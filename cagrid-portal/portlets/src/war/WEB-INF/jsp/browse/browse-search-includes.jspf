@@ -140,7 +140,7 @@ var SummaryTree = Class.create({
 
             for (var i = 0; i < nodesList.length; i++) {
                 var node = nodesList[i];
-                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "(" + node.count + ")",type:subTree.type,name:node.name}, subTreeNode, true);
+                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "(<span class='numberOfResults'>" + node.count + "</span>)",type:subTree.type,name:node.name}, subTreeNode, true);
             }
         }
     },
