@@ -345,26 +345,7 @@
         <property name="objectName" value="resultsCommand"/>
         <property name="successViewName" value="/results/tabular"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
-        <property name="serviceErrorInterpretors">
-        	<list>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.FQPServiceErrorInterpretor">
-        			<property name="pattern" value="Problem query data service at URL:"/>
-        			<property name="message" value="One of the data services ({0}) involved in your federated query has encountered and error."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value="faultString: GSSException: Defective credential detected [Caused by: Proxy file (/tmp/x509up_u3533) not found.]"/>
-        			<property name="message" value="You must be logged in in order to query this service."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value="maxBytes \(\d+\) exceeded"/>
-        			<property name="message" value="The service you are querying has returned too much data."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value=".*"/>
-        			<property name="message" value="The service that you are attempting to query encountered an error."/>
-        		</bean>
-        	</list>
-        </property>
+        <property name="serviceErrorInterpretors" ref="serviceErrorInterpretors"/>
     </bean>
 
     <!--

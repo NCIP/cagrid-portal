@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
+import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
 import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     private QueryInstanceDao queryInstanceDao;
     private QueryResultTableDao queryResultTableDao;
     private PortalFileService portalFileService;
+    private List<ServiceErrorInterpretor> serviceErrorInterpretors = new ArrayList<ServiceErrorInterpretor>();
+
 
     @Override
     public String validate() {
@@ -159,15 +162,36 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
     }
 
+
     public String getError(String instanceId) {
         String result = "Could not find query with ID " + instanceId;
 
         QueryInstance instance = loadInstance(instanceId);
+        Map<String, Object> infoMap = new HashMap<String, Object>();
+        infoMap.put("instance", instance);
+
         if (instance != null) {
             result = instance.getError();
 
-            Map<String, Object> infoMap = new HashMap<String, Object>();
-            infoMap.put("instance", instance);
+            String error = instance.getError();
+            if (error != null) {
+                String message = null;
+                for (ServiceErrorInterpretor interpretor : getServiceErrorInterpretors()) {
+                    logger.debug("Trying interpretor: " + interpretor);
+                    try {
+                        message = interpretor.getErrorMessage(error);
+                        if (message != null) {
+                            break;
+                        }
+                    } catch (Exception ex) {
+                        logger.error("Couldn't get error message: " + ex.getMessage(), ex);
+                    }
+                }
+                if (message != null) {
+                    result = message;
+                    infoMap.put("summaryErrorMsg", result);
+                }
+            }
 
             try {
                 return getView(getErrorView(), infoMap);
@@ -182,6 +206,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
         return result;
 
     }
+
 
     public String getNoResults(QueryInstance instance) {
         Map<String, Object> infoMap = new HashMap<String, Object>();
@@ -314,5 +339,13 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
     public void setPortalFileService(PortalFileService portalFileService) {
         this.portalFileService = portalFileService;
+    }
+
+    public List<ServiceErrorInterpretor> getServiceErrorInterpretors() {
+        return serviceErrorInterpretors;
+    }
+
+    public void setServiceErrorInterpretors(List<ServiceErrorInterpretor> serviceErrorInterpretors) {
+        this.serviceErrorInterpretors = serviceErrorInterpretors;
     }
 }

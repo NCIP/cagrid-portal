@@ -39,7 +39,8 @@ Select all data sources you would like to query.
 <script type="text/javascript">
 
 function ${ns}renderAvailableEndpoints(){
-	
+	${ns}selectEndpointsButton.set("label","Loading...");
+
 	var cql = jQuery("#input-query").val();
 	SharedQueryCatalogEntryManagerFacade.renderAvailableEndpointsFormContent(cql, "${ns}",
 	{
@@ -56,6 +57,8 @@ function ${ns}renderAvailableEndpoints(){
 }
 
 function ${ns}checkEnableSelectEndpoints(){
+	${ns}selectEndpointsButton.set("label","Select");
+    
 	if(jQuery().length > 0){
 		${ns}selectEndpointsButton.set("disabled", false);
 	}else{
@@ -68,7 +71,7 @@ var ${ns}selectEndpointsButton = null;
 
 jQuery(document).ready(function() {
 
-	${ns}renderAvailableEndpoints();
+
 
 	${ns}selectEndpointsButton = new YAHOO.widget.Button({
 		label: "Select",
@@ -77,6 +80,8 @@ jQuery(document).ready(function() {
 	});
 	${ns}selectEndpointsButton.set("disabled", true);
 
+    ${ns}renderAvailableEndpoints();
+    
 	${ns}selectEndpointsButton.on("click", function(evt){
 		var endpoints = new Array();
 		var l = jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked");

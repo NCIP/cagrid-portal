@@ -10,8 +10,17 @@
 
     <c:otherwise>
         <div class="errorMessage">
-            One or more of the remote data sources that you are attempting to query
-            encountered an error. Please contact the Help Desk at ncicb@pop.nci.nih.gov and
+            <c:choose>
+                <c:when test="${!empty summaryErrorMsg}">
+                    <c:out value="${summaryErrorMsg}"/>
+                </c:when>
+                <c:otherwise>
+                    One or more of the remote data sources that you are attempting to query
+                    encountered an error.
+                </c:otherwise>
+            </c:choose>
+
+            Please contact the Help Desk at ncicb@pop.nci.nih.gov and
             provide them with the query and error message.
             <a id="toggleError${instance.id}" onclick="cgp_toggleError(${instance.id})">View Error</a>
         </div>

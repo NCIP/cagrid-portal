@@ -155,22 +155,17 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
         return null;
     }
 
-    public String renderRoleTypesForType(String targetType, String namespace) {
+    public String renderRoleTypesForType(final String targetType, final String namespace) {
         String html = null;
         try {
-            String sourceType = getUserModel().getCurrentCatalogEntry()
+            final String sourceType = getUserModel().getCurrentCatalogEntry()
                     .getClass().getName();
             Set<String> types = new HashSet<String>();
-            Set<String> sourceTypes = new HashSet<String>();
-            Set<String> targetTypes = new HashSet<String>();
-            for (Class klass : PortletUtils.getSubclasses(null, Class
-                    .forName(targetType))) {
-                targetTypes.add(klass.getName());
-            }
-            for (Class klass : PortletUtils.getSubclasses(null, Class
-                    .forName(sourceType))) {
-                sourceTypes.add(klass.getName());
-            }
+            Set<String> sourceTypes = new HashSet<String>(){{
+                add(sourceType);}};
+            Set<String> targetTypes = new HashSet<String>(){{
+                add(targetType);}};
+
             types.addAll(sourceTypes);
             types.addAll(targetTypes);
 
