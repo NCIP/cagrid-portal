@@ -2,9 +2,9 @@
 <%@ include file="/WEB-INF/jsp/include/liferay-includes.jspf" %>
 
 <%
-response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-response.setHeader("Pragma","no-cache"); //HTTP 1.0
-response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+    response.setHeader("Cache-Control", "no-cache"); //HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); //HTTP 1.0
+    response.setDateHeader("Expires", 0); //prevents caching at the proxy server
 %>
 
 <%@ include file="browse-search-includes.jspf" %>
@@ -64,58 +64,65 @@ response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
 
         if (resultList != null) {
             YAHOO.log("Received results of size:" + resultList.length);
-
-            for (var i = 0, len = resultList.length; i < len; ++i) {
+            if (resultList < 1) {
                 $("regularResults").setStyle({display: 'block'});
-                var result = resultList[i];
+                var noResultMsg = document.createElement('div');
+                noResultMsg.appendChild(document.createTextNode("No search results found!"));
+                $("jsFillerRegularResults").appendChild(noResultMsg);
+            }
+            else {
+                for (var i = 0, len = resultList.length; i < len; ++i) {
+                    $("regularResults").setStyle({display: 'block'});
+                    var result = resultList[i];
 
-                var resultDiv = document.createElement('div');
-                resultDiv.className = "oneResultDiv";
-                var detailsLnk = document.createElement('a');
-                detailsLnk.setAttribute('id', '${ns}cat_name' + result.id)
-                detailsLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');
-                detailsLnk.setAttribute('name', 'Details');
-                detailsLnk.innerHTML = result.name;
+                    var resultDiv = document.createElement('div');
+                    resultDiv.className = "oneResultDiv";
+                    var detailsLnk = document.createElement('a');
+                    detailsLnk.setAttribute('id', '${ns}cat_name' + result.id)
+                    detailsLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');
+                    detailsLnk.setAttribute('name', 'Details');
+                    detailsLnk.innerHTML = result.name;
 
-            <%--represents the popup with CE details--%>
-                var popupLnk = document.createElement('span');
-                popupLnk.className = "yui-skin-sam";
-                popupLnk.setAttribute('id', '${ns}catalogPopupDiv' + result.id);
+                <%--represents the popup with CE details--%>
+                    var popupLnk = document.createElement('span');
+                    popupLnk.className = "yui-skin-sam";
+                    popupLnk.setAttribute('id', '${ns}catalogPopupDiv' + result.id);
 
-                var iconLnk = document.createElement('a');
-                iconLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');
-                iconLnk.setAttribute('name', 'Details');
-                iconLnk.className = "oneResultIcon";
-                var icon = document.createElement('img');
-                icon.setAttribute('src', '<c:url value="/images/catalog_icons/"/>' + result.catalog_type + '.png');
-                icon.setAttribute('alt', '');
-                iconLnk.appendChild(icon);
-                resultDiv.appendChild(iconLnk);
+                    var iconLnk = document.createElement('a');
+                    iconLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');
+                    iconLnk.setAttribute('name', 'Details');
+                    iconLnk.className = "oneResultIcon";
+                    var icon = document.createElement('img');
+                    icon.setAttribute('src', '<c:url value="/images/catalog_icons/"/>' + result.catalog_type + '.png');
+                    icon.setAttribute('alt', '');
+                    iconLnk.appendChild(icon);
+                    resultDiv.appendChild(iconLnk);
 
-                var nameDiv = document.createElement('div');
-                nameDiv.appendChild(detailsLnk);
-                nameDiv.appendChild(popupLnk);
-                resultDiv.appendChild(nameDiv);
+                    var nameDiv = document.createElement('div');
+                    nameDiv.appendChild(detailsLnk);
+                    nameDiv.appendChild(popupLnk);
+                    resultDiv.appendChild(nameDiv);
 
 
-                var descDiv = document.createElement('div');
-                descDiv.setAttribute("id", "${ns}cat_desc" + result.id);
-                if (result.description == null || result.description == undefined || result.description == "") {
-                    descDiv.className = "oneResultNoDescription";
-                    descDiv.appendChild(document.createTextNode("No information available"));
-                } else {
-                    descDiv.className = "oneResultDescription";
-                    descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
+                    var descDiv = document.createElement('div');
+                    descDiv.setAttribute("id", "${ns}cat_desc" + result.id);
+                    if (result.description == null || result.description == undefined || result.description == "") {
+                        descDiv.className = "oneResultNoDescription";
+                        descDiv.appendChild(document.createTextNode("No information available"));
+                    } else {
+                        descDiv.className = "oneResultDescription";
+                        descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
+                    }
+                    resultDiv.appendChild(descDiv);
+
+                    if (result.featured) {
+                        $("featuredDiv").setStyle({display: 'block'});
+                        $("jsFillerFeaturedResults").appendChild(resultDiv);
+                        continue;
+                    }
+                    $("jsFillerRegularResults").appendChild(resultDiv);
+
                 }
-                resultDiv.appendChild(descDiv);
-
-                if (result.featured) {
-                    $("featuredDiv").setStyle({display: 'block'});
-                    $("jsFillerFeaturedResults").appendChild(resultDiv);
-                    continue;
-                }
-                $("jsFillerRegularResults").appendChild(resultDiv);
-
             }
         }
     }
