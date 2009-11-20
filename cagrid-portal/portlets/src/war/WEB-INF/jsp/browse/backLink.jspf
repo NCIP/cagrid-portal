@@ -1,35 +1,43 @@
+
 <portlet:renderURL var="viewUrl">
     <portlet:param name="operation" value="view"/>
     <c:if test="${query!=null}">
         <portlet:param name="query" value="${query}"/>
+        <c:set var="backLink" value="query"/>
     </c:if>
     <c:if test="${selectedCatalogType!=null}">
         <portlet:param name="selectedCatalogType" value="${selectedCatalogType}"/>
+        <c:set var="backLink" value="selectedCatalogType"/>
     </c:if>
     <c:if test="${selectedCatalogLabel!=null}">
         <portlet:param name="selectedCatalogLabel" value="${selectedCatalogLabel}"/>
+        <c:set var="backLink" value="selectedCatalogLabel"/>
     </c:if>
-
     <c:if test="${catalogType!=null}">
         <portlet:param name="catalogType" value="${catalogType}"/>
+        <c:set var="backLink" value="catalogType"/>
     </c:if>
     <c:if test="${aof!=null}">
         <portlet:param name="aof" value="${aof}"/>
+        <c:set var="backLink" value="aof"/>
     </c:if>
     <c:if test="${searchKeyword!=null}">
         <portlet:param name="searchKeyword" value="${searchKeyword}"/>
     </c:if>
     <c:if test="${selectedIds!=null}">
         <portlet:param name="selectedIds" value="${selectedIds}"/>
+        <c:set var="backLink" value="selectedIds"/>
     </c:if>
 </portlet:renderURL>
 
 <div class="row">
-    <div style="float:left;">
-        <a href="<c:out value="${viewUrl}"/>">Back to search results</a>
-    </div>
-    <div style="float:right;">
+    <c:if test="${backLink !=null}">
+        <div style="float:left;">
+            <a href="<c:out value="${viewUrl}"/>">Back to search results</a>
+        </div>
+    </c:if>
 
+    <div style="float:right;">
 
         <!-- AddThis Button BEGIN -->
         <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4a9587a21a6fbe5e"><img

@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/browse/common/view/edit_controls.jspf" %>
 		
-<%@ include file="/WEB-INF/jsp/browse/common/view/photo_row.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/personView/view/photo_row.jspf" %>
 
 		<div class="contactInfoRow">
 			<c:if test="${catalogEntry.phoneNumberPublic}">
