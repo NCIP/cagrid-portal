@@ -1,0 +1,160 @@
+<div class="photoRow">
+    <div class="photo">
+        <tags:catalogEntryImage entry="${catalogEntry}" thumbnail="false" id="${ns}catalogEntryImage"
+                                title="${catalogEntry.name}" alt="Image of ${catalogEntry.name}"/>
+    </div>
+    <div class="photoRightContent">
+        <h1 class="entryName"><c:out value="${catalogEntry.name}"/></h1>
+       <%-- <i>
+        <b><spring:message code="${catalogEntry.class.name}"/> Catalog Entry</b>
+        [Created by
+			<c:choose>
+				<c:when test="${!empty catalogEntry.author}"> 
+				<portlet:renderURL var="viewAuthorUrl">
+					<portlet:param name="operation" value="viewDetails"/>
+					<portlet:param name="entryId" value="${catalogEntry.author.catalog.id}"/>
+				</portlet:renderURL>
+				<a href="<c:out value="${viewAuthorUrl}"/>">
+					<c:out value="${catalogEntry.author.catalog.firstName}"/> <c:out value="${catalogEntry.author.catalog.lastName}"/>
+				</a>
+				</c:when>
+				<c:otherwise>caGrid Portal</c:otherwise>
+			</c:choose>
+        ]</i> --%>
+        <p class="entryDescription">
+            <c:out value="${catalogEntry.description}"/>
+        </p>
+        <br/>
+        </div>
+        <!-- The following line is for formatting purposes -->
+        <hr style="clear:both; visibility:hidden;"/>
+        </div>
+
+
+<script type="text/javascript">
+
+
+    function ${ns}renderAverageRating(rating) {
+        for (i = 1; i <= rating; i++) {
+            document.getElementById("_" + i).className = "on";
+        }
+    }
+
+
+    jQuery(document).ready(function() {
+    ${managerFacadeName}.
+        getAverageRating(
+        {
+            callback:function(message) {
+                ${ns}renderAverageRating(message);
+            },
+            errorHandler:function(errorString, exception) {
+                alert("Error setting rating: " + errorString);
+            }
+        });
+
+    });
+
+
+</script>
+<script>
+    var canRate = false;
+    <c:if test="${!empty portalUser}">
+    canRate = true;
+    </c:if>
+
+    /*
+     * Interactive Star Rating system
+     * Author: Addam M. Driver
+     * Date: 10/31/2006
+     * http://www.reignwaterdesigns.com/ad/tidbits/rateme/
+     */
+
+    var sMax;    // Isthe maximum number of stars
+    var holder; // Is the holding pattern for clicked state
+    var preSet; // Is the PreSet value onces a selection has been made
+    var rated;
+
+    // Rollover for image Stars //
+    function rating(num) {
+        if (canRate) {
+            sMax = 0;	// Isthe maximum number of stars
+            for (n = 0; n < num.parentNode.childNodes.length; n++) {
+                if (num.parentNode.childNodes[n].nodeName == "A") {
+                    sMax++;
+                }
+            }
+
+            if (!rated) {
+                s = num.id.replace("_", ''); // Get the selected star
+                a = 0;
+                for (i = 1; i <= sMax; i++) {
+                    if (i <= s) {
+                        document.getElementById("_" + i).className = "on";
+                        /* document.getElementById("rateStatus").innerHTML = num.title; */
+                        holder = a + 1;
+                        a++;
+                    } else {
+                        document.getElementById("_" + i).className = "";
+                    }
+                }
+            }
+        }
+        else {
+            $("rateStatus").innerHTML = "Please login to rate";
+        }
+    }
+
+    // For when you roll out of the the whole thing //
+    function off(me) {
+		if (!canRate) {
+			$("rateStatus").innerHTML = "";
+		}
+        if (!rated) {
+            if (!preSet) {
+                for (i = 1; i <= sMax; i++) {
+                    document.getElementById("_" + i).className = "";
+                    /* document.getElementById("rateStatus").innerHTML = me.parentNode.title; */
+                }
+            } else {
+                rating(preSet);
+                /* document.getElementById("rateStatus").innerHTML = document.getElementById("ratingSaved").innerHTML; */
+            }
+        }
+    }
+
+    // When you actually rate something //
+    function rateIt(me) {
+        if (canRate) {
+            if (!rated) {
+                document.getElementById("rateStatus").innerHTML = document.getElementById("ratingSaved").innerHTML;
+                preSet = me;
+                rated = 1;
+                sendRate(me);
+                rating(me);
+            }
+        }
+    }
+
+    // Send the rating information somewhere using Ajax or something like that.
+    function sendRate(sel) {
+        var rating = sel.id.replace("_", ''); // Get the selected star
+
+    ${managerFacadeName}.
+        setRating(rating,
+        {
+            callback:function(message) {
+                if (message != null) {
+                    alert(message);
+                } else {
+                    ${ns}renderAverageRating();
+                }
+            },
+            errorHandler:function(errorString, exception) {
+                alert("Error setting rating: " + errorString);
+            }
+        });
+
+    }
+
+</script>
