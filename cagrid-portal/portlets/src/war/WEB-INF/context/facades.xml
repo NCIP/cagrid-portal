@@ -103,11 +103,11 @@
         <property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
     </bean>    
 
-    <bean class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerAspect"
-          parent="abstractSolrCommandExecutor">
-        <constructor-arg value="/dataimport?command=delta-import"/>
-        <property name="order" value="100"/>
-    </bean>
+    <!--<bean class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerAspect"-->
+          <!--parent="abstractSolrCommandExecutor">-->
+        <!--<constructor-arg value="/dataimport?command=delta-import"/>-->
+        <!--<property name="order" value="100"/>-->
+    <!--</bean>-->
 
     <bean id="catalogEntryManagerFacade"
     	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade"

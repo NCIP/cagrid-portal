@@ -21,6 +21,7 @@
 <script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
 <c:set var="ns" value="${param.ns}"/>
+<c:set var="userGuideUrl" value="${param.userGuideUrl}"/>
 
 <style type="text/css">
 div.row div.label {
@@ -50,10 +51,18 @@ div.row label:after {
 </style>
 
 <div align="left" style="overflow:auto; height:800px;padding-bottom:10px;" class="yui-skin-sam">
+
 <div class="instructions">
 	Please fill out your information in the fields below. Passwords must be between 10 and 20 characters, 
 	and must include an uppercase letter, a lowercase letter, a number, and a special character.
+    <span id="summaryHelpLink">
+              <a href="${userGuideUrl}-RegisterasaNewUser" target="_blank">
+                  <tags:image name="help.gif"/>
+              </a>
+          </span>
 </div>
+
+    
 	<form name="editForm">
 		<div class="row">
 			<div class="leftpanel">
