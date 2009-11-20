@@ -75,13 +75,13 @@
 
 <div id="summaryContent">
 <div id="summaryTitle">
-    <h3>Top Contributors
+    Top Contributors
 		<span id="summaryHelpLink">
 			<a href="${userGuideUrl}-TopContributors" target="_blank">
 				<tags:image name="help.gif"/>
 			</a>
 		</span>
-	</h3>
+
 </div>
 
     <div id="${ns}categories" class="row">
