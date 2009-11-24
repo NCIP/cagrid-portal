@@ -692,14 +692,14 @@
 		<servlet-name>Main Servlet</servlet-name>
 		<url-pattern>/c/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Display Chart</servlet-name>
-		<url-pattern>/display_chart/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Facebook Servlet</servlet-name>
-		<url-pattern>/facebook/*</url-pattern>
-	</servlet-mapping>
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>Display Chart</servlet-name>-->
+		<!--<url-pattern>/display_chart/*</url-pattern>-->
+	<!--</servlet-mapping>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>Facebook Servlet</servlet-name>-->
+		<!--<url-pattern>/facebook/*</url-pattern>-->
+	<!--</servlet-mapping>-->
 	<servlet-mapping>
 		<servlet-name>Friendly URL Servlet - Private Group</servlet-name>
 		<url-pattern>/group/*</url-pattern>
@@ -712,26 +712,26 @@
 		<servlet-name>Friendly URL Servlet - Public</servlet-name>
 		<url-pattern>/web/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>I18n Servlet</servlet-name>
-		<url-pattern>/de/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>I18n Servlet</servlet-name>
-		<url-pattern>/zh_CN/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>I18n Servlet</servlet-name>
-		<url-pattern>/zh_TW/*</url-pattern>
-	</servlet-mapping>
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>I18n Servlet</servlet-name>-->
+		<!--<url-pattern>/de/*</url-pattern>-->
+	<!--</servlet-mapping>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>I18n Servlet</servlet-name>-->
+		<!--<url-pattern>/zh_CN/*</url-pattern>-->
+	<!--</servlet-mapping>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>I18n Servlet</servlet-name>-->
+		<!--<url-pattern>/zh_TW/*</url-pattern>-->
+	<!--</servlet-mapping>-->
 	<servlet-mapping>
 		<servlet-name>Image Servlet</servlet-name>
 		<url-pattern>/image/*</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Language Servlet</servlet-name>
-		<url-pattern>/language/*</url-pattern>
-	</servlet-mapping>
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>Language Servlet</servlet-name>-->
+		<!--<url-pattern>/language/*</url-pattern>-->
+	<!--</servlet-mapping>-->
 	<servlet-mapping>
 		<servlet-name>Portal Delegator Servlet</servlet-name>
 		<url-pattern>/delegate/*</url-pattern>
