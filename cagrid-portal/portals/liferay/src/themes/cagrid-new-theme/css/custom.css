@@ -548,11 +548,15 @@ div.row div.twoCols{
 	background-position:0 -166px;
 }
 #featuredDiv {
-	background-color:#FFFFCF;
+	background:url(../images/foop/featured-results-bg.png) repeat-x 0 -50px;
 	padding:10px;
 }
 .commentAuthor {
 	font-size:7pt;
 	color:gray;
 	font-style:italic;
+}
+.numberOfResults {
+	color:#98989E;
+	margin-left:5px;
 }

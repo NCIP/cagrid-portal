@@ -261,7 +261,7 @@ var Catalogs = Class.create({
             this.query.setStartValue(0);
             this.browseSummaryDiv.innerHTML = '';
 
-            this.browseSummaryDiv.appendChild(document.createTextNode("Browsing"));
+            this.browseSummaryDiv.appendChild(document.createTextNode(""));
             if (this.config.keyword != g_wildcard)
                 this.browseSummaryDiv.appendChild(document.createTextNode("(" + this.config.keyword + ")"));
 
