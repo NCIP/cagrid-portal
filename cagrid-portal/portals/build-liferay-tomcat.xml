@@ -7,8 +7,7 @@
     
     <import file="${basedir}/build.xml"/>
     
-    <property name="liferay.tomcat.download.url"
-              value="http://apache.seekmeup.com/tomcat/tomcat-5/v5.5.27/bin/${tomcat.server.name}.zip"/>
+    <property name="liferay.tomcat.download.url" value="${liferay.tomcat.download.url}"/>
     <property name="liferay.tomcat.dir.name" value="${tomcat.server.name}"/>
     <property name="liferay.tomcat.zip" value="${liferay.install.dir}/${tomcat.server.name}.zip"/>
     <property name="liferay.tomcat.home" value="${liferay.install.dir}/${liferay.tomcat.dir.name}"/>
@@ -19,8 +18,6 @@
     <property name="liferay.portal.war.dir"
               value="${liferay.root.context.dir}"/>
 
-    <property name="liferay.autodeploy.dir" value="${liferay.install.dir}/deploy"/>
-    
     <property name="liferay.tomcat.enginename" value="Catalina"/>
     <property name="liferay.tomcat.hostname" value="localhost"/>
     
@@ -146,7 +143,7 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
             </fileset>
         </move>
 
-    </target>	
+    </target>
 	
     <target name="tomcat:copy-startup-scripts">
         <if>

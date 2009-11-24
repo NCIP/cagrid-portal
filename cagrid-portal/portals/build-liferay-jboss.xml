@@ -20,8 +20,6 @@
     
     <property name="liferay.portal.war.dir"
               value="${liferay.root.context.dir}"/>
-    <property name="liferay.autodeploy.dir" value="${liferay.install.dir}/deploy"/>
-
 
 
     <target name="test-jboss-zip">
