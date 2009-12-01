@@ -85,9 +85,10 @@
                     <field name="term_label" column="label"/>
                 </entity>
             </entity>
-            <!--compute average rating-->
+            <!--compute average rating for all catalogs EXCEPT Person and Point of contact-->
             <entity name="ratings"
-                    query="select avg(rating) as avg_rating from cat_ratings where catalog_id='${AllCatalogs.id}'">
+                    query="select avg(rating) as avg_rating from cat_ratings r, cat_entry e where r.catalog_id=e.id and e.id='${AllCatalogs.id}' and
+                    e.catalog_type not in ('poc','person')">
                 <field name="rating" column="avg_rating"/>
             </entity>
 
