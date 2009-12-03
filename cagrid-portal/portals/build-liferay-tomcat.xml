@@ -4,9 +4,9 @@
 
     <property name="ext.ext.lib.dir" value="${basedir}/ext/ext-tomcat/jars"/>
     <property name="ext.ext.xml.dir" value="${basedir}/ext/ext-tomcat/xmls"/>
-    
+
     <import file="${basedir}/build.xml"/>
-    
+
     <property name="liferay.tomcat.download.url" value="${liferay.tomcat.download.url}"/>
     <property name="liferay.tomcat.dir.name" value="${tomcat.server.name}"/>
     <property name="liferay.tomcat.zip" value="${liferay.install.dir}/${tomcat.server.name}.zip"/>
@@ -20,24 +20,24 @@
 
     <property name="liferay.tomcat.enginename" value="Catalina"/>
     <property name="liferay.tomcat.hostname" value="localhost"/>
-    
+
     <property name="portal.search.war.dest" value="${liferay.auto.deploy.dest.dir}/${portal.search.war.name}"/>
-    
+
 
     <import file="${basedir}/build-liferay-common.xml"/>
 
-	<target name="test-tomcat-zip" depends="prepare">
+    <target name="test-tomcat-zip" depends="prepare">
         <condition property="liferay.tomcat.zip.available">
             <available file="${liferay.tomcat.zip}" type="file"/>
         </condition>
     </target>
-    
+
     <target name="download-tomcat" unless="liferay.tomcat.zip.available"
             depends="test-tomcat-zip">
         <mkdir dir="${liferay.install.dir}"/>
         <get src="${liferay.tomcat.download.url}" dest="${liferay.tomcat.zip}" verbose="on"/>
     </target>
-    
+
     <target name="test-tomcat">
         <condition property="liferay.tomcat.available">
             <available file="${liferay.tomcat.home}" type="dir"/>
@@ -62,21 +62,22 @@
 
             </then>
         </if>
-    </target>    
-	
-	<!-- Move Endorsed Jars -->
-	<target name="move-endorsed-jars">
+    </target>
+
+    <!-- Move Endorsed Jars -->
+    <target name="move-endorsed-jars">
         <move todir="${liferay.tomcat.home}/common/endorsed">
             <fileset dir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/lib">
                 <include name="xercesImpl.jar"/>
             </fileset>
         </move>
-	</target>
+    </target>
 
-	<!-- Configure Context -->
-	<target name="configure-context">
-		<echo file="${liferay.tomcat.home}/conf/${liferay.tomcat.enginename}/${liferay.tomcat.hostname}/ROOT.xml" append="false">
-			<![CDATA[<Context path="">
+    <!-- Configure Context -->
+    <target name="configure-context">
+        <echo file="${liferay.tomcat.home}/conf/${liferay.tomcat.enginename}/${liferay.tomcat.hostname}/ROOT.xml"
+              append="false">
+            <![CDATA[<Context path="">
         <Resource 
                 name="jdbc/LiferayPool" 
                 auth="Container" 
@@ -108,24 +109,42 @@
 	/> 	         
 </Context>	
 			]]>
-		</echo>
-	</target>
-	
-	<target name="configure-jaas">
-		<echo file="${liferay.tomcat.home}/conf/jaas.config" append="false">
-		<![CDATA[PortalRealm { 
+        </echo>
+    </target>
+
+    <target name="configure-jaas">
+        <echo file="${liferay.tomcat.home}/conf/jaas.config" append="false">
+            <![CDATA[PortalRealm {
 com.liferay.portal.kernel.security.jaas.PortalLoginModule  required; 
 };	
 		]]>
-		</echo>
-	</target>
-	
-	<target name="configure-catalina-properties">
-		<propertyfile file="${liferay.tomcat.home}/conf/catalina.properties">
-			<entry key="common.loader" value="$${catalina.home}/common/classes,$${catalina.home}/common/i18n/*.jar,$${catalina.home}/common/endorsed/*.jar,$${catalina.home}/common/lib/*.jar,$${catalina.home}/common/lib/ext/*.jar"/>
-		</propertyfile>
-	</target>
-	
+        </echo>
+    </target>
+
+
+    <!--disable session persistence in Tomcat-->
+    <target name="configure-session-persistence" depends="prepare">
+        <!--<property name="tomcat.webapp.context.file" value="${liferay.tomcat.home}/conf/context.xml"/>-->
+          <property name="tomcat.webapp.context.file"
+                          value="${liferay.tomcat.home}/conf/context.xml"/>
+        <xmltask source="${tomcat.webapp.context.file}" dest="${tomcat.webapp.context.file}" report="true"
+                failWithoutMatch="false">
+            <remove path="Context/Manager" />
+            <insert path="Context">
+               <![CDATA[
+                    <Manager pathname="" />
+               ]]>
+            </insert>
+        </xmltask>
+    </target>
+
+    <target name="configure-catalina-properties">
+        <propertyfile file="${liferay.tomcat.home}/conf/catalina.properties">
+            <entry key="common.loader"
+                   value="$${catalina.home}/common/classes,$${catalina.home}/common/i18n/*.jar,$${catalina.home}/common/endorsed/*.jar,$${catalina.home}/common/lib/*.jar,$${catalina.home}/common/lib/ext/*.jar"/>
+        </propertyfile>
+    </target>
+
     <target name="copy-ext-jars">
         <mkdir dir="${liferay.tomcat.home}/common/lib/ext"/>
 
@@ -144,7 +163,7 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
         </move>
 
     </target>
-	
+
     <target name="tomcat:copy-startup-scripts">
         <if>
             <istrue value="${liferay.tomcat.deploy.scripts}"/>
@@ -159,7 +178,7 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
             </then>
         </if>
     </target>
-	
+
     <target name="configure-connectors" depends="prepare">
         <if>
             <istrue value="${liferay.tomcat.configure.connectors}"/>
@@ -204,18 +223,19 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
     </target>
 
     <target name="configure-tomcat">
-    	
-    	<antcall target="configure-context"/>
-    	<antcall target="configure-jaas"/>
-    	<antcall target="configure-catalina-properties"/>
-    	<antcall target="copy-ext-jars"/>
-    	<antcall target="tomcat:copy-startup-scripts"/>
-    	<antcall target="configure-connectors"/>
+
+        <antcall target="configure-context"/>
+        <antcall target="configure-jaas"/>
+        <antcall target="configure-catalina-properties"/>
+        <antcall target="copy-ext-jars"/>
+        <antcall target="tomcat:copy-startup-scripts"/>
+        <antcall target="configure-connectors"/>
+        <antcall target="configure-session-persistence"/>
     </target>
-    
+
     <target name="tomcat:deploy-liferay-portal-war" depends="download-war">
 
-		<delete dir="${liferay.root.context.dir}"/>
+        <delete dir="${liferay.root.context.dir}"/>
         <mkdir dir="${liferay.root.context.dir}"/>
         <unzip src="${liferay.downloads.dir}/${liferay.war}" dest="${liferay.root.context.dir}"/>
 
@@ -226,7 +246,7 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
         </copy>
 
     </target>
-    
+
     <target name="tomcat:install-liferay" depends="prepare" description="Install and configure Liferay Portal">
         <antcall target="install-tomcat"/>
         <antcall target="tomcat:deploy-liferay-portal-war"/>
@@ -237,5 +257,5 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
         <!-- antcall target="configure-liferay-messages"/ -->
     </target>
 
-     
- </project>
+
+</project>
