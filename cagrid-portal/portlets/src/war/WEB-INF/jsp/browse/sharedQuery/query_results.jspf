@@ -267,6 +267,7 @@ function ${ns}ResultTable(instanceId, metadataUrl, dataUrl){
 				{
 					paginator: new YAHOO.widget.Paginator({
         				rowsPerPage: 25,
+                        template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} <div>{CurrentPageReport}</div>",
         				containers: [this.instanceId + "pageCtrlTop", this.instanceId + "pageCtrlBottom"]
     				}),
     				sortedBy: {

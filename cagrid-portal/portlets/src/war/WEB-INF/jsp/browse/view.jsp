@@ -204,7 +204,7 @@
                 <div id="catalogResult">
                     <div id="${ns}catalogs">
                         <div id="featuredDiv" style="display:none;">
-                            <h3>Featured Results</h3>
+                            <h3>Featured Catalog Entries</h3>
 
                             <div id="jsFillerFeaturedResults"><!-- Featured search results will go here --></div>
                         </div>
