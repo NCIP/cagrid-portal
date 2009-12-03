@@ -346,6 +346,7 @@
         <property name="successViewName" value="/results/tabular"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
         <property name="serviceErrorInterpretors" ref="serviceErrorInterpretors"/>
+       	<property name="portalFileService" ref="securePortalFileService"/>
     </bean>
 
     <!--
@@ -377,6 +378,10 @@
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
 
+	<bean id="shareQueryRedirectUrl" class="java.lang.String">
+        <constructor-arg><value><![CDATA[/web/guest/catalog/tools?p_p_id=BrowsePortlet_WAR_cagridportlets&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_BrowsePortlet_WAR_cagridportlets_operation=editCatalogEntry&_BrowsePortlet_WAR_cagridportlets_entryId=]]></value></constructor-arg>
+    </bean>	
+
     <bean
             id="shareQueryController"
             class="gov.nih.nci.cagrid.portal.portlet.query.shared.ShareQueryController"
@@ -390,31 +395,21 @@
 
         <property name="commandName" value="cqlQueryCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/myQueries/edit"/>
-                <property name="errorTabPath" value="/query/xml"/>
-                <property name="errorsAttributeName" value="submitQueryErrors"/>
-            </bean>
-        </property>
+        
+        <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
+        
     </bean>
 
     <bean
             id="shareBuilderQueryController"
             class="gov.nih.nci.cagrid.portal.portlet.query.shared.ShareBuilderQueryController"
-            autowire="byName">
+            autowire="byName" parent="shareQueryController">
 
         <property name="commandName" value="cqlQueryCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/myQueries/edit"/>
-                <property name="errorTabPath" value="/query/builder"/>
-                <property name="errorsAttributeName" value="submitQueryErrors"/>
-            </bean>
-        </property>
+        
+        <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
+        
     </bean>
 
     <bean id="viewSharedQueryFormController"
@@ -814,8 +809,5 @@
             </map>
         </property>
     </bean>
-
-    <bean id="cqlQueryService" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryService" autowire="byName"/>
-
 
 </beans>

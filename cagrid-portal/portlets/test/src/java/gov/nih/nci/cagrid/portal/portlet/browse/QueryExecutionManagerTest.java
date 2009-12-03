@@ -1,19 +1,18 @@
 package gov.nih.nci.cagrid.portal.portlet.browse;
 
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
-import gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager;
-import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
-import gov.nih.nci.cagrid.portal.domain.dataservice.Query;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
-import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.*;
+import gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * User: kherm
@@ -38,7 +37,7 @@ public class QueryExecutionManagerTest {
         instanceList.add(mockQueryInstance);
         instanceList.add(mockQueryInstance);
 
-        QueryModel mockModel = mock(QueryModel.class);
+        QueryService mockModel = mock(QueryService.class);
         when(mockModel.getSubmittedQueries()).thenReturn(instanceList);
 //        manager.setQueryModel(mockModel);
 

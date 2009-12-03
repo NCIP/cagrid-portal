@@ -46,25 +46,20 @@ public class ShareBuilderQueryController extends ShareQueryController {
 	}
 	
 	@Override
-	protected void doHandleAction(ActionRequest request,
+	protected void handleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
 		CQLQueryCommand command = (CQLQueryCommand)obj;
 		CQLQueryBean cqlQueryBean = (CQLQueryBean)getCqlQueryTreeFacade().getRootNode().getContent();
 		command.setCqlQuery(cqlQueryBean.toXml());
-		command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());		
+		command.setDataServiceUrl(getUserModel().getSelectedService().getUrl());
 		
-		super.doHandleAction(request, response, command, errors);
+		super.handleAction(request, response, command, errors);
 	}
 	
 	@Override
 	protected Object getCommand(PortletRequest request) throws Exception {
-		CQLQueryCommand command = getQueryModel().getWorkingQuery();
-		if (command == null) {
-			command = new CQLQueryCommand();
-			getQueryModel().setWorkingQuery(command);
-		}
-		return command;
+		return new CQLQueryCommand();
 	}
 
 	public TreeFacade getCqlQueryTreeFacade() {

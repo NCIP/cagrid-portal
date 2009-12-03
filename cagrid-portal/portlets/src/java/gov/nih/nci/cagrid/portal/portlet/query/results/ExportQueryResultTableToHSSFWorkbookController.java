@@ -43,6 +43,12 @@ public class ExportQueryResultTableToHSSFWorkbookController extends
 			HttpServletResponse res) throws Exception {
 
 		String instanceId = req.getParameter("instanceId");
+		doExport(Integer.valueOf(instanceId), res);
+
+		return null;
+	}
+	
+	protected void doExport(Integer instanceId, HttpServletResponse res) throws Exception {
 		QueryResultTable table = getQueryResultTableDao().getByQueryInstanceId(
 				Integer.valueOf(instanceId));
 		HSSFWorkbook wb = this.getQueryResultTableToHSSFWorkbookBuilder()
@@ -51,8 +57,6 @@ public class ExportQueryResultTableToHSSFWorkbookController extends
 		res.addHeader("Content-Disposition",
 				"attachment;filename=\"query_results.xls\"");
 		wb.write(res.getOutputStream());
-
-		return null;
 	}
 
 	public QueryResultTableToHSSFWorkbookBuilder getQueryResultTableToHSSFWorkbookBuilder() {

@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -23,7 +23,7 @@ import org.springframework.web.portlet.ModelAndView;
 public class ViewUmlClassListController extends AbstractViewObjectController {
 
 	private GridServiceDao gridServiceDao;
-	private QueryModel queryModel;
+	private UserModel userModel;
 
 	/**
 	 * 
@@ -35,8 +35,8 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 	@Override
 	protected Object getObject(RenderRequest request) {
 		SelectServiceCommand command = new SelectServiceCommand();
-		if (getQueryModel().getSelectedService() != null) {
-			String url = getQueryModel().getSelectedService()
+		if (getUserModel().getSelectedService() != null) {
+			String url = getUserModel().getSelectedService()
 			.getUrl();
 			command
 					.setDataServiceUrl(url);
@@ -49,10 +49,10 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 
 	@Override
 	protected void addData(RenderRequest request, ModelAndView mav) {
-		if (getQueryModel().getSelectedService() != null) {
+		if (getUserModel().getSelectedService() != null) {
 			//Association with current session.
 			GridDataService selectedService = (GridDataService) getGridServiceDao()
-					.getById(getQueryModel().getSelectedService().getId());
+					.getById(getUserModel().getSelectedService().getId());
 			
 			//Sort by packageName.className
 			SortedMap<String,UMLClass> sorted = new TreeMap<String,UMLClass>();
@@ -71,12 +71,12 @@ public class ViewUmlClassListController extends AbstractViewObjectController {
 		this.gridServiceDao = gridServiceDao;
 	}
 
-	public QueryModel getQueryModel() {
-		return queryModel;
+	public UserModel getUserModel() {
+		return userModel;
 	}
 
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
 	}
 
 }

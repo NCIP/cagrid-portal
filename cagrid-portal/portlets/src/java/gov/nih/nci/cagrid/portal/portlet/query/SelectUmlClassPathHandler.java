@@ -3,9 +3,10 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query;
 
-import javax.portlet.PortletRequest;
-
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.tab.AbstractInterPortletMessageSelectedPathHandler;
+
+import javax.portlet.PortletRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -15,7 +16,7 @@ public class SelectUmlClassPathHandler extends
 		AbstractInterPortletMessageSelectedPathHandler {
 
 	private String umlClassSelectedTabPath;
-	private QueryModel queryModel;
+	private UserModel userModel;
 	
 	/**
 	 * 
@@ -32,7 +33,7 @@ public class SelectUmlClassPathHandler extends
 			Object object) {
 		String selectedPath = null;
 		if(object != null && object instanceof Integer){
-			getQueryModel().selectUmlClassForQuery((Integer)object);
+			getUserModel().selectUmlClassForQuery((Integer)object);
 			selectedPath = getUmlClassSelectedTabPath();
 		}
 		return selectedPath;
@@ -46,12 +47,13 @@ public class SelectUmlClassPathHandler extends
 		this.umlClassSelectedTabPath = umlClassSelectedTabPath;
 	}
 
-	public QueryModel getQueryModel() {
-		return queryModel;
+
+	public UserModel getUserModel() {
+		return userModel;
 	}
 
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
 	}
 
 }

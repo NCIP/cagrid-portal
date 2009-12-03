@@ -3,7 +3,7 @@
             onchange="<c:out value="${namespace}"/>executeHistoryOperation('<c:out value="${instance.id}"/>',
     this.options[this.selectedIndex].value)">
     <option value="---" selected>---</option>
-    <c:if test="${instance.state == 'COMPLETE' and !empty instance.result}">
+    <c:if test="${instance.state == 'COMPLETE'}">
         <option value="selectQueryInstance">View Results</option>
     </c:if>
     <c:if test="${instance.state == 'ERROR'}">

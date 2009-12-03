@@ -5,7 +5,8 @@ package gov.nih.nci.cagrid.portal.portlet.query.results;
 
 import gov.nih.nci.cagrid.portal.dao.DCQLQueryDao;
 import gov.nih.nci.cagrid.portal.dao.DomainModelDao;
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.dao.QueryResultTableDao;
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
@@ -13,12 +14,15 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.domain.table.QueryResultData;
+import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryRenderController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryInstanceResultsBean;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.portlet.util.Table;
 import gov.nih.nci.cagrid.portal.portlet.util.TableScroller;
+import gov.nih.nci.cagrid.portal.service.PortalFileService;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -35,8 +39,11 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 
 	private String resultsBeanSessionAttributeName;
 	private DomainModelDao domainModelDao;
+	private UMLClassDao umlClassDao;
 	private DCQLQueryDao dcqlQueryDao;
 	private List<ServiceErrorInterpretor> serviceErrorInterpretors = new ArrayList<ServiceErrorInterpretor>();
+	private QueryResultTableDao queryResultTableDao;
+	private PortalFileService portalFileService;
 
 	/**
 	 * 
@@ -48,11 +55,13 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject(javax.portlet.RenderRequest)
+	 * @see
+	 * gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject
+	 * (javax.portlet.RenderRequest)
 	 */
 	@Override
 	protected Object getObject(RenderRequest request) {
-		QueryInstance instance = getQueryModel().getSelectedQueryInstance();
+		QueryInstance instance = getUserModel().getSelectedQueryInstance();
 		CQLQueryInstanceResultsBean command = (CQLQueryInstanceResultsBean) request
 				.getPortletSession().getAttribute(
 						getResultsBeanSessionAttributeName());
@@ -63,27 +72,6 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 		} else {
 			command = new CQLQueryInstanceResultsBean();
 			if (instance != null) {
-
-				String xml = instance.getResult();
-
-				if (xml != null) {
-
-					List<String> colNames = getColumnNames(instance);
-					getQueryModel().setQueryResultsColumnNames(colNames);
-
-					Table table = null;
-					try {
-						table = PortletUtils.buildTableFromCQLResults(colNames,
-								new ByteArrayInputStream(xml.getBytes()));
-					} catch (Exception ex) {
-						throw new CaGridPortletApplicationException(
-								"Error build table from XML results: "
-										+ ex.getMessage(), ex);
-					}
-					if (table != null) {
-						command.setTableScroller(new TableScroller(table, 10));
-					}
-				}
 
 				String error = instance.getError();
 				if (error != null) {
@@ -96,13 +84,33 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 								break;
 							}
 						} catch (Exception ex) {
-							logger.error("Couldn't get error message: " + ex.getMessage(), ex);
+							logger.error("Couldn't get error message: "
+									+ ex.getMessage(), ex);
 						}
 					}
 					if (message != null) {
 						logger.debug("Setting message = " + message);
 						command.setError(message);
 					}
+				} else {
+
+					List<String> colNames = getColumnNames(instance);
+					Table table = null;
+					try {
+						QueryResultTable t = getQueryResultTableDao()
+								.getByQueryInstanceId(instance.getId());
+						PortalFileService pfs = getPortalFileService();
+						QueryResultData qrd = t.getData();
+						byte[] in = pfs.read(qrd.getFileName());
+
+						table = PortletUtils.buildTableFromCQLResults(colNames,
+								new ByteArrayInputStream(in));
+					} catch (Exception ex) {
+						throw new CaGridPortletApplicationException(
+								"Error building table from XML results: "
+										+ ex.getMessage(), ex);
+					}
+					command.setTableScroller(new TableScroller(table, 10));
 				}
 
 				command.setInstance(instance);
@@ -129,8 +137,8 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 			domainModel = query.getTargetServices().get(0).getDomainModel();
 		}
 		domainModel = getDomainModelDao().getById(domainModel.getId());
-		UMLClass umlClass = getQueryModel().getUmlClassDao()
-				.getUmlClassFromModel(domainModel, umlClassName);
+		UMLClass umlClass = getUmlClassDao().getUmlClassFromModel(domainModel,
+				umlClassName);
 		for (UMLAttribute att : umlClass.getUmlAttributeCollection()) {
 			colNames.add(att.getName());
 		}
@@ -170,6 +178,30 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 	public void setServiceErrorInterpretors(
 			List<ServiceErrorInterpretor> serviceErrorInterpretors) {
 		this.serviceErrorInterpretors = serviceErrorInterpretors;
+	}
+
+	public UMLClassDao getUmlClassDao() {
+		return umlClassDao;
+	}
+
+	public void setUmlClassDao(UMLClassDao umlClassDao) {
+		this.umlClassDao = umlClassDao;
+	}
+
+	public QueryResultTableDao getQueryResultTableDao() {
+		return queryResultTableDao;
+	}
+
+	public void setQueryResultTableDao(QueryResultTableDao queryResultTableDao) {
+		this.queryResultTableDao = queryResultTableDao;
+	}
+
+	public PortalFileService getPortalFileService() {
+		return portalFileService;
+	}
+
+	public void setPortalFileService(PortalFileService portalFileService) {
+		this.portalFileService = portalFileService;
 	}
 
 }

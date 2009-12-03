@@ -3,16 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.model;
 
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.springframework.validation.BindException;
-
-import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
-import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -57,7 +55,7 @@ public class SelectUmlClassController extends
 			throws Exception {
 		SelectUmlClassCommand command = (SelectUmlClassCommand)obj;
 		UMLClass umlClass = getUmlClassDao().getById(command.getUmlClassId());
-		getQueryModel().setSelectedUmlClass(umlClass);
+		getUserModel().setSelectedUmlClass(umlClass);
 	}
 
 	public UMLClassDao getUmlClassDao() {

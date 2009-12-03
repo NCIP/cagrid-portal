@@ -3,11 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query;
 
-import javax.portlet.PortletRequest;
-
 import gov.nih.nci.cagrid.portal.dao.GridDataServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.tab.AbstractInterPortletMessageSelectedPathHandler;
+
+import javax.portlet.PortletRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -17,7 +18,7 @@ public class SelectDataServicePathHandler extends
 		AbstractInterPortletMessageSelectedPathHandler {
 
 	private String dataServiceSelectedTabPath;
-	private QueryModel queryModel;
+	private UserModel userModel;
 	private GridDataServiceDao gridDataServiceDao;
 	
 	/**
@@ -36,7 +37,7 @@ public class SelectDataServicePathHandler extends
 		String selectedPath = null;
 		if(object != null && object instanceof Integer){
 			GridDataService service = getGridDataServiceDao().getById((Integer)object);
-			getQueryModel().setSelectedService(service);
+			getUserModel().setSelectedService(service);
 			selectedPath = getDataServiceSelectedTabPath();
 		}
 		return selectedPath;
@@ -50,20 +51,20 @@ public class SelectDataServicePathHandler extends
 		this.dataServiceSelectedTabPath = umlClassSelectedTabPath;
 	}
 
-	public QueryModel getQueryModel() {
-		return queryModel;
-	}
-
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
-	}
-
 	public GridDataServiceDao getGridDataServiceDao() {
 		return gridDataServiceDao;
 	}
 
 	public void setGridDataServiceDao(GridDataServiceDao gridDataServiceDao) {
 		this.gridDataServiceDao = gridDataServiceDao;
+	}
+
+	public UserModel getUserModel() {
+		return userModel;
+	}
+
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
 	}
 
 }

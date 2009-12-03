@@ -26,7 +26,7 @@ public class ViewCqlXmlController extends AbstractQueryRenderController {
 	 */
 	@Override
 	protected Object getObject(RenderRequest request) {
-		CQLQueryCommand command = getQueryModel().getWorkingQuery();
+		CQLQueryCommand command = getUserModel().getWorkingQuery();
 		if(command == null){
 			command = new CQLQueryCommand();
 		}

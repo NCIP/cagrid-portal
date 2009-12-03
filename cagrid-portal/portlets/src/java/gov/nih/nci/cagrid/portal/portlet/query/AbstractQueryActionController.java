@@ -4,15 +4,17 @@
 package gov.nih.nci.cagrid.portal.portlet.query;
 
 import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
+ * 
  */
 public abstract class AbstractQueryActionController extends
 		AbstractActionResponseHandlerCommandController {
-	
-	private QueryModel queryModel;
+
+	private UserModel userModel;
+	private QueryService queryService;
 
 	/**
 	 * 
@@ -33,18 +35,25 @@ public abstract class AbstractQueryActionController extends
 	 * @param commandClass
 	 * @param commandName
 	 */
-	public AbstractQueryActionController(Class commandClass,
-			String commandName) {
+	public AbstractQueryActionController(Class commandClass, String commandName) {
 		super(commandClass, commandName);
 
 	}
-	
-	public QueryModel getQueryModel() {
-		return queryModel;
+
+	public UserModel getUserModel() {
+		return userModel;
 	}
 
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
+	}
+
+	public QueryService getQueryService() {
+		return queryService;
+	}
+
+	public void setQueryService(QueryService queryService) {
+		this.queryService = queryService;
 	}
 
 }

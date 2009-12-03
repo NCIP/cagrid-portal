@@ -59,14 +59,14 @@ public class ExportToXmlController extends AbstractQueryActionController {
         CQLQueryCommand command = (CQLQueryCommand) obj;
         CQLQueryBean cqlQueryBean = (CQLQueryBean) getCqlQueryTreeFacade().getRootNode().getContent();
         command.setCqlQuery(cqlQueryBean.toXml());
-        command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());
+        command.setDataServiceUrl(getUserModel().getSelectedService().getUrl());
     }
 
     protected Object getCommand(PortletRequest request) throws Exception {
-        CQLQueryCommand command = getQueryModel().getWorkingQuery();
+        CQLQueryCommand command = getUserModel().getWorkingQuery();
         if (command == null) {
             command = new CQLQueryCommand();
-            getQueryModel().setWorkingQuery(command);
+            getUserModel().setWorkingQuery(command);
         }
         return command;
     }

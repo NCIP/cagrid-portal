@@ -62,7 +62,7 @@ public class UpdateCriterionController extends
 	
 	protected Object getCommand(PortletRequest request)
     	throws Exception{
-		return getQueryModel().getSelectedCriterion();
+		return getUserModel().getSelectedCriterion();
 	}
 	
 	protected void initBinder(PortletRequest request,

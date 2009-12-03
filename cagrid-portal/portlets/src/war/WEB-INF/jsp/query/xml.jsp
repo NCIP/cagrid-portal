@@ -42,11 +42,11 @@
                 <input type="submit" id="${formName}Submit" alt="Submit Query" value="Submit Query"/>
 
                 <!--no sharing if query is dcql-->
-                <c:if test="${cqlQueryCommand.dcql == 'false'}">
-                    <c:if test="${!empty portalUser}">
-                        <input type="button" id="${formName}query" alt="Share Query" value="Share Query" onclick="<portlet:namespace/>shareQuery()"/>
-                    </c:if>
+
+                <c:if test="${!empty portalUser}">
+                    <input type="button" id="${formName}query" alt="Share Query" value="Share Query" onclick="<portlet:namespace/>shareQuery()"/>
                 </c:if>
+
 
             </td>
         </tr>

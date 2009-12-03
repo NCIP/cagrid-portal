@@ -25,11 +25,6 @@
         <aop:scoped-proxy proxy-target-class="true"/>
     </bean>
 
-    <bean id="queryModel" class="gov.nih.nci.cagrid.portal.portlet.query.QueryModel" scope="globalSession"
-          autowire="byName">
-        <aop:scoped-proxy proxy-target-class="true"/>
-    </bean>
-
     <bean id="discoveryModel" class="gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel" scope="globalSession"
           autowire="byName">
         <aop:scoped-proxy proxy-target-class="true"/>
@@ -134,6 +129,15 @@
           autowire="byName">
         <property name="portalUserIdSessionAttributeName" value="CAGRIDPORTAL_ATTS_liferayUserId"/>
         <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
+    </bean>
+    
+    <bean id="requestAttributePropertiesPopulatorInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.RequestAttributePropertiesPopulatorInterceptor"
+          autowire="byName">
+          <property name="properties">
+			<util:map>
+        		<entry key="loginUrl" value="${cagrid.portal.loginUrl}"/>
+        	</util:map>
+        </property>
     </bean>
 
     <bean id="servicefilter"

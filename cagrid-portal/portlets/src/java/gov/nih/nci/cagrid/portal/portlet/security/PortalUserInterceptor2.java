@@ -7,16 +7,16 @@ import gov.nih.nci.cagrid.portal.authn.AuthnServiceException;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.portlet.UserModel;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
 import gov.nih.nci.cagrid.portal.security.CDSCredentialRetriever;
+
+import javax.portlet.PortletSession;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 import org.springframework.web.portlet.context.PortletWebRequest;
-
-import javax.portlet.PortletSession;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
@@ -27,7 +27,6 @@ public class PortalUserInterceptor2 implements WebRequestInterceptor {
     private static final Log logger = LogFactory
             .getLog(PortalUserInterceptor2.class);
     private UserModel userModel;
-    private QueryModel queryModel;
 
     private String portalUserSessionAttributeName;
     private String portalUserIdSessionAttributeName;
@@ -127,7 +126,6 @@ public class PortalUserInterceptor2 implements WebRequestInterceptor {
                 }
                 /** set in session **/
                 getUserModel().setPortalUser(portalUser);
-                getQueryModel().setPortalUser(portalUser);
                 logger.debug("Putting portal user in session under: "
                         + getPortalUserSessionAttributeName());
                 session.setAttribute(getPortalUserSessionAttributeName(),
@@ -169,14 +167,6 @@ public class PortalUserInterceptor2 implements WebRequestInterceptor {
 
     public void setPortalUserDao(PortalUserDao portalUserDao) {
         this.portalUserDao = portalUserDao;
-    }
-
-    public QueryModel getQueryModel() {
-        return queryModel;
-    }
-
-    public void setQueryModel(QueryModel queryModel) {
-        this.queryModel = queryModel;
     }
 
     public String getPortalUserIdSessionAttributeName() {

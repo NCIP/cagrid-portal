@@ -42,7 +42,7 @@ public class ViewCqlTreeController extends AbstractQueryRenderController {
 	@Override
 	protected Object getObject(RenderRequest request) {
 		TreeNode rootNode = null;
-		UMLClass umlClass = getQueryModel().getSelectedUmlClass();
+		UMLClass umlClass = getUserModel().getSelectedUmlClass();
 		if (umlClass == null) {
 			logger.debug("no UMLClass selected");
 		} else {

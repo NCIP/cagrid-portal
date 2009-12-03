@@ -8,15 +8,18 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -26,7 +29,7 @@ public class CQLQueryHistoryFacade {
     private static final Log logger = LogFactory
             .getLog(CQLQueryHistoryFacade.class);
 
-    private QueryModel queryModel;
+    private QueryService queryService;
     private String requestAttributeName;
     private String renderServletUrl;
     private QueryInstanceDao queryInstanceDao;
@@ -40,7 +43,7 @@ public class CQLQueryHistoryFacade {
 
     public List<QueryInstance> getActiveInstances() {
         List<QueryInstance> activeInstances = new ArrayList<QueryInstance>();
-        List<QueryInstance> submitted = getQueryModel()
+        List<QueryInstance> submitted = getQueryService()
                 .getSubmittedQueries();
         for (QueryInstance instance : submitted) {
             if (isActive(instance)) {
@@ -59,7 +62,7 @@ public class CQLQueryHistoryFacade {
     public QueryInstance getInstance(Integer instanceId) {
 
         QueryInstance instance = null;
-        List<QueryInstance> submitted = getQueryModel()
+        List<QueryInstance> submitted = getQueryService()
                 .getSubmittedQueries();
 
         for (QueryInstance inst : submitted) {
@@ -96,7 +99,7 @@ public class CQLQueryHistoryFacade {
 
         QueryInstance instance = getQueryInstanceDao().getById(bean.getId());
         if (instance != null) {
-            for (QueryInstance inst : getQueryModel().getSubmittedQueries()) {
+            for (QueryInstance inst : getQueryService().getSubmittedQueries()) {
                 if (inst.getId().equals(instance.getId())) {
                     instance.setResult(inst.getResult());
                 }
@@ -142,12 +145,12 @@ public class CQLQueryHistoryFacade {
         this.queryInstanceDao = queryInstanceDao;
     }
 
-    public QueryModel getQueryModel() {
-        return queryModel;
-    }
+	public QueryService getQueryService() {
+		return queryService;
+	}
 
-    public void setQueryModel(QueryModel queryModel) {
-        this.queryModel = queryModel;
-    }
+	public void setQueryService(QueryService queryService) {
+		this.queryService = queryService;
+	}
 
 }

@@ -52,12 +52,12 @@
            value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
     <input type="button" id="${criteriaBeanFormName}SQuery" alt="Submit Query"
            value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
-    <c:if  test="${cqlQueryBean.DCQLQuery == 'false'}">
-        <c:if test="${!empty portalUser}">
-            <input type="button" id="${criteriaBeanFormName}ShareQuery" alt="Share Query"
-                   value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
-        </c:if>
+
+    <c:if test="${!empty portalUser}">
+       <input type="button" id="${criteriaBeanFormName}ShareQuery" alt="Share Query"
+              value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
     </c:if>
+
     <input type="hidden" name="selectedTabPath" value=""/>
     <input type="hidden" name="operation" value=""/>
 </form:form>

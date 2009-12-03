@@ -57,7 +57,7 @@ public class SelectQueryInstanceController extends
                                   ActionResponse response, Object obj, BindException errors)
             throws Exception {
         SelectQueryInstanceCommand command = (SelectQueryInstanceCommand) obj;
-        QueryInstance instance = getQueryModel().getQueryInstance(
+        QueryInstance instance = getQueryService().getQueryInstance(
                 command.getInstanceId());
         if (instance == null) {
             // Will be null if created in previous http session
@@ -68,7 +68,7 @@ public class SelectQueryInstanceController extends
                         + command.getInstanceId());
             }
         }
-        getQueryModel().setSelectedQueryInstance(instance);
+        getUserModel().setSelectedQueryInstance(instance);
     }
 
     public CQLQueryInstanceDao getCqlQueryInstanceDao() {

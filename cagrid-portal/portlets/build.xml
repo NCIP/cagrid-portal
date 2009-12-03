@@ -107,7 +107,7 @@
     </target>
 
 
-    <target name="deploy-portlets" description="Will deploy pre-built caGrid Portlets war">
+    <target name="deploy-portlets" depends="war" description="Will deploy pre-built caGrid Portlets war">
         <copy file="${cagrid.portlets.war.file}" tofile="${target.deploy.dir}/cagridportlets.war"
               overwrite="true"/>
     </target>

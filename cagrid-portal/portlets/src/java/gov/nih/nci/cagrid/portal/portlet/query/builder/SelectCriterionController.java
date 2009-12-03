@@ -120,7 +120,7 @@ public class SelectCriterionController extends
         }
 
         bean.setPath(path);
-        getQueryModel().setSelectedCriterion(bean);
+        getUserModel().setSelectedCriterion(bean);
     }
 
     @Required

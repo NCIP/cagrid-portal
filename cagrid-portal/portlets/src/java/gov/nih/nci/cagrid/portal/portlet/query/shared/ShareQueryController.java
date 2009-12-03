@@ -3,14 +3,16 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.shared;
 
-import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
-import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
+import gov.nih.nci.cagrid.portal.dao.QueryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.SharedQueryCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.domain.PortalUser;
+import gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.dataservice.Query;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -23,7 +25,12 @@ import org.springframework.validation.BindException;
  */
 public class ShareQueryController extends AbstractQueryActionController {
 
-	private GridServiceDao gridServiceDao;
+	private UserModel userModel;
+	private SharedQueryCatalogEntryDao sharedQueryCatalogEntryDao;
+	private QueryDao queryDao;
+	private QueryService queryService;
+	
+	private String redirectUrl;
 
 	/**
 	 * 
@@ -49,53 +56,86 @@ public class ShareQueryController extends AbstractQueryActionController {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
-	 */
 	@Override
 	protected void doHandleAction(ActionRequest request,
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
+		if(true) throw new Exception("This method should not be called.");
+	}
+	
+	
+	@Override
+	protected void handleAction(ActionRequest request,
+			ActionResponse response, Object obj, BindException errors)
+			throws Exception {
+		
 		if (errors.hasErrors()) {
 			return;
 		}
 		CQLQueryCommand command = (CQLQueryCommand) obj;
-		getQueryModel().setWorkingQuery(command);
-
-		GridDataService targetService = (GridDataService) getGridServiceDao()
-				.getByUrl(command.getDataServiceUrl());
-		String umlClassName = PortletUtils.getTargetUMLClassName(command
-				.getCqlQuery());
-		UMLClass targetClass = getQueryModel().getUmlClassDao()
-				.getUmlClassFromModel(targetService.getDomainModel(),
-						umlClassName);
-
-		if (targetClass == null) {
-			errors.rejectValue("cqlQuery", PortletConstants.INVALID_UML_CLASS,
-					null, "No such UMLClass in DomainModel.");
-			return;
+		
+		String xml = command.getCqlQuery();
+		Query query = getQueryDao().getQueryByHash(PortalUtils.createHash(xml));
+		if(query == null){
+			query = getQueryService().createQueryFromXml(xml);
 		}
-
-		SharedCQLQuery sharedQuery = new SharedCQLQuery();
-		sharedQuery.setOwner(getQueryModel().getPortalUser());
-		sharedQuery.setTargetService(targetService);
-		sharedQuery.setTargetClass(targetClass);
-		SharedQueryBean sharedQueryBean = new SharedQueryBean();
-		sharedQueryBean.setQuery(sharedQuery);
-		sharedQueryBean.setQueryCommand(command);
-		getQueryModel().setWorkingSharedQuery(sharedQueryBean);
+		
+		//Create the catalog entry
+		PortalUser portalUser = getUserModel().getPortalUser();
+		SharedQueryCatalogEntry entry = new SharedQueryCatalogEntry();
+		entry.setAbout(query);
+		entry.setAuthor(portalUser);
+		entry.setContributor(portalUser.getCatalog());
+		getSharedQueryCatalogEntryDao().save(entry);
+		
+		//Set it on the user model
+		getUserModel().setCurrentCatalogEntry(entry);
+		
+		//Send a redirect to the browse page
+		String url = getRedirectUrl() + entry.getId();
+		response.sendRedirect(url);
 	}
 
-	public GridServiceDao getGridServiceDao() {
-		return gridServiceDao;
+	public UserModel getUserModel() {
+		return userModel;
 	}
 
-	public void setGridServiceDao(GridServiceDao gridServiceDao) {
-		this.gridServiceDao = gridServiceDao;
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
 	}
+
+	public SharedQueryCatalogEntryDao getSharedQueryCatalogEntryDao() {
+		return sharedQueryCatalogEntryDao;
+	}
+
+	public void setSharedQueryCatalogEntryDao(
+			SharedQueryCatalogEntryDao sharedQueryCatalogEntryDao) {
+		this.sharedQueryCatalogEntryDao = sharedQueryCatalogEntryDao;
+	}
+
+	public QueryService getQueryService() {
+		return queryService;
+	}
+
+	public void setQueryService(QueryService queryService) {
+		this.queryService = queryService;
+	}
+
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
+	}
+
+	public QueryDao getQueryDao() {
+		return queryDao;
+	}
+
+	public void setQueryDao(QueryDao queryDao) {
+		this.queryDao = queryDao;
+	}
+
 
 }

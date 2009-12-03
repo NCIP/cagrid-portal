@@ -32,7 +32,7 @@ public class ViewAggregateTargetsController extends AbstractQueryRenderControlle
         AggregateTargetsCommand aggregateTargetsCmd = cqlQueryBean.getAggregateTargets();
 
         log.debug("No Available aggregate targets. Refreshing from database");
-        aggregateTargetsCmd.setAvailable(targetsProvider.getSemanticallyEquivalentClasses(getQueryModel().getSelectedUmlClass()));
+        aggregateTargetsCmd.setAvailable(targetsProvider.getSemanticallyEquivalentClasses(getUserModel().getSelectedUmlClass()));
         cqlQueryBean.setAggregateTargets(aggregateTargetsCmd);
 
         return aggregateTargetsCmd;
@@ -40,7 +40,7 @@ public class ViewAggregateTargetsController extends AbstractQueryRenderControlle
 
     @Override
     protected void addData(RenderRequest request, ModelAndView mav) {
-        mav.addObject("primary", getQueryModel().getSelectedUmlClass());
+        mav.addObject("primary", getUserModel().getSelectedUmlClass());
     }
 
     public UMLClassDao getUmlClassDao() {

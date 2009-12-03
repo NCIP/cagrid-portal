@@ -70,7 +70,7 @@ public class ViewUmlClassTreeController extends
 
 
     protected UMLClass getRootUmlClass() {
-        UMLClass umlClass = getQueryModel().getSelectedUmlClass();
+        UMLClass umlClass = getUserModel().getSelectedUmlClass();
 
         if (umlClass != null) {
             umlClass = getUmlClassDao().getById(umlClass.getId());

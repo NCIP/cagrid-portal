@@ -176,6 +176,7 @@
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="portalUserInterceptor2"/>
                 <ref bean="portalUserRequestInterceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
 
@@ -220,6 +221,7 @@
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="portalUserInterceptor2"/>
                 <ref bean="portalUserRequestInterceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
 

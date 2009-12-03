@@ -16,6 +16,8 @@ import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
  */
 public class CancelQueryInstanceController extends
 		AbstractQueryActionController {
+	
+	
 
 	/**
 	 * 
@@ -49,7 +51,7 @@ public class CancelQueryInstanceController extends
 			ActionResponse response, Object obj, BindException errors)
 			throws Exception {
 		SelectQueryInstanceCommand command = (SelectQueryInstanceCommand)obj;
-		getQueryModel().cancelQueryInstance(command.getInstanceId());
+		getQueryService().cancelQueryInstance(command.getInstanceId());
 	}
 
 }

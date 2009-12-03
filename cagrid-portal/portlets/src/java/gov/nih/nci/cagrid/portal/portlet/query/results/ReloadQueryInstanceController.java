@@ -60,7 +60,7 @@ public class ReloadQueryInstanceController extends AbstractQueryActionController
         if (instance instanceof CQLQueryInstance){
             workingQuery.setDataServiceUrl(((CQLQueryInstance) instance).getDataService().getUrl());
         }
-        getQueryModel().setWorkingQuery(workingQuery);
+        getUserModel().setWorkingQuery(workingQuery);
     }
 
     public QueryInstanceDao getQueryInstanceDao() {

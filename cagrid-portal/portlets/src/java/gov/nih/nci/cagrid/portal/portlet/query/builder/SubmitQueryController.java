@@ -21,6 +21,7 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
@@ -51,6 +52,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 	private CQLQueryInstanceDao cqlQueryInstanceDao;
 	private DCQLQueryInstanceDao dcqlQueryInstanceDao;
 	private String fqpService;
+	private QueryService queryService;
 
 	private int maxActiveQueries = 3;
 
@@ -103,7 +105,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 		}
 
 		CQLQueryCommand command = (CQLQueryCommand) obj;
-		getQueryModel().setWorkingQuery(command);
+		getUserModel().setWorkingQuery(command);
 
 		GridDataService dataService = null;
 		if (!command.isDcql()) {
@@ -121,7 +123,7 @@ public class SubmitQueryController extends AbstractQueryActionController {
 		// Make sure the user has not exceeded the maximum
 		// number of simultaneous queries.
 		int active = 0;
-		for (QueryInstance instance : getQueryModel().getSubmittedQueries()) {
+		for (QueryInstance instance : getQueryService().getSubmittedQueries()) {
 			if (QueryInstanceState.RUNNING.equals(instance.getState())
 					|| QueryInstanceState.SCHEDULED.equals(instance.getState())
 					|| QueryInstanceState.UNSCHEDULED.equals(instance
@@ -141,10 +143,10 @@ public class SubmitQueryController extends AbstractQueryActionController {
 
 		try {
 			if (command.isDcql()) {
-				submitDCQLQuery(getQueryModel().getPortalUser(), command
+				submitDCQLQuery(getUserModel().getPortalUser(), command
 						.getCqlQuery());
 			} else
-				submitCQLQuery(getQueryModel().getPortalUser(), dataService,
+				submitCQLQuery(getUserModel().getPortalUser(), dataService,
 						command.getCqlQuery());
 		} catch (Exception ex) {
 			logger.error(ex);
@@ -157,88 +159,11 @@ public class SubmitQueryController extends AbstractQueryActionController {
 
 	private void submitDCQLQuery(PortalUser user, String dcql)
 			throws CaGridPortletApplicationException {
-		logger.debug("Submitted Query: " + dcql);
-
-		String hash = PortalUtils.createHash(dcql);
-		DCQLQuery query = getDcqlQueryDao().getByHash(hash);
-
-		if (query == null) {
-			query = new DCQLQuery();
-			query.setXml(dcql);
-			query.setHash(hash);
-			try {
-				Set<String> svcUrls = PortletUtils.getTargetServiceUrls(dcql);
-				for(String svcUrl : svcUrls){
-					GridDataService svc = (GridDataService) getGridServiceDao().getByUrl(svcUrl);
-					query.getTargetServices().add(svc);
-				}
-			} catch (Exception ex) {
-				throw new CaGridPortletApplicationException(
-						"Error getting target service urls: " + ex.getMessage(),
-						ex);
-			}
-			getDcqlQueryDao().save(query);
-		}
-
-		DCQLQueryInstance inst = new DCQLQueryInstance();
-		if (user != null) {
-			inst.setPortalUser(user);
-		}
-		inst.setQuery(query);
-
-		GridService _fqpService = null;
-		try {
-			_fqpService = getGridServiceDao().getByUrl(getFqpService());
-			inst.setFqpService(_fqpService);
-		} catch (Exception ex) {
-			throw new CaGridPortletApplicationException(
-					"Error looking up FQP Service '" + fqpService + "': "
-							+ ex.getMessage(), ex);
-		}
-
-		getDcqlQueryInstanceDao().save(inst);
-		query.getInstances().add(inst);
-		getDcqlQueryDao().save(query);
-
-		if (user != null) {
-			PortalUser p = getPortalUserDao().getById(user.getId());
-			p.getQueryInstances().add(inst);
-			getPortalUserDao().save(p);
-		}
-		getQueryModel().submitDcqlQuery(inst);
+		getQueryService().submitQuery(dcql, null);
 	}
-
 	private void submitCQLQuery(PortalUser user, GridDataService service,
 			String cql) {
-		logger.debug("Submitted Query: " + cql);
-
-		String hash = PortalUtils.createHash(cql);
-		CQLQuery query = getCqlQueryDao().getByHash(hash);
-
-		if (query == null) {
-			query = new CQLQuery();
-			query.setXml(cql);
-			query.setHash(hash);
-			getCqlQueryDao().save(query);
-		}
-
-		CQLQueryInstance inst = new CQLQueryInstance();
-		inst.setDataService(service);
-		if (user != null) {
-			inst.setPortalUser(user);
-		}
-		inst.setQuery(query);
-		getCqlQueryInstanceDao().save(inst);
-
-		query.getInstances().add(inst);
-		getCqlQueryDao().save(query);
-
-		if (user != null) {
-			PortalUser p = getPortalUserDao().getById(user.getId());
-			p.getQueryInstances().add(inst);
-			getPortalUserDao().save(p);
-		}
-		getQueryModel().submitCqlQuery(inst);
+		getQueryService().submitQuery(cql, service.getUrl());
 	}
 
 	@Required
@@ -310,5 +235,13 @@ public class SubmitQueryController extends AbstractQueryActionController {
 
 	public void setFqpService(String fqpService) {
 		this.fqpService = fqpService;
+	}
+
+	public QueryService getQueryService() {
+		return queryService;
+	}
+
+	public void setQueryService(QueryService queryService) {
+		this.queryService = queryService;
 	}
 }

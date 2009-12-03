@@ -3,6 +3,12 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.model;
 
+import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
+import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
@@ -10,12 +16,6 @@ import javax.portlet.PortletRequest;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
-
-import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
-import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
-import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -25,7 +25,7 @@ public class SelectServiceController extends
 		AbstractActionResponseHandlerCommandController {
 
 	private GridServiceDao gridServiceDao;
-	private QueryModel queryModel;
+	private UserModel userModel;
 
 	/**
 	 * 
@@ -77,7 +77,7 @@ public class SelectServiceController extends
 		GridDataService selectedService = (GridDataService) getGridServiceDao()
 				.getByUrl(command.getDataServiceUrl());
 		logger.debug("Selecting service " + selectedService.getUrl());
-		getQueryModel().setSelectedService(selectedService);
+		getUserModel().setSelectedService(selectedService);
 	}
 
 	@Required
@@ -90,11 +90,11 @@ public class SelectServiceController extends
 	}
 
 	@Required
-	public QueryModel getQueryModel() {
-		return queryModel;
+	public UserModel getUserModel() {
+		return userModel;
 	}
 
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
 	}
 }

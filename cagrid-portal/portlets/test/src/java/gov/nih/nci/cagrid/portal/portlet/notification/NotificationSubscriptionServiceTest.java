@@ -1,5 +1,14 @@
 package gov.nih.nci.cagrid.portal.portlet.notification;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.NotificationSubscriberDao;
 import gov.nih.nci.cagrid.portal.dao.NotificationSubscriptionDao;
@@ -8,11 +17,9 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.NotificationSubscriber;
 import gov.nih.nci.cagrid.portal.domain.NotificationSubscription;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
-import static org.junit.Assert.*;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
+
 import org.junit.Test;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
 
 /**
  * User: kherm
@@ -47,9 +54,9 @@ public class NotificationSubscriptionServiceTest {
         PortalUser _mockUser = mock(PortalUser.class);
         when(_mockUser.getId()).thenReturn(1);
 
-        QueryModel _mockQModel = mock(QueryModel.class);
+        UserModel _mockQModel = mock(UserModel.class);
         when(_mockQModel.getPortalUser()).thenReturn(_mockUser);
-        service.setQueryModel(_mockQModel);
+        service.setUserModel(_mockQModel);
 
         NotificationSubscription _mockSubcription = mock(NotificationSubscription.class);
         when(_mockNDao.getSubscription(new GridService(), _mockUser)).thenReturn(_mockSubcription);

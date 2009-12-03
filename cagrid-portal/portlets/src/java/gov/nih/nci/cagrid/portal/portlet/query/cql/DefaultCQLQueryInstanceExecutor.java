@@ -70,7 +70,7 @@ public class DefaultCQLQueryInstanceExecutor implements
 
         if (instance.getPortalUser() != null) {
             String proxyStr = instance.getPortalUser().getGridCredential();
-            proxyStr = getEncryptionService().decrypt(proxyStr);
+            proxyStr = getEncryptionService().decrypt(proxyStr);	
             if (proxyStr != null) {
                 try {
                     cred = new GlobusCredential(new ByteArrayInputStream(

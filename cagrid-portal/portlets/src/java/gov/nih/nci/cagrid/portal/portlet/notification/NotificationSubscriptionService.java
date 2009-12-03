@@ -10,7 +10,8 @@ import gov.nih.nci.cagrid.portal.domain.NotificationSubscription;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.portlet.AjaxViewGenerator;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
-import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
+import gov.nih.nci.cagrid.portal.portlet.UserModel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.directwebremoting.annotations.Param;
@@ -35,7 +36,7 @@ public class NotificationSubscriptionService extends AjaxViewGenerator {
     private GridServiceDao gridServiceDao;
     private PortalUserDao portalUserDao;
     private static final Log logger = LogFactory.getLog(NotificationSubscriptionService.class);
-    private QueryModel queryModel;
+    private UserModel userModel;
 
 
     /**
@@ -99,8 +100,8 @@ public class NotificationSubscriptionService extends AjaxViewGenerator {
     }
 
     public PortalUser getPortalUser() {
-        if (queryModel.getPortalUser() != null)
-            return portalUserDao.getById(queryModel.getPortalUser().getId());
+        if (getUserModel().getPortalUser() != null)
+            return portalUserDao.getById(getUserModel().getPortalUser().getId());
         return null;
     }
 
@@ -121,14 +122,6 @@ public class NotificationSubscriptionService extends AjaxViewGenerator {
         this.notificationSubscriberDao = notificationSubscriberDao;
     }
 
-    public QueryModel getQueryModel() {
-        return queryModel;
-    }
-
-    public void setQueryModel(QueryModel queryModel) {
-        this.queryModel = queryModel;
-    }
-
     public PortalUserDao getPortalUserDao() {
         return portalUserDao;
     }
@@ -136,4 +129,14 @@ public class NotificationSubscriptionService extends AjaxViewGenerator {
     public void setPortalUserDao(PortalUserDao portalUserDao) {
         this.portalUserDao = portalUserDao;
     }
+
+
+	public UserModel getUserModel() {
+		return userModel;
+	}
+
+
+	public void setUserModel(UserModel userModel) {
+		this.userModel = userModel;
+	}
 }

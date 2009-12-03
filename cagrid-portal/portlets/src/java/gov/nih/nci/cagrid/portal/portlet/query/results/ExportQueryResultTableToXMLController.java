@@ -20,63 +20,67 @@ import java.io.OutputStream;
  */
 public class ExportQueryResultTableToXMLController extends AbstractController {
 
-    private QueryResultTableDao queryResultTableDao;
-    private PortalFileService portalFileService;
+	private QueryResultTableDao queryResultTableDao;
+	private PortalFileService portalFileService;
 
-    /**
+	/**
      *
      */
-    public ExportQueryResultTableToXMLController() {
+	public ExportQueryResultTableToXMLController() {
 
-    }
+	}
 
-    /*
-      * (non-Javadoc)
-      *
-      * @see
-      * org.springframework.web.servlet.mvc.AbstractController#handleRequestInternal
-      * (javax.servlet.http.HttpServletRequest,
-      * javax.servlet.http.HttpServletResponse)
-      */
-    @Override
-    protected ModelAndView handleRequestInternal(HttpServletRequest req,
-                                                 HttpServletResponse res) throws Exception {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.web.servlet.mvc.AbstractController#handleRequestInternal
+	 * (javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected ModelAndView handleRequestInternal(HttpServletRequest req,
+			HttpServletResponse res) throws Exception {
 
-        res.setContentType("text/xml");
-        res.addHeader("Content-Disposition",
-                "attachment;filename=\"query_results.xml\"");
+		String instanceId = req.getParameter("instanceId");
+		doExport(Integer.valueOf(instanceId), res);
 
-        String instanceId = req.getParameter("instanceId");
-        QueryResultTable table = getQueryResultTableDao().getByQueryInstanceId(
-                Integer.valueOf(instanceId));
-        byte[] in = null;
-        try {
-            in = portalFileService.read(table.getData().getFileName());
-            OutputStream out = res.getOutputStream();
-            out.write(in);
-            out.flush();
-        } catch (IOException e) {
-            logger.warn("Could not read File using the file service", e);
-        }
+		return null;
+	}
 
+	protected void doExport(Integer instanceId, HttpServletResponse res)
+			throws Exception {
+		res.setContentType("text/xml");
+		res.addHeader("Content-Disposition",
+				"attachment;filename=\"query_results.xml\"");
+		QueryResultTable table = getQueryResultTableDao().getByQueryInstanceId(
+				instanceId);
+		byte[] in = null;
+		try {
+			in = getPortalFileService().read(table.getData().getFileName());
+			OutputStream out = res.getOutputStream();
+			out.write(in);
+			out.flush();
+		} catch (IOException e) {
+			logger.warn("Could not read File using the file service", e);
+		}
 
-        return null;
-    }
+	}
 
-    public PortalFileService getPortalFileService() {
-        return portalFileService;
-    }
+	public PortalFileService getPortalFileService() {
+		return portalFileService;
+	}
 
-    public void setPortalFileService(PortalFileService portalFileService) {
-        this.portalFileService = portalFileService;
-    }
+	public void setPortalFileService(PortalFileService portalFileService) {
+		this.portalFileService = portalFileService;
+	}
 
-    public QueryResultTableDao getQueryResultTableDao() {
-        return queryResultTableDao;
-    }
+	public QueryResultTableDao getQueryResultTableDao() {
+		return queryResultTableDao;
+	}
 
-    public void setQueryResultTableDao(QueryResultTableDao queryResultTableDao) {
-        this.queryResultTableDao = queryResultTableDao;
-    }
+	public void setQueryResultTableDao(QueryResultTableDao queryResultTableDao) {
+		this.queryResultTableDao = queryResultTableDao;
+	}
 
 }

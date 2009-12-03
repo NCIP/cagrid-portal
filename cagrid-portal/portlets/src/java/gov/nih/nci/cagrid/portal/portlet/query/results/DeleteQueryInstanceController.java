@@ -55,14 +55,14 @@ public class DeleteQueryInstanceController extends
                                   ActionResponse response, Object obj, BindException errors)
             throws Exception {
         SelectQueryInstanceCommand command = (SelectQueryInstanceCommand) obj;
-        QueryInstance instance = getQueryModel().getQueryInstance(command.getInstanceId());
+        QueryInstance instance = getQueryService().getQueryInstance(command.getInstanceId());
         if (instance != null) {
             //Will be null if it was created in previous http session.
-            getQueryModel().deleteQueryInstance(instance.getId());
+            getQueryService().deleteQueryInstance(instance.getId());
         }
         instance = getQueryInstanceDao().getById(command.getInstanceId());
-        if (getQueryModel().getPortalUser() != null) {
-            PortalUser user = getQueryModel().getPortalUser();
+        if (getUserModel().getPortalUser() != null) {
+            PortalUser user = getUserModel().getPortalUser();
             user = getPortalUserDao().getById(user.getId());
             user.getQueryInstances().remove(instance);
             getPortalUserDao().save(user);

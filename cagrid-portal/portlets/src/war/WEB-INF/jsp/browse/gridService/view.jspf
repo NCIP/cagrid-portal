@@ -39,9 +39,11 @@
    </div>   
    </c:if>
 
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/prototype.js"/>'></script>
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/effects.js"/>'></script>
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/controls.js"/>'></script>
 
-    <%----%>
-    <%--<%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>--%>
+    <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
     <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>
 
 </c:if>

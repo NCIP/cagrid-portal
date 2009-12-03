@@ -56,17 +56,17 @@ public class SubmitBuilderQueryController extends SubmitQueryController {
 		String xml = cqlQueryBean.toXml();
 		logger.debug("XML: " + xml);
 		command.setCqlQuery(xml);
-		command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());		
+		command.setDataServiceUrl(getUserModel().getSelectedService().getUrl());		
 		
 		super.doHandleAction(request, response, command, errors);
 	}
 	
 	@Override
 	protected Object getCommand(PortletRequest request) throws Exception {
-		CQLQueryCommand command = getQueryModel().getWorkingQuery();
+		CQLQueryCommand command = getUserModel().getWorkingQuery();
 		if (command == null) {
 			command = new CQLQueryCommand();
-			getQueryModel().setWorkingQuery(command);
+			getUserModel().setWorkingQuery(command);
 		}
 		return command;
 	}

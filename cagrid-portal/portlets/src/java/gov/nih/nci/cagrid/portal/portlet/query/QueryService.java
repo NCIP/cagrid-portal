@@ -110,30 +110,7 @@ public class QueryService implements ApplicationContextAware {
 		String hash = PortalUtils.createHash(queryXML);
 		DCQLQuery query = (DCQLQuery) getQueryDao().getQueryByHash(hash);
 		if (query == null) {
-			query = new DCQLQuery();
-			query.setXml(queryXML);
-			query.setHash(hash);
-
-			getQueryDao().save(query);
-		}
-		
-		if(query.getTargetServices() == null || query.getTargetServices().size() == 0){
-			List<GridDataService> targetServices = new ArrayList<GridDataService>();
-			Set<String> svcUrls = null;
-			try {
-				svcUrls = PortletUtils.getTargetServiceUrls(queryXML);
-			} catch (Exception ex) {
-				throw new RuntimeException(
-						"Error getting target service URLs from DCQL query: "
-								+ ex.getMessage(), ex);
-			}
-			for (String svcUrl : svcUrls) {
-				GridDataService svc = (GridDataService) getGridServiceDao()
-						.getByUrl(svcUrl);
-				targetServices.add(svc);
-			}
-			query.setTargetServices(targetServices);
-			getQueryDao().save(query);
+			query = (DCQLQuery)createQueryFromXml(queryXML);
 		}
 
 		DCQLQueryInstance instance = new DCQLQueryInstance();
@@ -154,10 +131,7 @@ public class QueryService implements ApplicationContextAware {
 		String hash = PortalUtils.createHash(queryXML);
 		CQLQuery query = (CQLQuery) getQueryDao().getQueryByHash(hash);
 		if (query == null) {
-			query = new CQLQuery();
-			query.setXml(queryXML);
-			query.setHash(hash);
-			getQueryDao().save(query);
+			query = (CQLQuery)createQueryFromXml(queryXML);
 		}
 
 		CQLQueryInstance instance = new CQLQueryInstance();
@@ -182,6 +156,63 @@ public class QueryService implements ApplicationContextAware {
 		executor.start();
 		executors.put(instance.getId(), executor);
 	}
+	
+	public void cancelQueryInstance(Integer instanceId) {
+        QueryInstanceExecutor executor = executors.get(instanceId);
+        executor.cancel();
+    }
+
+    public QueryInstance deleteQueryInstance(Integer instanceId) {
+        cancelQueryInstance(instanceId);
+        QueryInstanceExecutor executor = executors.remove(instanceId);
+        return executor.getQueryInstance();
+    }
+    
+    public QueryInstance getQueryInstance(Integer instanceId) {
+        QueryInstance selected = null;
+        for (QueryInstance instance : getSubmittedQueries()) {
+            if (instance.getId().equals(instanceId)) {
+                selected = instance;
+                break;
+            }
+        }
+        return selected;
+    }
+    
+    public Query createQueryFromXml(String xml){
+    	Query query = null;
+    	String hash = PortalUtils.createHash(xml);
+    	if(PortletUtils.isCQL(xml)){
+    		query = new CQLQuery();
+			query.setXml(xml);
+			query.setHash(hash);
+			getQueryDao().save(query);
+    	}else{
+			query = new DCQLQuery();
+			query.setXml(xml);
+			query.setHash(hash);
+			getQueryDao().save(query);
+
+			List<GridDataService> targetServices = new ArrayList<GridDataService>();
+			Set<String> svcUrls = null;
+			try {
+				svcUrls = PortletUtils.getTargetServiceUrls(xml);
+			} catch (Exception ex) {
+				throw new RuntimeException(
+						"Error getting target service URLs from DCQL query: "
+								+ ex.getMessage(), ex);
+			}
+			for (String svcUrl : svcUrls) {
+				GridDataService svc = (GridDataService) getGridServiceDao()
+						.getByUrl(svcUrl);
+				targetServices.add(svc);
+			}
+			((DCQLQuery)query).setTargetServices(targetServices);
+			getQueryDao().save(query);    		
+    	}
+    	
+    	return query;
+    }
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;

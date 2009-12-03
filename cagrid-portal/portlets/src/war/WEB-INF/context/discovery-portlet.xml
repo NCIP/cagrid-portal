@@ -256,7 +256,7 @@
         <property name="objectName" value="rootNode"/>
         <property name="successViewName" value="/details/service"/>
         <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
-        <property name="loginUrl" value="/web/guest/login"/>
+        <property name="loginUrl" value="${cagrid.portal.loginUrl}"/>
     </bean>
 
     <bean
@@ -435,7 +435,7 @@
                 <ref bean="parameterMappingInterceptor"/>
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="liferayUserInteceptor"/>
-                <ref bean="portalUserInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
             </list>
         </property>
 

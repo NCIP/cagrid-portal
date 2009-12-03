@@ -33,11 +33,11 @@ public class ViewCriterionController extends AbstractQueryRenderController {
 	 */
 	@Override
 	protected Object getObject(RenderRequest request) {
-		return getQueryModel().getSelectedCriterion();
+		return getUserModel().getSelectedCriterion();
 	}
 	
 	protected void addData(RenderRequest request, ModelAndView mav){
-		mav.addObject("path", getQueryModel().getSelectedCriterion().getPath());
+		mav.addObject("path", getUserModel().getSelectedCriterion().getPath());
 		mav.addObject("predicates", getPredicates());
 	}
 
