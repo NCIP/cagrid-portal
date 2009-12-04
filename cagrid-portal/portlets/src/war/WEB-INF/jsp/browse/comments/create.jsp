@@ -64,14 +64,15 @@
 
     function ${ns}saveComment() {
 
-        var commentText = jQuery("#{ns}commentText").val;
+        var commentText = jQuery("#${ns}commentText").val();
 
-        CommentsManagerFacade.addComment(
+
+        CommentsManagerFacade.addComment(commentText,
         {
-            callback:function(commentText, response) {
+            callback:function(response) {
                 alert(response);
-            }
-            ,
+                Liferay.Popup.close(${ns}addCommentDialog);      
+            },
             errorHandler:function(errorString, exception) {
                 alert("Error rendering role types: " + errorString);
             }

@@ -8,11 +8,14 @@ import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
+@Transactional
 public class CommentsManagerFacade extends CatalogEntryManagerFacade {
 
     public List<Comment> getAll() {
@@ -28,7 +31,7 @@ public class CommentsManagerFacade extends CatalogEntryManagerFacade {
         cmt.setAuthor(portalUser);
         cmt.setCreatedAt(new Date());
         cmt.setCommentText(comment);
-        CatalogEntry ce = getUserModel().getCurrentCatalogEntry();
+        CatalogEntry ce = loadCurrentCE();
         ce.getComments().add(cmt);
         getCatalogEntryDao().save(ce);
 
