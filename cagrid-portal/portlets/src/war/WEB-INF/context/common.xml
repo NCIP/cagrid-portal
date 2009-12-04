@@ -396,7 +396,7 @@
         			<property name="message" value="One of the data services ({0}) involved in your federated query has encountered and error."/>
         		</bean>
         		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value="faultString: GSSException: Defective credential detected [Caused by: Proxy file (/tmp/\w+) not found.]"/>
+        			<property name="pattern" value="faultString: GSSException: Defective credential detected \[Caused by: Proxy file \(/tmp/.+"/>
         			<property name="message" value="You must be logged in in order to query this service."/>
         		</bean>
         		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
