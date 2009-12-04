@@ -36,6 +36,7 @@ var g_catalogType = "";
 var g_catalogType_label = "";
 var g_aof = "";
 var g_selectedids = "";
+var g_tree;
 
 <%--Represents the summary tree for filtering search results--%>
 var SummaryTree = Class.create({
@@ -50,6 +51,8 @@ var SummaryTree = Class.create({
             this.catalogType = g_wildcard;
 
         this.tree = new YAHOO.widget.TreeView(document.getElementById(catalog.config.treeDiv));
+    <%--also save it in a global variable--%>
+        g_tree = this.tree;
 
     <%--onClick callback. This is when a catalog type is selected in the tree. We will update the AOF tree here--%>
         this.tree.subscribe("labelClick", function(node, tree) {
@@ -315,7 +318,7 @@ var Catalogs = Class.create({
             this.query.removeFacet(this.config.filter.type);
             this.config.filter = null;
         }
-         if (this.config.catalog) {
+        if (this.config.catalog) {
             YAHOO.log("Adding catalog_type facet:" + this.config.catalog.type);
             this.query.addFacet("catalog_type", this.config.catalog.type);
         }
