@@ -5,13 +5,13 @@
 <script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
 
 <span id="${ns}commentTipContainer" class="yui-skin-sam"></span>
-<c:if test="${canUpdate}">
+
+<c:if test="${!empty portalUser}">
     <div class="row">
         <div class="value">
             <tags:image id="${ns}commentLink" name="comment.gif"/>
         </div>
     </div>
-
 </c:if>
 
 <script type="text/javascript">

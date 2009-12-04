@@ -1,3 +1,6 @@
+
+<%@ include file="/WEB-INF/jsp/browse/comments/commentLink.jspf" %>
+
 <link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/autocomplete/assets/skins/sam/autocomplete.css"/>">
 <script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/autocomplete/autocomplete-min.js"/>"></script>
