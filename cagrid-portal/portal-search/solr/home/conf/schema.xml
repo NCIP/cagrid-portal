@@ -157,6 +157,13 @@ lexicographic ordering isn't equal to the numeric ordering) -->
             </analyzer>
         </fieldType>
 
+        <fieldType name="portalText" class="solr.TextField" positionIncrementGap="100">
+            <analyzer>
+                <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+
 
         <!-- Less flexible matching, but less false matches.  Probably not ideal for product names,
 but may be good for SKUs.  Can insert dashes in the wrong place and still match. -->
@@ -259,6 +266,7 @@ but may be good for SKUs.  Can insert dashes in the wrong place and still match.
         <!-- catchall field, containing all other searchable text fields (implemented
 via copyField further on in this schema  -->
         <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+        <field name="portalText" type="portalText" indexed="true" stored="true" multiValued="true"/>
 
         <!-- Here, default is used to create a "timestamp" field indicating
            When each document was indexed.
@@ -290,8 +298,6 @@ via copyField further on in this schema  -->
 
         <field name="rating" type="sfloat" indexed="true" stored="true"/>
         <field name="featured" type="boolean" indexed="true" stored="true"/>
-
-        <!--will just treat it as a string-->
         <field name="phoneNumber" type="string" indexed="true" stored="true"/>
         <field name="service_name" type="text" indexed="true" stored="true"/>
         <field name="service_description" type="text" indexed="true" stored="true"/>
@@ -305,7 +311,9 @@ via copyField further on in this schema  -->
         <field name="oper_name" multiValued="true" type="text" indexed="true" stored="true"/>
         <field name="oper_description" multiValued="true" type="text" indexed="true" stored="true"/>
 
-         <field name="author" type="string" indexed="true" stored="true"/>
+        <field name="author" type="string" indexed="true" stored="true"/>
+        <field name="status" type="string" indexed="true" stored="true"/>
+
         <!-- Since we want to search multiple fields (description, title, user, etc.),
 we’ll set the default search field to a catchall text field called text -->
 
@@ -350,7 +358,11 @@ both match, the first appearing in the schema will be used.  -->
     <!-- copyField commands copy one field to another at the time a document
 is added to the index.  It's used either to index the same field differently,
 or to add multiple fields to the same field for easier/faster searching.  -->
-    <copyField source="name" dest="text"/>
+    <!--<copyField source="name" dest="text"/>-->
+    <!--copy some fields so that they are not tokenized too strictly-->
+    <copyField source="description" dest="portalText"/>
+    <copyField source="name" dest="portalText"/>
+
     <copyField source="name" dest="nameSort"/>
     <copyField source="lastName" dest="text"/>
     <copyField source="firstName" dest="text"/>

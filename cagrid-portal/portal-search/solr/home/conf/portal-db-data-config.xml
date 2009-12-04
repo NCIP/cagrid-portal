@@ -75,6 +75,11 @@
                         </entity>
                     </entity>
                 </entity>
+                <entity name="status"
+                        query="select * from status_change where service_id='${GridService.id}'
+                         and time=(Select max(time) from status_change where service_id='${GridService.id}')">
+                    <field name="status" column="status"/>
+                </entity>
             </entity>
             <entity name="AreaOfFocusTerm"
                     query="select term_id from cat_entry_aofterms where entry_id='${AllCatalogs.id}'">
@@ -101,6 +106,6 @@
                 </entity>
             </entity>
         </entity>
- </document>
+    </document>
 
 </dataConfig>
