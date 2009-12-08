@@ -8,15 +8,16 @@
 
 <c:if test="${!empty portalUser}">
     <div class="row">
-        <div class="value">
-            <tags:image id="${ns}commentLink" name="comment.gif"/>
-        </div>
+
+        	<span id="${ns}commentLink"></span>
+            
+
     </div>
 </c:if>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
-
+		
         ${ns}commentTip = new YAHOO.widget.Tooltip("commentTip", {
             context:"${ns}commentLink",
             text:"Write a comment about this Catalog Item",

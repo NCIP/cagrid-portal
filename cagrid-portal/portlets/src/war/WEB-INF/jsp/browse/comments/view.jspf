@@ -3,16 +3,17 @@
 <script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
 <div>
-<div class="row">
-    <div id="${ns}commentsHeader">
-        <h3>Comments</h3>
+	<div class="row">
+	    <div id="${ns}commentsHeader">
+	        <h3>Comments</h3>
+	    </div>
     </div>
-    </div>
-<div class="row">
-    <div id="${ns}commentsList">
-        </div>
+	<div class="row">
+	    <div id="${ns}commentsList">
+	    </div>
+	</div>
+	<%@ include file="/WEB-INF/jsp/browse/comments/commentLink.jspf" %>
 </div>
-    </div>
 
 
 <script type="text/javascript">
@@ -45,7 +46,11 @@
                   alert("Error rendering role types: " + errorString);
               }
         });
-
+		${ns}commentLink = new YAHOO.widget.Button({
+		label: "Add Comment",
+		id: "${ns}commentLink",
+		container: "${ns}commentLink"
+	});
     }
     
 </script>
