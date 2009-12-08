@@ -33,7 +33,7 @@
 <div class="row">
     <c:if test="${backLink !=null}">
         <div style="float:left;">
-            <a href="<c:out value="${viewUrl}"/>">Back to search results</a>
+            <a href="<c:out value="${viewUrl}"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to search results</a>
         </div>
     </c:if>
 

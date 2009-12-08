@@ -21,7 +21,7 @@
 		<portlet:param name="id" value="CPREPLACE"/>
 	</portlet:renderURL>
 	
-<a href="${viewUrl}">Back to search results</a>
+<a href="${viewUrl}"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to search results</a>
 
 <%@ include file="/WEB-INF/jsp/browse/entry_types.jspf" %>
 

@@ -9,7 +9,7 @@
 <portlet:renderURL var="backUrl">
 	<portlet:param name="selectedTabPath" value="/shared/search/list"/>
 </portlet:renderURL>
-<a href="<c:out value="${backUrl}"/>">&lt;&lt;&nbsp;Back to search results</a>
+<a href="<c:out value="${backUrl}"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to search results</a>
 <br/>
 <br/>
 <%@ include file="/WEB-INF/jsp/query/shared/search/view.jspf" %>
