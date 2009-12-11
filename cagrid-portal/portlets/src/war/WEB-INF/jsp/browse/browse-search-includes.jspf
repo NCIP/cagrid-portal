@@ -29,7 +29,7 @@
 <script type="text/javascript">
 //var myLogReader = new YAHOO.widget.LogReader("myLogger");
 
-var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
+var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?spellcheck=true&", {responseType:YAHOO.util.XHRDataSource.JSON});
 //global variables
 var g_wildcard = "*:*";
 var g_catalogType = "";
@@ -143,7 +143,7 @@ var SummaryTree = Class.create({
 
             for (var i = 0; i < nodesList.length; i++) {
                 var node = nodesList[i];
-                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "(<span class='numberOfResults'>" + node.count + "</span>)",type:subTree.type,name:node.name}, subTreeNode, true);
+                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "<span class='numberOfResults'>(" + node.count + ")</span>",type:subTree.type,name:node.name}, subTreeNode, true);
             }
         }
     },
@@ -285,10 +285,16 @@ var Catalogs = Class.create({
             try {
                 var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
                 var resultList = solrJSON.response.docs;
+
                 this.setupPaginator({start:solrJSON.response.start, count:solrJSON.response.numFound});
 
                 YAHOO.log("Firing result event");
                 resultEvent.fire(resultList);
+                if (solrJSON.spellcheck != null) {
+                    var suggestions = solrJSON.spellcheck.suggestions;
+                    ${ns}addSuggestions(suggestions);
+                }
+
             }
             catch (x) {
                 alert("JSON Parse failed!" + x);
@@ -335,10 +341,11 @@ var Catalogs = Class.create({
 
 
         this.paginatorSummaryDiv.innerHTML = '';
-        this.paginatorSummaryDiv.appendChild(document.createTextNode("Results " + startValue + " - " + endValue + " of " + totalRecords));
-        if (this.config.keyword != "*:*")
-            this.paginatorSummaryDiv.appendChild(document.createTextNode(" for " + this.config.keyword));
-
+        if (totalRecords > 0) {
+            this.paginatorSummaryDiv.appendChild(document.createTextNode("Results " + startValue + " - " + endValue + " of " + totalRecords));
+            if (this.config.keyword != "*:*")
+                this.paginatorSummaryDiv.appendChild(document.createTextNode(" for " + this.config.keyword));
+        }
     },
 
     handlePagination: function(newState, cat) {

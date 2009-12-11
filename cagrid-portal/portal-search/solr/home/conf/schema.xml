@@ -161,6 +161,7 @@ lexicographic ordering isn't equal to the numeric ordering) -->
             <analyzer>
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
                 <filter class="solr.LowerCaseFilterFactory"/>
+                <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
             </analyzer>
         </fieldType>
 
@@ -289,6 +290,7 @@ via copyField further on in this schema  -->
         <field name="number" type="text" indexed="true" stored="true"/>
         <field name="catalog_type" type="text_ws" indexed="true" stored="true"/>
         <field name="description" type="text" indexed="true" stored="true"/>
+        <field name="domain_description" type="text" indexed="true" stored="true"/>
         <field name="homepageUrl" type="text" indexed="true" stored="true"/>
         <field name="endpoint" type="text" indexed="true" stored="true"/>
         <field name="term_description" type="text" indexed="true" stored="true" multiValued="true"/>
@@ -313,6 +315,7 @@ via copyField further on in this schema  -->
 
         <field name="author" type="string" indexed="true" stored="true"/>
         <field name="status" type="string" indexed="true" stored="true"/>
+        <field name="service_type" type="string" indexed="true" stored="true"/>
 
         <!-- Since we want to search multiple fields (description, title, user, etc.),
 we’ll set the default search field to a catchall text field called text -->
@@ -359,17 +362,18 @@ both match, the first appearing in the schema will be used.  -->
 is added to the index.  It's used either to index the same field differently,
 or to add multiple fields to the same field for easier/faster searching.  -->
     <!--<copyField source="name" dest="text"/>-->
-    <!--copy some fields so that they are not tokenized too strictly-->
-    <copyField source="description" dest="portalText"/>
-    <copyField source="name" dest="portalText"/>
-
     <copyField source="name" dest="nameSort"/>
+
+    <!--copy to the default search field-->
+    <copyField source="name" dest="text"/>
+    <copyField source="catalogName" dest="text"/>
+    <copyField source="description" dest="text"/>
     <copyField source="lastName" dest="text"/>
     <copyField source="firstName" dest="text"/>
     <copyField source="street1" dest="text"/>
+    <copyField source="phoneNumber" dest="text"/>
     <copyField source="locality" dest="text"/>
     <copyField source="homepageUrl" dest="text"/>
-    <copyField source="stateProvince" dest="text"/>
     <copyField source="displayName" dest="text"/>
     <copyField source="shortName" dest="text"/>
     <copyField source="role" dest="text"/>
@@ -380,7 +384,6 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="className" dest="text"/>
     <copyField source="service_name" dest="text"/>
     <copyField source="service_description" dest="text"/>
-
 
     <!-- Similarity is the scoring routine for each document vs. a query.
 A custom similarity may be specified here, but the default is fine

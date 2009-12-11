@@ -1,5 +1,5 @@
 <dataConfig>
-    <dataSource driver="com.mysql.jdbc.Driver" url="@cagrid.portal.db.url@"
+    <dataSource driver="com.mysql.jdbc.Driver" url="@cagrid.portal.db.url@?autoReconnect=true"
                 user="@cagrid.portal.db.username@" password="@cagrid.portal.db.password@"/>
 
     <document name="CatalogEntry">
@@ -29,13 +29,14 @@
                     pk="id"
                     query="select * from grid_services where id='${AllCatalogs.grid_service_id}'">
                 <field name="endpoint" column="url"/>
+                <field name="service_type" column="service_type"/>
                 <!--domain model-->
                 <entity name="DomainModel"
                         query="select id from domain_models where service_id='${GridService.id}'">
                     <entity name="UMLClass"
                             query="select * from uml_class where model_id='${DomainModel.id}'">
                         <field name="className" column="className"/>
-                        <field name="description" column="description"/>
+                        <field name="domain_description" column="description"/>
                         <entity name="SemanticMetadataMapping"
                                 query="select SEM_META_ID from uml_class_sem_meta where uml_class_id='${UMLClass.id}'">
                             <entity name="SemanticMetadata"

@@ -382,6 +382,13 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
            <str name="fl">*</str>
            <str name="version">2.1</str>
             -->
+            <!--spellcheck-->
+            <!-- omp = Only More Popular -->
+            <str name="spellcheck.onlyMorePopular">false</str>
+            <!-- exr = Extended Results -->
+            <str name="spellcheck.extendedResults">false</str>
+            <!--  The number of suggestions to return -->
+            <str name="spellcheck.count">3</str>
         </lst>
         <arr name="components">
             <str>query</str>
@@ -389,6 +396,7 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
             <str>mlt</str>
             <str>highlight</str>
             <str>tree</str>
+            <str>spellcheck</str>
         </arr>
 
     </requestHandler>
@@ -525,62 +533,57 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
         <str name="type_field">catalog_type</str>
         <str name="type_label">Catalog Type</str>
 
-          <str name="terms_field">term_label</str>
+        <str name="terms_field">term_label</str>
         <str name="terms_label">Area Of Focus</str>
 
         <lst name="catalog_type">
-          <str name="tool_grid_service_endpoint">Grid Service Endpoint</str>
-            <str name="person">People</str>
+            <str name="tool_grid_service_endpoint">Services</str>
+            <str name="person">Persons</str>
             <str name="poc">Point Of Contact</str>
-            <str name="institution">Institution</str>
-            <str name="tool_shared_query">Shared Query</str>
-            <str name="tools">Tool</str>
+            <str name="institution">Institutions</str>
+            <str name="tool_shared_query">Shared Queries</str>
+            <str name="tools">Tools</str>
             <str name="dataset">Dataset</str>
-            <str name="tool_desktop">Desktop Tool</str>
+            <str name="tool_desktop">Tools</str>
             <str name="community">Communities</str>
-            <str name="information_model">Information Model</str>
-            <str name="tool_grid_service_interface">Grid Service Interface</str>
-            <str name="kc">Knowledge Center</str>
-            <str name="tool_portlet">Portlet</str>
-            <str name="project">Community Project</str>
+            <str name="information_model">Information Models</str>
+            <str name="tool_grid_service_interface">Service Interfaces</str>
+            <str name="kc">Knowledge Centers</str>
+            <str name="tool_portlet">Portlets</str>
+            <str name="project">Community Projects</str>
             <str name="terminology">Terminology</str>
-            <str name="tool_deployment">Tool Deployment</str>
-            <str name="tool_workflow">Workflow</str>
-            <str name="tool_workspace">Workspace</str>
+            <str name="tool_deployment">Tools</str>
+            <str name="tool_workflow">Workflows</str>
+            <str name="tool_workspace">Workspaces</str>
         </lst>
-
-
     </searchComponent>
+
 
     <!-- The spell check component can return a list of alternative spelling
   suggestions.  -->
     <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
 
-        <str name="queryAnalyzerFieldType">textSpell</str>
-
-        <lst name="spellchecker">
-            <str name="name">default</str>
-            <str name="field">spell</str>
-            <str name="spellcheckIndexDir">./spellchecker1</str>
-
-        </lst>
-        <lst name="spellchecker">
-            <str name="name">jarowinkler</str>
-            <str name="field">spell</str>
-            <!-- Use a different Distance Measure -->
-            <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
-            <str name="spellcheckIndexDir">./spellchecker2</str>
-
-        </lst>
-
         <lst name="spellchecker">
             <str name="classname">solr.FileBasedSpellChecker</str>
             <str name="name">file</str>
+            <str name="fieldType">text</str>
             <str name="sourceLocation">spellings.txt</str>
             <str name="characterEncoding">UTF-8</str>
             <str name="spellcheckIndexDir">./spellcheckerFile</str>
+            <str name="buildOnCommit">true</str>
         </lst>
+        <lst name="spellchecker">
+            <str name="name">default</str>
+            <str name="classname">solr.IndexBasedSpellChecker</str>
+            <str name="field">text</str>
+            <str name="spellcheckIndexDir">./spellcheckerIdx</str>
+            <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
+        </lst>
+
+
+        <str name="queryAnalyzerFieldType">textSpell</str>
     </searchComponent>
+
 
     <!-- a request handler utilizing the spellcheck component -->
     <requestHandler name="/spellCheckCompRH" class="solr.SearchHandler">

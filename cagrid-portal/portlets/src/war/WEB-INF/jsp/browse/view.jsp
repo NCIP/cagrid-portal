@@ -55,7 +55,33 @@
         $("jsFillerFeaturedResults").innerHTML = "";
         $("regularResults").setStyle({display: 'none'});
         $("jsFillerRegularResults").innerHTML = "";
+        $("${ns}suggestions").innerHTML = "";
     }
+
+    <%--suggest--%>
+    function ${ns}addSuggestions(suggestions) {
+    <%--traverse the suggestion object--%>
+        if (suggestions.length > 0) {
+            suggestions = suggestions[1].suggestion;
+            if (suggestions.length > 0) {
+
+                var suggestionDiv = document.createElement('div');
+                suggestionDiv.appendChild(document.createTextNode("Did you mean:"));
+
+                for (var i = 0; i < suggestions.length; i++) {
+
+                    var suggestLnk = document.createElement('a');
+                    var suggestWord = suggestions[i];
+                    suggestLnk.setAttribute('href', 'javascript:${ns}search("' + suggestWord + '")');
+                    suggestLnk.className = "suggestLink";
+                    suggestLnk.innerHTML = suggestWord + " ";
+                    suggestionDiv.appendChild(suggestLnk);
+                }
+                $("${ns}suggestions").appendChild(suggestionDiv);
+            }
+        }
+    }
+
 
     function ${ns}pageCallback(type, args) {
 
@@ -158,6 +184,7 @@
     });
 
     function ${ns}search(keyword) {
+        ${ns}resetPage();
 
         if (keyword.length < 1) {
             keyword = wildcard;
@@ -200,6 +227,11 @@
                 <%@ include file="/WEB-INF/jsp/browse/sort.jspf" %>
                 <div id="${ns}searchBar" class="searchBar">
                 </div>
+
+                <div id="${ns}suggestions">
+                        <%--add suggestions here--%>
+                </div>
+
 
                 <div id="catalogResult">
                     <div id="${ns}catalogs">
