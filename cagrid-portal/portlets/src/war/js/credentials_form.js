@@ -141,7 +141,7 @@ var CGP_CredentialsForm = Class.create({
 	},
 	populateIdps: function(){
 		var thisObj = this;
-		this.mgr.listIdPs(
+		this.mgr.listIdPsFromDorian(
 		{
 			callback: function(idps){
 				thisObj.listIdPsSuccessHandler(idps);
