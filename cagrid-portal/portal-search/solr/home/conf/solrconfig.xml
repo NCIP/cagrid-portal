@@ -195,8 +195,8 @@ queries.  An exception is thrown if exceeded.  -->
         autowarmCount - the number of entries to prepopulate from
           and old cache.
         -->
-    <filterCache
-      class="solr.LRUCache"
+        <filterCache
+                class="solr.LRUCache"
                 size="512"
                 initialSize="512"
                 autowarmCount="128"/>
@@ -578,6 +578,8 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
             <str name="field">text</str>
             <str name="spellcheckIndexDir">./spellcheckerIdx</str>
             <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
+            <str name="buildOnCommit">true</str>
+            <str name="buildOnOptimize">true</str>
         </lst>
 
 
