@@ -19,7 +19,7 @@ public class CQLQueryInstanceDaoTest extends QueryInstanceDaoTestBase<CQLQueryIn
     public void error(){
         CQLQueryInstance instance = new CQLQueryInstance();
 
-        instance.setError(PortalTestUtils.createReallyLongString(1650000));
+        instance.setError(PortalTestUtils.createReallyLongString(4000));
         getDao().save(instance);
         assertNotNull(instance);
 
