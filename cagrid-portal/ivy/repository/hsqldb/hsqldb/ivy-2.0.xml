@@ -3,8 +3,6 @@
 	<info organisation="hsqldb"
 		module="hsqldb"
 		revision="2.0"
-		status="integration"
-		publication="20051108172054rc7"
 	/>
 	<configurations>
 		<conf name="default" visibility="public" description="runtime dependencies and master artifact can be used with this conf" extends="runtime,master"/>
@@ -17,6 +15,6 @@
 		<conf name="optional" visibility="public" description="contains all optional dependencies"/>
 	</configurations>
 	<publications>
-		<artifact name="hsqldb" type="jar" ext="jar" rev="2.0" conf="master"/>
+		<artifact name="hsqldb" type="jar" conf="master"/>
 	</publications>
 </ivy-module>
