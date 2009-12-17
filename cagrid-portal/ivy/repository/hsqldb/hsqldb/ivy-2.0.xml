@@ -17,6 +17,6 @@
 		<conf name="optional" visibility="public" description="contains all optional dependencies"/>
 	</configurations>
 	<publications>
-		<artifact name="hsqldb" type="jar" ext="jar" conf="master"/>
+		<artifact name="hsqldb" type="jar" ext="jar" rev="2.0" conf="master"/>
 	</publications>
 </ivy-module>
