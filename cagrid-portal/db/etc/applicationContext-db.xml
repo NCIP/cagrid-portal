@@ -27,7 +27,7 @@
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
           p:driverClassName="${cagrid.portal.db.driver}"
-          p:maxActive="20" p:maxIdle="5" p:maxWait="180000"
+          p:maxActive="40" p:maxIdle="5" p:maxWait="180000"
           p:removeAbandoned="true"
           p:removeAbandonedTimeout="300"
           p:logAbandoned="true"
@@ -151,6 +151,7 @@
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.FavoriteRole</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.File</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.Hyperlink</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.Image</value>
@@ -309,7 +310,7 @@
 
     <bean id="communityCatalogEntryDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.catalog.CommunityCatalogEntryDao"/>
-     
+
     <bean id="favoriteOfRoleDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.catalog.FavoriteOfRoleDao"/>
 
@@ -370,15 +371,15 @@
     <bean id="queryResultTableDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.QueryResultTableDao"/>
 
-    <bean id="identityProviderDao"  parent="daoTemplate"
+    <bean id="identityProviderDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.IdentityProviderDao"/>
 
-    <bean id="idpAuthenticationDao"  parent="daoTemplate"
+    <bean id="idpAuthenticationDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.IdPAuthenticationDao"/>
 
     <bean id="timestampProvider" class="gov.nih.nci.cagrid.portal.util.StaticTimestampProvider"/>
 
-    <bean id="pointOfContactCatalogEntryDao"  parent="baseCatalogEntryDao"
+    <bean id="pointOfContactCatalogEntryDao" parent="baseCatalogEntryDao"
           class="gov.nih.nci.cagrid.portal.dao.catalog.PointOfContactCatalogEntryDao"/>
 
     <bean id="openSessionInViewForTesting"
