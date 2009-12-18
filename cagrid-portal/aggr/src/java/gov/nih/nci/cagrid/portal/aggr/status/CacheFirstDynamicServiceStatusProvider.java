@@ -32,34 +32,38 @@ public class CacheFirstDynamicServiceStatusProvider implements ServiceUrlProvide
     */
     public Set<String> getUrls(String indexServiceUrl) {
 
-        if (cache.containsKey(indexServiceUrl) && cache.get(indexServiceUrl).size() > 0) {
-            logger.debug("Will use cache to return URL's");
-
-            Set<String> _cachedUrls = cache.get(indexServiceUrl);
-            Set _urls = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-            synchronized (_cachedUrls) {
-                _urls.addAll(_cachedUrls);
-            }
-            return _urls;
-        } else {
-            logger.warn("Cache not initialized for this Index Will use dynamic lookup.");
-            return dynamicServiceStatusProvider.getUrls(indexServiceUrl);
+        if (!cache.containsKey(indexServiceUrl) && cache.get(indexServiceUrl).size() < 1) {
+            logger.warn("Cache not initialized for this Index. Will refresh cache first.");
+            updateCacheIdx(indexServiceUrl);
         }
+
+        logger.debug("Will use cache to return URL's");
+
+        Set<String> _cachedUrls = cache.get(indexServiceUrl);
+        Set _urls = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        synchronized (_cachedUrls) {
+            _urls.addAll(_cachedUrls);
+        }
+        return _urls;
     }
 
     public void monitorIndex() {
         logger.debug("Will start retreivel of services from Index");
         for (String indexServiceUrl : cache.keySet()) {
             logger.debug("will update cache for Index: " + indexServiceUrl);
+            updateCacheIdx(indexServiceUrl);
 
-            Set<String> eprs = dynamicServiceStatusProvider.getUrls(indexServiceUrl);
-            Set<String> _urls = cache.get(indexServiceUrl);
-            synchronized (_urls) {
-                if (eprs != null && eprs.size() > 0) {
-                    _urls.clear();
-                    _urls.addAll(eprs);
-                    logger.info("Added " + _urls.size() + " services to cache");
-                }
+        }
+    }
+
+    protected void updateCacheIdx(String indexServiceUrl) {
+        Set<String> eprs = dynamicServiceStatusProvider.getUrls(indexServiceUrl);
+        Set<String> _urls = cache.get(indexServiceUrl);
+        synchronized (_urls) {
+            if (eprs != null && eprs.size() > 0) {
+                _urls.clear();
+                _urls.addAll(eprs);
+                logger.info("Added " + _urls.size() + " services to cache");
             }
         }
     }
