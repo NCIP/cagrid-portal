@@ -26,6 +26,8 @@
         <entry key="DESKTOPTOOL" value="gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry"/>
         <entry key="GRIDSERVICEENDPOINT"
                value="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"/>
+        <entry key="GRIDDATASERVICEENDPOINT"
+               value="gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry"/>
         <entry key="GRIDSERVICEINTERFACE"
                value="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry"/>
         <entry key="INFORMATIONMODEL" value="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry"/>

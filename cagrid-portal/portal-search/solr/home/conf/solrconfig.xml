@@ -537,7 +537,8 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
         <str name="terms_label">Area Of Focus</str>
 
         <lst name="catalog_type">
-            <str name="tool_grid_service_endpoint">Services</str>
+            <str name="tool_grid_service_endpoint">Analytical Services</str>
+            <str name="tool_grid_data_service_endpoint">Data Services</str>
             <str name="person">Persons</str>
             <str name="poc">Point Of Contact</str>
             <str name="institution">Institutions</str>
