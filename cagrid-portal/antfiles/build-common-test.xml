@@ -62,7 +62,7 @@
     <target name="test-base">
         <mkdir dir="${junit.reports.dir}"/>
 
-        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="true">
+        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="${test.fork.mode}">
 
             <!--needed to hook into main reporting task-->
             <sysproperty key="net.sourceforge.cobertura.datafile"
