@@ -63,17 +63,28 @@ public class DeleteCatalogs {
 
         for (InformationModelCatalogEntry infoCatalog : (Iterable<InformationModelCatalogEntry>) allNullAuthorEntries) {
             List entries1 = templ
-                    .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.name = ? and ce.author is not null",
-                                infoCatalog.getName());
+                    .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.projectLongName = ? and ce.author is not null",
+                                infoCatalog.getProjectLongName());
 
             if (entries1.size() > 0) {
-                logger.debug("Found duplicate Information Model with the same name and description" + infoCatalog.getName() + "Will delete the one created by Portal");
+                logger.debug("Found duplicate Information Model with the same project long name" + infoCatalog.getProjectLongName() + "Will delete the one created by Portal");
                 deleteRelationships(templ, relInstDao, infoCatalog);
                 templ.delete(infoCatalog);
             }
         }
 
+    //Further delete all duplicate Info CE's even if they were authored
+        List<InformationModelCatalogEntry> allAuthoredEntries = templ
+                      .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.author != null");
+         if(allAuthoredEntries.size()>1){
+             logger.debug("Multiple Info models with same long name exist. Will delete one");
+             for(int i=1;i<allAuthoredEntries.size();i++){
+                 logger.debug("Delete CE with projectLongName " + allAuthoredEntries.get(i).getProjectLongName());
+                 deleteRelationships(templ, relInstDao, allAuthoredEntries.get(i));
+                 templ.delete(allAuthoredEntries.get(i));
 
+             }
+             }
        }
 
 
@@ -98,7 +109,7 @@ public class DeleteCatalogs {
 
     }
 
-    private  void deleteRelationships(HibernateTemplate templ,
+    protected  static void deleteRelationships(HibernateTemplate templ,
                                             CatalogEntryRelationshipInstanceDao relInstDao, CatalogEntry ce) {
 
         List<CatalogEntryRelationshipInstance> relInsts = relInstDao
