@@ -128,7 +128,7 @@ var SummaryTree = Class.create({
             scope : this
         });
         YAHOO.log("Summary query is " + summaryQuery.getQuery());
-        this.rootNode = new YAHOO.widget.HTMLNode({html:"Search Categories"}, this.tree.getRoot(), true);
+        this.rootNode = new YAHOO.widget.HTMLNode({html:"Catalog Search Categories"}, this.tree.getRoot(), true);
         this.tree.render();
     },
 
@@ -302,7 +302,7 @@ var Catalogs = Class.create({
         };
 
         var failureCallback = function (o) {
-            this.paginatorSummaryDiv.innerHTML = "Search error";
+            this.paginatorSummaryDiv.innerHTML = "Catalog Search Error";
             this.paginator.destroy();
             resultEvent.fire(null);
         };

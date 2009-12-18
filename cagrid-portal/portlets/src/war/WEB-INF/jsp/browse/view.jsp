@@ -93,7 +93,7 @@
             if (resultList < 1) {
                 $("regularResults").setStyle({display: 'block'});
                 var noResultMsg = document.createElement('div');
-                noResultMsg.appendChild(document.createTextNode("No search results found!"));
+                noResultMsg.appendChild(document.createTextNode("Your search did not match any catalog entries."));
                 $("jsFillerRegularResults").appendChild(noResultMsg);
             }
             else {
@@ -241,7 +241,7 @@
                             <div id="jsFillerFeaturedResults"><!-- Featured search results will go here --></div>
                         </div>
                         <div id="regularResults" style="display:none;">
-                            <h3>Search Results</h3>
+                            <h3>Catalog Search Results</h3>
 
                             <div id="jsFillerRegularResults"><!-- Not featured search results will go here --></div>
                         </div>
