@@ -68,7 +68,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         GridServiceEndPointCatalogEntry endpointCe = getGridServiceEndPointCatalogEntryDao()
                 .isAbout(service);
         if (endpointCe == null) {
-            endpointCe = new GridServiceEndPointCatalogEntry();
+            endpointCe = service instanceof GridDataService ? new GridDataServiceEndPointCatalogEntry() : new GridServiceEndPointCatalogEntry();
             endpointCe.setAbout(service);
             endpointCe.setCreatedAt(new Date());
             endpointCe.setPublished(true);

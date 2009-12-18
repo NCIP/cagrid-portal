@@ -89,143 +89,145 @@
             </list>
         </property>
     </bean>
-    
+
     <bean id="credentialManagerFacade" class="gov.nih.nci.cagrid.portal.portlet.credmgr.CredentialManagerFacade">
         <property name="authnService">
-        	<bean class="gov.nih.nci.cagrid.portal.security.AuthnService"/>
+            <bean class="gov.nih.nci.cagrid.portal.security.AuthnService"/>
         </property>
         <property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
-		<property name="encryptionService" ref="encryptionServicePrototype"/>
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
-    
+
     <bean id="registrationManager" class="gov.nih.nci.cagrid.portal.portlet.register.RegistrationManager">
         <property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
-    </bean>    
+    </bean>
 
-    <!--<bean class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerAspect"-->
-          <!--parent="abstractSolrCommandExecutor">-->
-        <!--<constructor-arg value="/dataimport?command=delta-import"/>-->
-        <!--<property name="order" value="100"/>-->
-    <!--</bean>-->
+    <bean class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerAspect"
+          id="catalogEntryManagerAspect"
+          parent="abstractSolrCommandExecutor">
+        <constructor-arg value="/dataimport?command=delta-import"/>
+        <property name="order" value="100"/>
+    </bean>
 
     <bean id="catalogEntryManagerFacade"
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade"
-    	autowire="byName">
-    	<property name="roleTypeRenderServletUrl" value="/browse/role_type_selection.html"/>
-    	<property name="newRelatedItemFormRenderServletUrl" value="/browse/new_related_item_form.html"/>
-    	<property name="relatedItemsRenderServletUrl" value="/browse/related_items_content_view.html"/>
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade"
+          autowire="byName">
+        <property name="roleTypeRenderServletUrl" value="/browse/role_type_selection.html"/>
+        <property name="newRelatedItemFormRenderServletUrl" value="/browse/new_related_item_form.html"/>
+        <property name="relatedItemsRenderServletUrl" value="/browse/related_items_content_view.html"/>
     </bean>
 
-    	
-    <bean id="personCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.PersonCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="toolCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="dataSetCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.DataSetCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="communityCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommunityCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
+
+    <bean id="personCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.PersonCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="toolCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="dataSetCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.DataSetCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="communityCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommunityCatalogEntryManagerFacade"
+          autowire="byName"/>
+
     <bean id="commentsManagerFacade"
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommentsManagerFacade"
-    	autowire="byName"/>
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommentsManagerFacade"
+          autowire="byName"/>
 
     <bean id="institutionCatalogEntryManagerFacade"
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.InstitutionCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="catalogEntryRelationshipTypeManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryRelationshipTypeManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="knowledgeCenterCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.KnowledgeCenterCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-	<bean id="projectCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ProjectCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="workspaceCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.WorkspaceCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="gridServiceInterfaceCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridServiceInterfaceCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="sharedQueryCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.SharedQueryCatalogEntryManagerFacade" 
-    	autowire="byName">
-    	<property name="selectEndpointsFormContentViewName" value="/browse/sharedQuery/select_endpoints_form_content.html"/>
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.InstitutionCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="catalogEntryRelationshipTypeManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryRelationshipTypeManagerFacade"
+          autowire="byName"/>
+
+    <bean id="knowledgeCenterCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.KnowledgeCenterCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="projectCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ProjectCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="workspaceCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.WorkspaceCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="gridServiceInterfaceCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridServiceInterfaceCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="sharedQueryCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.SharedQueryCatalogEntryManagerFacade"
+          autowire="byName">
+        <property name="selectEndpointsFormContentViewName"
+                  value="/browse/sharedQuery/select_endpoints_form_content.html"/>
     </bean>
-    	
-    <bean id="workflowCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.WorkflowCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="toolDeploymentCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolDeploymentCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="gridServiceEndPointCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridServiceEndPointCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="informationModelCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.InformationModelCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="terminologyCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.TerminologyCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="portletCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.PortletCatalogEntryManagerFacade"
-    	autowire="byName"/>
-    	
-    <bean id="desktopToolCatalogEntryManagerFacade" 
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.DesktopToolCatalogEntryManagerFacade"
-    	autowire="byName"/>
-	
-	
-	<bean id="terminologyProvider" class="gov.nih.nci.cagrid.portal.portlet.terms.JenaTerminologyProvider">
-		<property name="models">
-			<util:map>
-				<entry>
-					<key>
-						<bean class="java.net.URI">
-							<constructor-arg value="http://cagrid.org/terms/area_of_focus_1_0.owl"/>
-						</bean>
-					</key>
-					<bean class="gov.nih.nci.cagrid.portal.portlet.terms.JenaFileModelFactoryBean">
-						<property name="modelFile" value="classpath:terms/area_of_focus_1_0.owl"/>
-						<property name="modelSpec">
-							<util:constant static-field="com.hp.hpl.jena.ontology.OntModelSpec.OWL_MEM"/>
-						</property>
-					</bean>
-				</entry>
-			</util:map>	
-		</property>
-	</bean>
+
+    <bean id="workflowCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.WorkflowCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="toolDeploymentCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolDeploymentCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="gridServiceEndPointCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridServiceEndPointCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="informationModelCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.InformationModelCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="terminologyCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.TerminologyCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="portletCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.PortletCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+    <bean id="desktopToolCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.DesktopToolCatalogEntryManagerFacade"
+          autowire="byName"/>
+
+
+    <bean id="terminologyProvider" class="gov.nih.nci.cagrid.portal.portlet.terms.JenaTerminologyProvider">
+        <property name="models">
+            <util:map>
+                <entry>
+                    <key>
+                        <bean class="java.net.URI">
+                            <constructor-arg value="http://cagrid.org/terms/area_of_focus_1_0.owl"/>
+                        </bean>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.terms.JenaFileModelFactoryBean">
+                        <property name="modelFile" value="classpath:terms/area_of_focus_1_0.owl"/>
+                        <property name="modelSpec">
+                            <util:constant static-field="com.hp.hpl.jena.ontology.OntModelSpec.OWL_MEM"/>
+                        </property>
+                    </bean>
+                </entry>
+            </util:map>
+        </property>
+    </bean>
 
     <bean id="queryExecutionManager"
-    	class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager"
-    	p:resultsView="/WEB-INF/jsp/browse/sharedQuery/query_results_display.jsp" 
-    	p:errorView="/WEB-INF/jsp/browse/sharedQuery/query_error_display.jsp"
-    	autowire="byName"/>
+          class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager"
+          p:resultsView="/WEB-INF/jsp/browse/sharedQuery/query_results_display.jsp"
+          p:errorView="/WEB-INF/jsp/browse/sharedQuery/query_error_display.jsp"
+          autowire="byName"/>
 
     <bean id="terminologyService" class="gov.nih.nci.cagrid.portal.portlet.terms.TerminologyService" autowire="byName">
-            <property name="addTermsFormInputsRenderServletUrl" value="/browse/add_terms_form_inputs.html"/>
-        </bean>
+        <property name="addTermsFormInputsRenderServletUrl" value="/browse/add_terms_form_inputs.html"/>
+    </bean>
 
 
 </beans>

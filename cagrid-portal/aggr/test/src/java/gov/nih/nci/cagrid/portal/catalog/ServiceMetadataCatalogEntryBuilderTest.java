@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.Metadata;
 import static junit.framework.Assert.*;
@@ -58,6 +59,7 @@ public class ServiceMetadataCatalogEntryBuilderTest extends
                         "serviceMetadataCatalogEntryBuilder");
 
         final GridServiceEndPointCatalogEntry endpointCe = b.build(dataService);
+        assertTrue(endpointCe instanceof GridDataServiceEndPointCatalogEntry);
 
         GridServiceEndPointCatalogEntryDao endpointDao = (GridServiceEndPointCatalogEntryDao) TestDB
                 .getApplicationContext().getBean(

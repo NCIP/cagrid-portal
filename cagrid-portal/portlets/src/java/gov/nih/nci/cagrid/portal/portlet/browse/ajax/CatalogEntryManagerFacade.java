@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryViewBeanFactory;
 import gov.nih.nci.cagrid.portal.portlet.browse.LabelDescriptionBean;
 import gov.nih.nci.cagrid.portal.portlet.terms.TermBean;
 import gov.nih.nci.cagrid.portal.portlet.terms.TerminologyProvider;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -83,6 +82,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
 //                PortletUtils.addResource(getUserModel().getPortalUser(),
 //                        CatalogEntry.class, ce.getId());
             }
+            logger.debug("Saving CE named:" + ce.getName() + " Will now mark the CE as published.");
+            ce.setPublished(true);
             getCatalogEntryDao().save(ce);
             saveAreasOfFocus();
 
@@ -161,10 +162,12 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             final String sourceType = getUserModel().getCurrentCatalogEntry()
                     .getClass().getName();
             Set<String> types = new HashSet<String>();
-            Set<String> sourceTypes = new HashSet<String>(){{
-                add(sourceType);}};
-            Set<String> targetTypes = new HashSet<String>(){{
-                add(targetType);}};
+            Set<String> sourceTypes = new HashSet<String>() {{
+                add(sourceType);
+            }};
+            Set<String> targetTypes = new HashSet<String>() {{
+                add(targetType);
+            }};
 
             types.addAll(sourceTypes);
             types.addAll(targetTypes);

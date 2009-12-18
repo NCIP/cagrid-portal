@@ -37,11 +37,15 @@
     margin: 0 0 0.5em;
 }
 
-#summaryContent{
-    overflow:auto;
+#summaryContent {
+    overflow: auto;
 }
 
-.suggestLink{
-    text-decoration:none;
-    font-weight:bold;
+.suggestLink {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.resultsCount {
+    font-weight: bold;
 }

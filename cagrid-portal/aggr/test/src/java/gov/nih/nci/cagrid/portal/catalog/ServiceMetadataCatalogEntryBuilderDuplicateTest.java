@@ -5,11 +5,11 @@ import gov.nih.nci.cagrid.portal.TestDB;
 import gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder;
 import gov.nih.nci.cagrid.portal.dao.catalog.InformationModelCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.Metadata;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 import org.junit.Test;
 
 import java.io.FileReader;
@@ -53,6 +53,8 @@ public class ServiceMetadataCatalogEntryBuilderDuplicateTest extends
                         "serviceMetadataCatalogEntryBuilder");
 
         final GridServiceEndPointCatalogEntry endpointCe = b.build(dataService);
+        assertTrue(endpointCe instanceof GridDataServiceEndPointCatalogEntry);
+
         InformationModelCatalogEntryDao infoDao = (InformationModelCatalogEntryDao) TestDB
                 .getApplicationContext().getBean("informationModelCatalogEntryDao");
 
