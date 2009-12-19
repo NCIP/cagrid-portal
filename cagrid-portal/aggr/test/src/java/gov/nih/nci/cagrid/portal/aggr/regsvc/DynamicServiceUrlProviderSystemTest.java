@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Set;
+
 /**
  * User: kherm
  *
@@ -15,14 +17,19 @@ public class DynamicServiceUrlProviderSystemTest extends TestCase {
 
 
     public void testRun() {
-        String idxUrl = "http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService";
+        String idxUrl = "http://index.ctsa.cagrid.org:8080/wsrf/services/DefaultIndexService";
 
 
         Long beginTime = PortalTestUtils.getTimestamp();
 
         DynamicServiceUrlProvider provider = new DynamicServiceUrlProvider();
         try {
-            assertNotNull(provider.getUrls(idxUrl));
+            Set<String> svcs = provider.getUrls(idxUrl);
+            assertNotNull(svcs);
+            for (String svc : svcs) {
+                assertTrue(svc.length() > 0);
+                logger.debug(svc);
+            }
         } catch (Exception e) {
             fail(e.getMessage());
         }
