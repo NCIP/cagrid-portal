@@ -62,7 +62,7 @@
     <target name="test-base">
         <mkdir dir="${junit.reports.dir}"/>
 
-        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="${test.fork.mode}">
+        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="true">
 
             <!--needed to hook into main reporting task-->
             <sysproperty key="net.sourceforge.cobertura.datafile"
@@ -100,45 +100,45 @@
         </junit>
     </target>
 
-	<target name="test-single" depends="prepare-test">
-		
-		<property name="test.prefix" value="gov.nih.nci.cagrid.portal."/>
-		<input addproperty="test.name" message="Enter test name [prefix is '${test.prefix}']"/>
-		
+    <target name="test-single" depends="prepare-test">
+
+        <property name="test.prefix" value="gov.nih.nci.cagrid.portal."/>
+        <input addproperty="test.name" message="Enter test name [prefix is '${test.prefix}']"/>
+
         <mkdir dir="${junit.reports.dir}"/>
         <junit dir="${basedir}" printsummary="yes" showoutput="yes" fork="true" haltonfailure="yes">
             <sysproperty key="basedir" value="${basedir}"/>
-        	<jvmarg value="-Xmx256m" />
-			<jvmarg value="-Duser.timezone=GMT" />
-			<jvmarg value="-Dexternal-properties=${etc.dir}/portal-test.properties" />
-        	
+            <jvmarg value="-Xmx256m"/>
+            <jvmarg value="-Duser.timezone=GMT"/>
+            <jvmarg value="-Dexternal-properties=${etc.dir}/portal-test.properties"/>
+
             <formatter type="xml"/>
             <classpath>
                 <path refid="test.run.cp"/>
             </classpath>
 
-        	<test name="${test.prefix}${test.name}"
-        	        	                  todir="${junit.reports.dir}"/>
+            <test name="${test.prefix}${test.name}"
+                  todir="${junit.reports.dir}"/>
         </junit>
     </target>
-	
-	<target name="test-suite" depends="prepare-test">
-		<java classname="org.junit.runner.JUnitCore" fork="true">
-			<classpath>
+
+    <target name="test-suite" depends="prepare-test">
+        <java classname="org.junit.runner.JUnitCore" fork="true">
+            <classpath>
                 <path refid="test.run.cp"/>
             </classpath>
-			
-        	<jvmarg value="-Xmx256m" />
-			<jvmarg value="-Duser.timezone=GMT" />
-			<jvmarg value="-Dexternal-properties=${etc.dir}/portal-test.properties" />
-			
-			
-			<arg value="gov.nih.nci.cagrid.portal.service.LiferayServiceTestSuite2"/>
-			<!--
-			<arg value="gov.nih.nci.cagrid.portal.service.TestSuite1"/>
-			-->
-		</java>
-	</target>
+
+            <jvmarg value="-Xmx256m"/>
+            <jvmarg value="-Duser.timezone=GMT"/>
+            <jvmarg value="-Dexternal-properties=${etc.dir}/portal-test.properties"/>
+
+
+            <arg value="gov.nih.nci.cagrid.portal.service.LiferayServiceTestSuite2"/>
+            <!--
+               <arg value="gov.nih.nci.cagrid.portal.service.TestSuite1"/>
+               -->
+        </java>
+    </target>
 
 
 </project>
