@@ -5,9 +5,10 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * User: kherm
@@ -18,6 +19,7 @@ public abstract class AbstractSolrCommandExecutor {
     private String baseSolrURL;
     private String localhostURL;
     private String command;
+    protected final String URL_ENCODING = "UTF-8";
 
     HttpClient httpClient;
 
@@ -27,8 +29,6 @@ public abstract class AbstractSolrCommandExecutor {
         this.command = command;
     }
 
-
-    public abstract void runCommand() throws Exception;
 
     public String getBaseSolrURL() {
         try {
@@ -48,6 +48,7 @@ public abstract class AbstractSolrCommandExecutor {
 
     /**
      * Synchronize calls to SOLR
+     *
      * @param httpMethod
      * @throws IOException
      */
@@ -55,6 +56,11 @@ public abstract class AbstractSolrCommandExecutor {
         getHttpClient().executeMethod(httpMethod);
 
     }
+
+    public String encode(String url) throws Exception {
+        return URLEncoder.encode(url, URL_ENCODING);
+    }
+
     public void setBaseSolrURL(String baseSolrURL) {
         this.baseSolrURL = baseSolrURL;
     }

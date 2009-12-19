@@ -13,8 +13,13 @@
 
     <!--aspects sepreated for testing-->
     <import resource="applicationContext-portal-search.xml"/>
-    
-    <bean class="gov.nih.nci.cagrid.portal.search.PortalDaoAspect" lazy-init="true"
+
+    <bean id="deleteCatalogs" class="gov.nih.nci.cagrid.portal.search.PortalDaoDeleteAspect" lazy-init="true"
+          parent="abstractSolrCommandExecutor">
+        <constructor-arg value="/update"/>
+    </bean>
+
+    <bean id="deltaImportAspect" class="gov.nih.nci.cagrid.portal.search.PortalDaoAspect" lazy-init="true"
           parent="abstractSolrCommandExecutor">
         <constructor-arg value="/dataimport?command=delta-import"/>
     </bean>

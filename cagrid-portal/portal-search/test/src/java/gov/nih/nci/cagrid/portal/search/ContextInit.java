@@ -11,10 +11,11 @@ import org.springframework.core.io.ClassPathResource;
  * @author kherm manav.kher@semanticbits.com
  */
 public class ContextInit {
+    GenericApplicationContext ctx;
 
     @Test
     public void init() {
-        GenericApplicationContext ctx = new GenericApplicationContext();
+        ctx = new GenericApplicationContext();
 
         XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
         xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-db.xml"));

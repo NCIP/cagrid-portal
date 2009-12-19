@@ -1,57 +1,30 @@
 package gov.nih.nci.cagrid.portal.search;
 
-import gov.nih.nci.cagrid.portal.DBIntegrationTestBase;
-import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.dao.PersonDao;
-import gov.nih.nci.cagrid.portal.dao.catalog.*;
-import gov.nih.nci.cagrid.portal.domain.catalog.*;
-import gov.nih.nci.cagrid.portal.domain.DomainObject;
-import gov.nih.nci.cagrid.portal.domain.AbstractDomainObject;
+import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.InstitutionCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.Person;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-
-import java.io.IOException;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 
 /**
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class PortalDaoAspectTest extends DBIntegrationTestBase {
+public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
 
-
-    PersonCatalogEntryDao personCatalogEntryDao;
-    PortalUserDao portalUserDao;
-
-    @Override
-    protected ConfigurableApplicationContext loadContext(Object o) throws Exception {
-        GenericApplicationContext ctx = new GenericApplicationContext();
-
-        XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
-        xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-db.xml"));
-        xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-portal-search-aspects.xml"));
-
-        ctx.registerBeanDefinition("defaultHttpClient", new RootBeanDefinition(MockHttpClient.class));
-        ctx.refresh();
-
-
-        return ctx;
-    }
-
-
-    public void testDelete(){
+    public void testDelete() {
         PersonCatalogEntry pCE = new PersonCatalogEntry();
         PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
         pCEDao.save(pCE);
-         MockHttpClient.assertJustRan();
-        
+        MockHttpClient.assertJustRan();
+
         pCEDao.delete(pCE);
     }
 
@@ -62,15 +35,15 @@ public class PortalDaoAspectTest extends DBIntegrationTestBase {
 
     }
 
-    public void testNonCEDao() throws Exception{
-          Person p = new Person();
+    public void testNonCEDao() throws Exception {
+        Person p = new Person();
         PersonDao cEDao = (PersonDao) getApplicationContext().getBean("personDao");
         cEDao.save(p);
         assertFalse("Solr HTTP interface should not be called for non CatalogEntry DAO", MockHttpClient.assertJustRan());
         MockHttpClient httpClient = (MockHttpClient) getApplicationContext().getBean("defaultHttpClient");
-         httpClient.executeMethod(null);
+        httpClient.executeMethod(null);
     }
-    
+
     public void testCEAspect() {
         CatalogEntry ce = new CatalogEntry();
         CatalogEntryDao cEDao = (CatalogEntryDao) getApplicationContext().getBean("catalogEntryDao");
@@ -115,30 +88,6 @@ public class PortalDaoAspectTest extends DBIntegrationTestBase {
         this.portalUserDao = portalUserDao;
     }
 
-
-    static class MockHttpClient extends HttpClient {
-
-        private static boolean assertRan = false;
-
-        public MockHttpClient() {
-        }
-
-
-        @Override
-        public int executeMethod(HttpMethod httpMethod) throws IOException, HttpException {
-            assertRan = true;
-            return 0;
-        }
-
-        public static boolean assertJustRan() {
-            if (assertRan) {
-                assertRan = false;
-                return !assertRan;
-            }
-            return assertRan;
-
-        }
-    }
 
 }
 
