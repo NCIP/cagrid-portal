@@ -14,6 +14,7 @@
     <property name="junit.reports.dir" value="${test.build.dir}/junit-reports"/>
     <property name="cobertura.datafile" value="${test.build.dir}/build/cobertura.datafile"/>
 
+    <property  file="${antfiles.dir}/build-test.properties"/>
     <property name="test.target.property.file" value="${antfiles.dir}/build-test.properties"/>
 
     <patternset id="unit.test.pattern">
@@ -138,6 +139,18 @@
                <arg value="gov.nih.nci.cagrid.portal.service.TestSuite1"/>
                -->
         </java>
+    </target>
+
+    <!--create DB for running of tests. Properties in build-test.properties-->
+    <target name="createTestDB" depends="prepare-test" description="Will create the test database.">
+        <sql driver="${cagrid.portal.db.driver}"
+             url="${cagrid.portal.db.base.url}"
+             userid="${cagrid.portal.db.username}"
+             password="${cagrid.portal.db.password}">
+            <classpath refid="test.run.cp"/>
+            DROP DATABASE IF EXISTS ${cagrid.portal.db.name};
+            CREATE DATABASE ${cagrid.portal.db.name};
+        </sql>
     </target>
 
 

@@ -57,5 +57,11 @@
         <fail message="Unit Tests failed! Consult the logs for details." if="unit.test.failed"/>
     </target>
 
+    <!--has to be run from a project folder so all libraries are available-->
+    <target name="createTestDB" depends="prepare">
+        <ant inheritall="false" target="createTestDB"
+             dir="${projects.dir}/db"/>
+    </target>
+
 
 </project>
