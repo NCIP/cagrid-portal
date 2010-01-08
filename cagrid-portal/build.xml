@@ -274,10 +274,6 @@
 
     <target name="all" depends="clean,build-all" description="Build the Portal project."/>
 
-    <!--for automatated build-->
-    <target name="test" depends="all, test:test" description="Run all unit tests for the project."/>
-    <target name="reports" depends="all, reports:reports" description="Generate reports for the project."/>
-
 
     <target name="deploy-web-fast" depends="prepare">
 
