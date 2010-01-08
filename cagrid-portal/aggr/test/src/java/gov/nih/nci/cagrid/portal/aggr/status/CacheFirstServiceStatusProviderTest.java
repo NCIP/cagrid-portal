@@ -27,14 +27,14 @@ public class CacheFirstServiceStatusProviderTest extends TestCase {
         stub(mockDynamicUrlProvider.getUrls(_dummyIdx)).toReturn(_dynamidIdxUrls);
 
         CacheFirstDynamicServiceStatusProvider _provider = new CacheFirstDynamicServiceStatusProvider();
-
+        _provider.setIndexServiceUrls(new String[]{_dummyIdx});
         _provider.setDynamicServiceStatusProvider(mockDynamicUrlProvider);
         _provider.getUrls(_dummyIdx);
 
         // verify that cache is not being used
         verify(mockDynamicUrlProvider, times(1)).getUrls(_dummyIdx);
 
-        _provider.setIndexServiceUrls(new String[]{_dummyIdx});
+
         assertNotNull(_provider.getUrls(_dummyIdx));
 
     }

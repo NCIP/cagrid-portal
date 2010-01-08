@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.aggr.status;
 import gov.nih.nci.cagrid.portal.aggr.ServiceUrlProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class CacheFirstDynamicServiceStatusProvider implements ServiceUrlProvide
     */
     public Set<String> getUrls(String indexServiceUrl) {
 
-        if (!cache.containsKey(indexServiceUrl) && cache.get(indexServiceUrl).size() < 1) {
+        if (!cache.containsKey(indexServiceUrl) || cache.get(indexServiceUrl).size() < 1) {
             logger.warn("Cache not initialized for this Index. Will refresh cache first.");
             updateCacheIdx(indexServiceUrl);
         }
@@ -101,6 +102,7 @@ public class CacheFirstDynamicServiceStatusProvider implements ServiceUrlProvide
         return dynamicServiceStatusProvider;
     }
 
+    @Required
     public void setDynamicServiceStatusProvider(ServiceUrlProvider dynamicServiceStatusProvider) {
         this.dynamicServiceStatusProvider = dynamicServiceStatusProvider;
     }
