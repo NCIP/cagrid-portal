@@ -63,5 +63,10 @@
              dir="${projects.dir}/db"/>
     </target>
 
+    <target name="deleteTestDB" depends="prepare">
+        <ant inheritall="false" target="deleteTestDB"
+             dir="${projects.dir}/db"/>
+    </target>
+
 
 </project>

@@ -142,7 +142,7 @@
     </target>
 
     <!--create DB for running of tests. Properties in build-test.properties-->
-    <target name="createTestDB" depends="prepare-test" description="Will create the test database.">
+    <target name="createTestDB" depends="prepare-test">
         <sql driver="${cagrid.portal.db.driver}"
              url="${cagrid.portal.db.base.url}"
              userid="${cagrid.portal.db.username}"
@@ -150,6 +150,16 @@
             <classpath refid="test.run.cp"/>
             DROP DATABASE IF EXISTS ${cagrid.portal.db.name};
             CREATE DATABASE ${cagrid.portal.db.name};
+        </sql>
+    </target>
+
+    <target name="deleteTestDB" depends="prepare-test">
+        <sql driver="${cagrid.portal.db.driver}"
+             url="${cagrid.portal.db.base.url}"
+             userid="${cagrid.portal.db.username}"
+             password="${cagrid.portal.db.password}">
+            <classpath refid="test.run.cp"/>
+            DROP DATABASE IF EXISTS ${cagrid.portal.db.name};
         </sql>
     </target>
 
