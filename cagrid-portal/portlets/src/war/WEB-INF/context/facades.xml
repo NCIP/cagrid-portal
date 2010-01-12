@@ -177,6 +177,10 @@
     <bean id="toolDeploymentCatalogEntryManagerFacade"
           class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolDeploymentCatalogEntryManagerFacade"
           autowire="byName"/>
+    
+    <bean id="gridDataServiceEndPointCatalogEntryManagerFacade"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridDataServiceEndPointCatalogEntryManagerFacade"
+          autowire="byName"/>
 
     <bean id="gridServiceEndPointCatalogEntryManagerFacade"
           class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.GridServiceEndPointCatalogEntryManagerFacade"

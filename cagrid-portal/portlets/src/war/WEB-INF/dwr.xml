@@ -96,6 +96,10 @@
             <param name="beanName" value="toolDeploymentCatalogEntryManagerFacade"/>
         </create>
 
+        <create creator="spring" javascript="GridDataServiceEndPointCatalogEntryManagerFacade">
+            <param name="beanName" value="gridDataServiceEndPointCatalogEntryManagerFacade"/>
+        </create>
+
         <create creator="spring" javascript="GridServiceEndPointCatalogEntryManagerFacade">
             <param name="beanName" value="gridServiceEndPointCatalogEntryManagerFacade"/>
         </create>
