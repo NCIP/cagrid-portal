@@ -114,13 +114,14 @@ public class PortalTreeComponent extends SearchComponent implements SolrCoreAwar
             if (_fieldArr != null) {
 
                 for (Field _field : _fieldArr) {
-                    String _tNode = treeLabelMap.containsKey(_field.stringValue()) ? treeLabelMap.get(_field.stringValue()) : _field.stringValue();
+                // get by label
+                    String _tNodeLabel = treeLabelMap.containsKey(_field.stringValue()) ? treeLabelMap.get(_field.stringValue()) : _field.stringValue();
 
 
-                    TreeNode node = _tree.getByName(_field.stringValue());
+                    TreeNode node = _tree.getByLabel(_tNodeLabel);
                     if (node == null) {
                         // new node
-                        node = new TreeNode(_field.stringValue(), _tNode);
+                        node = new TreeNode(_field.stringValue(), _tNodeLabel);
                         _tree.addNode(node);
                     }
                     node.setCount(node.getCount() + 1);

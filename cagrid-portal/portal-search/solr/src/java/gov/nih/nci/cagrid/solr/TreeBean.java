@@ -30,7 +30,18 @@ public class TreeBean extends SolrDocument {
         TreeNode returnNode = null;
         for (Iterator iter = this.nodeList.listIterator(); iter.hasNext();) {
             TreeNode node = (TreeNode) iter.next();
-            if (node.getName().equals(name))
+            if (node.getName().equalsIgnoreCase(name))
+                returnNode = node;
+
+        }
+
+        return returnNode;
+    }
+    public TreeNode getByLabel(String label) {
+        TreeNode returnNode = null;
+        for (Iterator iter = this.nodeList.listIterator(); iter.hasNext();) {
+            TreeNode node = (TreeNode) iter.next();
+            if (node.getLabel().equalsIgnoreCase(label))
                 returnNode = node;
 
         }
