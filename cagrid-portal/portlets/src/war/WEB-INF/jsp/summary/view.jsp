@@ -18,14 +18,15 @@
 
 
 <script type="text/javascript">
-
+    //maximum number of items to display
+    var MAX_ITEMS = 7;
+    
     // Get Area of Focus tree for Data Set catalog type
     var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setTree(true);
     ${ns}query.addFacet("catalog_type", "information_model");
-    ${ns}query.setRows(7);
 
     function ${ns}navigateToDataSet(aof) {
         var searchLink = "${dataSetLnk}";
@@ -52,7 +53,9 @@
             var aofTree = solrJSON.tree;
             if (aofTree.length > 1) {
                 var aofs = aofTree[1].nodes;
-                for (var i = 0; i < aofs.length; i++) {
+                var counter = aofs.length>MAX_ITEMS?MAX_ITEMS:aofs.length;
+
+                for (var i = 0; i < counter; i++) {
                     var aof = aofs[i];
 
                     var resultDiv = document.createElement('div');
