@@ -23,5 +23,5 @@
 		</div>
 		
 <%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
-		
+
 <%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %>

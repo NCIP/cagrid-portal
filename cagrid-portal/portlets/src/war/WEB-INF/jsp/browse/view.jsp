@@ -11,7 +11,9 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
 <div style="text-align:right;">
-    <a href="/web/guest/help/-/wiki/Help/Browsing+the+Catalog">Help</a>
+      <a href="${userGuideUrl}-ManageYourProfileandCredentials"  target="_blank">
+       <tags:image name="help.gif"/>
+          </a>
 </div>
 
 <%@ include file="catalogCreateDialog.jspf" %>

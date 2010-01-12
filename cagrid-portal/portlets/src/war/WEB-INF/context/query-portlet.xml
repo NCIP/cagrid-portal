@@ -412,103 +412,6 @@
         
     </bean>
 
-    <bean id="viewSharedQueryFormController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueryFormController"
-          autowire="byName">
-        <property name="objectName" value="sharedQueryBean"/>
-        <property name="successViewName" value="/shared/myQueries/edit"/>
-        <property name="errorsAttributeName" value="updateSharedQueryErrors"/>
-    </bean>
-
-    <bean
-            id="updateSharedQueryController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.UpdateSharedQueryController"
-            autowire="byName">
-
-        <property name="validators">
-            <list>
-                <bean class="gov.nih.nci.cagrid.portal.portlet.query.shared.SharedQueryBeanValidator"
-                      autowire="byName"/>
-            </list>
-        </property>
-
-        <property name="commandName" value="sharedQueryBean"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.shared.SharedQueryBean"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/myQueries/edit"/>
-                <property name="errorTabPath" value="/shared/myQueries/edit"/>
-                <property name="errorsAttributeName" value="updateSharedQueryErrors"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="viewSharedQueriesController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueriesController"
-          autowire="byName">
-        <property name="objectName" value="sharedQueries"/>
-        <property name="successViewName" value="/shared/myQueries/list"/>
-
-    </bean>
-
-    <bean
-            id="selectSharedQueryController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryController"
-            autowire="byName">
-        <property name="commandName" value="selectSharedQueryCommand"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/myQueries/edit"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean
-            id="loadSharedQueryController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.LoadSharedQueryController"
-            autowire="byName">
-        <property name="commandName" value="selectSharedQueryCommand"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/query/xml"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="viewSharedQueriesSearchFormController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueriesSearchFormController"
-          autowire="byName">
-        <property name="objectName" value="sharedQuerySearchCommand"/>
-        <property name="successViewName" value="/shared/search/form"/>
-    </bean>
-
-    <bean
-            id="searchSharedQueriesController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.SearchSharedQueriesController"
-            autowire="byName">
-        <property name="listBeanSessionAttributeName" value="sharedQueryListBean"/>
-        <property name="commandName" value="sharedQuerySearchCommand"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.search.KeywordSearchBean"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/search/list"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="viewSharedQueriesSearchResultsController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueriesSearchResultsController"
-          autowire="byName">
-        <property name="objectName" value="sharedQueries"/>
-        <property name="successViewName" value="/shared/search/list"/>
-        <property name="listBeanSessionAttributeName" value="sharedQueryListBean"/>
-    </bean>
 
     <bean
             id="scrollSharedQuerySearchResultsController"
@@ -525,49 +428,8 @@
         </property>
     </bean>
 
-    <bean
-            id="selectSharedQueryToViewController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryController"
-            autowire="byName">
-        <property name="commandName" value="selectSharedQueryCommand"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/search/view"/>
-            </bean>
-        </property>
-    </bean>
 
-    <bean
-            id="selectMySharedQueryToViewController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryController"
-            autowire="byName">
-        <property name="commandName" value="selectSharedQueryCommand"/>
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.shared.SelectSharedQueryCommand"/>
-        <property name="actionResponseHandler">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
-                <property name="tabControlConfig" ref="queryTabControlConfig"/>
-                <property name="newTabPath" value="/shared/myQueries/view"/>
-            </bean>
-        </property>
-    </bean>
 
-    <bean id="viewSharedQueryController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueryController"
-          autowire="byName">
-        <property name="objectName" value="sharedQuery"/>
-        <property name="successViewName" value="/shared/search/view"/>
-        <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
-    </bean>
-
-    <bean id="viewMySharedQueryController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.ViewSharedQueryController"
-          autowire="byName">
-        <property name="objectName" value="sharedQuery"/>
-        <property name="successViewName" value="/shared/myQueries/view"/>
-        <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
-    </bean>
 
     <bean id="portletModeParameterHandlerMapping"
           class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
@@ -606,14 +468,8 @@
                         <entry key="scrollQueryInstanceResults" value-ref="scrollQueryInstanceResultsController"/>
                         <entry key="shareQuery" value-ref="shareQueryController"/>
                         <entry key="shareBuilderQuery" value-ref="shareBuilderQueryController"/>
-                        <entry key="selectSharedQuery" value-ref="selectSharedQueryController"/>
-                        <entry key="updateSharedQuery" value-ref="updateSharedQueryController"/>
-                        <entry key="searchSharedQueries" value-ref="searchSharedQueriesController"/>
-                        <entry key="selectSharedQueryToView" value-ref="selectSharedQueryToViewController"/>
                         <entry key="scrollSharedQuerySearchResults"
                                value-ref="scrollSharedQuerySearchResultsController"/>
-                        <entry key="selectMySharedQueryToView" value-ref="selectMySharedQueryToViewController"/>
-                        <entry key="loadSharedQuery" value-ref="loadSharedQueryController"/>
                         <entry key="viewAggregateTargets" value-ref="viewAggregateTargetsController"/>
                         <entry key="selectAggregateTargets" value-ref="selectAggregateTargetsController"/>
                     </map>
@@ -679,12 +535,6 @@
                 
                 <entry key="/results/xml" value-ref="viewQueryResultsXmlController"/>
                  -->
-                <entry key="/shared/myQueries/edit" value-ref="viewSharedQueryFormController"/>
-                <entry key="/shared/myQueries/list" value-ref="viewSharedQueriesController"/>
-                <entry key="/shared/myQueries/view" value-ref="viewMySharedQueryController"/>
-                <entry key="/shared/search/form" value-ref="viewSharedQueriesSearchFormController"/>
-                <entry key="/shared/search/list" value-ref="viewSharedQueriesSearchResultsController"/>
-                <entry key="/shared/search/view" value-ref="viewSharedQueryController"/>
             </map>
         </property>
     </bean>

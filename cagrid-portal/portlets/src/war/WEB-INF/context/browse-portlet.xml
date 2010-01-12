@@ -73,10 +73,12 @@
           class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewDetailsController"
           autowire="byName">
         <property name="objectName" value="catalogEntryViewBean"/>
+            <property name="userGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
     </bean>
 
     <bean id="browseViewProfileController"
           class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewProfileController"
+          parent="browseViewDetailsController"
           autowire="byName">
         <property name="objectName" value="catalogEntryViewBean"/>
     </bean>
@@ -136,6 +138,7 @@
           autowire="byName">
         <property name="successViewName" value="view"/>
         <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
+        <property name="userGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
     </bean>
 
     <bean id="browseEditController"

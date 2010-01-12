@@ -34,18 +34,10 @@
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry"/></option>
                         <option value="DESKTOPTOOL"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry"/></option>
-                        <option value="GRIDSERVICEENDPOINT"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"/></option>
-                        <option value="GRIDSERVICEINTERFACE"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry"/></option>
-                        <option value="INFORMATIONMODEL"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry"/></option>
                         <option value="INSTITUTION"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry"/></option>
                         <option value="KNOWLEDGECENTER"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry"/></option>
-                        <option value="PERSON"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry"/></option>
                         <option value="PORTLET"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry"/></option>
                         <option value="PROJECT"><spring:message
@@ -58,8 +50,6 @@
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry"/></option>
                         <option value="TOOLDEPLOYMENT"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry"/></option>
-                        <option value="WORKFLOW"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry"/></option>
                         <option value="WORKSPACE"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry"/></option>
                     </select>

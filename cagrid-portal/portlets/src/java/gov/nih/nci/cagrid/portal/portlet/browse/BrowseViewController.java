@@ -23,6 +23,7 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
 
     private HibernateTemplate hibernateTemplate;
     private String successViewName;
+    private String userGuideUrl;
 
     private UserModel userModel;
 
@@ -83,11 +84,18 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
         } else {
             throw new RuntimeException("Unknown browse type: " + browseType);
         }
-
+               mav.addObject("userGuideUrl", getUserGuideUrl());
         encodeWithSearchParams(mav, request);
         return mav;
     }
 
+    public String getUserGuideUrl() {
+        return userGuideUrl;
+    }
+
+    public void setUserGuideUrl(String userGuideUrl) {
+        this.userGuideUrl = userGuideUrl;
+    }
 
     public String getSuccessViewName() {
         return successViewName;
