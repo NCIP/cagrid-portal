@@ -1459,13 +1459,12 @@
     </changeSet>
 
     <changeSet id="56-pre-a" author="kherm" runOnChange="true">
-        <preConditions>
-            <not>
-            <foreignKeyConstraintExists foreignKeyName="FK17004D95C22809C4A"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="FK17004D95C22809C4"/>
         </preConditions>
-        <dropForeignKeyConstraint baseTableName="cat_role_instance" constraintName="FK17004D95C22809C4A"/>
+        <dropForeignKeyConstraint baseTableName="cat_role_instance" constraintName="FK17004D95C22809C4"/>
     </changeSet>
+
     <changeSet author="kherm (generated)" id="56-b">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_role_instance" columnName="source_id"/>
@@ -1474,11 +1473,9 @@
     </changeSet>
 
 
-    <changeSet id="56-pre-c" author="kherm">
-        <preConditions>
-            <not>
+    <changeSet id="56-pre-c" author="kherm" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
             <foreignKeyConstraintExists foreignKeyName="FK17004D95F6C7048E"/>
-            </not>
         </preConditions>
         <dropForeignKeyConstraint baseTableName="cat_role_instance" constraintName="FK17004D95F6C7048E"/>
     </changeSet>
@@ -1986,11 +1983,9 @@
         <dropColumn columnName="identifer" tableName="cat_terms"/>
     </changeSet>
 
-    <changeSet id="61-36-pre-a" author="kherm">
-        <preConditions>
-            <not>
+    <changeSet id="61-36-pre-a" author="kherm" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
             <foreignKeyConstraintExists foreignKeyName="FK53CA73DEE5AF2F22"/>
-            </not>
         </preConditions>
         <dropForeignKeyConstraint baseTableName="cat_terms" constraintName="FK53CA73DEE5AF2F22"/>
     </changeSet>
