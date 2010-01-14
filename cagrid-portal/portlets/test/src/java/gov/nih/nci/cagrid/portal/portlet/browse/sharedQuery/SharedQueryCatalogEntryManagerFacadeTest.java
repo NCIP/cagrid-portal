@@ -19,9 +19,10 @@ public class SharedQueryCatalogEntryManagerFacadeTest extends PortalPortletInteg
             String dcqlXML = PortalTestUtils.readFileASString("test/data/sampleDCQL1.xml");
             String cqlXML = PortalTestUtils.readFileASString("test/data/sampleCQL1.xml");
 
-            facade.setQuery(dcqlXML);
-            assertNull("Should be a valid query", facade.validate());
             facade.setQuery(cqlXML);
+            assertNull("Should be a valid query", facade.validate());
+
+            facade.setQuery(dcqlXML);
             assertNull("Should be a valid query", facade.validate());
 
             facade.setQuery("<samples/>");
