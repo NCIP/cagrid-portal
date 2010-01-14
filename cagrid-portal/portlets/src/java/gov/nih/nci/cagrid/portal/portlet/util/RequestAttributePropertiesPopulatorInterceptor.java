@@ -12,9 +12,11 @@ import javax.portlet.PortletSession;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
+import org.springframework.web.portlet.context.PortletWebRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  *
  */
 public class RequestAttributePropertiesPopulatorInterceptor implements
@@ -42,9 +44,11 @@ public class RequestAttributePropertiesPopulatorInterceptor implements
 	/* (non-Javadoc)
 	 * @see org.springframework.web.context.request.WebRequestInterceptor#preHandle(org.springframework.web.context.request.WebRequest)
 	 */
-	public void preHandle(WebRequest request) throws Exception {
+	public void preHandle(WebRequest webRequest) throws Exception {
+        PortletWebRequest portletWebRequest = (PortletWebRequest) webRequest;
+
 		for(String prop : getProperties().keySet()){
-			request.setAttribute(prop, getProperties().get(prop), PortletSession.APPLICATION_SCOPE);
+			portletWebRequest.getRequest().setAttribute(prop, getProperties().get(prop));
 		}
 	}
 

@@ -38,7 +38,8 @@
 
         <div class="flow-buttons">
             <span id="cancelButton"><input type="button" value="Cancel" id="${ns}cancelBtn"></span>
-            <span id="submitButtonContainer"><input type="button" value="Add Comment" id="${ns}addCommentBtn"></span>
+            <span id="submitButtonContainer"><input type="button" value="Add Comments" disabled="disabled"
+                                                    id="${ns}addCommentBtn"></span>
         </div>
 
     </div>
@@ -46,6 +47,15 @@
 </form>
 
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+
+    jQuery('#${ns}commentText').bind("keyup", function(e){
+        if(jQuery('#${ns}commentText').val().length>0)
+            jQuery('#${ns}addCommentBtn').attr("disabled","");
+        else
+            jQuery('#${ns}addCommentBtn').attr("disabled","disabled");
+    });
+    });
 
     jQuery(
             function() {
@@ -70,8 +80,8 @@
         CommentsManagerFacade.addComment(commentText,
         {
             callback:function(response) {
-                alert(response);
-                Liferay.Popup.close(${ns}addCommentDialog);      
+                Liferay.Popup.close(${ns}addCommentDialog);
+                ${ns}loadComments();
             },
             errorHandler:function(errorString, exception) {
                 alert("Error rendering role types: " + errorString);

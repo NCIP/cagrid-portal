@@ -6,18 +6,20 @@
 
 <span id="${ns}commentTipContainer" class="yui-skin-sam"></span>
 
-<c:if test="${!empty portalUser}">
-    <div class="row">
-
-        	<span id="${ns}commentLink"></span>
-            
-
-    </div>
-</c:if>
+<div class="row">
+    <c:choose>
+        <c:when test="${!empty portalUser}">
+            <span id="${ns}commentLink"></span>
+        </c:when>
+        <c:otherwise>
+            Please <a href='<c:out value="${loginUrl}"/>'>sign in</a> to add Comments.
+        </c:otherwise>
+    </c:choose>
+</div>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
-		
+
         ${ns}commentTip = new YAHOO.widget.Tooltip("commentTip", {
             context:"${ns}commentLink",
             text:"Write a comment about this Catalog Item",

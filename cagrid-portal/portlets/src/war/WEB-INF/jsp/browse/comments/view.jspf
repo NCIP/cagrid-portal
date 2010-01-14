@@ -8,16 +8,23 @@
 	        <h3>Comments</h3>
 	    </div>
     </div>
+    <%@ include file="/WEB-INF/jsp/browse/comments/commentLink.jspf" %>
 	<div class="row">
 	    <div id="${ns}commentsList">
 	    </div>
 	</div>
-	<%@ include file="/WEB-INF/jsp/browse/comments/commentLink.jspf" %>
 </div>
 
 
 <script type="text/javascript">
+    jQuery(document).ready(function() {
 
+   	${ns}commentLink = new YAHOO.widget.Button({
+		label: "Add Comment",
+		id: "${ns}commentLink",
+		container: "${ns}commentLink"
+	});
+    });
     
     function ${ns}loadComments(){
 
@@ -46,11 +53,8 @@
                   alert("Error rendering role types: " + errorString);
               }
         });
-		${ns}commentLink = new YAHOO.widget.Button({
-		label: "Add Comment",
-		id: "${ns}commentLink",
-		container: "${ns}commentLink"
-	});
+
+
     }
     
 </script>
