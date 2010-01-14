@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery;
 
+import gov.nih.nci.cagrid.common.SchemaValidationException;
+import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.portal.dao.QueryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
@@ -17,17 +19,16 @@ import gov.nih.nci.cagrid.portal.portlet.browse.GridServiceEndpointDescriptorBea
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolCatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
+import org.apache.axis.utils.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.axis.utils.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -42,6 +43,8 @@ public class SharedQueryCatalogEntryManagerFacade extends
 	private SharedQueryCatalogEntryDao sharedQueryCatalogEntryDao;
 	private QueryDao queryDao;
 	private String selectEndpointsFormContentViewName;
+    SchemaValidator cqlXMLSchemaValidator, dcqlXMLSchemaValidator;
+
 
 	private static final Log logger = LogFactory
 			.getLog(SharedQueryCatalogEntryManagerFacade.class);
@@ -112,10 +115,16 @@ public class SharedQueryCatalogEntryManagerFacade extends
 	@Override
 	public String validate() {
 		String message = null;
-		if (!PortletUtils.isDCQL(this.queryXML)
-				&& !PortletUtils.isCQL(this.queryXML)) {
-			message = "The query is invalid. Please check the syntax.";
-		}
+        /** must validate as CQL or DCQL **/
+        try {
+            cqlXMLSchemaValidator.validate(this.queryXML);
+        } catch (SchemaValidationException e) {
+            try {
+                dcqlXMLSchemaValidator.validate(this.queryXML);
+            } catch (SchemaValidationException e1) {
+                message = "The query is invalid. Please check the syntax.";
+            }
+        }
 		return message;
 	}
 
@@ -246,4 +255,19 @@ public class SharedQueryCatalogEntryManagerFacade extends
 		this.selectEndpointsFormContentViewName = selectEndpointsFormContentViewName;
 	}
 
+    public SchemaValidator getCqlXMLSchemaValidator() {
+        return cqlXMLSchemaValidator;
+    }
+
+    public void setCqlXMLSchemaValidator(SchemaValidator cqlXMLSchemaValidator) {
+        this.cqlXMLSchemaValidator = cqlXMLSchemaValidator;
+    }
+
+    public SchemaValidator getDcqlXMLSchemaValidator() {
+        return dcqlXMLSchemaValidator;
+    }
+
+    public void setDcqlXMLSchemaValidator(SchemaValidator dcqlXMLSchemaValidator) {
+        this.dcqlXMLSchemaValidator = dcqlXMLSchemaValidator;
+    }
 }
