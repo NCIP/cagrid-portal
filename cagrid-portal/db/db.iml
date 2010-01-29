@@ -17,7 +17,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Globus" level="application" />
     <orderEntry type="library" exported="" name="junit" level="application" />
-    <orderEntry type="library" exported="" name="hsql" level="application" />
     <orderEntry type="library" exported="" name="spring" level="project" />
     <orderEntry type="library" exported="" name="hibernate" level="project" />
     <orderEntry type="module-library">
@@ -74,6 +73,17 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../ivy/repository/slf4j/slf4j/1.5.6/slf4j-log4j12-1.5.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Globus" level="application" />
+    <orderEntry type="library" name="hsql 1.9" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
