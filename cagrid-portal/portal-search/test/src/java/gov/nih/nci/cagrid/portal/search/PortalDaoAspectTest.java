@@ -2,14 +2,12 @@ package gov.nih.nci.cagrid.portal.search;
 
 import gov.nih.nci.cagrid.portal.dao.PersonDao;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
-import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.InstitutionCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.domain.Person;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 
 /**
@@ -28,12 +26,11 @@ public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
         pCEDao.delete(pCE);
     }
 
-    public void testPersonCEAspect() {
-        PersonCatalogEntry pCE = new PersonCatalogEntry();
-        PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
-        pCEDao.save(pCE);
-
-    }
+//    public void testPersonCEAspect() {
+//        PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
+//        pCEDao.createCatalogAbout(new PortalUser());
+//
+//    }
 
     public void testNonCEDao() throws Exception {
         Person p = new Person();
@@ -44,25 +41,15 @@ public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
         httpClient.executeMethod(null);
     }
 
-    public void testCEAspect() {
-        CatalogEntry ce = new CatalogEntry();
-        CatalogEntryDao cEDao = (CatalogEntryDao) getApplicationContext().getBean("catalogEntryDao");
-        cEDao.save(ce);
-
-    }
 
     public void testGSCEAspect() {
-        GridServiceEndPointCatalogEntry ce = new GridServiceEndPointCatalogEntry();
         GridServiceEndPointCatalogEntryDao cEDao = (GridServiceEndPointCatalogEntryDao) getApplicationContext().getBean("gridServiceEndPointCatalogEntryDao");
-        cEDao.save(ce);
-
+        cEDao.createCatalogAbout(new GridService());
     }
 
     public void testInstCEAspect() {
-        InstitutionCatalogEntry ce = new InstitutionCatalogEntry();
         InstitutionCatalogEntryDao cEDao = (InstitutionCatalogEntryDao) getApplicationContext().getBean("institutionCatalogEntryDao");
-        cEDao.save(ce);
-
+        cEDao.createCatalogAbout(new Participant());
     }
 
 
