@@ -46,6 +46,12 @@ public class CatalogEntryManagerAspect extends AbstractSolrCommandExecutor imple
 
     }
 
+    //ToDo Make these annotations and a single Pointcut
+    @AfterReturning("execution(* gov.nih.nci.cagrid.portal.portlet.browse.ajax.*.save(..))")
+    public void save() throws Exception {
+        runCommand();
+    }
+
     public int getOrder() {
         return order;
     }
