@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.solr;
 
 import org.apache.solr.common.SolrDocument;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * User: kherm
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class TreeBean extends SolrDocument {
 
-    private List<TreeNode> nodeList = new ArrayList<TreeNode>();
+    private Set<TreeNode> nodeList = new TreeSet<TreeNode>();
     public static final String NODE_LABEL = "node";
 
     public TreeBean(TreeDescriptor desc) {
@@ -28,7 +28,7 @@ public class TreeBean extends SolrDocument {
 
     public TreeNode getByName(String name) {
         TreeNode returnNode = null;
-        for (Iterator iter = this.nodeList.listIterator(); iter.hasNext();) {
+        for (Iterator iter = this.nodeList.iterator(); iter.hasNext();) {
             TreeNode node = (TreeNode) iter.next();
             if (node.getName().equalsIgnoreCase(name))
                 returnNode = node;
@@ -37,9 +37,10 @@ public class TreeBean extends SolrDocument {
 
         return returnNode;
     }
+
     public TreeNode getByLabel(String label) {
         TreeNode returnNode = null;
-        for (Iterator iter = this.nodeList.listIterator(); iter.hasNext();) {
+        for (Iterator iter = this.nodeList.iterator(); iter.hasNext();) {
             TreeNode node = (TreeNode) iter.next();
             if (node.getLabel().equalsIgnoreCase(label))
                 returnNode = node;
