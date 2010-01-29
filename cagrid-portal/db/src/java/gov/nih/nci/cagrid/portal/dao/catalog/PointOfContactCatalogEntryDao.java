@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfCon
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.List;
@@ -52,7 +53,9 @@ public class PointOfContactCatalogEntryDao extends
         return catalog;
     }
 
+    
 
+    @UpdatesCatalogs
     public PointOfContactCatalogEntry createCatalogAbout(PointOfContact poc) {
         poc = (PointOfContact) getSession().load(PointOfContact.class, new Integer(poc.getId()));
 

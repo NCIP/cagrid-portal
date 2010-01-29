@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.dao.catalog;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry;
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -25,6 +26,7 @@ public class InstitutionCatalogEntryDao extends AboutCatalogEntryDao<Institution
         return InstitutionCatalogEntry.class;
     }
 
+    @UpdatesCatalogs
     public InstitutionCatalogEntry createCatalogAbout(Participant participant) {
         InstitutionCatalogEntry entry = isAbout(participant);
         if (entry == null) {

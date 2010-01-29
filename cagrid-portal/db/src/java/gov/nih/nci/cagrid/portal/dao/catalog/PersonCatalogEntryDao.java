@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 /**
  * User: kherm
@@ -29,6 +30,8 @@ public class PersonCatalogEntryDao extends
         return PersonCatalogEntry.class;
     }
 
+
+    @UpdatesCatalogs
     public PersonCatalogEntry createCatalogAbout(PortalUser user) {
         user = (PortalUser) getSession().load(PortalUser.class, new Integer(user.getId()));
         PersonCatalogEntry entry = isAbout(user);

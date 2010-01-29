@@ -21,7 +21,6 @@ public abstract class AbstractCatalogEntryDao<T extends AbstractDomainObject> ex
     /**
      * Saves the catalog entry with the current timestamp
      */
-    @UpdatesCatalogs
     public void save(T entry) {
         if (entry instanceof CatalogEntry)
             ((CatalogEntry) entry).setUpdatedAt(timestampProvider.getTimestamp());

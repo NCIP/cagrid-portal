@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.ConceptHierarchyNode;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.List;
@@ -107,6 +108,7 @@ public class GridServiceEndPointCatalogEntryDao extends
 		return catalog;
 	}
 
+    @UpdatesCatalogs
 	public GridServiceEndPointCatalogEntry createCatalogAbout(
 			GridService service) {
 		GridServiceEndPointCatalogEntry entry = isAbout(service);
