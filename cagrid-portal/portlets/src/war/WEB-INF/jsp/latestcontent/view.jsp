@@ -86,11 +86,7 @@
 <div id="summaryContent">
     <div id="summaryTitle">
              Latest Content
-        <span id="summaryHelpLink">
-            <a href="${userGuideUrl}-LatestEntries" target="_blank">
-                <tags:image name="help.gif"/>
-            </a>
-           </span>
+        <tags:helpLink  helpURL="${userGuideUrl}-LatestEntries"/>
     </div>
 
     <div id="${ns}categories" class="row">

@@ -4,8 +4,7 @@
 
 
 <div style="text-align:right;">
-    <a href="${userGuideUrl}-ManageYourProfileandCredentials"  target="_blank">Help</a>
-       <tags:image name="help.gif"/>
+     <tags:helpLink helpURL="${userGuideUrl}-ManageYourProfileandCredentials"/>
 </div>
 <!-- Top -->
 <div class="yui-skin-sam">

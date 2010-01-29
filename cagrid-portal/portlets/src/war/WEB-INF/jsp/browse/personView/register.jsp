@@ -55,11 +55,7 @@ div.row label:after {
 <div class="instructions">
 	Please fill out your information in the fields below. Passwords must be between 10 and 20 characters, 
 	and must include an uppercase letter, a lowercase letter, a number, and a special character.
-    <span id="summaryHelpLink">
-              <a href="${userGuideUrl}-RegisterasaNewUser" target="_blank">
-                  <tags:image name="help.gif"/>
-              </a>
-          </span>
+       <tags:helpLink helpURL="${userGuideUrl}-RegisterasaNewUser"/>
 </div>
 
     

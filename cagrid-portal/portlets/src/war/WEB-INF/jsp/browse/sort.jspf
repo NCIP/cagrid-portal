@@ -19,21 +19,27 @@
     jQuery(document).ready(function() {
         ${ns}sortOrder();
 
+        if (location.href.indexOf("guest/catalog/people") > -1) {
+            ${ns}clearOption("rating");
+        }
+
         g_tree.subscribe("labelClick", function(node, tree) {
             //remove service status option for all
-            ${ns}clearStatusOption();
+            ${ns}clearOption("status");
 
-            <%--make sure rating option exists--%>
+        <%--make sure rating option exists--%>
             if (jQuery("#${ns}sortList option[value='rating']").val() == null)
                 jQuery("#${ns}sortList").append("<option value='rating'>Rating</option>");
 
-            <%--add service status option for grid services--%>
+        <%--add service status option for grid services--%>
             if (node.data.name == "tool_grid_service_endpoint" || node.data.name == "tool_grid_data_service_endpoint") {
                 jQuery("#${ns}sortList").append("<option value='status'>Service Status</option>");
             }
-            <%--remove rating option for people--%>
+                    <%--remove rating option for people--%>
+
             else if (node.data.name == "person" || node.data.name == "poc") {
                 jQuery("#${ns}sortList option[value='rating']").remove();
+                ${ns}sortResults();
             }
         });
 
@@ -44,17 +50,15 @@
         });
     });
 
+    function ${ns}clearOption(option) {
+        if (jQuery("#${ns}sortList option[value='" + option + "']").val() != null)
+            jQuery("#${ns}sortList option[value='" + option + "']").remove();
+    }
+
     function ${ns}sortOrder() {
         jQuery("#${ns}sortOrderImg").attr({
             src:"<c:url value='/images/sort_" + sortOrder + ".png'/>"
         });
-    }
-
-    function ${ns}clearStatusOption() {
-        //remove service status option
-        if (jQuery("#${ns}sortList option[value='status']").val() != null) {
-            jQuery("#${ns}sortList option[value='status']").remove();
-        }
     }
 
 

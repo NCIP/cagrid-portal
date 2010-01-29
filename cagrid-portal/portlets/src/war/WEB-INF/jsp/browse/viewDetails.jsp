@@ -4,7 +4,7 @@
 <portlet:renderURL var="viewUrl">
 	<portlet:param name="operation" value="view"/>
 </portlet:renderURL>
-<a href="<c:out value="${viewUrl} }"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to search results</a>
+<a href="<c:out value="${viewUrl} }"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back</a>
 
 <div id="catalogEntry.name">
 <c:out value="${catalogEntry.name}"/>

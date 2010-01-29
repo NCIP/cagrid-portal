@@ -23,6 +23,7 @@
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setRows(7);
+    ${ns}query.addFacet("catalog_type", "!poc !person");
 
 
     function ${ns}navigateToCatalog(id) {
@@ -87,11 +88,7 @@
 <div id="summaryContent">
     <div id="summaryTitle">
     Top Ranked Content
-           <span id="summaryHelpLink">
-            <a href="${userGuideUrl}-TopRankedEntries" target="_blank">
-                <tags:image name="help.gif"/>
-            </a>
-           </span>
+             <tags:helpLink helpURL="${userGuideUrl}-TopRankedEntries"/>
         </div>
 
     <div id="${ns}categories" class="row" style="vertical-align:middle;">

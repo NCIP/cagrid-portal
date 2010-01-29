@@ -17,3 +17,4 @@
         <%@ include file="/WEB-INF/jsp/browse/sharedQuery/view.jspf" %>
     </c:otherwise>
 </c:choose>
+

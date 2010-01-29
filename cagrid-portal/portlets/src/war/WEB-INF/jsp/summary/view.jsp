@@ -81,13 +81,8 @@
 
 <div id="dataSetsContent">
     <div id="summaryTitle">
-     Data Set Categories
-        <span id="summaryHelpLink">
-            <a href="http://cagrid.org/display/portal30/caGrid+Portal+3.0+User%27s+Guide#caGridPortal3.0User%27sGuide
--DataSetCategories" target="_blank">
-                <tags:image name="help.gif"/>
-            </a>
-           </span>
+     Data Set Categoriess
+        <tags:helpLink helpURL="${userGuideUrl}-DataSetCategories"/>
     </div>
 
     <div id="${ns}categories" class="row">

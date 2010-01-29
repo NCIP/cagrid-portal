@@ -1,10 +1,7 @@
 <%@tag %>
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
-<tags:yui-minimum/>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>"/>
-<script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
-
+<%--does NOT include YUI scripts for faster loading. But make sure these are available--%>
 <%@attribute name="helpURL" required="true" %>
 
 <c:set var="ns"><portlet:namespace/></c:set>
@@ -19,7 +16,6 @@
 </span>
 
 <script type="text/javascript">
-    jQuery(document).ready(function() {
 
         ${ns}catalogTip = new YAHOO.widget.Tooltip("helpTip", {
             context:"${id}",
@@ -29,5 +25,5 @@
             hideDelay:100
 
         });
-    });
+  
 </script>

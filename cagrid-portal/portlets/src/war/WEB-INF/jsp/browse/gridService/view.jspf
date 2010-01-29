@@ -43,7 +43,10 @@
 	<script type="text/javascript" src='<c:url value="/js/scriptaculous/effects.js"/>'></script>
 	<script type="text/javascript" src='<c:url value="/js/scriptaculous/controls.js"/>'></script>
 
+    <div class="row">
+            <label>Notifications</label>
     <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
+    </div>
     <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>
 
 </c:if>

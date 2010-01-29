@@ -243,8 +243,9 @@ var Catalogs = Class.create({
         }
 
         if (this.config.selectedCatalogType) {
+            alert("is not null");
             YAHOO.log("Adding selected catalog_type facet:" + this.config.selectedCatalogType);
-            this.query.addFacet("catalog_type", this.config.selectedCatalogType);
+                this.query.addFacet("catalog_type", this.config.selectedCatalogType);
         }
 
         if (this.config.filter) {
@@ -254,6 +255,12 @@ var Catalogs = Class.create({
         if (this.config.sortField) {
             YAHOO.log("Will sort on " + this.config.sortField);
             this.query.sort(this.config.sortField);
+            <%--ignore POC and People when sort by rating--%>
+            if(this.config.sortField =="rating"){
+                this.query.addFacet("catalog_type", "!poc !person");
+                if(this.config.catalog)
+                    this.query.addFacet("catalog_type", this.config.catalog.type + " !poc !person");
+        }
         }
 
         if (this.config.ids) {

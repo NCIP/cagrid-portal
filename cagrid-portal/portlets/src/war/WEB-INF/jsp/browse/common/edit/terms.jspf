@@ -62,8 +62,8 @@ function ${ns}addTerms(terms){
 			termValues += ",";
 		}
 	}
-	jQuery("#${ns}areaOfFocusValues").val(termValues);
-	jQuery("#${ns}areaOfFocusLabels").val(termLabels);
+	jQuery("#${ns}areaOfFocusValues").attr("value",termValues);
+	jQuery("#${ns}areaOfFocusLabels").attr("value",termLabels);
 	${ns}setAreaOfFocusValues(termValues);
 }
 

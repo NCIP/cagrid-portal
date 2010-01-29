@@ -76,12 +76,7 @@
 <div id="summaryContent">
 <div id="summaryTitle">
     Top Contributors
-		<span id="summaryHelpLink">
-			<a href="${userGuideUrl}-TopContributors" target="_blank">
-				<tags:image name="help.gif"/>
-			</a>
-		</span>
-
+    <tags:helpLink  helpURL="${userGuideUrl}-TopContributors"/>
 </div>
 
     <div id="${ns}categories" class="row">

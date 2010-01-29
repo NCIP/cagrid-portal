@@ -1,20 +1,9 @@
 <%@ include file="/WEB-INF/jsp/include/servlet_includes.jsp" %>
 
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>" />
-
-<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/logger/logger-min.js"/>"></script>
-
 <c:set var="ns" value="${param.ns}"/>
 
 <script type="text/javascript"
 	src="<c:url value="/dwr/interface/TerminologyService.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
 <div style="text-align:left;" class="yui-skin-sam">
 
@@ -83,7 +72,7 @@ jQuery(document).ready(function() {
 			terms.push(
 				{
 					uri: jQuery(termEls[i]).val(),
-					label: jQuery(termEls[i]).next().text(),
+					label: jQuery(termEls[i]).next("span").text(),
 					comment: jQuery(termEls[i]).next("span").next()
 				}
 			);

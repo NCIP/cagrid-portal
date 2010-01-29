@@ -1,30 +1,32 @@
 
+
 <portlet:renderURL var="viewUrl">
     <portlet:param name="operation" value="view"/>
-    <c:if test="${query!=null}">
+    <c:if test="${fn:length(query)>0}">
         <portlet:param name="query" value="${query}"/>
         <c:set var="backLink" value="query"/>
     </c:if>
-    <c:if test="${selectedCatalogType!=null}">
+    <c:if test="${fn:length(selectedCatalogType)>0}">
         <portlet:param name="selectedCatalogType" value="${selectedCatalogType}"/>
         <c:set var="backLink" value="selectedCatalogType"/>
     </c:if>
-    <c:if test="${selectedCatalogLabel!=null}">
+    <c:if test="${fn:length(selectedCatalogLabel)>0}">
         <portlet:param name="selectedCatalogLabel" value="${selectedCatalogLabel}"/>
         <c:set var="backLink" value="selectedCatalogLabel"/>
     </c:if>
-    <c:if test="${catalogType!=null}">
+    <c:if test="${fn:length(catalogType)>0}">
         <portlet:param name="catalogType" value="${catalogType}"/>
         <c:set var="backLink" value="catalogType"/>
     </c:if>
-    <c:if test="${aof!=null}">
+    <c:if test="${fn:length(aof)>0}">
         <portlet:param name="aof" value="${aof}"/>
         <c:set var="backLink" value="aof"/>
     </c:if>
-    <c:if test="${searchKeyword!=null}">
+    <c:if test="${searchKeyword!='*:*'}">
         <portlet:param name="searchKeyword" value="${searchKeyword}"/>
+        <c:set var="backLink" value="searchKeyword"/>
     </c:if>
-    <c:if test="${selectedIds!=null}">
+    <c:if test="${fn:length(selectedIds)>0}">
         <portlet:param name="selectedIds" value="${selectedIds}"/>
         <c:set var="backLink" value="selectedIds"/>
     </c:if>
@@ -33,7 +35,7 @@
 <div class="row">
     <c:if test="${backLink !=null}">
         <div style="float:left;">
-            <a href="<c:out value="${viewUrl}"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to search results</a>
+            <a href="<c:out value="${viewUrl}"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to Results</a>
         </div>
     </c:if>
 

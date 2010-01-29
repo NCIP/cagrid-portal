@@ -11,23 +11,13 @@
 <c:set var="rtsId">${id_prefix}${term.uri}</c:set>
 <div class="row">
 	<div class="label">
-<input id="${rtsId}" type="checkbox" name="${input_name}" value="${term.uri}"/>
+<input id="${rtsId}" type="checkbox" name="${input_name}" value="${term.uri}">
+        <span style="display:none;">${term.label}</span>
+        <span style="display:none;">${term.comment}</span>
+  </input>
+
 </div>
 <div class="value">
-<label id="${rtsId}-infoPopup-control"
-   for="${rtsId}"
-   class="infoPopupLink"
-   onmouseover="$('${rtsId}-infoPopup-content').style.display='inline'"
-   onmouseout="$('${rtsId}-infoPopup-content').style.display='none'">
-   <c:out value="${term.label}"/>
-</label>&nbsp;
-
-        <span id="${rtsId}-infoPopup-content" class="infoPopup">
-        <c:out value="${term.comment}"/>
-
-
-<span class="infoPopup-pointer">&nbsp;</span></span>
-
-<div id="${rtsId}_subTermsContainer"></div>
+    <tags:yuiPopup popupContent="Area of Focus: ${term.comment}" label="${term.label}" id="${rtsId}-infoPopup-control"/>
 </div>
-</div>
+    </div>
