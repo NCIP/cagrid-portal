@@ -243,7 +243,6 @@ var Catalogs = Class.create({
         }
 
         if (this.config.selectedCatalogType) {
-            alert("is not null");
             YAHOO.log("Adding selected catalog_type facet:" + this.config.selectedCatalogType);
                 this.query.addFacet("catalog_type", this.config.selectedCatalogType);
         }
