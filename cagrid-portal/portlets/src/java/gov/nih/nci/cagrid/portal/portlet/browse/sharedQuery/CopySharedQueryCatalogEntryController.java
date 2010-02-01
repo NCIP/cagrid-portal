@@ -47,6 +47,7 @@ public class CopySharedQueryCatalogEntryController extends BrowseViewDetailsCont
 
         logger.debug("Creating a copy of shared query");
         SharedQueryCatalogEntry copyCatalogEntry = (SharedQueryCatalogEntry) (getCatalogEntryFactory().newCatalogEntry(sharedQueryEntryType));
+        copyCatalogEntry.setName("Copy of " + catalogEntry.getName());
         copyCatalogEntry.setAreasOfFocus(catalogEntry.getAreasOfFocus());
         copyCatalogEntry.setDescription(catalogEntry.getDescription());
 

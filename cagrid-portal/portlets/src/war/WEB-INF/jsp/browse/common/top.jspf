@@ -37,6 +37,6 @@
 
 <c:set var="managerFacadeName">${catalogEntry.class.simpleName}ManagerFacade</c:set>
 <c:set var="managerFacadePath">/dwr/interface/${managerFacadeName}.js</c:set>
-<script type='text/javascript' src="<c:url value="${managerFacadePath}"/>"/></script>
+<script type='text/javascript' src="<c:url value="${managerFacadePath}"/>"></script>
 <script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>

@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.Query;
 import gov.nih.nci.cagrid.portal.portlet.browse.GridServiceEndpointDescriptorBean;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolCatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 import org.apache.axis.utils.StringUtils;
 import org.apache.commons.logging.Log;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URL;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -43,7 +45,7 @@ public class SharedQueryCatalogEntryManagerFacade extends
 	private SharedQueryCatalogEntryDao sharedQueryCatalogEntryDao;
 	private QueryDao queryDao;
 	private String selectEndpointsFormContentViewName;
-    SchemaValidator cqlXMLSchemaValidator, dcqlXMLSchemaValidator;
+    String cqlSchema,dcqlSchema;
 
 
 	private static final Log logger = LogFactory
@@ -117,11 +119,16 @@ public class SharedQueryCatalogEntryManagerFacade extends
 		String message = null;
         /** must validate as CQL or DCQL **/
         try {
-            cqlXMLSchemaValidator.validate(this.queryXML);
+               URL schemaPath = this.getClass().getClassLoader().getResource(getCqlSchema());
+            SchemaValidator validator = new SchemaValidator(schemaPath.getFile());
+            validator.validate(this.queryXML);
         } catch (SchemaValidationException e) {
             try {
-                dcqlXMLSchemaValidator.validate(this.queryXML);
+               URL schemaPath = this.getClass().getClassLoader().getResource(getDcqlSchema());
+             SchemaValidator validator = new SchemaValidator(schemaPath.getFile());
+             validator.validate(this.queryXML);
             } catch (SchemaValidationException e1) {
+                logger.info("Saving invalid query " + e1.getMessage());
                 message = "The query is invalid. Please check the syntax.";
             }
         }
@@ -220,7 +227,23 @@ public class SharedQueryCatalogEntryManagerFacade extends
 		return sqCe.getId();
 	}
 
-	public GridServiceEndPointCatalogEntryDao getGridServiceEndPointCatalogEntryDao() {
+    public String getCqlSchema() {
+        return cqlSchema;
+    }
+
+    public void setCqlSchema(String cqlSchema) {
+        this.cqlSchema = cqlSchema;
+    }
+
+    public String getDcqlSchema() {
+        return dcqlSchema;
+    }
+
+    public void setDcqlSchema(String dcqlSchema) {
+        this.dcqlSchema = dcqlSchema;
+    }
+
+    public GridServiceEndPointCatalogEntryDao getGridServiceEndPointCatalogEntryDao() {
 		return gridServiceEndPointCatalogEntryDao;
 	}
 
@@ -255,19 +278,5 @@ public class SharedQueryCatalogEntryManagerFacade extends
 		this.selectEndpointsFormContentViewName = selectEndpointsFormContentViewName;
 	}
 
-    public SchemaValidator getCqlXMLSchemaValidator() {
-        return cqlXMLSchemaValidator;
-    }
 
-    public void setCqlXMLSchemaValidator(SchemaValidator cqlXMLSchemaValidator) {
-        this.cqlXMLSchemaValidator = cqlXMLSchemaValidator;
-    }
-
-    public SchemaValidator getDcqlXMLSchemaValidator() {
-        return dcqlXMLSchemaValidator;
-    }
-
-    public void setDcqlXMLSchemaValidator(SchemaValidator dcqlXMLSchemaValidator) {
-        this.dcqlXMLSchemaValidator = dcqlXMLSchemaValidator;
-    }
 }
