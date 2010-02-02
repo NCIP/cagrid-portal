@@ -89,6 +89,32 @@
         <url-pattern>/dwr/*</url-pattern>
     </filter-mapping>
 
+    <!--custom filters for AppScan/security issues-->
+    <filter>
+        <filter-name>
+            DisableUrlSessionFilter
+        </filter-name>
+        <filter-class>
+            gov.nih.nci.cagrid.portal.portlet.filter.DisableUrlSessionFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DisableUrlSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>
+            CrossScriptingFilter
+        </filter-name>
+        <filter-class>
+            gov.nih.nci.cagrid.portal.portlet.filter.CrossScriptingFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CrossScriptingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>dwr-invoker</servlet-name>
         <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
@@ -100,10 +126,10 @@
             <param-name>disconnectedTime</param-name>
             <param-value>5000</param-value>
         </init-param>
- 		<init-param>
-    		<param-name>allowScriptTagRemoting</param-name >
-    		<param-value>true </param-value>
-  		</init-param>
+        <init-param>
+            <param-name>allowScriptTagRemoting</param-name>
+            <param-value>true</param-value>
+        </init-param>
         <init-param>
             <param-name>classes</param-name>
             <param-value>
@@ -197,7 +223,7 @@
         <servlet-name>export</servlet-name>
         <url-pattern>/export/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>credmgr</servlet-name>
         <servlet-class>
@@ -209,8 +235,8 @@
     <servlet-mapping>
         <servlet-name>credmgr</servlet-name>
         <url-pattern>/credmgr/*</url-pattern>
-    </servlet-mapping> 
-    
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>browse</servlet-name>
         <servlet-class>
@@ -218,12 +244,12 @@
         </servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>browse</servlet-name>
         <url-pattern>/browse/*</url-pattern>
-    </servlet-mapping>  
-    
+    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>terms</servlet-name>
@@ -237,7 +263,7 @@
         <servlet-name>terms</servlet-name>
         <url-pattern>/terms/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>img</servlet-name>
         <servlet-class>
