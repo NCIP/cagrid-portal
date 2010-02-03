@@ -43,6 +43,15 @@
         </createTable>
     </changeSet>
 
+    <!--clean all authentication tickets. Will always run-->
+    <changeSet id="20-2-always" author="kherm" runAlways="true">
+        <preConditions onError="MARK_RAN">
+            <tableExists tableName="authn_tickets"/>
+        </preConditions>
+        <delete tableName="authn_tickets">
+        </delete>
+    </changeSet>
+
     <changeSet author="kherm (generated)" id="20-3">
         <preConditions onFail="MARK_RAN">
             <not>
