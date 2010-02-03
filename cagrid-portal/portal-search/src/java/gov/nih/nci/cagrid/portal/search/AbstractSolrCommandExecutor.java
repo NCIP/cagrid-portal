@@ -4,6 +4,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,9 +22,12 @@ public abstract class AbstractSolrCommandExecutor {
     private String command;
     protected final String URL_ENCODING = "UTF-8";
 
-    HttpClient httpClient;
+      HttpCommandExecutor executor;
 
     protected Log logger = LogFactory.getLog(getClass());
+
+    protected AbstractSolrCommandExecutor() {
+    }
 
     protected AbstractSolrCommandExecutor(String command) throws URISyntaxException {
         this.command = command;
@@ -53,7 +57,7 @@ public abstract class AbstractSolrCommandExecutor {
      * @throws IOException
      */
     public synchronized void execute(HttpMethod httpMethod) throws IOException {
-        getHttpClient().executeMethod(httpMethod);
+      getExecutor().execute(httpMethod);  
 
     }
 
@@ -81,11 +85,12 @@ public abstract class AbstractSolrCommandExecutor {
         this.command = command;
     }
 
-    public HttpClient getHttpClient() {
-        return httpClient;
+    public HttpCommandExecutor getExecutor() {
+        return executor;
     }
 
-    public void setHttpClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
+    @Required
+    public void setExecutor(HttpCommandExecutor executor) {
+        this.executor = executor;
     }
 }

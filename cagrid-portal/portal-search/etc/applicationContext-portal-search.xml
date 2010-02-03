@@ -16,19 +16,31 @@
     </bean>
 
     <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
-          abstract="true" p:httpClient-ref="defaultHttpClient"
+          abstract="true" p:executor-ref="defaultHttpCommandExecutor"
           p:baseSolrURL="${cagrid.portal.solr.http.url}"
           p:localhostURL="http://localhost:${cagrid.portal.http.port}"/>
 
     <!--will initialize on container startup-->
     <bean id="solrFullImport" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
-          parent="abstractSolrCommandExecutor">
+          parent="abstractSolrCommandExecutor" p:executor-ref="defaultHttpCommandExecutor">
         <constructor-arg value="/dataimport?command=full-import"/>
     </bean>
 
     <bean id="solrSpellBuildIdx" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
-          parent="abstractSolrCommandExecutor">
+          parent="abstractSolrCommandExecutor" p:executor-ref="defaultHttpCommandExecutor">
         <constructor-arg value="/select/?q=*:*&amp;spellcheck=true&amp;spellcheck.build=true"/>
+    </bean>
+
+    <bean id="defaultHttpCommandExecutor" class="gov.nih.nci.cagrid.portal.search.DefaultHttpCommandExecutor"
+          scope="singleton" p:httpClient-ref="defaultHttpClient"/>
+
+    <bean id="cachingHttpCommandExecutor" class="gov.nih.nci.cagrid.portal.search.CachingHttpCommandExecutor"
+          scope="singleton" p:httpClient-ref="defaultHttpClient">
+        <property name="quietTime">
+            <bean class="java.lang.Long">
+                <constructor-arg value="${cagrid.portal.solr.quiet.period}"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="defaultHttpClient" class="org.apache.commons.httpclient.HttpClient"/>

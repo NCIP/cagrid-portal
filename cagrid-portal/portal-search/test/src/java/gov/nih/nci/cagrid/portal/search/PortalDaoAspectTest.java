@@ -17,6 +17,13 @@ import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
  */
 public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
 
+    public PortalDaoAspectTest() {
+        HttpCommandExecutor executor = (HttpCommandExecutor)getApplicationContext().getBean("defaultHttpCommandExecutor");
+        PortalDaoAspect aspect = (PortalDaoAspect)getApplicationContext().getBean("deltaImportAspect");
+        aspect.setExecutor(executor);
+
+    }
+
     public void testDelete() {
         PersonCatalogEntry pCE = new PersonCatalogEntry();
         PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
@@ -42,12 +49,12 @@ public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
     }
 
 
-    public void testGSCEAspect() {
+    public void testGSCEAspect()throws Exception {
         GridServiceEndPointCatalogEntryDao cEDao = (GridServiceEndPointCatalogEntryDao) getApplicationContext().getBean("gridServiceEndPointCatalogEntryDao");
         cEDao.createCatalogAbout(new GridService());
     }
 
-    public void testInstCEAspect() {
+    public void testInstCEAspect() throws Exception {
         InstitutionCatalogEntryDao cEDao = (InstitutionCatalogEntryDao) getApplicationContext().getBean("institutionCatalogEntryDao");
         cEDao.createCatalogAbout(new Participant());
     }
@@ -56,6 +63,7 @@ public class PortalDaoAspectTest extends PortalDaoAspectTestBase {
     @Override
     protected void onTearDown() throws Exception {
         super.onTearDown();    //To change body of overridden methods use File | Settings | File Templates.
+
         assertTrue("Solr HTTP interface was not called", MockHttpClient.assertJustRan());
     }
 
