@@ -45,6 +45,9 @@
         <li class="selected"><a href="#tab1"><em>Queries</em></a></li>
     </ul>
     <div class="yui-content">
+        <div style="width:100%;display:none;margin-bottom:5px;" id="${ns}deleteAllContainer">
+            <input type="button" value="Delete All Results"/>
+        </div>
         <div id="${ns}resultsDiv">
         </div>
     </div>
@@ -148,6 +151,10 @@ function ${ns}loadResults(firstTime) {
 
                 jQuery("#${ns}resultsDiv").accordion({header:'h3',collapsible: true,active:false });
 
+            <%--setup delete all button--%>
+                jQuery("#${ns}deleteAllContainer").show();
+                YAHOO.util.Event.removeListener("${ns}deleteAllContainer", "click", ${ns}deleteAllQueries);
+                YAHOO.util.Event.addListener("${ns}deleteAllContainer", "click", ${ns}deleteAllQueries, qInstList);
 
             }
         },
@@ -158,6 +165,17 @@ function ${ns}loadResults(firstTime) {
     });
 }
 
+function ${ns}deleteAllQueries(e,qInstList) {
+    if (!confirm("Are you sure you want to delete All queries?")) {
+        return;
+    }
+    for (var i = 0; i < qInstList.length; i++) {
+        QueryExecutionManager.deleteQueryInstance(qInstList[i].id, {
+        });
+    }
+    ${ns}loadResults(false);
+
+}
 <%--track running queries here--%>
 function ${ns}queryExecutionListener(qInst, statusDiv) {
 
@@ -175,7 +193,7 @@ function ${ns}queryExecutionListener(qInst, statusDiv) {
 
         },
         errorHandler:function(errorString, exception) {
-            alert("Error getting query status " + errorString);
+
         },
         async: true
     });
@@ -247,7 +265,7 @@ function ${ns}ResultTable(instanceId, metadataUrl, dataUrl) {
     });
 
 
-    this.pag.subscribe('render', ${ns}updateTotalRecords,instanceId);
+    this.pag.subscribe('render', ${ns}updateTotalRecords, instanceId);
 
 
     this.handleMetadataSuccess = function(o) {
@@ -319,13 +337,13 @@ function ${ns}ResultTable(instanceId, metadataUrl, dataUrl) {
     };
 }
 
-function ${ns}updateTotalRecords(paginator,containerId) {
-      var container = containerId+ "pageCtrlTop";
-      var resultsCountDiv = document.createElement('div');
-      resultsCountDiv.className = "resultsCount";
-      resultsCountDiv.appendChild(document.createTextNode("Total Results: " + paginator.totalRecords));
-      YAHOO.util.Dom.get(container).appendChild(resultsCountDiv);
-  }
+function ${ns}updateTotalRecords(paginator, containerId) {
+    var container = containerId + "pageCtrlTop";
+    var resultsCountDiv = document.createElement('div');
+    resultsCountDiv.className = "resultsCount";
+    resultsCountDiv.appendChild(document.createTextNode("Total Results: " + paginator.totalRecords));
+    YAHOO.util.Dom.get(container).appendChild(resultsCountDiv);
+}
 
 jQuery(document).ready(function() {
 
