@@ -13,10 +13,8 @@
 <div id="<portlet:namespace/>tabs" class="yui-navset"> 
     <ul class="yui-nav"> 
         <li class="selected"><a href="#<portlet:namespace/>tab1"><em>Related Entries</em></a></li> 
-        <li><a href="#<portlet:namespace/>tab2"><em>Other Info</em></a></li>
-        <li><a href="#<portlet:namespace/>tab3"><em>Comments</em></a></li>
-
-    </ul>             
+        <li><a href="#<portlet:namespace/>tab2"><em>Comments</em></a></li>
+    </ul>
     <div class="yui-content"> 
         <div>
 
@@ -343,9 +341,6 @@ function ${ns}deleteRelatedItem(relationshipId){
 <%@ include file="/WEB-INF/jsp/browse/related_items_content.jspf" %>
         </div> 
         <div>
-        	<%@ include file="/WEB-INF/jsp/browse/otherInfo.jspf" %>
-        </div>
-        <div>
         	<%@ include file="/WEB-INF/jsp/browse/comments/view.jspf" %>
         </div>
 
@@ -381,7 +376,7 @@ function ${ns}newButton(label, baseName){
 
 jQuery(document).ready(function() {
     var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
-    commentsTab = myTabs.getTab(2);
+    commentsTab = myTabs.getTab(1);
     commentsTab.addListener('click', ${ns}loadComments);
 
 
