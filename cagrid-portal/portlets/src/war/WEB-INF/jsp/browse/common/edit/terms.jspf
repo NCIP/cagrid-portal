@@ -1,29 +1,17 @@
 <div class="termsRow">
-
 	<div class="row">
 		<label for="areaOfFocus">Area of Focus</label>
-		<textarea 
-			style="height:50px;width:300px;"
-			name="areaOfFocusLabels" 
-			id="${ns}areaOfFocusLabels"><tags:joinTermLabels items="${catalogEntry.areasOfFocus}" delimiter=","/></textarea>
-		
+		<textarea style="height:50px;width:300px;" name="areaOfFocusLabels" id="${ns}areaOfFocusLabels"><tags:joinTermLabels items="${catalogEntry.areasOfFocus}" delimiter=","/></textarea>
 		<input class="required autoSet" type="hidden" name="areaOfFocusValues" id="${ns}areaOfFocusValues"
-			value="<tags:joinTermIdentifiers items="${catalogEntry.areasOfFocus}" delimiter=","/>"
-		/>
-	</div>
-
-</div>
-
+			value="<tags:joinTermIdentifiers items="${catalogEntry.areasOfFocus}" delimiter=","/>"/>
+	</div></div>
 <script type="text/javascript">
-
 var ${ns}areaOfFocusPopupDialog = null;
 var ${ns}areaOfFocusDialogOpen = false;
 function ${ns}showAreaOfFocusDialog(){
 	${ns}areaOfFocusDialogOpen = true;
 	${ns}areaOfFocusPopupDialog = new Liferay.Popup({title: "Area of Focus", modal:true, width:750 , height:500}); 
-	jQuery(
-		${ns}areaOfFocusPopupDialog
-	).load(
+	jQuery(${ns}areaOfFocusPopupDialog).load(
 		<c:url var="editAreaOfFocusUrl" value="/browse/edit_area_of_focus.html">
 			<c:param name="ns" value="${ns}"/>
 		</c:url>
@@ -31,11 +19,8 @@ function ${ns}showAreaOfFocusDialog(){
 	    { 
 	    	onClose: function(){
 	    		${ns}areaOfFocusDialogOpen = false;
-	    	}
-	    }
-	);	
+	    	}});
 }
-
 function ${ns}setAreaOfFocusValues(termValues){
 	${managerFacadeName}.setAreaOfFocusValues(termValues,
 	{
@@ -44,12 +29,9 @@ function ${ns}setAreaOfFocusValues(termValues){
 		},
 		errorHandler:function(errorString, exception){
 			alert("Error setting area of focus: " + errorString);
-		}
-	});
+		}});
 }
-
 function ${ns}addTerms(terms){
-	
 	Liferay.Popup.close(${ns}areaOfFocusPopupDialog);
 	${ns}areaOfFocusDialogOpen = false;
 	var termLabels = "";
@@ -60,21 +42,16 @@ function ${ns}addTerms(terms){
 		if(i + 1 < terms.length){
 			termLabels += ", ";
 			termValues += ",";
-		}
-	}
+		}}
 	jQuery("#${ns}areaOfFocusValues").attr("value",termValues);
 	jQuery("#${ns}areaOfFocusLabels").attr("value",termLabels);
 	${ns}setAreaOfFocusValues(termValues);
 }
-
 jQuery(document).ready(function() {
 	jQuery("#${ns}areaOfFocusLabels").bind('focus', function(evt){
 		if(!${ns}areaOfFocusDialogOpen){
 			${ns}areaOfFocusDialogOpen = true;
 			${ns}showAreaOfFocusDialog();
-		}
-	});
+		}});
 });
-
 </script>
-

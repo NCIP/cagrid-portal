@@ -1,5 +1,4 @@
 <div class="photoRow">
-
     <div class="photo">
         <tags:catalogEntryImage entry="${catalogEntry}" thumbnail="false" id="${ns}catalogEntryImage"
                                 title="Click to edit this image." cssClass="cagp-tooltip"/>
@@ -26,7 +25,6 @@
     </div>
     <!-- The following line is for formatting purposes -->
     <hr style="clear:both; visibility:hidden;"/>
-
     <c:if test='<%=request.isUserInRole("catalog-admin")%>'>
         <%-- Render field... --%>
         <div class="row">
@@ -40,15 +38,12 @@
             <input type="radio" name="featured" class="autoSet" value="false"
                     <c:if test="${!catalogEntry.featured}">
                         checked
-                    </c:if>
-                    />
+                    </c:if>/>
         </div>
     </c:if>
-
 </div>
 
 <script type="text/javascript">
-
     var ${ns}uploadImageDialog = null;
     function ${ns}showUploadImageDialog() {
         ${ns}uploadImageDialog = new Liferay.Popup({title: "Upload Image", modal:true, width:500 , height:200});
@@ -76,7 +71,5 @@
         });
 
         ${ns}initTooltips();
-
-
     });
 </script>

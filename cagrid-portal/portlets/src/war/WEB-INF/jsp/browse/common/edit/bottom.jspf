@@ -5,5 +5,4 @@
 	<span id="${ns}saveButtonContainer"></span>
 </div>
 </div>
-		
 <%@ include file="/WEB-INF/jsp/browse/common/edit/bottom_script.jspf" %>

@@ -1,14 +1,3 @@
-<%--
-<%
-CatalogEntryViewBean catalogEntryViewBean = (CatalogEntryViewBean)request.getAttribute("catalogEntryViewBean");
-String updateActionId = "UPDATE";
-String deleteActionId = "DELETE";
-String resourceName = "gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry";
-String resourceId = String.valueOf(catalogEntryViewBean.getCatalogEntry().getId());
-%>
-		<c:set var="canUpdate" value="<%= permissionChecker.hasPermission(0, resourceName, resourceId, updateActionId) %>"/>
-		<c:set var="canDelete" value="<%= permissionChecker.hasPermission(0, resourceName, resourceId, deleteActionId) %>"/>
---%>
 <%
 boolean userIsAdmin = request.isUserInRole("catalog-admin");
 boolean userIsOwnerUser = false;
@@ -23,24 +12,14 @@ if(request.isUserInRole("catalog-user")){
 	}
 }
 %>
-
 <c:set var="canUpdate" value="<%=userIsOwnerUser || userIsAdmin%>"/>
 <c:set var="canDelete" value="<%=userIsOwnerUser && !entryIsPerson || userIsAdmin%>"/>
 
-		<portlet:actionURL var="updateUrl">
-			<portlet:param name="operation" value="editCatalogEntry"/>
-			<portlet:param name="entryId" value="${catalogEntry.id}"/>
-		</portlet:actionURL>
-		
-		<portlet:actionURL var="deleteUrl">
-			<portlet:param name="operation" value="deleteCatalogEntry"/>
-			<portlet:param name="entryId" value="${catalogEntry.id}"/>
-		</portlet:actionURL>
+		<portlet:actionURL var="updateUrl"><portlet:param name="operation" value="editCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/></portlet:actionURL>
+		<portlet:actionURL var="deleteUrl"><portlet:param name="operation" value="deleteCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/></portlet:actionURL>
 		<p>
 		<c:if test="${canUpdate}"><a href="<c:out value="${updateUrl}"/>">Edit</a></c:if>
 		<%-- TODO: Should be able to delete only after associated potal user has been deleted. --%>
-		
 		<c:if test="${canUpdate && canDelete}"> | </c:if>
 		<c:if test="${canDelete}"><a href="<c:out value="${deleteUrl}"/>" onclick="confirm('Are you sure you want to delete this?');">Delete</a></c:if><br/>
-		
 		</p>
