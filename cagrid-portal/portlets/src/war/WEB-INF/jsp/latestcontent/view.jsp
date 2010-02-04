@@ -19,7 +19,7 @@
 
 
 <script type="text/javascript">
-    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?&version=2.2&sort=createdAt+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
+    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?&version=2.2&sort=updatedAt+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setRows(7);
