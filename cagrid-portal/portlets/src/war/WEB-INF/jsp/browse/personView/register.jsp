@@ -9,7 +9,6 @@
         src="<c:url value="/dwr/interface/RegistrationManager.js"/>"></script>
 
 <c:set var="ns" value="${param.ns}"/>
-<c:set var="userGuideUrl" value="${param.userGuideUrl}"/>
 
 <style type="text/css">
     div.row div.label {
@@ -48,7 +47,7 @@
         Please fill out your information in the fields below. Passwords must be between 10 and 20 characters,
         and must include an uppercase letter, a lowercase letter, a number, and a special character.
     <span>
-            <a id="registerHelpLink" href="${userGuideUrl}-RegisterasaNewUser" target="_blank">
+            <a id="registerHelpLink" href="${usersGuideUrl}-RegisterasaNewUser" target="_blank">
                 <tags:image name="help.gif"/>
             </a>
         </span>

@@ -11,7 +11,7 @@
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
 <div style="text-align:right;">
-    <tags:helpLink helpURL="${userGuideUrl}-ManageYourProfileandCredentials"/>
+    <tags:helpLink helpURL="${usersGuideUrl}-WorkingwithCatalogEntries"/>
 </div>
 
 <%@ include file="catalogCreateDialog.jspf" %>
@@ -189,6 +189,16 @@
         if (keyword.length < 1) {
             keyword = wildcard;
         }
+        else {
+            if (keyword.indexOf("http:") > -1 || keyword.indexOf("www.") > -1) {
+            <%-- if URL surround keyword with ""--%>
+                if (keyword.indexOf('"') != 0)
+                    keyword = '"' + keyword;
+                if (keyword.lastIndexOf('"') != keyword.length - 1)
+                    keyword = keyword + '"';
+            }
+        }
+
         wildcard = keyword;
 
         new Catalogs({

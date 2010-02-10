@@ -4,7 +4,7 @@
 
 
 <div style="text-align:right;">
-     <tags:helpLink helpURL="${userGuideUrl}-ManageYourProfileandCredentials"/>
+     <tags:helpLink helpURL="${usersGuideUrl}-ManageYourProfileandCredentials"/>
 </div>
 <!-- Top -->
 <div class="yui-skin-sam">

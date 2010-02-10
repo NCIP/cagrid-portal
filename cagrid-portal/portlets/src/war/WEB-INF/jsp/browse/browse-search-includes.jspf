@@ -29,7 +29,7 @@
 <script type="text/javascript">
 //var myLogReader = new YAHOO.widget.LogReader("myLogger");
 
-var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?spellcheck=true&", {responseType:YAHOO.util.XHRDataSource.JSON});
+var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrUrl}"/>/select?spellcheck=true&", {responseType:YAHOO.util.XHRDataSource.JSON});
 //global variables
 var g_wildcard = "*:*";
 var g_catalogType = "";
@@ -240,11 +240,13 @@ var Catalogs = Class.create({
         if (this.config.catalog) {
             YAHOO.log("Adding catalog_type facet:" + this.config.catalog.type);
             this.query.addFacet("catalog_type", this.config.catalog.type);
+
         }
 
         if (this.config.selectedCatalogType) {
             YAHOO.log("Adding selected catalog_type facet:" + this.config.selectedCatalogType);
                 this.query.addFacet("catalog_type", this.config.selectedCatalogType);
+            
         }
 
         if (this.config.filter) {
@@ -319,7 +321,7 @@ var Catalogs = Class.create({
             cache: false,
             scope : this});
 
-    <%--reset selected types so they are only used the first time the page is rendered--%>
+    <%--reset selected types so they are only used the first time the page is rendered otherwise summary tree is restricted--%>
         if (this.config.selectedCatalogType) {
             YAHOO.log("Removing selected catalog_type facet:" + this.config.selectedCatalogType);
             this.query.removeFacet("catalog_type");

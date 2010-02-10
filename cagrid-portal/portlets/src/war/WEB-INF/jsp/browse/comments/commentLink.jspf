@@ -2,14 +2,8 @@
 <span id="${ns}commentTipContainer" class="yui-skin-sam"></span>
 
 <div class="row">
-    <c:choose>
-        <c:when test="${!empty portalUser}">
-            <span id="${ns}commentLink"></span>
-        </c:when>
-        <c:otherwise>
-            Please <a href='<c:out value="${loginUrl}"/>'>sign in</a> to add Comments.
-        </c:otherwise>
-    </c:choose>
+    Please <tags:login id="commentsTab" useHrefRedirect="true" loggedInText="<span id='${ns}commentLink'></span>"
+    notLoggedInText="to add comments"/>
 </div>
 
 <script type="text/javascript">

@@ -16,11 +16,7 @@
 <div class="yui-skin-sam">
     <c:choose>
         <c:when test="${empty portalUser}">
-            If you have an NIH username and password, then
-            select the NCICB AuthenticationService IdP before pressing the Log
-            In button. If you do not have an NIH username and password, but you
-            have already registered through the portal (or through the GAARDS UI), then select the
-            Dorian Identity Provider. If you have not yet registered, you may do so by
+            <spring:message message="${login.message}"/>If you have not yet registered, you may do so by
             clicking <a href="javascript:${ns}showRegisterDialog();">here</a>.
 
 
