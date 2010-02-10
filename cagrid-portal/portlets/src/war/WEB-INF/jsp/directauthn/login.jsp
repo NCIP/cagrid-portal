@@ -16,7 +16,7 @@
 <div class="yui-skin-sam">
     <c:choose>
         <c:when test="${empty portalUser}">
-            <spring:message message="${login.message}"/>If you have not yet registered, you may do so by
+            <spring:message code="login.message"/> If you have not yet registered, you may do so by
             clicking <a href="javascript:${ns}showRegisterDialog();">here</a>.
 
 
