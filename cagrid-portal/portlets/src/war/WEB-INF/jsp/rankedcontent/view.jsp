@@ -7,7 +7,6 @@
 <script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
 <script src="<c:url value="/js/browse-catalog.js"/>"></script>
 
 <liferay-portlet:renderURL var="dataSetLnk" portletName="BrowsePortlet_WAR_cagridportlets"
@@ -19,7 +18,7 @@
 
 <script type="text/javascript">
     // Get Area of Focus tree for Data Set catalog type
-    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?&version=2.2&sort=rating+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
+    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrUrl}"/>/select?&version=2.2&sort=rating+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setRows(7);
@@ -80,7 +79,7 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-        jQuery("#${ns}categories").append("Failed to get results");
+        jQuery("#${ns}categories").html("");
     };
 
 </script>
@@ -88,7 +87,7 @@
 <div id="summaryContent">
     <div id="summaryTitle">
     Top Ranked Content
-             <tags:helpLink helpURL="${userGuideUrl}-TopRankedEntries"/>
+             <tags:helpLink helpURL="${usersGuideUrl}-TopRankedEntries"/>
         </div>
 
     <div id="${ns}categories" class="row" style="vertical-align:middle;">

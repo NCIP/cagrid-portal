@@ -12,7 +12,6 @@ import javax.portlet.RenderRequest;
  */
 public class BaseSearchSupportingController extends BaseCatalogEntryAbstractController {
 
-    private String solrServiceUrl;
 
     protected BrowseTypeEnum getBrowseType(PortletRequest request) {
         return BrowseTypeEnum.valueOf(request
@@ -31,12 +30,9 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
      */
     public void encodeWithSearchParams(ModelAndView mav, RenderRequest request) {
 
-        mav.addObject(BrowseParams.SOLR_SERVICE_URL, getSolrServiceUrl());
-
         //catalog type
         if (request.getParameterMap().containsKey(BrowseParams.CATALOG_TYPE))
             mav.addObject(BrowseParams.CATALOG_TYPE, request.getParameter(BrowseParams.CATALOG_TYPE));
-
 
         /** these parameters are need to preserve browse view state **/
         // search keyword (wildcard by default)
@@ -62,12 +58,4 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
 
     }
 
-
-    public String getSolrServiceUrl() {
-        return solrServiceUrl;
-    }
-
-    public void setSolrServiceUrl(String solrServiceUrl) {
-        this.solrServiceUrl = solrServiceUrl;
-    }
 }

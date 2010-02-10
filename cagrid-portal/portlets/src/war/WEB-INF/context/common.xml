@@ -123,12 +123,14 @@
         <property name="portalUserIdSessionAttributeName" value="CAGRIDPORTAL_ATTS_liferayUserId"/>
         <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
     </bean>
-    
+
     <bean id="requestAttributePropertiesPopulatorInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.RequestAttributePropertiesPopulatorInterceptor"
           autowire="byName">
           <property name="properties">
 			<util:map>
         		<entry key="loginUrl" value="${cagrid.portal.loginUrl}"/>
+                <entry key="solrUrl" value="${cagrid.portal.solr.http.url}"/>
+                <entry key="usersGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
         	</util:map>
         </property>
     </bean>
@@ -354,12 +356,12 @@
         <property name="memberRelationshipTypeName" value="CommunityPersonMember"/>
     </bean>
 
-    <bean id="cqlXMLSchemaValidator" lazy-init="true"
+    <bean id="cqlXMLSchemaValidator"
           class="gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory" factory-method="initialize">
         <constructor-arg type="java.lang.String" value="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"/>
     </bean>
 
-    <bean id="dcqlXMLSchemaValidator" lazy-init="true"
+    <bean id="dcqlXMLSchemaValidator"
           class="gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory" factory-method="initialize">
         <constructor-arg type="java.lang.String" value="Distributed_CQL_schema_2.0.xsd"/>
     </bean>
@@ -382,31 +384,35 @@
           autowire="byName"/>
 
     <bean
-              id="summaryContentViewController"
-              class="gov.nih.nci.cagrid.portal.portlet.SummaryContentViewController"
-              autowire="byName">
-          <property name="successViewName" value="view"/>
-          <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
-          <property name="userGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
-      </bean>
+            id="summaryContentViewController"
+            class="gov.nih.nci.cagrid.portal.portlet.SummaryContentViewController"
+            autowire="byName">
+        <property name="successViewName" value="view"/>
+    </bean>
 
     <util:list id="serviceErrorInterpretors">
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.FQPServiceErrorInterpretor">
-        			<property name="pattern" value="Problem query data service at URL:"/>
-        			<property name="message" value="One of the data services ({0}) involved in your federated query has encountered and error."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value="faultString: GSSException: Defective credential detected \[Caused by: Proxy file \(/tmp/.+"/>
-        			<property name="message" value="You must be logged in in order to query this service."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value="maxBytes \(\d+\) exceeded"/>
-        			<property name="message" value="The service you are querying has returned too much data."/>
-        		</bean>
-        		<bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
-        			<property name="pattern" value=".*"/>
-        			<property name="message" value="The service that you are attempting to query encountered an error."/>
-        		</bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.FQPServiceErrorInterpretor">
+            <property name="pattern" value="Problem query data service at URL:"/>
+            <property name="message"
+                      value="One of the data services ({0}) involved in your federated query has encountered and error."/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
+            <property name="pattern"
+                      value="faultString: GSSException: Defective credential detected \[Caused by: Proxy file \(/tmp/.+"/>
+            <property name="message" value="You must be logged in in order to query this service."/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
+            <property name="pattern" value="maxBytes \(\d+\) exceeded"/>
+            <property name="message" value="The service you are querying has returned too much data."/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
+            <property name="pattern" value="faultString: java.net.ConnectException: Connection refused"/>
+            <property name="message" value="The serivce you are querying in unavailable or not responding. Please check the URL"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
+            <property name="pattern" value=".*"/>
+            <property name="message" value="The service that you are attempting to query encountered an error."/>
+        </bean>
     </util:list>
 
 </beans>

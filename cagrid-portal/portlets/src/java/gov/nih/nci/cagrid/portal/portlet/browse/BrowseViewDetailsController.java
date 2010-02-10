@@ -25,7 +25,6 @@ public class BrowseViewDetailsController extends BaseSearchSupportingController 
     private Map<String, String> entryTypeViewMap = new HashMap<String, String>();
     private String emptyViewName;
     private CatalogEntryViewBeanFactory catalogEntryViewBeanFactory;
-    private String userGuideUrl;
 
     protected ModelAndView handleRenderRequestInternal(RenderRequest request,
                                                        RenderResponse response) throws Exception {
@@ -50,8 +49,6 @@ public class BrowseViewDetailsController extends BaseSearchSupportingController 
         mav = new ModelAndView(viewName);
 
         encodeWithSearchParams(mav, request);
-             mav.addObject("userGuideUrl", getUserGuideUrl());
-
         mav.addObject(getObjectName(), getCatalogEntryViewBeanFactory()
                 .newCatalogEntryViewBean(entry));
         if (request.getParameter("viewMode") != null) {
@@ -61,13 +58,6 @@ public class BrowseViewDetailsController extends BaseSearchSupportingController 
         return mav;
     }
 
-    public String getUserGuideUrl() {
-        return userGuideUrl;
-    }
-
-    public void setUserGuideUrl(String userGuideUrl) {
-        this.userGuideUrl = userGuideUrl;
-    }
 
     public Map<String, String> getEntryTypeViewMap() {
         return entryTypeViewMap;

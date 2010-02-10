@@ -16,17 +16,30 @@
 <div class="yui-skin-sam">
     <c:choose>
         <c:when test="${empty portalUser}">
-
             If you have an NIH username and password, then
             select the NCICB AuthenticationService IdP before pressing the Log
             In button. If you do not have an NIH username and password, but you
             have already registered through the portal (or through the GAARDS UI), then select the
             Dorian Identity Provider. If you have not yet registered, you may do so by
             clicking <a href="javascript:${ns}showRegisterDialog();">here</a>.
-            <br/>
-            <br/>
 
-            <portlet:renderURL var="portalAuthnUrl"/>
+
+            <span style="vertical-align:top;">
+                <tags:helpLink helpURL="${usersGuideUrl}-UsingthecaGridPortalfortheFirstTime"/>
+            </span>
+            
+            <br/>
+            <br/>
+          
+            <c:choose>
+                <c:when test="${! empty redirectUrl}">
+                    <c:set var="portalAuthnUrl" value="${redirectUrl}"/>
+                </c:when>
+                <c:otherwise>
+                    <portlet:renderURL var="portalAuthnUrl"/>
+                </c:otherwise>
+            </c:choose>
+            
             <portlet:actionURL var="action">
                 <portlet:param name="operation" value="login"/>
             </portlet:actionURL>

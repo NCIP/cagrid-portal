@@ -7,7 +7,6 @@
 <script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
 <script src="<c:url value="/js/browse-catalog.js"/>"></script>
 
 <liferay-portlet:renderURL var="dataSetLnk" portletName="BrowsePortlet_WAR_cagridportlets"
@@ -22,7 +21,7 @@
     var MAX_ITEMS = 7;
     
     // Get Area of Focus tree for Data Set catalog type
-    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
+    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setTree(true);
@@ -74,15 +73,15 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-        jQuery("#${ns}categories").append("Failed to get results");
+         jQuery("#${ns}categories").html("");
     };
 
 </script>
 
 <div id="dataSetsContent">
     <div id="summaryTitle">
-     Data Set Categoriess
-        <tags:helpLink helpURL="${userGuideUrl}-DataSetCategories"/>
+     Data Set Categories
+        <tags:helpLink helpURL="${usersGuideUrl}-DataSetCategories"/>
     </div>
 
     <div id="${ns}categories" class="row">

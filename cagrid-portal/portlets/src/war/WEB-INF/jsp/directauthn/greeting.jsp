@@ -16,7 +16,8 @@
 <div id="logIn">
 <c:choose>
 	<c:when test="${empty portalUser}">
-		<a href="<c:out value="${loginUrl}"/>" id="${ns}loginLink" style="text-decoration:none"><b>Log In</b></a>&nbsp;&nbsp;|&nbsp;
+                <tags:login useHrefRedirect="false" loginLinkText="Log In"
+                            notLoggedInText="&nbsp;|&nbsp;" id="loginLink" />
 		<a href="javascript:${ns}showRegisterDialog();" id="${ns}registerLink" style="text-decoration:none"><b>Register</b></a>
 	</c:when>
 	<c:otherwise>
@@ -45,7 +46,7 @@ function ${ns}showRegisterDialog(){
 			new Liferay.Popup({title: "Register", modal:true, width:800 , height:400});
 	jQuery(
 		${ns}registerDialog
-	).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {userGuideUrl:"${userGuideUrl}"});
+	).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {userGuideUrl:"${usersGuideUrl}"});
 }
 
 jQuery(document).ready(function(){
@@ -63,7 +64,7 @@ jQuery(document).ready(function(){
             showDelay:200 });
 
      ${ns}loginTip = new YAHOO.widget.Tooltip("loginTip", {
-            context:"${ns}loginLink",
+            context:"loginLink",
             text:"Log in to the Portal. <br>This will let you use <br>your Grid credentials to <br>invoke secured Data Services<br> and create/edit content <br>in the Portal",
             container:"${ns}loginTipContainer",
             showDelay:200 });

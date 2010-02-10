@@ -14,16 +14,11 @@
 
     <bean id="portletModeHandlerMapping"
           class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-
-        <property name="order" value="2"/>
-
         <property name="interceptors">
-            <list>
-                <ref bean="openSessionInViewInterceptor"/>
-                <ref bean="liferayUserInteceptor"/>
-            </list>
+         <list>
+             <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+         </list>
         </property>
-
         <property name="portletModeMap">
             <map>
                 <entry key="view">

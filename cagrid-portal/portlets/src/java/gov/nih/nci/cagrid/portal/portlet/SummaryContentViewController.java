@@ -13,26 +13,14 @@ import javax.portlet.RenderResponse;
  */
 public class SummaryContentViewController extends AbstractController {
 
-    private String solrServiceUrl;
     private String successViewName;
-    private String userGuideUrl;
 
 
     @Override
     protected ModelAndView handleRenderRequestInternal(RenderRequest request, RenderResponse response) throws Exception {
         ModelAndView mav = new ModelAndView(getSuccessViewName());
-        mav.addObject("solrServiceUrl", getSolrServiceUrl());
-        mav.addObject("userGuideUrl", getUserGuideUrl());
         return mav;
 
-    }
-
-    public String getSolrServiceUrl() {
-        return solrServiceUrl;
-    }
-
-    public void setSolrServiceUrl(String solrServiceUrl) {
-        this.solrServiceUrl = solrServiceUrl;
     }
 
     public String getSuccessViewName() {
@@ -43,11 +31,5 @@ public class SummaryContentViewController extends AbstractController {
         this.successViewName = successViewName;
     }
 
-    public String getUserGuideUrl() {
-        return userGuideUrl;
-    }
-
-    public void setUserGuideUrl(String userGuideUrl) {
-        this.userGuideUrl = userGuideUrl;
-    }
+    
 }

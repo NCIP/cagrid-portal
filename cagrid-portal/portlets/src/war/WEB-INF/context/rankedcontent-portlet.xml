@@ -12,20 +12,14 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-   
 
     <bean id="portletModeHandlerMapping"
           class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-
-        <property name="order" value="2"/>
-
         <property name="interceptors">
             <list>
-                <ref bean="openSessionInViewInterceptor"/>
-                <ref bean="liferayUserInteceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
-
         <property name="portletModeMap">
             <map>
                 <entry key="view">

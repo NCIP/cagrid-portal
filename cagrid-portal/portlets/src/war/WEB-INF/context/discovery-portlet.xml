@@ -273,13 +273,13 @@
         </property>
     </bean>
 
-    <bean id="viewXmlSchemaController"
-          class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ViewXmlSchemaController"
-          autowire="byName">
-        <property name="objectName" value="xmlSchema"/>
-        <property name="successViewName" value="/details/service/xmlSchema"/>
-        <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
-    </bean>
+    <!--<bean id="viewXmlSchemaController"-->
+          <!--class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ViewXmlSchemaController"-->
+          <!--autowire="byName">-->
+        <!--<property name="objectName" value="xmlSchema"/>-->
+        <!--<property name="successViewName" value="/details/service/xmlSchema"/>-->
+        <!--<property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>-->
+    <!--</bean>-->
 
     <bean id="viewParticipantDetailsController"
           class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ViewParticipantDetailsController"
@@ -459,8 +459,8 @@
                 <entry key="/details/service/tree"
                        value-ref="viewServiceDetailsController"/>
 
-                <entry key="/details/service/xmlSchema"
-                       value-ref="viewXmlSchemaController"/>
+                <!--<entry key="/details/service/xmlSchema"-->
+                       <!--value-ref="viewXmlSchemaController"/>-->
 
                 <entry key="/details/participant"
                        value-ref="viewParticipantDetailsController"/>

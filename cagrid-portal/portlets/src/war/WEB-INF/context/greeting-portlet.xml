@@ -26,7 +26,6 @@
             autowire="byName">
         <property name="viewName" value="greeting"/>
         <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
-        <property name="userGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
     </bean>
 
     <bean
@@ -44,6 +43,7 @@
             <list>
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="portalUserInterceptor2"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
 
@@ -69,6 +69,7 @@
             <list>
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="portalUserInterceptor2"/>
+                 <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
 

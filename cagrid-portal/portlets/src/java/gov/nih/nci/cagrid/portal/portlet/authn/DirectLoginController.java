@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.portal.authn.EncryptionService;
 import gov.nih.nci.cagrid.portal.authn.ProxyUtil;
 import gov.nih.nci.cagrid.portal.authn.domain.IdPAuthnInfo;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
-import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.security.AuthnService;
 import gov.nih.nci.cagrid.portal.service.UserService;
@@ -95,7 +94,7 @@ public class DirectLoginController extends AbstractCommandController {
         }
 
         DirectLoginCommand command = (DirectLoginCommand) obj;
-        AuthnTicket ticket = null;
+        String ticket = null;
         try {
             String idpUrl = command.getIdpUrl();
             IdPAuthnInfo authnInfo = getAuthnService().authenticateToIdP(command.getUsername(), command.getPassword(), idpUrl);
@@ -104,7 +103,7 @@ public class DirectLoginController extends AbstractCommandController {
             PortalUser user = getUserService().getOrCreatePortalUser(cred.getIdentity(), authnInfo
                     .getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
                     encryptedProxyStr);
-            ticket = getAuthnService().createAuthnTicket(user);
+            ticket = user.getPortalId();
 
             logger.debug("Setting default credential for user  " + cred.getIdentity());
 
@@ -128,8 +127,7 @@ public class DirectLoginController extends AbstractCommandController {
         }
 
         logger.debug("Login successful.");
-        String ticketEncrypted = getEncryptionService().encrypt(
-                ticket.getTicket());
+        String ticketEncrypted = getEncryptionService().encrypt(ticket);
         String redirectUrl = request.getPreferences().getValue(
                 getRedirectUrlPreferenceName(), null);
         if (redirectUrl == null) {

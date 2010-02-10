@@ -24,6 +24,7 @@
 		id="viewLoginController"
 		class="gov.nih.nci.cagrid.portal.portlet.authn.ViewDirectLoginController"
 		autowire="byName">
+        <property name="redirectUrlPreference" value="redirectUrl"/>
 		<property name="viewName" value="login"/>
 		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
 		<property name="errorsAttributeName" value="loginErrors"/>
@@ -61,6 +62,7 @@
 			<list>
 				<ref bean="openSessionInViewInterceptor" />
 				<ref bean="portalUserInterceptor2" />
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
 			</list>
 		</property>
 		
@@ -90,6 +92,7 @@
 			<list>
 				<ref bean="openSessionInViewInterceptor" />
 				<ref bean="portalUserInterceptor2" />
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
 			</list>
 		</property>		
 		
