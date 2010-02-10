@@ -35,7 +35,6 @@ import java.util.Date;
      private EncryptionService encryptionService;
      private String ticketParameterName;
      private PortalUserDao portalUserDao;
-     private AuthnTicketDao authnTicketDao;
 
      /**
       *
@@ -52,24 +51,13 @@ import java.util.Date;
          if (ticket == null) {
              return null;
          }
-         AuthnTicket authnTicket = null;
          try {
-             ticket = getEncryptionService().decrypt(ticket);
-             authnTicket = new AuthnTicket();
-             authnTicket.setTicket(ticket);
-             authnTicket = getAuthnTicketDao().getByExample(authnTicket);
-             if (authnTicket == null) {
-                 throw new Exception("Didn't find AuthnTicket for ticket '"
-                         + ticket + "'");
-             }
-             if (new Date().after(authnTicket.getNotAfter())) {
-                 throw new Exception("Authentication ticket is expired.");
-             }
-             PortalUser portalUser = authnTicket.getPortalUser();
+             String userId = getEncryptionService().decrypt(ticket);
+            PortalUser portalUser =  getPortalUserDao().getByPortalId(userId);
              if (portalUser == null) {
                  throw new Exception(
-                         "No PortalUser associated with AuthnTicket: "
-                                 + authnTicket.getId());
+                         "No PortalUser associated with PortalUserId: "
+                                 + userId);
              }
              try {
 
@@ -138,15 +126,6 @@ import java.util.Date;
                      .setAttribute(
                              getAuthnErrorMessageAttributeName(),
                              "An error was encountered during authentication. Please contact the adminstrator (" + getPortalAdminEmailAddress() + ").");
-         } finally {
-             try {
-                 if (authnTicket != null) {
-                     getAuthnTicketDao().delete(authnTicket);
-                 }
-             } catch (Exception ex) {
-                 logger.error("Error deleting authentication ticket: "
-                         + ex.getMessage(), ex);
-             }
          }
          return credentials;
      }
@@ -177,15 +156,4 @@ import java.util.Date;
      public void setPortalUserDao(PortalUserDao portalUserDao) {
          this.portalUserDao = portalUserDao;
      }
-
-     @Required
-     public AuthnTicketDao getAuthnTicketDao() {
-         return authnTicketDao;
-     }
-
-     public void setAuthnTicketDao(AuthnTicketDao authnTicketDao) {
-         this.authnTicketDao = authnTicketDao;
-     }
-
-
  }

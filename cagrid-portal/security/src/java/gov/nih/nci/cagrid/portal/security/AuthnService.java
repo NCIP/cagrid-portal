@@ -24,7 +24,7 @@ import java.util.UUID;
 public class AuthnService extends BaseAuthnService {
 
     private EncryptionService encryptionService;
-	private AuthnTicketDao authnTicketDao;
+
 	private PortalUserDao portalUserDao;
 	private PersonDao personDao;
 
@@ -35,24 +35,7 @@ public class AuthnService extends BaseAuthnService {
 
 	}
 
-    public AuthnTicket createAuthnTicket(PortalUser user){
-		AuthnTicket ticket = new AuthnTicket();
-		ticket.setPortalUser(user);
-		ticket.setNotAfter(new Date((new Date()).getTime()
-				+ getTicketLifetime()));
-		ticket.setTicket(UUID.randomUUID().toString());
-		getAuthnTicketDao().save(ticket);
-		return ticket;
-	}
 
-
-    public AuthnTicketDao getAuthnTicketDao() {
-		return authnTicketDao;
-	}
-
-	public void setAuthnTicketDao(AuthnTicketDao authnTicketDao) {
-		this.authnTicketDao = authnTicketDao;
-	}
 
 	public PortalUserDao getPortalUserDao() {
 		return portalUserDao;
