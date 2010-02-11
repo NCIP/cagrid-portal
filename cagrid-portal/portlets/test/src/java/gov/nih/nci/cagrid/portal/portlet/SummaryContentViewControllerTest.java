@@ -20,7 +20,6 @@ public class SummaryContentViewControllerTest {
     public void handleRenderRequestInternal() throws Exception {
         SummaryContentViewController controller = new SummaryContentViewController();
 
-        controller.setSolrServiceUrl("url");
         ModelAndView mav = controller.handleRenderRequest(request, response);
 
         assertNotNull(response.getContentAsString());
