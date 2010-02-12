@@ -80,7 +80,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
                         logger.error(msg);
                         throw new RuntimeException(msg);
                     }
-                    getQueryService().submitQuery(query.getXml(), url);
+                    getQueryService().submitQuery(query.getXml().trim(), url);
                 }
 
             }
@@ -112,7 +112,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
      * @return
      */
     public List<QueryInstance> getQueryInstances(String cql) {
-        Query query = getQueryService().loadQuery(cql);
+        Query query = getQueryService().loadQuery(cql.trim());
         List<QueryInstance> result = new ArrayList<QueryInstance>();
         if (query != null) {
             for (QueryInstance instance : getQueryService()

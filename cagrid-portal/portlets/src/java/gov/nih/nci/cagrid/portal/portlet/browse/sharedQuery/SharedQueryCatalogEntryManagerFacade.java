@@ -18,7 +18,6 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.Query;
 import gov.nih.nci.cagrid.portal.portlet.browse.GridServiceEndpointDescriptorBean;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.ToolCatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 import org.apache.axis.utils.StringUtils;
 import org.apache.commons.logging.Log;
@@ -26,11 +25,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -58,7 +57,7 @@ public class SharedQueryCatalogEntryManagerFacade extends
 	}
 
 	public String setQuery(String queryXML) {
-		this.queryXML = queryXML;
+		this.queryXML = queryXML.trim();
 		return null;
 
 	}

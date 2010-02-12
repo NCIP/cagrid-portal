@@ -171,6 +171,7 @@ function ${ns}deleteAllQueries(e,qInstList) {
     }
     for (var i = 0; i < qInstList.length; i++) {
         QueryExecutionManager.deleteQueryInstance(qInstList[i].id, {
+            async:false
         });
     }
     ${ns}loadResults(false);
