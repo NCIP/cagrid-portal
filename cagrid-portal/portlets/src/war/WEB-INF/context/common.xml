@@ -19,6 +19,11 @@
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
+    <bean id="csrfTokenName" class="java.lang.String">
+        <constructor-arg value="${cagrid.portal.csrfTokenName}"/>
+    </bean>
+
+
     <bean id="interPortletMessageManager"
           class="gov.nih.nci.cagrid.portal.portlet.SessionBasedInterPortletMessageManager" scope="globalSession"
           autowire="byName">
@@ -133,6 +138,11 @@
                 <entry key="usersGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
         	</util:map>
         </property>
+    </bean>
+    
+    <bean id="csrfTokenProviderRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.filter.CSRFTokenProviderRequestInterceptor"
+          abstract="true">
+        <property name="csrfTokenName" value="${cagrid.portal.csrfTokenName}"/>
     </bean>
 
     <bean id="servicefilter"

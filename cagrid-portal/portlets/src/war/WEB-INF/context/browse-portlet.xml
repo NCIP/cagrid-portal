@@ -179,6 +179,7 @@
                 <ref bean="portalUserInterceptor2"/>
                 <ref bean="portalUserRequestInterceptor"/>
                 <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+                <ref bean="csrfTokenProviderRequestInterceptor"/>
             </list>
         </property>
 

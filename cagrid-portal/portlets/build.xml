@@ -68,9 +68,27 @@
                 <include name="**/application-config-client.xml"/>
             </fileset>
             <filterset>
-                <filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
+            	<filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
             </filterset>
         </copy>
+    	
+    	<copy todir="${build.war.dir}" overwrite="true" filtering="true">
+            <fileset dir="${src.war.dir}">
+                <include name="WEB-INF/classes/messages.properties"/>
+            </fileset>
+            <filterset>
+            	<filter token="CSRF_TOKEN_NAME" value="${cagrid.portal.csrfTokenName}"/>
+            </filterset>
+        </copy>
+    	
+    	<copy todir="${build.war.dir}" overwrite="true" filtering="true">
+    	            <fileset dir="${src.war.dir}">
+    	                <include name="**/application-config-client.xml"/>
+    	            </fileset>
+    	            <filterset>
+    	            	<filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
+    	            </filterset>
+    	        </copy>
 
         <copy todir="${build.war.webinf.dir}/lib" overwrite="true" flatten="true">
             <fileset dir="${ext.lib.dir}">

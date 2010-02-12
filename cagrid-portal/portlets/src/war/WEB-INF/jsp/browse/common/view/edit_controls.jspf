@@ -16,7 +16,7 @@ if(request.isUserInRole("catalog-user")){
 <c:set var="canDelete" value="<%=userIsOwnerUser && !entryIsPerson || userIsAdmin%>"/>
 
 		<portlet:actionURL var="updateUrl"><portlet:param name="operation" value="editCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/></portlet:actionURL>
-		<portlet:actionURL var="deleteUrl"><portlet:param name="operation" value="deleteCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/></portlet:actionURL>
+		<portlet:actionURL var="deleteUrl"><portlet:param name="operation" value="deleteCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/><portlet:param name="${csrfTokenName}" value="${csrfTokenValue}"/></portlet:actionURL>
 		<p>
 		<c:if test="${canUpdate}"><a href="<c:out value="${updateUrl}"/>">Edit</a></c:if>
 		<%-- TODO: Should be able to delete only after associated potal user has been deleted. --%>
