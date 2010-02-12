@@ -99,7 +99,8 @@
             <entry key="cagrid.portal.filestore.path" value="${cagrid.portal.filestore.path}"/>
         	<entry key="cagrid.portal.user.guide.wikiURL" value="${cagrid.portal.user.guide.wikiURL}"/>
         	<entry key="cagrid.portal.loginUrl" value="${cagrid.portal.loginUrl}"/>
-            <entry key="cagrid.portal.solr.quiet.period" value="${cagrid.portal.solr.quiet.period}"/>
+        	<entry key="cagrid.portal.solr.quiet.period" value="${cagrid.portal.solr.quiet.period}"/>
+        	<entry key="cagrid.portal.csrfTokenName" value="${cagrid.portal.csrfTokenName}"/>
         </propertyfile>
     </target>
 
