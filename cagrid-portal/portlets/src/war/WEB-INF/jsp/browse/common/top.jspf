@@ -1,8 +1,3 @@
-<%@ page import="gov.nih.nci.cagrid.portal.domain.PortalUser" %>
-<%@ page import="gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry" %>
-<%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryViewBean" %>
-<%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean" %>
-
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
@@ -11,6 +6,8 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/menu/assets/skins/sam/menu.css"/>" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/tabview/assets/skins/sam/tabview.css"/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/assets/skins/sam/treeview.css"/>"/>
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/paginator/assets/skins/sam/paginator.css"/>">
+
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/catalog.css"/>"/>
 
 
