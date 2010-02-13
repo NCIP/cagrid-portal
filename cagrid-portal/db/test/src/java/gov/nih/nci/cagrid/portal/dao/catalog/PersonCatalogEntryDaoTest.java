@@ -33,16 +33,16 @@ public class PersonCatalogEntryDaoTest extends CatalogEntryDaoTestBase<PersonCat
     public void createWithAddress() {
         try {
             Person person = p.getPerson();
-            Address mockAddress = mock(Address.class);
-
-            when(mockAddress.getCountry()).thenReturn("US");
-            when(mockAddress.getStateProvince()).thenReturn("MD");
+            Address add = new Address();
+            add.setCountry("US");
+            add.setStateProvince("MD");
 
             List<Address> addresses = new ArrayList<Address>();
-            addresses.add(mockAddress);
-
+            addresses.add(add);
             person.setAddresses(addresses);
             p.setPerson(person);
+            interruptSession();
+
 
             getDao().createCatalogAbout(p);
             getDao().isAbout(p);

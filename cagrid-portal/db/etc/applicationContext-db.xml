@@ -345,7 +345,8 @@
           class="gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao"/>
 
     <bean id="personCatalogEntryDao" parent="aboutCatalogEntryDao"
-          class="gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao"/>
+          class="gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao"
+            autowire="byName"/>
 
     <bean id="catalogEntryRelationshipTypeDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipTypeDao"/>

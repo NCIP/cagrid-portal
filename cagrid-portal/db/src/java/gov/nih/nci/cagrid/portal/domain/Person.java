@@ -41,7 +41,7 @@ public class Person extends AbstractDomainObject {
 	
 	private List<PointOfContact> pointOfContacts = new ArrayList<PointOfContact>();
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "person_addresses", 
 			joinColumns = @JoinColumn(name = "person_id"), 
