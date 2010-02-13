@@ -1,13 +1,16 @@
 package gov.nih.nci.cagrid.portal.dao.catalog;
 
-import java.util.List;
-
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
+import gov.nih.nci.cagrid.portal.dao.PersonDao;
+import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
-import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * User: kherm
@@ -16,6 +19,8 @@ import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
  */
 public class PersonCatalogEntryDao extends
         AboutCatalogEntryDao<PersonCatalogEntry, PortalUser> {
+    private PortalUserDao portalUserDao;
+    private PersonDao personDao;
 
     public PersonCatalogEntryDao() {
     }
@@ -32,8 +37,9 @@ public class PersonCatalogEntryDao extends
 
 
     @UpdatesCatalogs
+    @Transactional
     public PersonCatalogEntry createCatalogAbout(PortalUser user) {
-        user = (PortalUser) getSession().load(PortalUser.class, new Integer(user.getId()));
+        user = getPortalUserDao().getById(user.getId());
         PersonCatalogEntry entry = isAbout(user);
         if (entry == null) {
             entry = new PersonCatalogEntry();
@@ -73,6 +79,7 @@ public class PersonCatalogEntryDao extends
             }
         }
         save(entry);
+        logger.debug("Saved Person catalog with ID" + entry.getId());
         return entry;
     }
 
@@ -85,4 +92,19 @@ public class PersonCatalogEntryDao extends
         return l;
     }
 
+    public PortalUserDao getPortalUserDao() {
+        return portalUserDao;
+    }
+
+    public void setPortalUserDao(PortalUserDao portalUserDao) {
+        this.portalUserDao = portalUserDao;
+    }
+
+    public PersonDao getPersonDao() {
+        return personDao;
+    }
+
+    public void setPersonDao(PersonDao personDao) {
+        this.personDao = personDao;
+    }
 }
