@@ -2,7 +2,7 @@
 <span id="${ns}commentTipContainer" class="yui-skin-sam"></span>
 
 <div class="row">
-    Please <tags:login id="commentsTab" useHrefRedirect="true" loggedInText="<span id='${ns}commentLink'></span>"
+    <tags:login id="commentsTab" useHrefRedirect="true" loggedInText="<span id='${ns}commentLink'></span>"
     notLoggedInText="to add comments"/>
 </div>
 

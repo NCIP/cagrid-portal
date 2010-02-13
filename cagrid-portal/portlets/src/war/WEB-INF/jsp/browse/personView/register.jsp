@@ -71,8 +71,16 @@
                 </div>
                 <div class="row">
                     <label for="password">Password</label>
-                    <input type="password" name="password" class="autoSet required"/>
+                    <input type="password" name="password" id="password" />
                 </div>
+                <div class="row">
+                    <label for="password">ReType Password</label>
+                    <input type="password" id="password2" />
+                    <div id="passwordError" class="errorMsg" style="display:none;">
+                        Passwords don't match
+                     </div>
+                </div>
+
                 <div class="row">
                     <label for="email">e-mail</label>
                     <input type="text" name="email" class="autoSet required"/>
@@ -81,12 +89,12 @@
                     <label for="phone">Phone</label>
                     <input type="text" name="phone" class="autoSet required"/>
                 </div>
+            </div>
+            <div class="rightpanel">
                 <div class="row">
                     <label for="organization">Organization</label>
                     <input type="text" name="organization" class="autoSet required"/>
                 </div>
-            </div>
-            <div class="rightpanel">
                 <div class="row">
                     <label for="street1">Street 1</label>
                     <input type="text" name="street1" class="autoSet required"/>
@@ -125,71 +133,85 @@
         <span id="cancelButtonContainer"></span>
         <span id="submitButtonContainer"></span>
     </div>
-    <div>
+</div>
 
-        <script type="text/javascript">
+<script type="text/javascript">
 
-            var RegisterForm = Class.create(CGP_BaseAjaxForm, {
+    var RegisterForm = Class.create(CGP_BaseAjaxForm, {
 
-                handleSubmitSuccess: function(response) {
-                    alert(response);
-                    Liferay.Popup.close(${ns}registerDialog);
-                },
+        handleSubmitSuccess: function(response) {
+            alert(response);
+            Liferay.Popup.close(${ns}registerDialog);
+        },
 
-                submit: function() {
-                <%--set the country and state to defaults--%>
-                    this.setField("stateProvince", jQuery("#stateProvince option:selected").val());
-                    this.setField("country", jQuery("#country option:selected").val());
-                    this.validateThenSubmit(false);
-                },
+        submit: function() {
+        <%--set the country and state to defaults--%>
+            this.setField("stateProvince", jQuery("#stateProvince option:selected").val());
+            this.setField("country", jQuery("#country option:selected").val());
+            this.validateThenSubmit(false);
+        },
 
-                handleSubmitError: function(errorString, exception) {
-                    if (errorString == null) {
-                        alert("Error registering.");
+        handleSubmitError: function(errorString, exception) {
+            if (errorString == null) {
+                alert("Error registering.");
+            } else {
+                var errorMatch = "Error: Invalid User Property: ";
+                var uPwdErr = "Unacceptable password, ";
+                var iPwdErr = "Invalid password, ";
+                var emailErr = "Invalid email";
+                var uUsrErr = "Unacceptable User ID, ";
+                var eUsrErr = "The user";
+
+                var idx = errorString.indexOf(errorMatch);
+                if (idx > -1) {
+                    var msg = errorString.substring(idx + errorMatch.length);
+                    if (msg.startsWith(uPwdErr)) {
+                        this.setInputMessage("password", msg.substring(uPwdErr.length));
+
+                    } else if (msg.startsWith(iPwdErr)) {
+                        this.setInputMessage("password", msg.substring(iPwdErr.length));
+
+                    } else if (msg.startsWith(emailErr)) {
+                        this.setInputMessage("email", msg);
+
+                    } else if (msg.startsWith(uUsrErr)) {
+                        this.setInputMessage("username", msg.substring(uUsrErr.length));
+
+                    } else if (msg.startsWith(eUsrErr)) {
+                        this.setInputMessage("username", msg);
+
                     } else {
-                        var errorMatch = "Error: Invalid User Property: ";
-                        var uPwdErr = "Unacceptable password, ";
-                        var iPwdErr = "Invalid password, ";
-                        var emailErr = "Invalid email";
-                        var uUsrErr = "Unacceptable User ID, ";
-                        var eUsrErr = "The user";
-
-                        var idx = errorString.indexOf(errorMatch);
-                        if (idx > -1) {
-                            var msg = errorString.substring(idx + errorMatch.length);
-                            if (msg.startsWith(uPwdErr)) {
-                                this.setInputMessage("password", msg.substring(uPwdErr.length));
-
-                            } else if (msg.startsWith(iPwdErr)) {
-                                this.setInputMessage("password", msg.substring(iPwdErr.length));
-
-                            } else if (msg.startsWith(emailErr)) {
-                                this.setInputMessage("email", msg);
-
-                            } else if (msg.startsWith(uUsrErr)) {
-                                this.setInputMessage("username", msg.substring(uUsrErr.length));
-
-                            } else if (msg.startsWith(eUsrErr)) {
-                                this.setInputMessage("username", msg);
-
-                            } else {
-                                alert(msg);
-                            }
-                        }
+                        alert(msg);
                     }
-                },
-
-                cancel: function() {
-                    Liferay.Popup.close(${ns}registerDialog);
                 }
-            });
+            }
+        },
 
-            jQuery(document).ready(function() {
-                var myForm = new RegisterForm("", "editForm", "RegistrationManager");
-                myForm.submitButtonLabel = "Register";
-                myForm.render();
-                var myStates = new CGP_StateCountryLists("stateProvince", "country");
-                myStates.render();
-            });
+        cancel: function() {
+            Liferay.Popup.close(${ns}registerDialog);
+        }
+    });
 
-        </script>
+    jQuery(document).ready(function() {
+        var myForm = new RegisterForm("", "editForm", "RegistrationManager");
+        myForm.submitButtonLabel = "Register";
+        myForm.render();
+        var myStates = new CGP_StateCountryLists("stateProvince", "country");
+        myStates.render();
+
+        jQuery("#passwordError").hide();
+        
+       jQuery("#password2").blur(function() {
+          if(jQuery("#password2").val()!=jQuery("#password").val()){
+              jQuery("#passwordError").show();
+          }
+           else{
+              jQuery("#passwordError").hide();
+
+          }
+});
+
+        
+    });
+
+</script>
