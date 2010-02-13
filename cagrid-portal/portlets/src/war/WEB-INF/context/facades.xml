@@ -105,7 +105,7 @@
 
     <bean class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerAspect"
           id="catalogEntryManagerAspect"
-          parent="abstractSolrCommandExecutor">
+          parent="abstractSolrCommandExecutor" p:executor-ref="cachingHttpCommandExecutor">
         <constructor-arg value="/dataimport?command=delta-import"/>
         <property name="order" value="100"/>
     </bean>
