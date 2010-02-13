@@ -141,7 +141,7 @@
     </bean>
     
     <bean id="csrfTokenProviderRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.filter.CSRFTokenProviderRequestInterceptor"
-          abstract="true">
+          >
         <property name="csrfTokenName" value="${cagrid.portal.csrfTokenName}"/>
     </bean>
 
