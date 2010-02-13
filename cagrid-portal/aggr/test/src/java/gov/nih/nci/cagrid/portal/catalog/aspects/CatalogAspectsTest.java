@@ -83,7 +83,7 @@ public class CatalogAspectsTest extends PortalAggrIntegrationTestBase {
 
         portalUserDao.save(p);
 
-        PortalUser loadedP = portalUserDao.getById(1);
+        PortalUser loadedP = portalUserDao.getById(p.getId());
 
         // make sure catalog item is created for service
         assertNotNull(loadedP.getCatalog());
