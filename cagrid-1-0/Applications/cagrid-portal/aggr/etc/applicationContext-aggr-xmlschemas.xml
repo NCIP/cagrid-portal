@@ -36,14 +36,15 @@
         <property name="timerTask" ref="checkForXmlSchemas" />
     </bean>
 
-    <bean id="xmlSchemasTimerFactory"
-          class="org.springframework.scheduling.timer.TimerFactoryBean">
+    <!--GME has retired-->
+    <!--<bean id="xmlSchemasTimerFactory"-->
+          <!--class="org.springframework.scheduling.timer.TimerFactoryBean">-->
 
-        <property name="scheduledTimerTasks">
-            <list>
-                <ref bean="checkForXmlSchemasTask" />
-            </list>
-        </property>
-    </bean>
+        <!--<property name="scheduledTimerTasks">-->
+            <!--<list>-->
+                <!--<ref bean="checkForXmlSchemasTask" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
 </beans>
