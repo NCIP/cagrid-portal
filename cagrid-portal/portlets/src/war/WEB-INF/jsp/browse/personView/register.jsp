@@ -44,8 +44,7 @@
 <div align="left" style="overflow:auto;height:800px;padding-bottom:10px;" class="yui-skin-sam">
 
     <div class="instructions">
-        Please fill out your information in the fields below. Passwords must be between 10 and 20 characters,
-        and must include an uppercase letter, a lowercase letter, a number, and a special character.
+        <spring:message code="register.message"/>
     <span>
             <a id="registerHelpLink" href="${usersGuideUrl}-RegisterasaNewUser" target="_blank">
                 <tags:image name="help.gif"/>
@@ -71,14 +70,15 @@
                 </div>
                 <div class="row">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" />
+                    <input type="password" name="password" id="password"/>
                 </div>
                 <div class="row">
                     <label for="password">ReType Password</label>
-                    <input type="password" id="password2" />
+                    <input type="password" id="password2"/>
+
                     <div id="passwordError" class="errorMsg" style="display:none;">
                         Passwords don't match
-                     </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -145,9 +145,13 @@
         },
 
         submit: function() {
+            var passwdChk = checkPasswords();
+            if (passwdChk != null)
+                return false;
         <%--set the country and state to defaults--%>
             this.setField("stateProvince", jQuery("#stateProvince option:selected").val());
             this.setField("country", jQuery("#country option:selected").val());
+            this.setField("password", jQuery("#password").val());
             this.validateThenSubmit(false);
         },
 
@@ -161,6 +165,7 @@
                 var emailErr = "Invalid email";
                 var uUsrErr = "Unacceptable User ID, ";
                 var eUsrErr = "The user";
+                var iPwdMatchErr = "Passwords don't match";
 
                 var idx = errorString.indexOf(errorMatch);
                 if (idx > -1) {
@@ -179,7 +184,8 @@
 
                     } else if (msg.startsWith(eUsrErr)) {
                         this.setInputMessage("username", msg);
-
+                    } else if (msg.startsWith(iPwdMatchErr)) {
+                        this.setInputMessage("password2", msg);
                     } else {
                         alert(msg);
                     }
@@ -200,18 +206,20 @@
         myStates.render();
 
         jQuery("#passwordError").hide();
-        
-       jQuery("#password2").blur(function() {
-          if(jQuery("#password2").val()!=jQuery("#password").val()){
-              jQuery("#passwordError").show();
-          }
-           else{
-              jQuery("#passwordError").hide();
 
-          }
-});
+        jQuery("#password2").blur(checkPasswords);
 
-        
     });
 
+    function checkPasswords()
+    {
+        if (jQuery("#password2").val() != jQuery("#password").val()) {
+            jQuery("#passwordError").show();
+            return "Passwords don't match";
+        }
+        else {
+            jQuery("#passwordError").hide();
+            return null;
+        }
+    }
 </script>
