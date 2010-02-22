@@ -25,135 +25,137 @@ import java.util.Date;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
-  * @author kherm manav.kher@semanticbits.com
-  */
+ * @author kherm manav.kher@semanticbits.com
+ */
 
- public class DirectAutoLogin extends AbstractAutoLogin {
+public class DirectAutoLogin extends AbstractAutoLogin {
 
-     private static final Log logger = LogFactory.getLog(DirectAutoLogin.class);
+    private static final Log logger = LogFactory.getLog(DirectAutoLogin.class);
 
-     private EncryptionService encryptionService;
-     private String ticketParameterName;
-     private PortalUserDao portalUserDao;
+    private EncryptionService encryptionService;
+    private String ticketParameterName;
+    private PortalUserDao portalUserDao;
 
-     /**
-      *
-      */
-     public DirectAutoLogin() {
+    /**
+     *
+     */
+    public DirectAutoLogin() {
 
-     }
+    }
 
-     public String[] login(HttpServletRequest request,
-                           HttpServletResponse response) throws AutoLoginException {
+    public String[] login(HttpServletRequest request,
+                          HttpServletResponse response) throws AutoLoginException {
 
-         String[] credentials = null;
-         String ticket = request.getParameter(getTicketParameterName());
-         if (ticket == null) {
-             return null;
-         }
-         try {
-             String userId = getEncryptionService().decrypt(ticket);
-            PortalUser portalUser =  getPortalUserDao().getByPortalId(userId);
-             if (portalUser == null) {
-                 throw new Exception(
-                         "No PortalUser associated with PortalUserId: "
-                                 + userId);
-             }
-             try {
+        String[] credentials = null;
+        String ticket = request.getParameter(getTicketParameterName());
+        if (ticket == null) {
+            return null;
+        }
+        try {
+            String gridIdentity = getEncryptionService().decrypt(ticket);
+            PortalUser portalUser = new PortalUser();
+            portalUser.setGridIdentity(gridIdentity);
+            portalUser = getPortalUserDao().getByExample(portalUser);
+            if (portalUser == null) {
+                throw new Exception(
+                        "No PortalUser associated with Grid Identity: "
+                                + gridIdentity);
+            }
+            try {
 
-                 User user = null;
-                 if (portalUser.getPortalId() == null) {
-                     logger.debug("creating new User for "
-                             + portalUser.getGridIdentity());
+                User user = null;
+                if (portalUser.getPortalId() == null) {
+                    logger.debug("creating new User for "
+                            + portalUser.getGridIdentity());
 
-                     user = addLiferayUser(portalUser);
+                    user = addLiferayUser(portalUser);
 
-                     portalUser.setPortalId(String.valueOf(user.getCompanyId())
-                             + ":" + String.valueOf(user.getUserId()));
-                     getPortalUserDao().save(portalUser);
-                 } else {
-                     String[] portalId = portalUser.getPortalId().split(":");
-                     user = UserLocalServiceUtil.getUserById(Integer
-                             .parseInt(portalId[0]), Integer
-                             .parseInt(portalId[1]));
-                     if (user == null) {
-                         throw new AutoLoginException(
-                                 "No User found for portalId = " + portalId);
-                     }
-                 }
+                    portalUser.setPortalId(String.valueOf(user.getCompanyId())
+                            + ":" + String.valueOf(user.getUserId()));
+                    getPortalUserDao().save(portalUser);
+                } else {
+                    String[] portalId = portalUser.getPortalId().split(":");
+                    user = UserLocalServiceUtil.getUserById(Integer
+                            .parseInt(portalId[0]), Integer
+                            .parseInt(portalId[1]));
+                    if (user == null) {
+                        throw new AutoLoginException(
+                                "No User found for portalId = " + portalId);
+                    }
+                }
 
-                 request.setAttribute(getUserIdAttributeName(), portalUser
-                         .getId());
+                request.setAttribute(getUserIdAttributeName(), portalUser
+                        .getId());
 
-                 credentials = new String[3];
-                 credentials[0] = String.valueOf(user.getUserId());
-                 credentials[1] = user.getPassword();
-                 credentials[2] = Boolean.TRUE.toString();
-             } catch (UserEmailAddressException ex) {
-                 request
-                         .setAttribute(
-                                 getAuthnErrorMessageAttributeName(),
-                                 "The email address that is associated with your account"
-                                         + " is invalid. Please contact your identity provider "
-                                         + "administrator to correct it.");
+                credentials = new String[3];
+                credentials[0] = String.valueOf(user.getUserId());
+                credentials[1] = user.getPassword();
+                credentials[2] = Boolean.TRUE.toString();
+            } catch (UserEmailAddressException ex) {
+                request
+                        .setAttribute(
+                                getAuthnErrorMessageAttributeName(),
+                                "The email address that is associated with your account"
+                                        + " is invalid. Please contact your identity provider "
+                                        + "administrator to correct it.");
 
-             } catch (DuplicateUserEmailAddressException ex) {
-                 request
-                         .setAttribute(
-                                 getAuthnErrorMessageAttributeName(),
-                                 "A user with the email address '"
-                                         + portalUser.getPerson()
-                                         .getEmailAddress()
-                                         + "' already exists. Either authenticate using the credentials associated with that account, or ask the portal adminstrator ("
-                                         + getPortalAdminEmailAddress()
-                                         + ") to delete your existing portal account.");
+            } catch (DuplicateUserEmailAddressException ex) {
+                request
+                        .setAttribute(
+                                getAuthnErrorMessageAttributeName(),
+                                "A user with the email address '"
+                                        + portalUser.getPerson()
+                                        .getEmailAddress()
+                                        + "' already exists. Either authenticate using the credentials associated with that account, or ask the portal adminstrator ("
+                                        + getPortalAdminEmailAddress()
+                                        + ") to delete your existing portal account.");
 
-             } catch (ReservedUserEmailAddressException ex) {
-                 request
-                         .setAttribute(
-                                 getAuthnErrorMessageAttributeName(),
-                                 "The email address '"
-                                         + portalUser.getPerson()
-                                         .getEmailAddress()
-                                         + "' is reserved. Please contact the portal adminstrator ("
-                                         + getPortalAdminEmailAddress() + ").");
-             }
+            } catch (ReservedUserEmailAddressException ex) {
+                request
+                        .setAttribute(
+                                getAuthnErrorMessageAttributeName(),
+                                "The email address '"
+                                        + portalUser.getPerson()
+                                        .getEmailAddress()
+                                        + "' is reserved. Please contact the portal adminstrator ("
+                                        + getPortalAdminEmailAddress() + ").");
+            }
 
-         } catch (Exception ex) {
-             logger.error("Unexpected error while authenticating: "
-                     + ex.getMessage(), ex);
-             request
-                     .setAttribute(
-                             getAuthnErrorMessageAttributeName(),
-                             "An error was encountered during authentication. Please contact the adminstrator (" + getPortalAdminEmailAddress() + ").");
-         }
-         return credentials;
-     }
+        } catch (Exception ex) {
+            logger.error("Unexpected error while authenticating: "
+                    + ex.getMessage(), ex);
+            request
+                    .setAttribute(
+                            getAuthnErrorMessageAttributeName(),
+                            "An error was encountered during authentication. Please contact the adminstrator (" + getPortalAdminEmailAddress() + ").");
+        }
+        return credentials;
+    }
 
-     @Required
-     public EncryptionService getEncryptionService() {
-         return encryptionService;
-     }
+    @Required
+    public EncryptionService getEncryptionService() {
+        return encryptionService;
+    }
 
-     public void setEncryptionService(EncryptionService encryptionService) {
-         this.encryptionService = encryptionService;
-     }
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
+    }
 
-     @Required
-     public String getTicketParameterName() {
-         return ticketParameterName;
-     }
+    @Required
+    public String getTicketParameterName() {
+        return ticketParameterName;
+    }
 
-     public void setTicketParameterName(String ticketParameterName) {
-         this.ticketParameterName = ticketParameterName;
-     }
+    public void setTicketParameterName(String ticketParameterName) {
+        this.ticketParameterName = ticketParameterName;
+    }
 
-     @Required
-     public PortalUserDao getPortalUserDao() {
-         return portalUserDao;
-     }
+    @Required
+    public PortalUserDao getPortalUserDao() {
+        return portalUserDao;
+    }
 
-     public void setPortalUserDao(PortalUserDao portalUserDao) {
-         this.portalUserDao = portalUserDao;
-     }
- }
+    public void setPortalUserDao(PortalUserDao portalUserDao) {
+        this.portalUserDao = portalUserDao;
+    }
+}

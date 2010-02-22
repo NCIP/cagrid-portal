@@ -103,7 +103,7 @@ public class DirectLoginController extends AbstractCommandController {
             PortalUser user = getUserService().getOrCreatePortalUser(cred.getIdentity(), authnInfo
                     .getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
                     encryptedProxyStr);
-            ticket = user.getPortalId();
+            ticket = user.getGridIdentity();
 
             logger.debug("Setting default credential for user  " + cred.getIdentity());
 
