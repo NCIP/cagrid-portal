@@ -170,7 +170,7 @@ body {
 	background-color:#E5E7ED;
 	overflow:auto;
 	padding:4px 5px 6px 8px;
-	width:186px;
+	width:206px;
 	-moz-border-radius-bottomleft:10px;
 	-webkit-border-bottom-left-radius:10px;
 	right:0;
@@ -203,6 +203,23 @@ body {
 	background-image:url(../images/foop/searchbox_endcaps.png);
 	background-position:-25px 0;
 }
+
+.searchBox .R-tip{
+    float:left;
+    vertical-align:bottom;
+    padding-left:3px;
+}
+
+#helpTipsContent{
+    font-size:8.5pt;
+
+}
+
+#loginLink{
+    font-weight:bold;
+    text-decoration:none;
+}
+
 /*
 #logIn {
 	position:absolute;

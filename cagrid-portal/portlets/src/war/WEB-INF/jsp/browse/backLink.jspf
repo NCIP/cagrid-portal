@@ -1,42 +1,44 @@
+<%@ taglib prefix="liferay-portlet" uri="http://liferay.com/tld/portlet" %>
 
-
-<portlet:renderURL var="viewUrl">
-    <portlet:param name="operation" value="view"/>
+<liferay-portlet:actionURL var="viewUrl">
+    <liferay-portlet:param name="operation" value="view"/>
     <c:if test="${fn:length(query)>0}">
-        <portlet:param name="query" value="${query}"/>
+        <liferay-portlet:param name="query" value="${query}"/>
         <c:set var="backLink" value="query"/>
     </c:if>
     <c:if test="${fn:length(selectedCatalogType)>0}">
-        <portlet:param name="selectedCatalogType" value="${selectedCatalogType}"/>
+        <liferay-portlet:param name="selectedCatalogType" value="${selectedCatalogType}"/>
         <c:set var="backLink" value="selectedCatalogType"/>
     </c:if>
     <c:if test="${fn:length(selectedCatalogLabel)>0}">
-        <portlet:param name="selectedCatalogLabel" value="${selectedCatalogLabel}"/>
+        <liferay-portlet:param name="selectedCatalogLabel" value="${selectedCatalogLabel}"/>
         <c:set var="backLink" value="selectedCatalogLabel"/>
     </c:if>
     <c:if test="${fn:length(catalogType)>0}">
-        <portlet:param name="catalogType" value="${catalogType}"/>
+        <liferay-portlet:param name="catalogType" value="${catalogType}"/>
         <c:set var="backLink" value="catalogType"/>
     </c:if>
     <c:if test="${fn:length(aof)>0}">
-        <portlet:param name="aof" value="${aof}"/>
+        <liferay-portlet:param name="aof" value="${aof}"/>
         <c:set var="backLink" value="aof"/>
     </c:if>
     <c:if test="${searchKeyword!='*:*'}">
-        <portlet:param name="searchKeyword" value="${searchKeyword}"/>
+        <liferay-portlet:param name="searchKeyword" value="${searchKeyword}"/>
         <c:set var="backLink" value="searchKeyword"/>
     </c:if>
     <c:if test="${fn:length(selectedIds)>0}">
-        <portlet:param name="selectedIds" value="${selectedIds}"/>
+        <liferay-portlet:param name="selectedIds" value="${selectedIds}"/>
         <c:set var="backLink" value="selectedIds"/>
     </c:if>
-</portlet:renderURL>
+</liferay-portlet:actionURL>
 
 <div class="row">
     <c:if test="${backLink !=null}">
+        <form:form id="${ns}backLinkForm" method="post">
         <div style="float:left;">
-            <a href="<c:out value="${viewUrl}"/>"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to Results</a>
+            <a href="javascript:${ns}returnToSearch();"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to Results</a>
         </div>
+        </form:form>
     </c:if>
 
     <div style="float:right;">
@@ -52,3 +54,10 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    function ${ns}returnToSearch(){
+       $("${ns}backLinkForm").action="${viewUrl}";
+        $("${ns}backLinkForm").submit();
+    }
+    </script>

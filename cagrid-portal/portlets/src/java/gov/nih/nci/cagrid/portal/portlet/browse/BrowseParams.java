@@ -15,4 +15,5 @@ public class BrowseParams {
     public static final String CATALOG_TYPE = "catalogType";
     public static final String SELECTED_CATALOG_TYPE = "selectedCatalogType";
     public static final String SELECTED_CATALOG_LABEL = "selectedCatalogLabel";
+    public static final String ENTRY_ID="entryId";
 }

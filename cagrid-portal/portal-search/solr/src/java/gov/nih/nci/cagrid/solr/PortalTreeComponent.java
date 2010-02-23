@@ -16,6 +16,7 @@ import org.apache.solr.util.plugin.SolrCoreAware;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 
 /**
@@ -114,9 +115,20 @@ public class PortalTreeComponent extends SearchComponent implements SolrCoreAwar
             if (_fieldArr != null) {
 
                 for (Field _field : _fieldArr) {
-                // get by label
-                    String _tNodeLabel = treeLabelMap.containsKey(_field.stringValue()) ? treeLabelMap.get(_field.stringValue()) : _field.stringValue();
+                    String _tNodeLabel = _field.stringValue();
 
+                    // get by label
+                    //keys can be space delimited
+                    outer:
+                    for (String type : treeLabelMap.keySet()) {
+                        StringTokenizer typeTokens = new StringTokenizer(type);
+                        for (int i = 0; i < typeTokens.countTokens();)
+                            if (_field.stringValue().equalsIgnoreCase(typeTokens.nextToken())) {
+                                _tNodeLabel = treeLabelMap.get(type);
+                                break outer;
+                            }
+
+                    }
 
                     TreeNode node = _tree.getByLabel(_tNodeLabel);
                     if (node == null) {

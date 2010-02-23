@@ -21,7 +21,7 @@
         if (characterCode == 13) { //if generated character code is equal to ascii 13 (if enter key)
             var searchLink = "${searchLink}";
             searchLink = searchLink.replace("/guest/home", "/guest/catalog/all");
-            $("${ns}searchKeyword").value = keyword;
+            $("${ns}searchKeyword").value = escape(keyword);
             $("${ns}searchForm").action = searchLink;
             $("${ns}searchForm").submit();
             return false;

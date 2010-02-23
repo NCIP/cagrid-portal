@@ -4,6 +4,8 @@ import org.springframework.web.portlet.ModelAndView;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 
 /**
  * User: kherm
@@ -20,6 +22,22 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
 
     }
 
+    private void addRenderParam(ActionRequest req, ActionResponse res, String param){
+        if(req.getParameterMap().containsKey(param)){
+            res.setRenderParameter(param,req.getParameter(param));
+        }
+
+    }
+    public void handleActionRequestInternal(ActionRequest req, ActionResponse res)
+            throws Exception {
+        addRenderParam(req,res,BrowseParams.SEARCH_KEYWORD);
+        addRenderParam(req,res,BrowseParams.SELECTED_IDS);
+        addRenderParam(req,res,BrowseParams.AREA_OF_FOCUS);
+        addRenderParam(req,res,BrowseParams.SELECTED_CATALOG_TYPE);
+        addRenderParam(req,res,BrowseParams.SELECTED_CATALOG_LABEL);
+        addRenderParam(req,res,BrowseParams.ENTRY_ID);
+        addRenderParam(req,res,"operation");
+    }
 
     /**
      * Will encode the MAV with parameters need to create a SOLR search query.

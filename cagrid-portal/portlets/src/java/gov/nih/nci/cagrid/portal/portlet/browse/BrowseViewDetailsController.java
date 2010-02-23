@@ -11,6 +11,8 @@ import org.springframework.web.portlet.ModelAndView;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,8 @@ public class BrowseViewDetailsController extends BaseSearchSupportingController 
     private Map<String, String> entryTypeViewMap = new HashMap<String, String>();
     private String emptyViewName;
     private CatalogEntryViewBeanFactory catalogEntryViewBeanFactory;
+
+
 
     protected ModelAndView handleRenderRequestInternal(RenderRequest request,
                                                        RenderResponse response) throws Exception {

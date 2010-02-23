@@ -14,6 +14,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import java.net.URLEncoder;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
@@ -38,16 +39,6 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
 
     }
 
-    /*
-      * (non-Javadoc)
-      *
-      * @see org.springframework.web.portlet.mvc.Controller#handleActionRequest(javax.portlet.ActionRequest,
-      *      javax.portlet.ActionResponse)
-      */
-    public void handleActionRequest(ActionRequest req, ActionResponse res)
-            throws Exception {
-        res.setRenderParameter(BrowseParams.SEARCH_KEYWORD, req.getParameter(BrowseParams.SEARCH_KEYWORD));
-    }
 
     /*
       * (non-Javadoc)
@@ -85,6 +76,7 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
             throw new RuntimeException("Unknown browse type: " + browseType);
         }
                mav.addObject("userGuideUrl", getUserGuideUrl());
+
         encodeWithSearchParams(mav, request);
         return mav;
     }

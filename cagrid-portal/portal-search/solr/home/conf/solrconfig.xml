@@ -543,19 +543,14 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
             <str name="poc">Point Of Contact</str>
             <str name="institution">Institutions</str>
             <str name="tool_shared_query">Shared Queries</str>
-            <str name="tools">Tools</str>
+            <str name="tools tool_desktop tool_grid_service_interface tool_deployment tool_workflow tool_workspace">Tools</str>
             <str name="dataset">Dataset</str>
-            <str name="tool_desktop">Tools</str>
             <str name="community">Communities</str>
             <str name="information_model">Information Models</str>
-            <str name="tool_grid_service_interface">Service Interfaces</str>
             <str name="kc">Knowledge Centers</str>
             <str name="tool_portlet">Portlets</str>
             <str name="project">Community Projects</str>
             <str name="terminology">Terminology</str>
-            <str name="tool_deployment">Tools</str>
-            <str name="tool_workflow">Workflows</str>
-            <str name="tool_workspace">Workspaces</str>
         </lst>
     </searchComponent>
 
@@ -565,18 +560,9 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
     <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
 
         <lst name="spellchecker">
-            <str name="classname">solr.FileBasedSpellChecker</str>
-            <str name="name">file</str>
-            <str name="fieldType">text</str>
-            <str name="sourceLocation">spellings.txt</str>
-            <str name="characterEncoding">UTF-8</str>
-            <str name="spellcheckIndexDir">./spellcheckerFile</str>
-            <str name="buildOnCommit">true</str>
-        </lst>
-        <lst name="spellchecker">
             <str name="name">default</str>
             <str name="classname">solr.IndexBasedSpellChecker</str>
-            <str name="field">text</str>
+            <str name="field">portalText</str>
             <str name="spellcheckIndexDir">./spellcheckerIdx</str>
             <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
             <str name="buildOnCommit">true</str>

@@ -28,7 +28,7 @@ public class BaseCatalogEntryAbstractController extends AbstractController {
         CatalogEntry entry = null;
         Integer entryId = null;
         try {
-            entryId = Integer.valueOf(request.getParameter("entryId"));
+            entryId = Integer.valueOf(request.getParameter(BrowseParams.ENTRY_ID));
         } catch (Exception ex) {
 
         }

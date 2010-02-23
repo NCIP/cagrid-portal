@@ -19,17 +19,11 @@
         src="<c:url value="/dwr/interface/CatalogEntryManagerFacade.js"/>"></script>
 
 
-<liferay-portlet:renderURL var="catalogLink"
+<liferay-portlet:actionURL var="catalogLink"
                            portletMode="view">
     <liferay-portlet:param name="operation" value="viewDetails"/>
-    <liferay-portlet:param name="entryId" value="ENTRYIDTOREPLACED"/>
-    <liferay-portlet:param name="selectedCatalogType" value="SELECTEDCATALOGTYPETOREPLACE"/>
-    <liferay-portlet:param name="selectedCatalogLabel" value="SELECTEDCATALOGLABELTOREPLACE"/>
-    <liferay-portlet:param name="catalogType" value="CATALOGTYPETOREPLACE"/>
-    <liferay-portlet:param name="aof" value="AOFTOREPLACE"/>
-    <liferay-portlet:param name="searchKeyword" value="SEARCHKEYWORDTOREPLACE"/>
-    <liferay-portlet:param name="selectedIds" value="SELECTEDIDSTOREPLACE"/>
-</liferay-portlet:renderURL>
+
+</liferay-portlet:actionURL>
 
 
 <script type="text/javascript">
@@ -38,16 +32,19 @@
 
 
     function ${ns}viewDetails(id) {
-        var theLink = "${catalogLink}";
-        var newLink = theLink.replace("ENTRYIDTOREPLACED", id);
-        newLink = newLink.replace("SELECTEDCATALOGTYPETOREPLACE", g_catalogType);
-        newLink = newLink.replace("SELECTEDCATALOGLABELTOREPLACE", g_catalogType_label);
-        newLink = newLink.replace("CATALOGTYPETOREPLACE", "${catalogType}");
-        newLink = newLink.replace("SEARCHKEYWORDTOREPLACE", wildcard);
-        newLink = newLink.replace("AOFTOREPLACE", g_aof);
-        newLink = newLink.replace("SELECTEDIDSTOREPLACE", g_selectedids);
 
-        window.location = newLink;
+        $("${ns}entryId").value = id;
+           $("${ns}selectedCatalogType").value = g_catalogType;
+           $("${ns}selectedCatalogLabel").value = g_catalogType_label;
+           $("${ns}catalogType").value = "${catalogType}";
+         $("${ns}aof").value = g_aof;
+         $("${ns}searchKeyword").value = wildcard;
+        $("${ns}selectedIds").value = g_selectedids;
+
+
+        $("${ns}catalogDetailsForm").action = "${catalogLink}";
+        $("${ns}catalogDetailsForm").submit();
+        return false;
     }
 
     function ${ns}resetPage() {
@@ -178,6 +175,7 @@
     jQuery(document).ready(function() {
     <c:if test="${not empty searchKeyword && searchKeyword != '*:*'}">
         wildcard = "<c:out value="${searchKeyword}"/>";
+        wildcard = unescape(wildcard);
         $("${ns}keyword").value = wildcard;
     </c:if>
         ${ns}search(wildcard);
@@ -196,6 +194,9 @@
                     keyword = '"' + keyword;
                 if (keyword.lastIndexOf('"') != keyword.length - 1)
                     keyword = keyword + '"';
+            }
+            else {
+                keyword = unescape(keyword);
             }
         }
 
@@ -224,9 +225,16 @@
 
 </script>
 
-<form:form id="${ns}catalogDetailsForm" name="catalogDetailsForm">
-    <input type="hidden" name="entryId" value=""><input type="hidden" name="operation" value="viewDetails">
-    <input type="hidden" name="query" value="">
+<form:form id="${ns}catalogDetailsForm" method="post">
+    <input type="hidden" name="entryId" id="${ns}entryId"value="">
+
+    <input type="hidden" name="selectedCatalogType"  id="${ns}selectedCatalogType" value="">
+    <input type="hidden" name="selectedCatalogLabel" id="${ns}selectedCatalogLabel" value="">
+    <input type="hidden" name="catalogType" id="${ns}catalogType" value="">
+    <input type="hidden" name="aof" id="${ns}aof" value="">
+    <input type="hidden" name="searchKeyword" id="${ns}searchKeyword" value="search">
+    <input type="hidden" name="selectedIds"  id="${ns}selectedIds" value="">
+
 
     <div>
         <tags:searchBox searchCallback="checkEnter" id="${ns}keyword"/>
