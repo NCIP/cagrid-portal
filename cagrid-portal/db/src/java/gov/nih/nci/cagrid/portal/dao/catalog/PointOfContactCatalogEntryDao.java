@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.portal.dao.catalog;
 
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
+import gov.nih.nci.cagrid.portal.domain.Address;
+import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
-import gov.nih.nci.cagrid.portal.domain.Person;
-import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
-import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.List;
@@ -53,7 +53,6 @@ public class PointOfContactCatalogEntryDao extends
         return catalog;
     }
 
-    
 
     @UpdatesCatalogs
     public PointOfContactCatalogEntry createCatalogAbout(PointOfContact poc) {
@@ -69,7 +68,6 @@ public class PointOfContactCatalogEntryDao extends
             entry.setDescription("Grid Service Point of Contact");
             if (poc instanceof ResearchCenterPointOfContact)
                 entry.setDescription("Research Center Point of Contact");
-            entry.setCreatedAt(getTimestampProvider().getTimestamp());
         } else
             logger
                     .debug("Catalog entry already exists for POC.");

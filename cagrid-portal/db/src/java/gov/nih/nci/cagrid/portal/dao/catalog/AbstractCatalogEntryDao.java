@@ -28,9 +28,10 @@ public abstract class AbstractCatalogEntryDao<T extends AbstractDomainObject> ex
             CatalogEntry ent = (CatalogEntry) entry;
             Date now = timestampProvider.getTimestamp();
             ent.setUpdatedAt(now);
-            if (ent.getCreatedAt() == null)
+            if (ent.getCreatedAt() == null) {
                 logger.debug("No create date for catalog. Will add now");
-            ent.setCreatedAt(now);
+                ent.setCreatedAt(now);
+            }
         }
         super.save(entry);    //To change body of overridden methods use File | Settings | File Templates.
     }

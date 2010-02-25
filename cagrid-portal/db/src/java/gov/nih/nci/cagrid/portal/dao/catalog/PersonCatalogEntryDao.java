@@ -45,9 +45,8 @@ public class PersonCatalogEntryDao extends
             entry = new PersonCatalogEntry();
             entry.setAbout(user);
             user.setCatalog(entry);
-            entry.setCreatedAt(getTimestampProvider().getTimestamp());
             entry.setDescription("Portal User");
-            
+
         } else
             logger
                     .debug("Catalog entry already exists. Will update the existing entry");
