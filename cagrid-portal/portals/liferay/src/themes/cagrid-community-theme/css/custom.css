@@ -60,29 +60,34 @@ body {
     right: -1px;
     width: 726px;
     height: 40px;
-}#navigation ul {
+}#navigation ul.main {
     margin: 0;
-    height: 40px;
+	background:url(../images/foop/community-nav-bg.png) #8899C4 repeat-x;
+	padding:5px;
+	min-height:30px;
+	position:relative;
 }
-#navigation ul li a {
-    background-image: url(../images/foop/nav-sprite.png);
-    height: 30px;
-    display: block;
-    margin-right: 1px;
-	font-size:15px;
-	font-weight:bold;
+#navigation ul.main .community-icon {
+	position:absolute;
+	top:2px;
+	right:2px;
+	height:40px;
+	width:278px;
+	background:url(../images/foop/community-nav-bg-watermark.png);
+}
+#navigation ul.main li a {
 	text-decoration:none;
-	padding:10px 8px 0 8px;
-	color:#5A5B5C;
+	padding:0px 8px 0 0;
+	color:#fff;
 }
-#navigation ul li a:hover {
-	background-position:0 -40px;
-	color:#424243;
+#navigation ul.main li a:hover {
+	text-decoration:underline;
 }
 #navigation ul li.selected a, #navigation ul li a:active {
 	background-position:0 -80px;
 	color:#ffffff;
 }
+/*
 
 #navigation ul li a#Home, #navigation ul li a#Data_Sets, #navigation ul li a#Tools, #navigation ul li a#People, 
 #navigation ul li a#Institutions, #navigation ul li a#Communities, #navigation ul li a#Catalog {
@@ -147,6 +152,7 @@ body {
     background-position: -629px -80px;
     width: 60px;
 }
+*/
 
 #navigation ul.signIn li a {
 	font-size:10pt;
@@ -333,7 +339,7 @@ body .yui-skin-sam .yui-navset .yui-nav .selected a,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:focus,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:hover,
 body .yui-skin-sam .yui-navset .yui-nav .selected a em, 
-#cabio .tabs li.current a{
+.tabs li.current a{
 	background:url(../images/foop/YUI_tab_selected.png);
 	border:none;
 	-moz-border-radius: 5px;
@@ -341,7 +347,7 @@ body .yui-skin-sam .yui-navset .yui-nav .selected a em,
 	border-radius: 5px;
 	font-weight:normal;
 }
-#cabio .tabs li.current a {color:#ffffff;}
+.tabs li.current a {color:#ffffff;}
 body .yui-skin-sam .yui-navset .yui-nav .selected a em,
 body .yui-skin-sam .yui-navset .yui-nav a em {
 	padding:1px 10px;
@@ -349,12 +355,12 @@ body .yui-skin-sam .yui-navset .yui-nav a em {
 body .yui-skin-sam .yui-navset .yui-nav .selected,
 body .yui-skin-sam .yui-navset .yui-nav .selected,
 body .yui-skin-sam .yui-navset .yui-nav li,
-#cabio .tabs li, 
-#cabio .tabs li.current {
+.tabs li, 
+.tabs li.current {
 	margin:5px;
 	top:0;
 }
-#cabio .tabs li{
+.tabs li{
 	line-height:normal;
 	background:none;
 	}
@@ -363,7 +369,7 @@ body .yui-skin-sam .yui-navset .yui-navset-top .yui-nav a,
 body .yui-skin-sam .yui-navset .yui-nav a:focus,
 body .yui-skin-sam .yui-navset .yui-nav a:hover,
 body .yui-skin-sam .yui-navset .yui-nav a em, 
-#cabio .tabs li a {
+.tabs li a {
 	background:url(../images/foop/YUI_tab_not_selected.png);
 	border:none;
 	-moz-border-radius: 5px;
@@ -371,14 +377,14 @@ body .yui-skin-sam .yui-navset .yui-nav a em,
 	border-radius: 5px;
 	color:#000000;
 }
-#cabio .tabs li a {
+.tabs li a {
 	padding:4px 10px;
 }
-#cabio .tabs li a:hover{
+.tabs li a:hover{
 	text-decoration:none;
 }
 body .yui-skin-sam .yui-navset .yui-nav, 
-#cabio ul {
+ul.ui-tabs, ul.tabs {
 	background:#D0D0D0;
 	border:none;
 	display:inline-block;
@@ -390,8 +396,16 @@ body .yui-skin-sam .yui-navset .yui-nav,
 	-webkit-border-radius-topright:10px;
 	padding:0 2px;
 }
-#cabio ul {
+#cabio ul.tabs {
 	display:block;
+	background:#D0D0D0;
+	border:none;
+	zoom:1;
+	-moz-border-radius-topleft:10px;
+	-moz-border-radius-topright:10px;
+	-webkit-border-radius-topleft:10px;
+	-webkit-border-radius-topright:10px;
+	padding:0 2px;
 }
 body .yui-skin-sam .yui-navset .yui-content, 
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-content {

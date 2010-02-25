@@ -179,6 +179,7 @@ body.staging {
 }
 
 #content-wrapper {
+	padding:10px;
 }
 
 .portal-iframe #content-wrapper {

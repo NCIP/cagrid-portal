@@ -24,7 +24,8 @@
 
     </ul>
 
-    <ul>
+    <ul class="main">
+    	<div class="community-icon"></div>
         #foreach ($nav_item in $nav_items)			
 			#if ($nav_item.isSelected())				
 				#set ($nav_item_class = "selected")			

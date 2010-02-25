@@ -26,7 +26,14 @@
 	overflow: visible;
 }
 
-#navigation li {
+#navigation ul.main li {
+	float: left;
+	list-style-type: disc;
+	position: relative;
+	margin-left:15px;
+	color:#fff;	
+}
+#navigation li, .tabs li {
 	float: left;
 	list-style-type: none;
 	position: relative;
