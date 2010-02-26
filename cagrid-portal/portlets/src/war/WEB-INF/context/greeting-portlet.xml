@@ -13,9 +13,14 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
     <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location"
-                  value="classpath:cagridportal.properties"/>
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
     </bean>
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
@@ -69,7 +74,7 @@
             <list>
                 <ref bean="openSessionInViewInterceptor"/>
                 <ref bean="portalUserInterceptor2"/>
-                 <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
             </list>
         </property>
 

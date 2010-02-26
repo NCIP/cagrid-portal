@@ -79,7 +79,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Globus" level="application" />
-    <orderEntry type="library" name="hsql 1.9" level="project" />
+    <orderEntry type="library" name="hsql 2.0" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -89,6 +89,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="mysql" level="project" />
   </component>
 </module>
 

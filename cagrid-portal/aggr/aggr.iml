@@ -29,6 +29,16 @@
     <orderEntry type="module" module-name="service" exported="" />
     <orderEntry type="library" name="mysql" level="project" />
     <orderEntry type="module" module-name="db" />
+    <orderEntry type="library" name="lexevs" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

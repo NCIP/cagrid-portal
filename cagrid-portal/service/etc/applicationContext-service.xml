@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-	
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="classpath:cagridportal.properties" />
-	</bean>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
-	
-	<bean id="catalogEntryService" class="gov.nih.nci.cagrid.portal.service.CatalogEntryService" autowire="byName"/>
-	    
-	<bean id="communityService" class="gov.nih.nci.cagrid.portal.service.CommunityService" autowire="byName"/>
-	
-	<bean id="personService" class="gov.nih.nci.cagrid.portal.service.PersonService" autowire="byName"/>
-	
-	<bean id="userService" class="gov.nih.nci.cagrid.portal.service.UserService" autowire="byName"/>
 
-    <bean id="pointOfContactCatalogService" class="gov.nih.nci.cagrid.portal.service.PointOfContactCatalogService" autowire="byName"/>
+    <bean id="catalogEntryService" class="gov.nih.nci.cagrid.portal.service.CatalogEntryService" autowire="byName"/>
+
+    <bean id="communityService" class="gov.nih.nci.cagrid.portal.service.CommunityService" autowire="byName"/>
+
+    <bean id="personService" class="gov.nih.nci.cagrid.portal.service.PersonService" autowire="byName"/>
+
+    <bean id="userService" class="gov.nih.nci.cagrid.portal.service.UserService" autowire="byName"/>
+
+    <bean id="pointOfContactCatalogService" class="gov.nih.nci.cagrid.portal.service.PointOfContactCatalogService"
+          autowire="byName"/>
 
     <bean id="portalFileService" class="gov.nih.nci.cagrid.portal.service.ZippedFileService"
-            p:fileStorePath="${cagrid.portal.filestore.path}" p:extension="zip">
-        </bean>	
-	
+          p:fileStorePath="${cagrid.portal.filestore.path}" p:extension="zip">
+    </bean>
+
+    <bean id="queryInstanceService" class="gov.nih.nci.cagrid.portal.service.QueryInstanceService"
+          autowire="byName"/>
+
 </beans>

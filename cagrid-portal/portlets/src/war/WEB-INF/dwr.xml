@@ -168,5 +168,13 @@
             <param name="include" value="id,commentText,createdAt,author"/>
         </convert>
 
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry">
+            <param name="include" value="name,about"/>
+        </convert>
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.GridService">
+            <param name="include" value="url,currentStatus"/>
+        </convert>
+
+
     </allow>
 </dwr>

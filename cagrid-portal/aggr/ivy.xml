@@ -20,11 +20,11 @@
     <publications>
         <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
         <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
-         
+
         <!--spring configs-->
         <artifact name="applicationContext-aggr-catalog" type="xml"/>
         <artifact name="applicationContext-aggr-catalog-aspects" type="xml"/>
-        <artifact name="applicationContext-aggr-concepts" type="xml"/>
+        <!--<artifact name="applicationContext-aggr-concepts" type="xml"/>-->
         <artifact name="applicationContext-aggr-geocode" type="xml"/>
         <artifact name="applicationContext-aggr-metachange" type="xml"/>
         <artifact name="applicationContext-aggr-regsvc-beans" type="xml"/>
@@ -32,19 +32,21 @@
         <artifact name="applicationContext-aggr-regsvcman" type="xml"/>
         <artifact name="applicationContext-aggr-status-beans" type="xml"/>
         <artifact name="applicationContext-aggr-status" type="xml"/>
+        <artifact name="applicationContext-aggr-utils" type="xml"/>
         <artifact name="applicationContext-aggr-xmlschemas" type="xml"/>
         <artifact name="applicationContext-aggr" type="xml"/>
         <artifact name="applicationContext-notification" type="xml"/>
         <artifact name="applicationContext-notification-aspects" type="xml"/>
         <artifact name="applicationContext-trust" type="xml"/>
+
         <artifact name="sync-description" type="xml"/>
 
     </publications>
 
     <dependencies>
         <dependency rev="2.7.1" org="apache" name="xerces2-j" conf="default"/>
-        <dependency rev="3.1" org="apache" name="commons-collections" />
-        <dependency rev="1.0" org="commons-cli" name="commons-cli" />
+        <dependency rev="3.1" org="apache" name="commons-collections"/>
+        <dependency rev="1.0" org="commons-cli" name="commons-cli"/>
 
         <dependency rev="1.5" org="org.apache.velocity" name="engine" conf="default"/>
         <dependency rev="1.4" org="javax.mail" name="mail" conf="default"/>
@@ -70,7 +72,7 @@
         <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->trust"/>
         <!--<dependency rev="1.2" org="caGrid" name="cadsr" conf="default->client" transitive="false"/>-->
 
-        <dependency rev="4.0" org="cacore" name="cadsr-api" />
+        <dependency rev="4.0" org="cacore" name="cadsr-api"/>
         <dependency rev="4.0" org="cacore" name="evs" conf="default->client"/>
         <dependency rev="4.0.3-bigindex" org="globus" name="mds" conf="default->jars"/>
         <dependency rev="4.0.3" org="globus" name="globus" conf="default;compile->crypto"/>

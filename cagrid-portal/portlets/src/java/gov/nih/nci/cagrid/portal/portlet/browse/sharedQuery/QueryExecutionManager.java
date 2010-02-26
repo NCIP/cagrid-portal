@@ -15,8 +15,6 @@ import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
-import gov.nih.nci.cagrid.portal.service.PortalFileService;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     private String errorView;
     private QueryInstanceDao queryInstanceDao;
     private QueryResultTableDao queryResultTableDao;
-    private PortalFileService portalFileService;
+
     private List<ServiceErrorInterpretor> serviceErrorInterpretors = new ArrayList<ServiceErrorInterpretor>();
 
 
@@ -50,6 +48,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
         return null;
     }
+
 
     public String startQueries(String[] urls) {
 
@@ -244,29 +243,9 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     }
 
     public void deleteQueryInstance(Integer instanceId) {
-        try {
-            getQueryService().removeQueryInstance(instanceId);
-            QueryInstanceDao dao = getQueryInstanceDao();
-            HibernateTemplate templ = dao.getHibernateTemplate();
-            QueryInstance inst = getQueryInstanceDao().getById(instanceId);
-            QueryResultTable table = inst.getQueryResultTable();
-            if (table != null) {
 
-                if (table.getData().getFileName() != null) {
-                    logger.debug("Will delete query results file");
-                    boolean deleted = getPortalFileService().delete(table.getData().getFileName());
-                    if (!deleted)
-                        logger.warn("Could not delete file on disk. Filename " + table.getData().getFileName());
-                }
-                templ.delete(table.getData());
-                templ.delete(table);
-            }
-            dao.delete(inst);
-        } catch (Exception ex) {
-            String msg = "Error deleting query instance: " + ex.getMessage();
-            logger.error(msg, ex);
-            throw new RuntimeException(msg, ex);
-        }
+        getQueryService().deleteQueryInstance(instanceId);
+
     }
 
     public GridServiceDao getGridServiceDao() {
@@ -333,13 +312,6 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
         this.queryResultTableDao = queryResultTableDao;
     }
 
-    public PortalFileService getPortalFileService() {
-        return portalFileService;
-    }
-
-    public void setPortalFileService(PortalFileService portalFileService) {
-        this.portalFileService = portalFileService;
-    }
 
     public List<ServiceErrorInterpretor> getServiceErrorInterpretors() {
         return serviceErrorInterpretors;

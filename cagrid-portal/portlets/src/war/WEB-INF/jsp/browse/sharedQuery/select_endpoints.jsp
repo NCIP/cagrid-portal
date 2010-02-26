@@ -24,7 +24,7 @@
     </h3>
 
     <p>
-        Select all data sources you would like to query.
+        You can select up to <span id="${ns}queryCount"></span> services to query.
     </p>
 
     <p>
@@ -51,7 +51,7 @@
             callback:function(html) {
                 jQuery("form[name='${ns}selectEndpointsForm']").html(html);
                 jQuery("form[name='${ns}selectEndpointsForm'] :checkbox[name='endpoints']").bind("click", function(evt) {
-                    ${ns}checkEnableSelectEndpoints();
+                    ${ns}checkEnableSelectEndpoints(evt);
                 });
                 ${ns}selectEndpointsButton.set("label", "Select");
 
@@ -63,7 +63,13 @@
         });
     }
 
-    function ${ns}checkEnableSelectEndpoints() {
+    function ${ns}checkEnableSelectEndpoints(evt) {
+
+        if (jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked").length > maxQueries) {
+            alert("You have selected the maximum allowed services to query");
+            evt.preventDefault();
+            return false;
+        }
         if (jQuery().length > 0) {
             ${ns}selectEndpointsButton.set("disabled", false);
         } else {
@@ -74,8 +80,18 @@
 
     var ${ns}selectEndpointsButton = null;
 
+    var maxQueries = 5;
     jQuery(document).ready(function() {
 
+    <%--set to a default--%>
+        jQuery("#${ns}queryCount").html(maxQueries);
+    <%--then update--%>
+        SharedQueryCatalogEntryManagerFacade.getMaxActiveQueries({
+            callback:function(count) {
+                maxQueries = count;
+                jQuery("#${ns}queryCount").html(maxQueries);
+            }
+        });
 
         ${ns}selectEndpointsButton = new YAHOO.widget.Button({
             label: "Select",

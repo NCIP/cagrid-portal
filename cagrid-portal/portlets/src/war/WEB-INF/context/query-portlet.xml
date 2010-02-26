@@ -11,13 +11,15 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
-
-
     <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location"
-                  value="classpath:cagridportal.properties"/>
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
     </bean>
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
@@ -208,10 +210,10 @@
         <property name="validators">
             <list>
                 <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName">
-                    </bean>
+                </bean>
                 <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator"
-                       p:cqlXMLSchemaValidator-ref="cqlXMLSchemaValidator"
-                        p:dcqlXMLSchemaValidator-ref="dcqlXMLSchemaValidator"/>
+                      p:cqlXMLSchemaValidator-ref="cqlXMLSchemaValidator"
+                      p:dcqlXMLSchemaValidator-ref="dcqlXMLSchemaValidator"/>
             </list>
         </property>
 
@@ -346,7 +348,7 @@
         <property name="successViewName" value="/results/tabular"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
         <property name="serviceErrorInterpretors" ref="serviceErrorInterpretors"/>
-       	<property name="portalFileService" ref="securePortalFileService"/>
+        <property name="portalFileService" ref="securePortalFileService"/>
     </bean>
 
     <!--
@@ -378,9 +380,12 @@
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
 
-	<bean id="shareQueryRedirectUrl" class="java.lang.String">
-        <constructor-arg><value><![CDATA[/web/guest/catalog/tools?p_p_id=BrowsePortlet_WAR_cagridportlets&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_BrowsePortlet_WAR_cagridportlets_operation=editCatalogEntry&_BrowsePortlet_WAR_cagridportlets_entryId=]]></value></constructor-arg>
-    </bean>	
+    <bean id="shareQueryRedirectUrl" class="java.lang.String">
+        <constructor-arg>
+            <value>
+                <![CDATA[/web/guest/catalog/tools?p_p_id=BrowsePortlet_WAR_cagridportlets&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_BrowsePortlet_WAR_cagridportlets_operation=editCatalogEntry&_BrowsePortlet_WAR_cagridportlets_entryId=]]></value>
+        </constructor-arg>
+    </bean>
 
     <bean
             id="shareQueryController"
@@ -395,9 +400,9 @@
 
         <property name="commandName" value="cqlQueryCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
-        
+
         <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
-        
+
     </bean>
 
     <bean
@@ -407,9 +412,9 @@
 
         <property name="commandName" value="cqlQueryCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
-        
+
         <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
-        
+
     </bean>
 
 
@@ -429,8 +434,6 @@
     </bean>
 
 
-
-
     <bean id="portletModeParameterHandlerMapping"
           class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
 
@@ -443,8 +446,8 @@
             <list>
                 <ref bean="parameterMappingInterceptor"/>
                 <ref bean="openSessionInViewInterceptor"/>
-                <ref bean="portalUserInterceptor2" />
-                <ref bean="portalUserRequestInterceptor" />
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
             </list>
         </property>
 
@@ -513,8 +516,8 @@
             <list>
                 <ref bean="parameterMappingInterceptor"/>
                 <ref bean="openSessionInViewInterceptor"/>
-                <ref bean="portalUserInterceptor2" />
-                <ref bean="portalUserRequestInterceptor" />
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
             </list>
         </property>
 

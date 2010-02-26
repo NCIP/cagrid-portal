@@ -12,10 +12,16 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
     <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location"
-                  value="classpath:cagridportal.properties"/>
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
     </bean>
+
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
@@ -129,19 +135,21 @@
         <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
     </bean>
 
-    <bean id="requestAttributePropertiesPopulatorInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.RequestAttributePropertiesPopulatorInterceptor"
+    <bean id="requestAttributePropertiesPopulatorInterceptor"
+          class="gov.nih.nci.cagrid.portal.portlet.util.RequestAttributePropertiesPopulatorInterceptor"
           autowire="byName">
-          <property name="properties">
-			<util:map>
-        		<entry key="loginUrl" value="${cagrid.portal.loginUrl}"/>
+        <property name="properties">
+            <util:map>
+                <entry key="loginUrl" value="${cagrid.portal.loginUrl}"/>
                 <entry key="solrUrl" value="${cagrid.portal.solr.http.url}"/>
                 <entry key="usersGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
-        	</util:map>
+            </util:map>
         </property>
     </bean>
-    
-    <bean id="csrfTokenProviderRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.filter.CSRFTokenProviderRequestInterceptor"
-          >
+
+    <bean id="csrfTokenProviderRequestInterceptor"
+          class="gov.nih.nci.cagrid.portal.portlet.filter.CSRFTokenProviderRequestInterceptor"
+            >
         <property name="csrfTokenName" value="${cagrid.portal.csrfTokenName}"/>
     </bean>
 
@@ -417,7 +425,8 @@
         </bean>
         <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
             <property name="pattern" value="faultString: java.net.ConnectException: Connection refused"/>
-            <property name="message" value="The serivce you are querying in unavailable or not responding. Please check the URL"/>
+            <property name="message"
+                      value="The serivce you are querying in unavailable or not responding. Please check the URL"/>
         </bean>
         <bean class="gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor">
             <property name="pattern" value=".*"/>
