@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GridServiceEndPointCEReClassify implements InitializingBean {
     private static Log log = LogFactory.getLog(GridServiceEndPointCEReClassify.class);
-    private GridServiceDao gDao;
-    private GridServiceEndPointCatalogEntryDao ceDao;
+    private GridServiceDao gridServiceDao;
+    private GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
     private CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao;
 
     public static void main(String[] args) {
@@ -31,18 +31,18 @@ public class GridServiceEndPointCEReClassify implements InitializingBean {
 
     public void afterPropertiesSet() throws Exception {
 
-        for (GridServiceEndPointCatalogEntry entry : ceDao.getAll()) {
+        for (GridServiceEndPointCatalogEntry entry : gridServiceEndPointCatalogEntryDao.getAll()) {
             if (entry.isData()) {
                 log.debug("Service with id " + entry.getId() + " is a Data Service. Will re-classify");
                 GridService service = entry.getAbout();
 
-                DeleteCatalogs.deleteRelationships(ceDao.getHibernateTemplate(),getCatalogEntryRelationshipInstanceDao(),
+                DeleteCatalogs.deleteRelationships(gridServiceEndPointCatalogEntryDao.getHibernateTemplate(),getCatalogEntryRelationshipInstanceDao(),
                 entry);
                 
-                ceDao.delete(entry);
+                gridServiceEndPointCatalogEntryDao.delete(entry);
                 // resave so that correct CE is created
                 service.setCatalog(null);
-                gDao.save(service);
+                gridServiceDao.save(service);
 
 
             }
@@ -59,19 +59,19 @@ public class GridServiceEndPointCEReClassify implements InitializingBean {
         this.catalogEntryRelationshipInstanceDao = catalogEntryRelationshipInstanceDao;
     }
 
-    public GridServiceDao getGDao() {
-        return gDao;
+    public GridServiceDao getGridServiceDao() {
+        return gridServiceDao;
     }
 
-    public void setGDao(GridServiceDao gDao) {
-        this.gDao = gDao;
+    public void setGridServiceDao(GridServiceDao gridServiceDao) {
+        this.gridServiceDao = gridServiceDao;
     }
 
-    public GridServiceEndPointCatalogEntryDao getCeDao() {
-        return ceDao;
+    public GridServiceEndPointCatalogEntryDao getGridServiceEndPointCatalogEntryDao() {
+        return gridServiceEndPointCatalogEntryDao;
     }
 
-    public void setCeDao(GridServiceEndPointCatalogEntryDao ceDao) {
-        this.ceDao = ceDao;
+    public void setGridServiceEndPointCatalogEntryDao(GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao) {
+        this.gridServiceEndPointCatalogEntryDao = gridServiceEndPointCatalogEntryDao;
     }
 }
