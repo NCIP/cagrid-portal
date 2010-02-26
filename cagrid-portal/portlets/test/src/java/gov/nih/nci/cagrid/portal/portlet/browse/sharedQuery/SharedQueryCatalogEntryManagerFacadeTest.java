@@ -31,8 +31,8 @@ public class SharedQueryCatalogEntryManagerFacadeTest extends PortalPortletInteg
             facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleCQLNotNull.xml"));
             assertNull("Should be a valid query", facade.validate());
 
-            facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleCQLPredicate.xml"));
-            assertNull("Should be a valid query", facade.validate());
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/invalidCQL.xml"));
+            assertNotNull("Should be a valid query", facade.validate());
 
             facade.setQuery(PortalTestUtils.readFileASString("test/data/selected_attribute_query.xml"));
             assertNull("Should be a valid query", facade.validate());
