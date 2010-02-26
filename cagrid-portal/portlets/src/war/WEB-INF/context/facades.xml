@@ -23,6 +23,10 @@
         </property>
     </bean>
 
+    <bean id="maxActiveQueries" class="java.lang.Integer">
+        <constructor-arg value="${cagrid.shared.query.max.active}"/>
+    </bean>
+
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
     <bean id="cqlQueryHistoryFacade" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryHistoryFacade"
@@ -171,7 +175,6 @@
     <bean id="sharedQueryCatalogEntryManagerFacade"
           class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.SharedQueryCatalogEntryManagerFacade"
           autowire="byName"
-          p:maxActiveQueries="${cagrid.shared.query.max.active}"
           p:cqlSchema="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"
           p:dcqlSchema="Distributed_CQL_schema_2.0.xsd">
         <property name="selectEndpointsFormContentViewName"
@@ -235,7 +238,6 @@
           class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager"
           p:resultsView="/WEB-INF/jsp/browse/sharedQuery/query_results_display.jsp"
           p:errorView="/WEB-INF/jsp/browse/sharedQuery/query_error_display.jsp"
-          p:maxActiveQueries="${cagrid.shared.query.max.active}"
           autowire="byName"/>
 
     <bean id="terminologyService" class="gov.nih.nci.cagrid.portal.portlet.terms.TerminologyService" autowire="byName">
