@@ -330,6 +330,9 @@
         <move file="${liferay.portal.war.dir}/WEB-INF/lib/commons-collections.jar"
               todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib"/>
 
+        <!--already exist in shared lib-->
+        <delete file="${liferay.portal.war.dir}/WEB-INF/lib/log4j.jar"/>
+                
         <delete>
             <fileset dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib">
                 <include name="hibernate3.jar"/>
