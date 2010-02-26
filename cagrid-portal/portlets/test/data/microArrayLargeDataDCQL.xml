@@ -1,31 +1,31 @@
 <ns1:DCQLQuery xmlns:ns1="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql">
- <ns1:TargetObject name="gov.nih.nci.caarray.domain.project.Experiment">
-  <ns1:Group logicRelation="AND">
-   <ns1:Attribute name="description" predicate="LIKE" value="%gbm%"/>
-   <ns1:Group logicRelation="AND">
-    <ns1:Association name="gov.nih.nci.caarray.domain.sample.Source" roleName="sources">
-     <ns1:Group logicRelation="AND">
-      <ns1:Association name="gov.nih.nci.caarray.domain.vocabulary.Term" roleName="diseaseState">
-       <ns1:Attribute name="id" predicate="IS_NOT_NULL"/>
-      </ns1:Association>
-      <ns1:Attribute name="id" predicate="IS_NOT_NULL"/>
-     </ns1:Group>
-    </ns1:Association>
-    <ns1:Group logicRelation="AND">
-     <ns1:Association name="edu.georgetown.pir.Organism" roleName="organism">
-      <ns1:Attribute name="id" predicate="IS_NOT_NULL"/>
-     </ns1:Association>
-     <ns1:Association name="gov.nih.nci.caarray.domain.array.ArrayDesign" roleName="arrayDesigns">
-      <ns1:Group logicRelation="AND">
-       <ns1:Association name="gov.nih.nci.caarray.domain.contact.Organization" roleName="provider">
-        <ns1:Attribute name="id" predicate="IS_NOT_NULL"/>
-       </ns1:Association>
-       <ns1:Attribute name="id" predicate="IS_NOT_NULL"/>
-      </ns1:Group>
-     </ns1:Association>
-    </ns1:Group>
-   </ns1:Group>
-  </ns1:Group>
- </ns1:TargetObject>
- <ns1:targetServiceURL>http://array.nci.nih.gov:80/wsrf/services/cagrid/CaArraySvc</ns1:targetServiceURL>
+    <ns1:TargetObject name="gov.nih.nci.caarray.domain.project.Experiment">
+        <ns1:Group logicRelation="AND">
+            <ns1:Attribute name="description" predicate="LIKE" value="%gbm%"/>
+            <ns1:Group logicRelation="AND">
+                <ns1:Association name="gov.nih.nci.caarray.domain.sample.Source" roleName="sources">
+                    <ns1:Group logicRelation="AND">
+                        <ns1:Association name="gov.nih.nci.caarray.domain.vocabulary.Term" roleName="diseaseState">
+                            <ns1:Attribute name="id" value="" predicate="IS_NOT_NULL"/>
+                        </ns1:Association>
+                        <ns1:Attribute name="id" value="" predicate="IS_NOT_NULL"/>
+                    </ns1:Group>
+                </ns1:Association>
+                <ns1:Group logicRelation="AND">
+                    <ns1:Association name="edu.georgetown.pir.Organism" roleName="organism">
+                        <ns1:Attribute name="id" value="" predicate="IS_NOT_NULL"/>
+                    </ns1:Association>
+                    <ns1:Association name="gov.nih.nci.caarray.domain.array.ArrayDesign" roleName="arrayDesigns">
+                        <ns1:Group logicRelation="AND">
+                            <ns1:Association name="gov.nih.nci.caarray.domain.contact.Organization" roleName="provider">
+                                <ns1:Attribute name="id" value="" predicate="IS_NOT_NULL"/>
+                            </ns1:Association>
+                            <ns1:Attribute name="id" value="" predicate="IS_NOT_NULL"/>
+                        </ns1:Group>
+                    </ns1:Association>
+                </ns1:Group>
+            </ns1:Group>
+        </ns1:Group>
+    </ns1:TargetObject>
+    <ns1:targetServiceURL>http://array.nci.nih.gov:80/wsrf/services/cagrid/CaArraySvc</ns1:targetServiceURL>
 </ns1:DCQLQuery>

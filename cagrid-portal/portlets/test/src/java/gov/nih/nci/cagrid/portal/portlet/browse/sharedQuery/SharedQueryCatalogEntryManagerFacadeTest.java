@@ -16,17 +16,26 @@ public class SharedQueryCatalogEntryManagerFacadeTest extends PortalPortletInteg
     public void testValidate() {
         SharedQueryCatalogEntryManagerFacade facade = (SharedQueryCatalogEntryManagerFacade) getBean("sharedQueryCatalogEntryManagerFacade");
         try {
-            String dcqlXML = PortalTestUtils.readFileASString("test/data/sampleDCQL1.xml");
-            String cqlXML = PortalTestUtils.readFileASString("test/data/sampleCQL1.xml");
-
-            facade.setQuery(cqlXML);
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleCQL1.xml"));
             assertNull("Should be a valid query", facade.validate());
 
-            facade.setQuery(dcqlXML);
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleDCQL1.xml"));
             assertNull("Should be a valid query", facade.validate());
 
             facade.setQuery("<samples/>");
             assertNotNull("Is not a valid query", facade.validate());
+
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/microArrayLargeDataDCQL.xml"));
+            assertNull("Should be a valid query", facade.validate());
+
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleCQLNotNull.xml"));
+            assertNull("Should be a valid query", facade.validate());
+
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/sampleCQLPredicate.xml"));
+            assertNull("Should be a valid query", facade.validate());
+
+            facade.setQuery(PortalTestUtils.readFileASString("test/data/selected_attribute_query.xml"));
+            assertNull("Should be a valid query", facade.validate());
 
 
         } catch (IOException e) {
