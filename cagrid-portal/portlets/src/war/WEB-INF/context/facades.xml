@@ -177,6 +177,7 @@
           autowire="byName"
           p:cqlSchema="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"
           p:dcqlSchema="Distributed_CQL_schema_2.0.xsd">
+        <property name="maxActiveQueries"  ref="maxActiveQueries"/>
         <property name="selectEndpointsFormContentViewName"
                   value="/browse/sharedQuery/select_endpoints_form_content.html"/>
     </bean>
@@ -238,7 +239,9 @@
           class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.QueryExecutionManager"
           p:resultsView="/WEB-INF/jsp/browse/sharedQuery/query_results_display.jsp"
           p:errorView="/WEB-INF/jsp/browse/sharedQuery/query_error_display.jsp"
-          autowire="byName"/>
+          autowire="byName">
+           <property name="maxActiveQueries"  ref="maxActiveQueries"/>
+        </bean>
 
     <bean id="terminologyService" class="gov.nih.nci.cagrid.portal.portlet.terms.TerminologyService" autowire="byName">
         <property name="addTermsFormInputsRenderServletUrl" value="/browse/add_terms_form_inputs.html"/>
