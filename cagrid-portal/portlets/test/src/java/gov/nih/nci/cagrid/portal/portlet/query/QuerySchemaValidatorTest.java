@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.portal.portlet.query;
 
-import org.junit.Test;
+import gov.nih.nci.cagrid.portal.PortalTestUtils;
+import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
+import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator;
+import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
 import org.junit.Before;
-import org.springframework.validation.Errors;
+import org.junit.Test;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import gov.nih.nci.cagrid.portal.PortalTestUtils;
-import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator;
-import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
-import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
+import org.springframework.validation.Errors;
 
 /**
  * User: kherm
@@ -21,7 +21,7 @@ public class QuerySchemaValidatorTest {
     CQLQuerySchemaValidator validator;
 
     @Before
-    public void setup() throws Exception{
+    public void setup() throws Exception {
         validator = new CQLQuerySchemaValidator();
         validator.setCqlXMLSchemaValidator(XMLSchemaValidatorFactory.initialize("1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"));
         validator.setDcqlXMLSchemaValidator(XMLSchemaValidatorFactory.initialize("Distributed_CQL_schema_2.0.xsd"));
@@ -55,7 +55,7 @@ public class QuerySchemaValidatorTest {
 
     @Test
     public void cqlPredicate() throws Exception {
-        String cqlQuery = PortalTestUtils.readFileASString("test/data/sampleCQLPredicate.xml");
+        String cqlQuery = PortalTestUtils.readFileASString("test/data/invalidCQL.xml");
 
         CQLQueryCommand query = new CQLQueryCommand();
         query.setCqlQuery(cqlQuery);
@@ -67,7 +67,6 @@ public class QuerySchemaValidatorTest {
         verify(mockErrors).rejectValue(anyString(), anyString(), anyString());
         verifyNoMoreInteractions(mockErrors);
     }
-
 
 
     public void cqlNotNull() throws Exception {
