@@ -59,14 +59,14 @@
         <property name="timerTask" ref="processNewConcepts" />
     </bean>
 
-    <bean id="conceptMonitorTimerFactory"
-          class="org.springframework.scheduling.timer.TimerFactoryBean">
+    <!--<bean id="conceptMonitorTimerFactory"-->
+          <!--class="org.springframework.scheduling.timer.TimerFactoryBean">-->
 
-        <property name="scheduledTimerTasks">
-            <list>
-                <ref bean="processNewConceptsTask" />
-            </list>
-        </property>
-    </bean>
+        <!--<property name="scheduledTimerTasks">-->
+            <!--<list>-->
+                <!--<ref bean="processNewConceptsTask" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
 </beans>
