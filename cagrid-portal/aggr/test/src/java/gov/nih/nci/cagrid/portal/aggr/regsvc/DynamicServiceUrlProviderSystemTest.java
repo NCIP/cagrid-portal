@@ -17,7 +17,7 @@ public class DynamicServiceUrlProviderSystemTest extends TestCase {
 
 
     public void testRun() {
-        String idxUrl = "http://index.ctsa.cagrid.org:8080/wsrf/services/DefaultIndexService";
+        String idxUrl = "http://index.training.cagrid.org:8080/wsrf/services/DefaultIndexService";
 
 
         Long beginTime = PortalTestUtils.getTimestamp();
