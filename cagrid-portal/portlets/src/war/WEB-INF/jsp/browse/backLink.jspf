@@ -1,5 +1,4 @@
 <%@ taglib prefix="liferay-portlet" uri="http://liferay.com/tld/portlet" %>
-
 <liferay-portlet:actionURL var="viewUrl">
     <liferay-portlet:param name="operation" value="view"/>
     <c:if test="${fn:length(query)>0}">
@@ -31,7 +30,6 @@
         <c:set var="backLink" value="selectedIds"/>
     </c:if>
 </liferay-portlet:actionURL>
-
 <div class="row">
     <c:if test="${backLink !=null}">
         <form:form id="${ns}backLinkForm" method="post">
@@ -40,9 +38,7 @@
         </div>
         </form:form>
     </c:if>
-
     <div style="float:right;">
-
         <!-- AddThis Button BEGIN -->
         <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4a9587a21a6fbe5e"><img
                 src="http://s7.addthis.com/static/btn/sm-bookmark-en.gif" width="83" height="16"
@@ -50,14 +46,6 @@
         <script type="text/javascript"
                 src="http://s7.addthis.com/js/250/addthis_widget.js?pub=xa-4a9587a21a6fbe5e"></script>
         <!-- AddThis Button END -->
-
-
     </div>
 </div>
-
-<script type="text/javascript">
-    function ${ns}returnToSearch(){
-       $("${ns}backLinkForm").action="${viewUrl}";
-        $("${ns}backLinkForm").submit();
-    }
-    </script>
+<script type="text/javascript">function ${ns}returnToSearch(){$("${ns}backLinkForm").action="${viewUrl}";$("${ns}backLinkForm").submit();}</script>
