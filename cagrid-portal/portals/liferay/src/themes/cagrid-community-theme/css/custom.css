@@ -62,7 +62,7 @@ body {
     height: 40px;
 }#navigation ul.main {
     margin: 0;
-	background:url(../images/foop/community-nav-bg.png) #8899C4 repeat-x;
+	background:url(../images/foop/community-nav-bg.png) #BEC4D5 repeat-x;
 	padding:5px;
 	min-height:30px;
 	position:relative;
@@ -80,14 +80,14 @@ body {
 #navigation ul.main li a {
 	text-decoration:none;
 	padding:0px 8px 0 0;
-	color:#fff;
+	color:#5a5b5c;
 }
 #navigation ul.main li a:hover {
 	text-decoration:underline;
 }
 #navigation ul li.selected a, #navigation ul li a:active {
 	background-position:0 -80px;
-	color:#ffffff;
+	color:#5a5b5c;
 }
 /*
 
