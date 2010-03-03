@@ -6,11 +6,6 @@
 
 <%@ include file="/WEB-INF/jsp/browse/sharedQuery/query_xml.jspf" %>
 
-<%--
-<%@ include file="/WEB-INF/jsp/browse/sharedQuery/query_details.jspf" %>
-<%@ include file="/WEB-INF/jsp/browse/sharedQuery/query_execute.jspf" %>
---%>
-
 <%@ include file="/WEB-INF/jsp/browse/sharedQuery/selected_endpoints.jspf" %>
 
 <%@ include file="/WEB-INF/jsp/browse/pocs.jspf" %>
