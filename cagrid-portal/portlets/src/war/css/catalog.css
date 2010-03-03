@@ -57,3 +57,10 @@
 	color:#333;
 	display:none;
 	}
+ span.resultStatus {
+        padding-left: 50px;
+    }
+
+    div.results {
+        width: 100%;
+    }
