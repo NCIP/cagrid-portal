@@ -398,17 +398,7 @@ ul.ui-tabs, ul.tabs {
 	-webkit-border-radius-topright:10px;
 	padding:0 2px;
 }
-#cabio ul.tabs {
-	display:block;
-	background:#D0D0D0;
-	border:none;
-	zoom:1;
-	-moz-border-radius-topleft:10px;
-	-moz-border-radius-topright:10px;
-	-webkit-border-radius-topleft:10px;
-	-webkit-border-radius-topright:10px;
-	padding:0 2px;
-}
+
 body .yui-skin-sam .yui-navset .yui-content, 
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-content {
 border:2px solid #D0D0D0;
