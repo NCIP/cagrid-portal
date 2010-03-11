@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.service;
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
+import gov.nih.nci.cagrid.portal.util.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -23,14 +24,12 @@ public class QueryInstanceService {
     public void delete(int instanceId) {
         QueryInstance instance = getQueryInstanceDao().getById(instanceId);
         QueryResultTable table = instance.getQueryResultTable();
-        if (table != null) {
-
-            if (table.getData().getFileName() != null) {
+        String fileName = BeanUtils.traverse(table,"data.fileName");
+        if (fileName!=null) {
                 log.debug("Will delete query results file");
-                boolean deleted = getPortalFileService().delete(table.getData().getFileName());
+                boolean deleted = getPortalFileService().delete(fileName);
                 if (!deleted)
                     log.warn("Could not delete file on disk. Filename " + table.getData().getFileName());
-            }
             HibernateTemplate templ = queryInstanceDao.getHibernateTemplate();
             templ.delete(table.getData());
             templ.delete(table);
