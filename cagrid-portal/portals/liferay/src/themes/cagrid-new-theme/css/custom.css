@@ -359,7 +359,15 @@ h3 {
 body .yui-skin-sam .yui-navset .yui-nav .selected a,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:focus,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:hover,
-body .yui-skin-sam .yui-navset .yui-nav .selected a em, 
+body .yui-skin-sam .yui-navset .yui-nav .selected a em {
+	background:url(../images/foop/YUI_tab_selected.png);
+	border:none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	font-weight:normal;
+	color:#fff;
+}
 
 body .yui-skin-sam .yui-navset .yui-nav .selected a em,
 body .yui-skin-sam .yui-navset .yui-nav a em {
@@ -367,14 +375,27 @@ body .yui-skin-sam .yui-navset .yui-nav a em {
 }
 body .yui-skin-sam .yui-navset .yui-nav .selected,
 body .yui-skin-sam .yui-navset .yui-nav .selected,
-body .yui-skin-sam .yui-navset .yui-nav li,
+body .yui-skin-sam .yui-navset .yui-nav li
+{
+	margin:5px;
+	top:0;
+}
 body .yui-skin-sam .yui-navset .yui-nav a,
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-nav a,
 body .yui-skin-sam .yui-navset .yui-nav a:focus,
 body .yui-skin-sam .yui-navset .yui-nav a:hover,
-body .yui-skin-sam .yui-navset .yui-nav a em, 
-body .yui-skin-sam .yui-navset .yui-nav {
-	background:#D0D0D0;
+body .yui-skin-sam .yui-navset .yui-nav a em
+{
+	background:url(../images/foop/YUI_tab_not_selected.png);
+	border:none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	color:#000;
+}
+body .yui-skin-sam .yui-navset .yui-nav
+{
+    background:#D0D0D0;
 	border:none;
 	display:inline-block;
 	zoom:1;
