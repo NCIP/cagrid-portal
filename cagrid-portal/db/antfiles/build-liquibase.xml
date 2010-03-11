@@ -26,7 +26,6 @@
                 url="${cagrid.portal.db.url}"
                 username="${cagrid.portal.db.username}"
                 password="${cagrid.portal.db.password}"
-                promptOnNonLocalDatabase="true"
                 dropFirst="false"
                 classpathref="run.cp"
                 />
