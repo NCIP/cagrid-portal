@@ -14,9 +14,6 @@
     <!--utilities-->
     <import resource="classpath:applicationContext-aggr.xml"/>
 
-    <bean class="gov.nih.nci.cagrid.portal.util.GridServiceEndPointCEReClassify"
-          autowire="byName"
-            />
     
    	<bean id="serviceMetadataCatalogEntryBuilderAspect"
  		class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.ServiceMetadataCatalogEntryBuilderAspect"
