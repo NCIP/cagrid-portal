@@ -1,0 +1,67 @@
+<c:set var="managerFacadeName">CatalogEntryRelationshipTypeManagerFacade</c:set>
+<c:set var="managerFacadePath">/dwr/interface/${managerFacadeName}.js</c:set>
+<script type='text/javascript' src="<c:url value="${managerFacadePath}"/>"/></script>
+<script type='text/javascript' src='/cagridportlets/dwr/engine.js'></script>
+<script type='text/javascript' src='/cagridportlets/dwr/util.js'></script>
+
+<div class="yui-skin-sam">
+<div id="debug_log"></div>
+<div id="${ns}dirty"></div>
+<form name="${ns}editForm">	
+<div class="row">
+<label for="name">Name</label>
+<input name="name" class="required autoSet" type="text" value="${relType.name}"/>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="description">Description</label>
+<textarea name="description" class="required autoSet" type="text"><c:out value="${relType.description}"/></textarea>
+<span style="color: red"></span>
+</div>
+
+
+<div class="row">
+<label for="roleAType">Role A Type</label>
+<tags:select name="roleAType" cssClass="required autoSet" currentValue="${relType.roleTypeA.type}" optionValues="${entryTypes}"/>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="roleAName">Role A Name</label>
+<input name="roleAName" class="required autoSet" type="text" value="${relType.roleTypeA.name}"/>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="roleADescription">Role A Description</label>
+<textarea name="roleADescription" class="required autoSet">${relType.roleTypeA.description}</textarea>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="roleBType">Role B Type</label>
+<tags:select name="roleBType" cssClass="required autoSet" currentValue="${relType.roleTypeB.type}" optionValues="${entryTypes}"/>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="roleBName">Role B Name</label>
+<input name="roleBName" class="required autoSet" type="text" value="${relType.roleTypeB.name}"/>
+<span style="color: red"></span>
+</div>
+
+<div class="row">
+<label for="roleBDescription">Role B Description</label>
+<textarea name="roleBDescription" class="required autoSet">${relType.roleTypeB.description}</textarea>
+<span style="color: red"></span>
+</div>
+
+		<input type="hidden" name="id" value="${relType.id}"/>
+</form>
+		
+		
+		<span id="${ns}saveButtonContainer"></span><span id="${ns}cancelButtonContainer"></span>
+		</div>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom_script.jspf" %>

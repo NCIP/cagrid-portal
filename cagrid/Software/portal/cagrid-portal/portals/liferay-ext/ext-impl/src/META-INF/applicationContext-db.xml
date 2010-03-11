@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <bean id="archivedStatus" class="java.lang.String">
+        <constructor-arg value="archivedStatus"/>
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+          p:driverClassName="${cagrid.portal.db.driver}"
+          p:maxActive="20" p:maxIdle="5" p:maxWait="180000"
+          p:removeAbandoned="true"
+          p:removeAbandonedTimeout="300"
+          p:logAbandoned="true"
+          p:timeBetweenEvictionRunsMillis="300000"
+          p:minEvictableIdleTimeMillis="600000"
+          p:url="${cagrid.portal.db.url}"
+          p:username="${cagrid.portal.db.username}"
+          p:password="${cagrid.portal.db.password}"/>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+          autowire="byName">
+
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=${cagrid.portal.db.dialect}
+                hibernate.show_sql=${cagrid.portal.db.show_sql}
+            </value>
+        </property>
+
+        <property name="filterDefinitions">
+            <list>
+                <bean class="org.springframework.orm.hibernate3.FilterDefinitionFactoryBean">
+                    <property name="filterName" ref="archivedStatus"/>
+                    <property name="parameterTypes">
+                        <props>
+                            <prop key="archivedFlag">boolean</prop>
+                        </props>
+                    </property>
+                </bean>
+            </list>
+        </property>
+
+        <property name="annotatedClasses">
+            <list>
+                <value>gov.nih.nci.cagrid.portal.domain.AuthnTicket</value>
+                <value>gov.nih.nci.cagrid.portal.domain.Address</value>
+                <value>gov.nih.nci.cagrid.portal.domain.Person</value>
+                <value>
+                    gov.nih.nci.cagrid.portal.domain.Participant
+                </value>
+                <value>
+                    gov.nih.nci.cagrid.portal.domain.Participation
+                </value>
+                <value>
+                    gov.nih.nci.cagrid.portal.domain.PortalUser
+                </value>
+                <value>
+                    gov.nih.nci.cagrid.portal.domain.Workspace
+                </value>
+                <value>gov.nih.nci.cagrid.portal.domain.Role</value>
+                <value>gov.nih.nci.cagrid.portal.domain.GridService</value>
+                <value>gov.nih.nci.cagrid.portal.domain.GridDataService</value>
+                <value>gov.nih.nci.cagrid.portal.domain.IndexService</value>
+                <value>gov.nih.nci.cagrid.portal.domain.NotificationSubscriber</value>
+                <value>gov.nih.nci.cagrid.portal.domain.NotificationSubscription</value>
+                <value>gov.nih.nci.cagrid.portal.domain.NotificationLogMessage</value>
+                <value>gov.nih.nci.cagrid.portal.domain.ServiceAnnotation</value>
+                <value>gov.nih.nci.cagrid.portal.domain.StatusChange</value>
+
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQuery</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.Query</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance</value>
+                <value>gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery</value>
+
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.Enumeration</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.UMLClass</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.common.ValueDomain</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.CaDSRRegistration</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.ContextProperty</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.Fault</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.InputParameter</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.Operation</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.Output</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.Service</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.service.ServiceContext</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass</value>
+
+                <value>gov.nih.nci.cagrid.portal.domain.news.NewsChannel</value>
+                <value>gov.nih.nci.cagrid.portal.domain.news.NewsItem</value>
+                <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema</value>
+                <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchy</value>
+                <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchyNode</value>
+                <value>gov.nih.nci.cagrid.portal.domain.SemanticMetadataMapping</value>
+
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipType</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleType</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Citation</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Comment</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.CriterionDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.FavoriteOfRole</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.FavoriteRole</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.File</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Hyperlink</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.InputDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.LOVCriterionDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.LOVCriterionValues</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.OutputColumnDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.OutputDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.ProvenanceGraph</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.QueryResultColumnDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Rating</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryToolsRelationship</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.TabularOutputDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.TemporalRelationship</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Term</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.Terminology</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCriterionDescriptor</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.ToolApplications</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.UMLAttributeCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.UMLClassCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <bean id="hibernateTemplate"
+          class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="checkWriteOperations">
+            <value>true</value>
+        </property>
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="daoTemplate" abstract="true">
+        <property name="hibernateTemplate">
+            <ref local="hibernateTemplate"/>
+        </property>
+    </bean>
+
+    <bean id="authnTicketDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.AuthnTicketDao"/>
+    <bean id="addressDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.AddressDao"/>
+
+    <bean id="personDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.PersonDao"/>
+    <bean id="portalUserDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.PortalUserDao"/>
+
+    <bean id="participantDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.ParticipantDao"/>
+    <bean id="roleDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.RoleDao"/>
+
+    <bean id="gridServiceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.GridServiceDao"/>
+
+    <bean id="gridDataServiceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.GridDataServiceDao"/>
+
+    <bean id="indexServiceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.IndexServiceDao"/>
+
+    <bean id="pointOfContactDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.PointOfContactDao"/>
+
+    <bean id="serviceMetadataDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.ServiceMetadataDao"/>
+
+    <bean id="workspaceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.WorkspaceDao"/>
+
+    <bean id="queryInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.QueryInstanceDao"/>
+
+    <bean id="cqlQueryDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.CQLQueryDao"/>
+
+    <bean id="cqlQueryInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao"/>
+
+    <bean id="dcqlQueryDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DCQLQueryDao"/>
+
+    <bean id="dcqlQueryInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DCQLQueryInstanceDao"/>
+
+    <bean id="sharedCqlQueryDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.SharedCQLQueryDao"/>
+
+    <bean id="umlClassDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.UMLClassDao"/>
+
+    <bean id="umlAttributeDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.UMLAttributeDao"/>
+
+    <bean id="newsChannelDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.news.NewsChannelDao"/>
+    <bean id="newsItemDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.news.NewsItemDao"/>
+
+    <bean id="xmlSchemaDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.XMLSchemaDao"/>
+
+    <bean id="conceptHierarchyNodeDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao"/>
+
+    <bean id="domainModelDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DomainModelDao"/>
+
+    <bean id="semanticMetadataMappingDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.SemanticMetadataMappingDao"/>
+
+    <bean id="notificationSubscriptionDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.NotificationSubscriptionDao"/>
+
+    <bean id="notificationSubscriberDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.NotificationSubscriberDao"/>
+
+    <bean id="notificationLogMessageDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.NotificationLogMessageDao"/>
+
+    <bean id="catalogEntryRoleInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRoleInstanceDao"/>
+
+    <bean id="citationDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.CitationDao"/>
+
+    <bean id="commentDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.CommentDao"/>
+
+    <bean id="favoriteOfRoleDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.FavoriteOfRoleDao"/>
+
+    <bean id="fileDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.FileDao"/>
+
+    <bean id="hyperlinkDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.HyperlinkDao"/>
+
+    <bean id="ratingDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.RatingDao"/>
+
+    <bean id="terminologyDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.TerminologyDao"/>
+
+    <bean id="termDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.TermDao"/>
+
+    <bean id="catalogEntryDao" class="gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao"
+          parent="daoTemplate"/>
+
+    <bean id="aboutCatalogEntryDao" class="gov.nih.nci.cagrid.portal.dao.catalog.AboutCatalogEntryDao"
+          abstract="true" p:timestampProvider-ref="timestampProvider" parent="daoTemplate"/>
+
+    <bean id="institutionCatalogEntryDao" parent="aboutCatalogEntryDao"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.InstitutionCatalogEntryDao"/>
+
+    <bean id="gridServiceEndPointCatalogEntryDao" parent="aboutCatalogEntryDao"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao"/>
+
+    <bean id="personCatalogEntryDao" parent="aboutCatalogEntryDao"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao"/>
+
+    <bean id="timestampProvider" class="gov.nih.nci.cagrid.portal.util.StaticTimestampProvider"/>
+
+
+    <bean id="openSessionInViewForTesting"
+          class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
+          autowire="byName">
+        <property name="singleSession">
+            <value>true</value>
+        </property>
+        <property name="flushModeName">
+            <value>FLUSH_AUTO</value>
+        </property>
+    </bean>
+
+</beans>

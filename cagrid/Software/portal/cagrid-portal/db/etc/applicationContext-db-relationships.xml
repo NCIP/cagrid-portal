@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
+    
+   <bean id="defaultCatalogEntryRelationshipTypesFactory" class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory" autowire="byName">
+    	<property name="enabled" value="${cagrid.portal.autopopulate.relationship.types}"/>
+    	<property name="relationshipTypes">
+    		<util:list>
+    		
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Dataset to Dataset Relationship" p:description="Some relationship between two datasets."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Dataset Relationship"
+    				p:name="Dataset Uses Information Model" p:description="A dataset supports/conforms to an information model."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The information model."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Dataset Relationship"
+    				p:name="Dataset Part-Of Relationship" p:description="A dataset is part of another dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Part"
+    				p:roleADescription="The dataset that is part of another dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Whole"
+    				p:roleBDescription="The dataset that is the whole."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Dataset Relationship"
+    				p:name="Dataset Same-As Relationship" p:description="A dataset is the same as another dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Dataset Relationship"
+    				p:name="Dataset Similar-To Relationship" p:description="A dataset is similar to another dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Dataset Relationship"
+    				p:name="Dataset Uses Terminology" p:description="A dataset uses a terminology."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry" p:roleBName="Terminology"
+    				p:roleBDescription="The terminology."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Dataset to Tool Relationship" p:description="Some relationship between a dataset and a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Tool Relationship"
+    				p:name="Dataset Analysis Tool" p:description="A dataset can be analyzed by a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset that can be analyzed."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that provides analysis of the dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Tool Relationship"
+    				p:name="Dataset Visualization Tool" p:description="A dataset can be visualized by a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset that can be visualized."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that provides visualization of the dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Dataset to Tool Relationship"
+    				p:name="Dataset Data Access Tool" p:description="A tool provides access to a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset that can be accessed."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that provides analysis of the dataset."
+    			/>
+    			
+
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Dataset to Community Relationship" p:description="A dataset is related to a community in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleAName="Dataset"
+    				p:roleADescription="The dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Community"
+    				p:roleBDescription="The community."
+    			/>
+    			
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Tool to Tool Relationship" p:description="A tool is related to another tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Tool to Tool Relationship" p:description="A tool is related to another tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Tool Relationship"
+    				p:name="Tool Equivalent-To Tool Relationship" p:description="A tool is equivalent to another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Tool Relationship"
+    				p:name="Tool Replaces Tool" p:description="A tool replaces another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The new tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The replaced tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Tool Relationship"
+    				p:name="Tool Similar-To Tool Relationship" p:description="A tool is similar to another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Tool Relationship"
+    				p:name="Tool Supports Tool" p:description="A tool supports another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool that provides support."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is supported."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Supports Tool"
+    				p:name="Tool Pre-processor for Tool" p:description="A tool provides pre-processing for another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool that provides pre-processing."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that uses the pre-processing."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Supports Tool"
+    				p:name="Tool Post-processor for Tool" p:description="A tool provides post-processing for another tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool that provides post-processing."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that uses the post-processing."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Tool to Dataset Relationship" p:description="A tool is related to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleAName="Tool"
+    				p:roleADescription="The tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Dataset Relationship"
+    				p:name="Grid Service Interface Supports Information Model" p:description="A grid service interface supports queries against an information model."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry" p:roleAName="Grid Service Interface"
+    				p:roleADescription="The grid service interface."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry" p:roleBName="Information Model"
+    				p:roleBDescription="The information model."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Community to Community Relationship" p:description="A community is related to another community in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleBName="Community"
+    				p:roleBDescription="The community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Community Relationship"
+    				p:name="Community Part-Of Community Relationship" p:description="A community is part of another community."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Part"
+    				p:roleADescription="The community that is the part."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleBName="Whole"
+    				p:roleBDescription="The community that is the whole."
+    			/>
+    			
+				<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Community Relationship"
+    				p:name="Community Participates In Community" p:description="A community is participates in another community."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Participant"
+    				p:roleADescription="The community that participates in another community."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleBName="Community"
+    				p:roleBDescription="The community that is participated in."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community Participates In Community"
+    				p:name="Institution Participates In Workspace" p:description="An institution participates in an caBIG workspace."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleAName="Participant"
+    				p:roleADescription="The institution that participates in a caBIG workspace."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry" p:roleBName="Workspace"
+    				p:roleBDescription="The caBIG workspace."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Community to Tool Deployment Relationship" p:description="A community is related to a tool deployment in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleBName="Tool Deployment"
+    				p:roleBDescription="The tool deployment."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Deployment Relationship"
+    				p:name="Institution Hosts Tool Deployment" p:description="A institution hosts a tool deployment."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleAName="Institution"
+    				p:roleADescription="The institution."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleBName="Tool Deployment"
+    				p:roleBDescription="The tool deployment."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Deployment Relationship"
+    				p:name="Hosting Institution of Grid Service Endpoint" p:description="A grid service endpoint is hosted by an institution."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleAName="Institution"
+    				p:roleADescription="The hosting institution."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry" p:roleBName="Grid Service Endpoint"
+    				p:roleBDescription="The grid service endpoint."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Community to Tool Relationship" p:description="A community is related to a tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Relationship"
+    				p:name="Community Contributes to Tool" p:description="A community contributes to the development of a tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that contributes."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is contributed to."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Relationship"
+    				p:name="Community Creator of Tool" p:description="A community is the primary developer of a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that develops the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is developed by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Relationship"
+    				p:name="Community Supports Tool" p:description="A community provides support for a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that provides tool support."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is supported by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community Supports Tool"
+    				p:name="Knowledge Center Supports caBIG Tool" p:description="A knowledge center provides support for a caBIG tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry" p:roleAName="Knowledge Center"
+    				p:roleADescription="The knowledge center that provides support."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is supported by the knowledge center."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Tool Relationship"
+    				p:name="Community Uses Tool" p:description="A community uses a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that uses the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is used by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Community to Dataset Relationship" p:description="A community is related to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Dataset Relationship"
+    				p:name="Community Contributes to Dataset" p:description="A community contributes to a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that contributes."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is contributed to."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Dataset Relationship"
+    				p:name="Community Creates Dataset" p:description="A community creates a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that creates the dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is created by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Dataset Relationship"
+    				p:name="Community Hosts Dataset" p:description="A community hosts a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that hosts the dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is hosted by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Dataset Relationship"
+    				p:name="Community Maintains Dataset" p:description="A community maintains a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that maintains the dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is maintained by the community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Community to Dataset Relationship"
+    				p:name="Community Uses Dataset" p:description="A community uses a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleAName="Community"
+    				p:roleADescription="The community that uses the dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is used by the community."
+    			/>
+    			
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Person to Community Relationship" p:description="A person is related to a community in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" p:roleBName="Community"
+    				p:roleBDescription="The community."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Community Relationship"
+    				p:name="Person is Member of Community" p:description="A person is a member of a community."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is a member."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleBName="Community"
+    				p:roleBDescription="The community to which the person belongs."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Community Relationship"
+    				p:name="Person to Institution Relationship" p:description="A person is related to an institution in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleBName="Institution"
+    				p:roleBDescription="The institution."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Institution Relationship"
+    				p:name="Person is Point-of-Contact for Institution" p:description="A person is a point-of-contact for an institution"
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The point-of-contact."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" p:roleBName="Institution"
+    				p:roleBDescription="The institution."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Person to Dataset Relationship" p:description="A person is related to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Dataset Relationship"
+    				p:name="Person Contributes to Dataset" p:description="A person contributes to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person who contributes to a dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is contributed to."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Dataset Relationship"
+    				p:name="Person Creates Dataset" p:description="A person creates a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person who creates a dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is created."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Dataset Relationship"
+    				p:name="Person Maintains Dataset" p:description="A person maintains a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person who maintains a dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is maintained."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Dataset Relationship"
+    				p:name="Person Uses Dataset" p:description="A person uses a dataset."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person who uses a dataset."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset that is used."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Person to Tool Relationship" p:description="A person is related to a tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Relationship"
+    				p:name="Person Contributes to Tool" p:description="A person contributes to a tool in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that contributes."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is contributed to."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Relationship"
+    				p:name="Person Creates Tool" p:description="A person creates a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that creates the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is created."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Relationship"
+    				p:name="Person Maintains Tool" p:description="A person maintains a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that maintains the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is maintained."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Relationship"
+    				p:name="Person Uses Tool" p:description="A person uses a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that uses the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is used."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Relationship"
+    				p:name="Person Point-of-Contact for Tool" p:description="A person is the point-of-contact for a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is the point-of-contact for the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person Point-of-Contact for Tool"
+    				p:name="Person is Technical Point-of-Contact for Tool" p:description="A person is the technical point-of-contact for a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is the technical point-of-contact for the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person Point-of-Contact for Tool"
+    				p:name="Person is Operational Point-of-Contact for Tool" p:description="A person is the operational point-of-contact for a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is the operational point-of-contact for the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person Point-of-Contact for Tool"
+    				p:name="Person is Organizational Point-of-Contact for Tool" p:description="A person is the organizational point-of-contact for a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is the organizational point-of-contact for the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Person to Tool Deployment Relationship" p:description="A person is related to a tool deployment in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleBName="Tool Deployment"
+    				p:roleBDescription="The tool deployment."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Person to Tool Deployment Relationship"
+    				p:name="Person Point-of-Contact for Grid Service Endpoint" p:description="A person is the point-of-contact for a grid service endpoint."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" p:roleAName="Person"
+    				p:roleADescription="The person that is the point-of-contact for the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" p:roleBName="Tool"
+    				p:roleBDescription="The tool."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Tool Deployment to Tool Relationship" p:description="Some relationship between a tool and its deployment."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleAName="Tool Deployment"
+    				p:roleADescription="The deployment of the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.Tool" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is deployed."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Deployment to Tool Relationship"
+    				p:name="Tool Deployment of Tool" p:description="Represents a deployment of a tool."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleAName="Tool Deployment"
+    				p:roleADescription="The deployment of the tool."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.Tool" p:roleBName="Tool"
+    				p:roleBDescription="The tool that is deployed."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Deployment of Tool"
+    				p:name="Grid Service Endpoint Implements Grid Service Interface" p:description="A grid service endpoint (deployment) implements a grid service interface."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPoint" p:roleAName="Grid Service Endpoint"
+    				p:roleADescription="The grid service endpoint."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterface" p:roleBName="Grid Service Interface"
+    				p:roleBDescription="The grid service interface."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:name="Tool Deployment to Dataset Relationship" p:description="A tool deployment is related to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" p:roleAName="Tool Deployment"
+    				p:roleADescription="The tool deployment."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Deployment to Dataset Relationship"
+    				p:name="Grid Service Endpoint Supports Information Model" p:description="A grid service endpoint supports queries against an information model."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry" p:roleAName="Grid Service Endpoint"
+    				p:roleADescription="The grid service endpoint."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry" p:roleBName="Information Model"
+    				p:roleBDescription="The information model."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool to Dataset Relationship"
+    				p:name="Shared Query to Dataset Relationship" p:description="A shared query relates to a dataset in some way."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" p:roleAName="Shared Query"
+    				p:roleADescription="The shared query."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" p:roleBName="Dataset"
+    				p:roleBDescription="The dataset."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Shared Query to Dataset Relationship"
+    				p:name="Shared Query applies to Information Model" p:description="A shared query references types that are defined in an information model."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" p:roleAName="Shared Query"
+    				p:roleADescription="The shared query."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry" p:roleBName="Information Model"
+    				p:roleBDescription="The information model."
+    			/>
+    			
+    			<bean class="gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory$RelationshipTypeConfig"
+    				p:parentName="Tool Deployment to Tool Relationship"
+    				p:name="Grid Service Endpoint Supports Shared Query" p:description="A grid service endpoint supports a shared query."
+    				p:roleAType="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry" p:roleAName="Grid Service Endpoint"
+    				p:roleADescription="The grid service endpoint."
+    				p:roleBType="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" p:roleBName="Shared Query"
+    				p:roleBDescription="The shared query."
+    			/>
+
+    		</util:list>
+    	</property>
+    </bean>
+
+
+</beans>

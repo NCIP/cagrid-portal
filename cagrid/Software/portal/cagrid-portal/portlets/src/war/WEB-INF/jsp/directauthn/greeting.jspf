@@ -1,0 +1,7 @@
+
+		You are logged in as: <b><c:out value="${portalUser.person.firstName}"/> <c:out value="${portalUser.person.lastName}"/></b><br/>
+		Your Grid Identity is: <b><c:out value="${portalUser.gridIdentity}"/></b><br/>
+		<portlet:actionURL var="logoutActionUrl">
+			<portlet:param name="operation" value="logout"/>
+		</portlet:actionURL>
+		<a href="<c:out value="${logoutActionUrl}"/>">Log Out</a>

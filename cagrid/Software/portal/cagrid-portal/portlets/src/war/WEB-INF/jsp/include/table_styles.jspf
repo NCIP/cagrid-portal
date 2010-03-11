@@ -1,0 +1,70 @@
+<style type="text/css">
+<!--
+.contentInnerTable {
+    width: 90%;
+    height: 100%;
+    vertical-align: top;
+    padding: 0.1em;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
+}
+.contentTableHeader {
+/* for the horizontal column headers */
+    font-family: arial, helvetica, verdana, sans-serif; /*background-color: #CCCCCC; /* constant: medium gray */
+    font-size: 0.9em;
+    background-color: #797C9C; /* constant: light purple */
+    color: #FFFFFF; /* constant: black */
+    font-weight: bold;
+    padding: 0.1cm;
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
+    text-align: left;
+}
+.dataRowLight {
+/* for the light color of alternating rows */
+    background-color: #EEEEE0; /* constant: blue */
+    color: #000000; /* constant: black */
+}
+
+.dataRowDark {
+/* for the dark color of alternating rows */
+    background-color: #D3D3D3; /* constant: dark blue */
+    color: #000000; /* constant: black */
+}
+
+.dataCellText {
+/* for text output cells */
+    font-size: 1em;
+    padding: 0.1em 0.2em 0.1em 0.2em;
+    line-height: 1.5em;
+    vertical-align: middle;
+}
+
+.dataCellTextBold {
+/* for text output cells */
+    font-size: 0.8em;
+    padding: 0em;
+    padding-left: 0.1cm;
+    line-height: 1.5em;
+    vertical-align: middle;
+    font-weight: bold;
+    width: 25%;
+}
+
+.txtHighlight {
+/* adds emphasis to text */
+    color: #797C9C;
+    font-weight: bold;
+}
+
+.txtHighlightOn {
+/* adds emphasis to text */
+    color: #9FA2BA;
+    font-weight: bold;
+}
+.leftColumn{
+	width: 25%;
+}
+-->
+</style>

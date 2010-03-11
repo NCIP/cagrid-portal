@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean
+            id="viewLoginController"
+            class="gov.nih.nci.cagrid.portal.portlet.authn.ViewDirectLoginController"
+            autowire="byName">
+        <property name="redirectUrlPreference" value="redirectUrl"/>
+        <property name="viewName" value="login"/>
+        <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
+        <property name="errorsAttributeName" value="loginErrors"/>
+        <property name="commandName" value="directLoginCommand"/>
+        <property name="authnErrorMessageAttributeName" value="CAGRIDPORTAL_ATTS_authnError"/>
+    </bean>
+
+    <bean
+            id="loginController"
+            class="gov.nih.nci.cagrid.portal.portlet.authn.DirectLoginController"
+            autowire="byName">
+        <property name="commandName" value="directLoginCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.authn.DirectLoginCommand"/>
+        <property name="redirectUrlPreferenceName" value="loginRedirectUrl"/>
+        <property name="ticketParameterName" value="prng2"/>
+        <property name="errorsAttributeName" value="loginErrors"/>
+        <property name="errorOperationName" value="viewLogin"/>
+        <property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+    </bean>
+
+    <bean
+            id="logoutController"
+            class="gov.nih.nci.cagrid.portal.portlet.authn.LogoutController"
+            autowire="byName"/>
+
+
+    <bean
+            id="portletModeParameterHandlerMapping"
+            class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+
+        <property name="order" value="1"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+            </list>
+        </property>
+
+        <property name="parameterName" value="operation"/>
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="login"
+                               value-ref="loginController"/>
+                        <entry key="logout"
+                               value-ref="logoutController"/>
+                        <entry key="viewLogin"
+                               value-ref="viewLoginController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="portletModeHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+        <property name="order" value="2"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeMap">
+            <map>
+                <entry key="view">
+                    <ref bean="viewLoginController"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/directauthn/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="defaultExceptionHandler"
+          parent="defaultExceptionHandlerTemplate"/>
+
+</beans>	

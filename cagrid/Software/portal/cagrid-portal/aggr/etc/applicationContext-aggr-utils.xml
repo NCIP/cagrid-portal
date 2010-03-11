@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <!--utilities-->
+    <import resource="classpath:applicationContext-aggr.xml"/>
+
+    
+   	<bean id="serviceMetadataCatalogEntryBuilderAspect"
+ 		class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.ServiceMetadataCatalogEntryBuilderAspect"
+ 		autowire="byName"/>
+
+      <bean id="queryInstanceCleaner" class="gov.nih.nci.cagrid.portal.aggr.util.QueryInstanceCleaner"
+          autowire="byName"/>
+
+    <bean class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="delay" ref="slowDefaultDelay"/>
+                    <property name="period" ref="slowDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="queryInstanceCleaner"/>
+                            <property name="targetMethod" value="clean"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

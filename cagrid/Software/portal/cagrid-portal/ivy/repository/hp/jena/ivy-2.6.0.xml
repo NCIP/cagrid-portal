@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="hp" module="jena" revision="2.6.0"/>
+
+
+	<configurations>
+		<!-- Public Configurations-->
+		<conf name="core" visibility="public"/>
+		<conf name="default" visibility="public" extends="core"/>
+	</configurations>
+
+
+	<publications>
+		<artifact name="jena" type="jar" conf="default"/>
+		<artifact name="iri" type="jar" conf="default"/>
+		
+	</publications>
+
+	<dependencies>
+		<dependency org="apache" name="commons-logging" rev="1.1"/>
+		<dependency org="apache" name="xerces2-j" rev="2.7.1"/>
+		<dependency org="antlr" name="antlr" rev="2.7.5"/>
+		<dependency org="ibm" name="icu4j" rev="3.4"/>
+		<dependency org="slf4j" name="slf4j" rev="1.5.6"/>
+	</dependencies>
+	
+</ivy-module>

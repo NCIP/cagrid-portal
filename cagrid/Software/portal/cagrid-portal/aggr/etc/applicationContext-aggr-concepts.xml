@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <import resource="classpath:applicationContext-aggr.xml"/>
+
+    <bean id="conceptMonitor"
+          class="gov.nih.nci.cagrid.portal.aggr.metachange.ConceptMonitor"
+          autowire="byName"/>
+
+    <bean id="serviceConceptIndexer" class="gov.nih.nci.cagrid.portal.aggr.metachange.ServiceConceptIndexer"
+          autowire="byName"/>
+
+    <bean id="conceptHandler"
+          class="gov.nih.nci.cagrid.portal.aggr.metachange.LexBIGConceptHandler"
+          autowire="byName">
+        <property name="version">
+            <bean
+                    class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
+                    p:tag="PRODUCTION"/>
+        </property>
+        <property name="codingSchemeUri"
+                  value="http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#"/>
+        <property name="evsApplicationService">
+            <bean
+                    class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+                    p:targetClass="gov.nih.nci.system.client.ApplicationServiceProvider"
+                    p:targetMethod="getApplicationServiceFromUrl">
+                <property name="arguments">
+                    <list>
+                        <bean class="java.lang.String">
+                            <constructor-arg value="${evs.remoteAPI.url}"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="processNewConcepts"
+          class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+        <property name="targetObject" ref="conceptMonitor"/>
+        <property name="targetMethod" value="processNewConcepts"/>
+    </bean>
+
+    <bean id="processNewConceptsTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" ref="slowDefaultDelay"/>
+        <property name="period" ref="slowDefaultPeriod"/>
+        <property name="timerTask" ref="processNewConcepts"/>
+    </bean>
+
+    <bean id="conceptMonitorTimerFactory"
+          class="org.springframework.scheduling.timer.TimerFactoryBean">
+
+        <property name="scheduledTimerTasks">
+            <list>
+                <ref bean="processNewConceptsTask"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

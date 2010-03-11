@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<project name="caGrid-portal-authn-portlet" basedir=".">
+
+    <import file="${basedir}/../antfiles/build-common-test.xml"/>
+
+
+    <property name="etc.dir" value="${basedir}/etc"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="src.java.dir" value="${src.dir}/java"/>
+    <property name="src.war.dir" value="${src.dir}/war"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.jars.dir" value="${build.dir}/jars"/>
+    <property name="build.wars.dir" value="${build.dir}/wars"/>
+    <property name="build.war.dir" value="${build.dir}/war"/>
+    <property name="build.war.webinf.dir" value="${build.war.dir}/WEB-INF"/>
+    <property name="build.war.lib.dir" value="${build.war.webinf.dir}/lib"/>
+    <property name="build.war.classes.dir" value="${build.war.webinf.dir}/classes"/>
+
+    <property name="war.name" value="cagrid-authn-portlet.war"/>
+    <property name="build.war.file" value="${build.wars.dir}/${war.name}"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ext.compile.lib.dir" value="${ext.dir}/compile/jars"/>
+    <property name="ext.default.lib.dir" value="${ext.dir}/default/jars"/>
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/jars"/>
+
+    <path id="compile.cp">
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="${ext.compile.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test.compile.cp">
+        <path refid="compile.cp"/>
+        <fileset dir="${ext.test.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+    <path id="test.run.cp">
+        <pathelement location="${test.build.classes.dir}"/>
+        <path refid="test.compile.cp"/>
+        <pathelement location="${build.war.classes.dir}"/>
+        <pathelement location="${build.war.webinf.dir}/context"/>
+    </path>
+
+    <target name="compile-authn">
+        <property name="authn.basedir" value="${basedir}/cagrid-authn">
+        </property>
+    </target>
+
+    <target name="compile" depends="compile-authn">
+        <mkdir dir="${build.classes.dir}"/>
+
+        <javac classpathref="compile.cp"
+               debug="true"
+               srcdir="${src.java.dir}" destdir="${build.classes.dir}"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${build.jars.dir}"/>
+
+        <jar destfile="${build.jars.dir}/${ant.project.name}-service.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/service/**"/>
+            </fileset>
+            <fileset dir="${etc.dir}">
+                <include name="applicationContext-*-service.xml"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${build.jars.dir}/${ant.project.name}-domain.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/domain/**"/>
+                <include name="**/authn/*.class"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="${build.jars.dir}/${ant.project.name}-web.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/web/**/*.class"/>
+            </fileset>
+        </jar>
+
+    </target>
+
+    <target name="build-war-dir" depends="jar">
+        <mkdir dir="${build.war.dir}"/>
+
+
+        <copy todir="${build.war.dir}">
+            <fileset dir="${src.war.dir}"/>
+        </copy>
+
+        <copy todir="${build.war.lib.dir}">
+            <fileset dir="${build.jars.dir}">
+                <include name="*.jar"/>
+                <exclude name="*-domain.jar"/>
+            </fileset>
+            <fileset dir="${ext.default.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <!--Copy properties-->
+        <antcall target="create-cagridportal-properties" inheritall="false">
+            <param name="target.dir" value="${build.war.classes.dir}"/>
+        </antcall>
+
+    </target>
+
+    <target name="war" depends="build-war-dir" description="Build war for the portlet">
+
+        <mkdir dir="${build.wars.dir}"/>
+        <war file="${build.war.file}"
+             basedir="${build.war.dir}"/>
+    </target>
+
+
+    <target name="deploy-portlet" description="Will deploy pre-built Authentication Portlets war">
+        <copy file="${build.war.file}"
+              tofile="${target.deploy.dir}/${war.name}"
+              overwrite="true"/>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${test.build.dir}"/>
+    </target>
+
+    <target name="all" depends="clean,war"/>
+
+</project>

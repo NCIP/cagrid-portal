@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean
+            id="viewStatusController"
+            class="gov.nih.nci.cagrid.portal.portlet.status.ViewStatusController"
+            autowire="byName">
+        <property name="objectName" value="statusBean"/>
+        <property name="successViewName" value="view"/>
+    </bean>
+
+    <bean
+            id="selectItemForDiscoveryController"
+            class="gov.nih.nci.cagrid.portal.portlet.map.SelectItemForDiscoveryController"
+            autowire="byName">
+        <property name="commandName" value="selectItemForDiscovery"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.map.SelectItemCommand"/>
+        <property name="redirectUrlPreferenceName" value="selectItemForDiscoveryRedirectUrl"/>
+        <property name="interPortletMessageSender">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                <property name="modePreferenceName" value="discoveryItemSelectMode"/>
+                <property name="outputQueuePreferenceName" value="selectedDiscoveryItemOutputQueueName"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="selectDirectoryForDiscoveryController"
+            class="gov.nih.nci.cagrid.portal.portlet.status.SelectDirectoryForDiscoveryController"
+            autowire="byName">
+        <property name="commandName" value="selectDirectoryForDiscovery"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.list.ListBean"/>
+        <property name="redirectUrlPreferenceName" value="selectDirectoryForDiscoveryRedirectUrl"/>
+        <property name="interPortletMessageSender">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                <property name="modePreferenceName" value="discoveryDirectorySelectMode"/>
+                <property name="outputQueuePreferenceName" value="selectedDiscoveryDirectoryOutputQueueName"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="portletModeParameterHandlerMapping"
+            class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+
+        <property name="order" value="1"/>
+        <property name="parameterName" value="operation"/>
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="selectItemForDiscovery"
+                               value-ref="selectItemForDiscoveryController"/>
+                        <entry key="selectDirectoryForDiscovery"
+                               value-ref="selectDirectoryForDiscoveryController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="portletModeHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+        <property name="order" value="2"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="liferayUserInteceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeMap">
+            <map>
+                <entry key="view">
+                    <ref bean="viewStatusController"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/status/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="defaultExceptionHandler"
+          parent="defaultExceptionHandlerTemplate"/>
+
+    <bean id="statusBean" class="gov.nih.nci.cagrid.portal.portlet.status.StatusBean" autowire="byName">
+        <property name="monitor" ref="registeredServiceMonitor"/>
+    </bean>
+
+</beans>

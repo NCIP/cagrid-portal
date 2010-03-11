@@ -1,0 +1,13 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+
+    <info organisation="sun" module="connector" revision="1.3.0" status="release">
+        <license name="BSDlike" url="http://www.opensource.org/licenses/bsdlicense.php"/>
+        <ivyauthor name="jayasoft" url="http://www.jayasoft.org/"/>
+
+        <description homepage="http://asm.objectweb.org/">
+        </description>
+    </info>
+
+</ivy-module>

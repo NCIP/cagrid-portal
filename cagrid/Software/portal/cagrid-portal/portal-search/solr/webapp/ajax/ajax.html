@@ -1,0 +1,236 @@
+<html>
+<head>
+<title>Solr Ajax Example</title>
+
+<link type="text/css" rel="stylesheet"
+      href="js/yui/datatable/assets/skins/sam/datatable.css">
+<script type="text/javascript" src="js/prototype.js"></script>
+
+<!-- Dependencies -->
+<script type="text/javascript"
+        src="js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="js/yui/element/element-min.js"></script>
+<script type="text/javascript" src="js/yui/datasource/datasource-min.js"></script>
+
+<!-- OPTIONAL: JSON Utility (for DataSource) -->
+<script type="text/javascript" src="js/yui/json/json-min.js"></script>
+
+<!-- OPTIONAL: Connection Manager (enables XHR for DataSource) -->
+<script type="text/javascript" src="js/yui/connection/connection-min.js"></script>
+
+<!-- OPTIONAL: Get Utility (enables dynamic script nodes for DataSource) -->
+<script type="text/javascript" src="js/yui/get/get-min.js"></script>
+
+<!-- Source file -->
+<script type="text/javascript" src="js/yui/logger/logger-min.js"></script>
+
+<!--tree-->
+<!-- Required CSS -->
+<link type="text/css" rel="stylesheet" href="js/yui/treeview/assets/skins/sam/treeview.css">
+<!-- Optional dependency source file -->
+<script src="js/yui/animation/animation-min.js" type="text/javascript"></script>
+<!-- TreeView source file -->
+<script src="js/yui/treeview/treeview-min.js"></script>
+
+<script language="Javascript">
+
+    YAHOO.log("Initializing SOLR data source", "debug");
+    var solrDatasource = new YAHOO.util.XHRDataSource("/solr/select?");
+    solrDatasource.responseType = YAHOO.util.XHRDataSource.JSON;
+
+    <!--extend array to find by object.initLabel property-->
+    Array.prototype.findByLabel =
+    function(labelValue) {
+        for (var i = 0; i < this.length; i++) {
+            YAHOO.log("Array element " + this[i].initLabel);
+            if (this[i].initLabel == labelValue) {
+                YAHOO.log("Found in array" + this[i].initLabel + " = " + labelValue);
+                return this[i];
+            }
+        }
+        return null;
+    };
+
+    <!--class represents a SOLR query. Can push and search parameters -->
+    var solrQuery = Class.create({
+        initialize: function(searchTerm) {
+            this.params = [
+                'wt=json'
+                , 'indent=on'
+                , 'hl=true'
+                //                ,'rows=200'
+                , 'hl.fl=name,features'
+            ];
+            this.params[this.params.length] = "q=" + searchTerm;
+        },
+        addParam: function(param) {
+            this.params.push(param);
+        },
+        removeParam: function(param) {
+            this.params.pop(param);
+
+        },
+        addFacet: function(arg, value) {
+            this.addParam("fq=" + arg + ":" + value);
+        },
+        getQuery: function() {
+            return this.params.join('&');
+        }
+    });
+
+    <!--represents a catalog item-->
+    var SearchTreeNode = Class.create({
+        initialize: function(initLabel) {
+            YAHOO.log("adding item with label" + initLabel);
+            this.initLabel = initLabel;
+            this.count = 1;
+            this.updateLabel();
+        },
+        updateLabel: function() {
+            this.label = this.initLabel + " (" + this.count + ")";
+        },
+        addCount: function() {
+            YAHOO.log("Count is" + this.count);
+            this.count++;
+            this.updateLabel();
+        }
+    });
+
+    <!--represents search results. Will build a search tree as results are added-->
+    var SearchResults = Class.create({
+        initialize: function() {
+            this.searchTree = new Array();
+        },
+        add: function(result) {
+            var typeLabel = result.catalog_type;
+            var categoryNode = this.searchTree.findByLabel(typeLabel);
+
+            YAHOO.log("Searching for node returned " + categoryNode);
+            if (null == categoryNode) {
+                YAHOO.log("Node is null. Will create node for " + typeLabel);
+                this.searchTree.push(new SearchTreeNode(typeLabel));
+            }
+            <!--else update the count-->
+            else {
+                YAHOO.log(categoryNode.label);
+                categoryNode.addCount();
+            }
+
+        },
+        <!--will add tree nodes to the supplied tree.-->
+        addNodesToTree: function(rootNode) {
+            for (var i = 0; i < this.searchTree.length; i++) {
+                new YAHOO.widget.TextNode(this.searchTree[i], rootNode);
+            }
+        }
+    });
+
+
+    var tree;
+    var categoryNode;
+    function initTree() {
+        tree = new YAHOO.widget.TreeView("CatalogTree");
+        var root = tree.getRoot();
+        categoryNode = new YAHOO.widget.TextNode({label:"Category"}, root, true);
+        tree.render();
+    }
+
+    <!--will show the search menu tree given a properly initialized SearchResults object -->
+    function showSearchTree(results) {
+        YAHOO.log("Updating tree", "debug");
+        tree.removeChildren(categoryNode);
+        results.addNodesToTree(categoryNode);
+        categoryNode.refresh();
+        categoryNode.expand();
+
+    }
+
+    var processSearchResults = {
+        success : function (oRequest, oParsedResponse, oPayload) {
+            YAHOO.log("RAW JSON DATA: " + oParsedResponse.results.responseText, "debug");
+            // Process the JSON data returned from the server
+            var messages = [];
+            try {
+                var jsonStr = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
+                resultList = jsonStr.response.docs;
+                // The returned data was parsed into an array of objects.
+                // Add a P element for each received message
+                var searchResults = new SearchResults();
+                for (var i = 0, len = resultList.length; i < len; ++i) {
+                    var _catalog = resultList[i]
+                    var p = document.createElement('p');
+
+                    <!--add to search results-->
+                    searchResults.add(_catalog);
+
+                    p.appendChild(document.createTextNode("Catalog Type: " + _catalog.catalog_type));
+                    p.appendChild(document.createTextNode("Name: " + _catalog.name));
+                    p.appendChild(document.createTextNode(" Description: " + _catalog.description));
+                    $('result').appendChild(p);
+                }
+                showSearchTree(searchResults);
+            }
+            catch (x) {
+                alert("JSON Parse failed!" + x);
+                return;
+            }
+        },
+
+        failure : function (o) {
+            alert("Async call failed!");
+            if (!YAHOO.util.Connect.isCallInProgress(o)) {
+                alert("Async call failed!");
+            }
+        },
+        timeout : 3000
+    };
+
+    function search() {
+        searchCatalogs($('searchField').value);
+    }
+
+    //    <!--function will search for catalogs given a search keyword and catalog type
+    //    keyword="*:*" will retreive all-->
+    function searchCatalogs(keyword, catatalog_type) {
+        var query = new solrQuery(keyword);
+        if (catatalog_type)
+            query.addFacet("catalog_type", catatalog_type);
+
+        YAHOO.log("Sending query to SOLR " + query.getQuery());
+        solrDatasource.sendRequest(query.getQuery(), processSearchResults);
+    }
+
+
+</script>
+
+</head>
+<body>
+
+Search Keyword: <input id="searchField" name="searchField" type="text"/>
+<input value="Go" type="button" onclick='search()'/>
+
+<div id="leftFrame" style="float:left;height:100%;width:20%">
+    <div id="CatalogTree">
+        Tree
+    </div>
+    <div id="myLogger"></div>
+</div>
+
+<div id="rightFrame" style="float:right;width:70%;height:100%;">
+    Result:
+    <div id="result" class="yui-skin-sam">
+    </div>
+</div>
+
+
+<script type="text/javascript">
+      var myLogReader = new YAHOO.widget.LogReader("myLogger");
+    initTree();
+//    searchCatalogs("*:*");
+</script>
+
+
+</body>
+
+
+</html>

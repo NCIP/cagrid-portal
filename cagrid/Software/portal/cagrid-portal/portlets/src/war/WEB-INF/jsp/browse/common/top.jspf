@@ -1,0 +1,38 @@
+<%@ page import="gov.nih.nci.cagrid.portal.domain.PortalUser" %>
+<%@ page import="gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry" %>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryViewBean" %>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean" %>
+
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+<portlet:defineObjects />
+<liferay-theme:defineObjects />
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/button/assets/skins/sam/button.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/menu/assets/skins/sam/menu.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/tabview/assets/skins/sam/tabview.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/assets/skins/sam/treeview.css"/>"/>
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/paginator/assets/skins/sam/paginator.css"/>"/>
+
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/catalog.css"/>"/>
+
+
+<script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/logger/logger-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/menu/menu-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/tabview/tabview-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
+<script src="<c:url value="/js/yui/treeview/treeview-min.js"/>"></script>
+
+<c:set var="catalogEntry" value="${catalogEntryViewBean.catalogEntry}"/>
+<c:set var="ns"><portlet:namespace/></c:set>
+<c:set var="managerFacadeName">${catalogEntry.class.simpleName}ManagerFacade</c:set>
+<c:set var="managerFacadePath">/dwr/interface/${managerFacadeName}.js</c:set>
+
+<script type='text/javascript' src="<c:url value="${managerFacadePath}"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>

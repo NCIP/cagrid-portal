@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/build/classes" />
+    <output-test url="file://$MODULE_DIR$/../out/test/portals" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/liferay-ext/ext-impl/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/liferay-ext/ext-service/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/liferay/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/liferay/test/src/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ext" />
+      <excludeFolder url="file://$MODULE_DIR$/liferay-ext" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="aggr" />
+    <orderEntry type="module" module-name="db" />
+    <orderEntry type="library" name="acegi" level="project" />
+    <orderEntry type="library" name="cagrid" level="project" />
+    <orderEntry type="module" module-name="security" />
+    <orderEntry type="library" name="liferay 5.2.3" level="project" />
+    <orderEntry type="library" name="Globus" level="application" />
+    <orderEntry type="module" module-name="cagrid-authn" />
+  </component>
+</module>
+

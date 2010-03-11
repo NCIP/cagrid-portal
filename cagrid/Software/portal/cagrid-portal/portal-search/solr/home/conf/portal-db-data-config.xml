@@ -1,0 +1,112 @@
+<dataConfig>
+    <dataSource driver="com.mysql.jdbc.Driver" url="@cagrid.portal.db.url@?autoReconnect=true"
+                user="@cagrid.portal.db.username@" password="@cagrid.portal.db.password@"/>
+
+    <document name="CatalogEntry">
+
+        <entity name="AllCatalogs"
+                query="select * from cat_entry"
+                pk="id"
+                deltaImportQuery="select * from cat_entry where id=='${dataimporter.delta.id}'"
+                deltaQuery="select id from cat_entry where updatedAt > '${dataimporter.last_index_time}'">
+            <field column="id" name="id"/>
+            <field column="author_id" name="id"/>
+            <field column="catalog_type" name="catalog_type"/>
+            <field column="name" name="catalogName"/>
+            <field column="firstName" name="firstName"/>
+            <field column="lastName" name="lastName"/>
+            <field column="description" name="description"/>
+            <field column="street1" name="street1"/>
+            <field column="locality" name="locality"/>
+            <field column="stateProvince" name="stateProvince"/>
+            <field column="country" name="country"/>
+            <field column="homepageUrl" name="homepageUrl"/>
+            <field column="phoneNumber" name="phoneNumber"/>
+            <field column="updatedAt" name="updatedAt"/>
+            <field column="featured" name="featured"/>
+            <field column="createdAt" name="createdAt"/>
+            <entity name="GridService"
+                    pk="id"
+                    query="select * from grid_services where id='${AllCatalogs.grid_service_id}'">
+                <field name="endpoint" column="url"/>
+                <field name="service_type" column="service_type"/>
+                <!--domain model-->
+                <entity name="DomainModel"
+                        query="select id from domain_models where service_id='${GridService.id}'">
+                    <entity name="UMLClass"
+                            query="select * from uml_class where model_id='${DomainModel.id}'">
+                        <field name="className" column="className"/>
+                        <field name="domain_description" column="description"/>
+                        <entity name="SemanticMetadataMapping"
+                                query="select SEM_META_ID from uml_class_sem_meta where uml_class_id='${UMLClass.id}'">
+                            <entity name="SemanticMetadata"
+                                    query="select * from sem_meta where id='${SemanticMetadataMapping.SEM_META_ID}'">
+                                <field name="concept_name" column="sm_cname"/>
+                                <field name="concept_description" column="sm_cdef"/>
+                                <field name="conceptCode" column="sm_ccode"/>
+                            </entity>
+                        </entity>
+                    </entity>
+                </entity>
+                <!--operations-->
+                <entity name="ServiceMetadata"
+                        query="select service_desc_id from svc_meta where service_id='${GridService.id}'">
+                    <entity name="Service" query="select * from svc where id='${ServiceMetadata.service_desc_id}'">
+                        <field name="service_name" column="name"/>
+                        <field name="service_description" column="description"/>
+                        <entity name="ServiceContextMeta"
+                                query="select sem_meta_id from svc_sem_meta where svc_id='${Service.id}'">
+                            <entity name="ServiceContext"
+                                    query="select id from svc_ctx where id='${ServiceContextMeta.sem_meta_id}'">
+                                <entity name="Operation"
+                                        query="select * from oper where serviceContext_id='${ServiceContext.id}'">
+                                    <field name="oper_description" column="description"/>
+                                    <field name="oper_name" column="name"/>
+                                    <!--<entity name="OperSemanticMetadataMapping"-->
+                                    <!--query="select sem_meta_id from oper_sem_meta where oper_id='${Operation.id}'">-->
+                                    <!--<entity name="SemanticMetadata"-->
+                                    <!--query="select * from sem_meta where id='${OperSemanticMetadataMapping.sem_meta_id}'">-->
+                                    <!--<field name="name" column="sm_cname"/>-->
+                                    <!--<field name="description" column="sm_cdef"/>-->
+                                    <!--<field name="conceptCode" column="sm_ccode"/>-->
+                                    <!--</entity>-->
+                                    <!--</entity>-->
+                                </entity>
+                            </entity>
+                        </entity>
+                    </entity>
+                </entity>
+                <entity name="status"
+                        query="select * from status_change where service_id='${GridService.id}'
+                         and time=(Select max(time) from status_change where service_id='${GridService.id}')">
+                    <field name="status" column="status"/>
+                </entity>
+            </entity>
+            <entity name="AreaOfFocusTerm"
+                    query="select term_id from cat_entry_aofterms where entry_id='${AllCatalogs.id}'">
+                <entity name="term"
+                        query="select * from cat_terms where id='${AreaOfFocusTerm.term_id}'">
+                    <field name="term_description" column="description"/>
+                    <field name="term_identifier" column="identifier"/>
+                    <field name="term_label" column="label"/>
+                </entity>
+            </entity>
+            <!--compute average rating for all catalogs EXCEPT Person and Point of contact-->
+            <entity name="ratings"
+                    query="select avg(rating) as avg_rating from cat_ratings r, cat_entry e where r.catalog_id=e.id and e.id='${AllCatalogs.id}' and
+                    e.catalog_type not in ('poc','person')">
+                <field name="rating" column="avg_rating"/>
+            </entity>
+
+            <!--author-->
+            <entity name="AuthorID"
+                    query="select person_id from portal_users where id='${AllCatalogs.author_id}'">
+                <entity name="Author" query="select * from persons where id='${AuthorID.person_id}'"
+                        pk="id">
+                    <field name="author" column="id"/>
+                </entity>
+            </entity>
+        </entity>
+    </document>
+
+</dataConfig>

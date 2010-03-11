@@ -1,0 +1,4 @@
+<c:forEach var="xmlSchema" items="${xmlSchemas}">
+	<c:set var="selectUrl" value="${fn:replace(selectXmlSchemaUrl, 'XML_SCHEMA_ID', xmlSchema.id)}"/>
+	<a href="${selectUrl}"><c:out value="${xmlSchema.namespace}"/></a><br/>
+</c:forEach>

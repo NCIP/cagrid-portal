@@ -1,0 +1,38 @@
+<table class="detailstable">
+	<tbody>
+		<tr>
+			<td class="detailslabelcell">QName:</td>
+			<td>
+				<c:choose>
+					<c:when test="${empty outputParam.xmlSchema}">
+						<c:out value="${outputParam.QName}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="selectUrl" value="${fn:replace(selectXmlSchemaUrl, 'XML_SCHEMA_ID', outputParam.xmlSchema.id)}"/>
+						<a href="${selectUrl}"><c:out value="${outputParam.QName}"/></a><br/>
+					</c:otherwise>
+				</c:choose>
+			</td>
+		</tr>
+		<c:if test="${!empty outputParam.UMLClass}">
+		<tr>
+			<td class="detailslabelcell">UML Class:</td>
+			<td>
+			<c:if test="${!empty outputParam.UMLClass}">
+				<c:out value="${outputParam.UMLClass.packageName}"/>.<c:out value="${outputParam.UMLClass.className}"/>
+			</c:if>
+			</td>
+		</tr>
+		</c:if>
+		<tr>
+			<td class="detailslabelcell">Is Array?:</td>
+			<td><c:out value="${outputParam.array}"/></td>
+		</tr>
+		<c:if test="${outputParam.array}">
+		<tr>
+			<td class="detailslabelcell">Dimensionality:</td>
+			<td><c:out value="${outputParam.dimensionality}"/></td>
+		</tr>
+		</c:if>
+	</tbody>
+</table>

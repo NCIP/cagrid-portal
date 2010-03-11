@@ -1,0 +1,65 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-authn-portlet" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal authentication module and is not dependent on the rest of the Portal projects
+            (db/aggr) etc
+        </description>
+    </info>
+
+    <configurations>
+        <conf name="compile" extends="default" visibility="public"/>
+        <conf name="default" extends="service" visibility="public"/>
+        <conf name="ext" visibility="public"/>
+        <conf name="test" extends="default" visibility="public" description="Test configuration"/>
+
+        <!--domain is a seperate config, so that other projects can use it as a runtime library (not copied to App Server)-->
+        <conf name="domain" visibility="public"/>
+        <conf name="service" visibility="public"/>
+        <conf name="web" extends="default" visibility="private"/>
+    </configurations>
+
+    <publications>
+        <artifact name="caGrid-${ivy.module}-domain" conf="domain" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-service" conf="service" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-web" conf="web" type="jar"/>
+        <artifact name="cagrid-authn-portlet" conf="web" type="war"/>
+    </publications>
+
+    <dependencies>
+
+        <dependency rev="1.14" org="oopsconsultancy" name="xmltask" conf="default"/>
+        <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full;test->test"/>
+        <dependency rev="4.0.3" org="globus" name="globus" conf="default;compile->crypto"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="dorian" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service"
+                    conf="default->client"/>
+
+        <dependency rev="${liferay.portal.version}" org="liferay" name="portal" conf="compile->portal-ext"/>
+        <dependency rev="2.3" org="sun" name="servlet" conf="compile->default"/>
+        <dependency rev="1.0" org="sun" name="portlet" conf="compile->default"/>
+        <dependency rev="1.1" org="sun" name="jstl"/>
+
+        <dependency rev="${liferay.portal.version}" org="liferay" name="portal"
+                    conf="default->portlet;compile->portal-ext"/>
+
+        <dependency rev="latest.integration" org="apache" name="commons-discovery"/>
+        <dependency rev="latest.integration" org="apache" name="log4j" conf="default->*"/>
+
+        <!--globus ext dependencies-->
+        <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>
+
+        <!--test dependencies-->
+        <dependency rev="4.4" org="junit" name="junit" conf="test->*"/>
+        <dependency rev="1.8" org="cobertura" name="cobertura" conf="test->*"/>
+        <dependency rev="1.6" org="org.mockito" name="mockito-all" conf="test->*"/>
+        <dependency rev="10.1.3.1" org="org.apache.derby" name="derby" conf="test->*"/>
+        <dependency rev="2.2" org="dbunit" name="dbunit" conf="test->*"/>
+        <dependency rev="1.8.0.1" org="hsqldb" name="hsqldb" conf="test->*"/>
+
+        <!--global exclude-->
+        <exclude artifact="jprov" type="jar"/>
+    </dependencies>
+
+</ivy-module>

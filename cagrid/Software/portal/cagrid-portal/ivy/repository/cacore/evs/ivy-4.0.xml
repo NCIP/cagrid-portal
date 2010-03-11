@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="cacore" module="evs" revision="4.0">
+		<description> The NCICB EVS API provides programmatic interfaces to EVS repositories.</description>
+	</info>
+
+	<configurations>
+		<!-- Public Configurations-->
+		<conf name="default" visibility="public"/>
+        <conf name="client" extends="default" visibility="public"/>
+	</configurations>
+
+
+	<publications>
+		<artifact name="evsapi40-beans" type="jar"/>
+        <artifact name="evsapi40-framework" type="jar"/>
+        <artifact name="lbAdmin" type="jar"/>
+        <artifact name="lbImpl" type="jar"/>
+        <artifact name="lbInterfaces" type="jar"/>
+        <artifact name="lbModel" type="jar"/>
+        <artifact name="lbPatch" type="jar"/>
+        <artifact name="lgModel" type="jar"/>
+        <artifact name="lgRDFConverter" type="jar"/>
+        <artifact name="lgUtility" type="jar"/>
+        <artifact name="lucene-regex-10-9-06-nightly" type="jar"/>
+    </publications>
+
+	<dependencies>
+        <dependency rev="4.0" org="cacore" name="cabio" conf="client"/>
+        <dependency rev="4.0" org="cacore" name="api"/>
+    </dependencies>
+</ivy-module>

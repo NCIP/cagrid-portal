@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <NOTIFICATION_LOG ID="-1" NOTIFICATIONTYPE="StatusChange" SENDSUCCESSFUL="false"/>
+	<NOTIFICATION_LOG ID="-2" SENDSUCCESSFUL="false"/>
+
+</dataset>

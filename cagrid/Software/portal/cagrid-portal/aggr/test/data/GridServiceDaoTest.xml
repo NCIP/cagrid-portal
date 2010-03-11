@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <GRID_SERVICES ID="-1" URL="http://service1.ORG:8080" SERVICE_TYPE='GridService'/>
+    <GRID_SERVICES ID="-2" URL="http://service2.org:13080" SERVICE_TYPE='GridService'/>
+    <GRID_SERVICES ID="-3" URL="http://service3.edu/wsrf/cagrid" SERVICE_TYPE='GridService'/>
+    <INDEX_SERVICES ID="-1" URL="http://index1"/>
+    <INDEX_SERVICES ID="-2" URL="http://index2"/>
+    <INDEX_SVC_GRID_SVC INDEX_SVC_ID="-1" GRID_SVC_ID="-1"/>
+    <INDEX_SVC_GRID_SVC INDEX_SVC_ID="-1" GRID_SVC_ID="-2"/>
+    <INDEX_SVC_GRID_SVC INDEX_SVC_ID="-1" GRID_SVC_ID="-3"/>
+    <INDEX_SVC_GRID_SVC INDEX_SVC_ID="-2" GRID_SVC_ID="-3"/>
+</dataset>

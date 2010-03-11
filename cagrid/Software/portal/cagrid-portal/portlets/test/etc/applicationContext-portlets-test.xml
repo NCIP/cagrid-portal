@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="defaultOntology" class="java.lang.String">
+        <constructor-arg value="NCI Thesaurus"/>
+    </bean>
+
+    <bean id="baseEVService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.BaseConceptService"
+          abstract="true"
+          p:searchLimit="4" p:vocabulary-ref="defaultOntology">
+        <property name="appService">
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+                  p:targetClass="gov.nih.nci.system.client.ApplicationServiceProvider"
+                  p:targetMethod="getApplicationServiceFromUrl">
+                <property name="arguments">
+                    <list>
+                        <value>http://evsapi.nci.nih.gov/evsapi40</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="caCoreConceptService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.CacoreConceptService"
+          parent="baseEVService"/>
+
+    <bean id="lexbigEVSService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigConceptService"
+          parent="baseEVService">
+        <property name="productionTag">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
+                  p:tag="PRODUCTION"/>
+        </property>
+        <property name="cr">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.ConceptReference">
+                <property name="codingScheme" ref="defaultOntology"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="evsAutoCompleter"
+          class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DefaultConceptAutocompleterService"
+          scope="globalSession">
+        <property name="conceptService" ref="lexbigEVSService"/>
+
+    </bean>
+
+    <bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean" scope="prototype">
+        <property name="formulators">
+            <map>
+                <entry>
+                    <key>
+                        <util:constant
+                                static-field="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator"/>
+                </entry>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

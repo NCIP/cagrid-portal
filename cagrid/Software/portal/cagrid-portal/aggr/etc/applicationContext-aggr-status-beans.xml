@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <!-- config file contains all non task beans -->
+    <import resource="classpath:applicationContext-aggr-regsvc-beans.xml"/>
+
+    <bean id="maxDowntimeHours" class="java.lang.Integer">
+        <constructor-arg value="${cagrid.portal.maxDowntimeHours}"/>
+    </bean>
+
+    <bean id="statusChangeArchiver" class="gov.nih.nci.cagrid.portal.aggr.status.StatusChangeArchiver">
+        <property name="maxDowntimeHours" ref="maxDowntimeHours"/>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
+    <bean id="dynamicServiceStatusProvider"
+          class="gov.nih.nci.cagrid.portal.aggr.status.DelegatingDynamicServiceStatusProvider">
+        <property name="providers">
+            <list>
+                <ref local="idxServiceStatusProvider"/>
+                <ref local="pingServiceStatusProvider"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="idxServiceStatusProvider"
+          class="gov.nih.nci.cagrid.portal.aggr.status.IdxServiceStatusProvider">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="dynamicServiceUrlProvider" ref="cacheFirstDynamicServiceStatusProvider"/>
+        <property name="strictIndexVerification" value="${strict.index.verification}"/>
+    </bean>
+
+    <bean id="pingServiceStatusProvider" class="gov.nih.nci.cagrid.portal.aggr.status.DynamicServiceStatusProvider">
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
+    <bean  id="cachedServiceStatusProvider"
+           class="gov.nih.nci.cagrid.portal.aggr.status.DBCachedServiceStatusProvider">
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
+    <bean id="wsdlServiceStatusProvider" class="gov.nih.nci.cagrid.portal.aggr.status.WSDLServiceStatusProvider">
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
+
+    <bean id="serviceStatusChangeMonitor"
+          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeMonitor" autowire="byName">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="cachedServiceStatusProvider" ref="cachedServiceStatusProvider"/>
+        <property name="cachedServiceUrlProvider">
+            <bean
+                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
+                <property name="gridServiceDao" ref="gridServiceDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="serviceStatusChangeListener"
+          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeListener">
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
+    <bean id="serviceStatusMonitor"
+          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusMonitor">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="cachedServiceUrlProvider">
+            <bean
+                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
+                <property name="gridServiceDao" ref="gridServiceDao"/>
+            </bean>
+        </property>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+        <property name="serviceStatusPolicy">
+            <bean class="gov.nih.nci.cagrid.portal.aggr.status.SimpleServiceStatusPolicy">
+                <property name="maxDowntimeHours" ref="maxDowntimeHours"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

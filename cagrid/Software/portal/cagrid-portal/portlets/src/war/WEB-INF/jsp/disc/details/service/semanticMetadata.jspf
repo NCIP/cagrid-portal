@@ -1,0 +1,19 @@
+<c:forEach var="semanticMetadata" items="${sms}">
+<table class="detailstable">
+	<thead>
+		<th colspan="2">
+			<b><c:out value="${semanticMetadata.conceptName}"/></b>
+		</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="detailslabelcell">Concept Code:</td>
+			<td><c:out value="${semanticMetadata.conceptCode}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Definition:</td>
+			<td><c:out value="${semanticMetadata.conceptDefinition}"/></td>
+		</tr>
+	</tbody>
+</table>
+</c:forEach>

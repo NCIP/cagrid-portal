@@ -1,0 +1,141 @@
+<script type="text/javascript">
+//var debug_log = new YAHOO.widget.LogReader("debug_log");
+var ${ns}saveButton = null;
+var ${ns}cancelButton = null;
+var ${ns}dirty = false;
+var ${ns}requiredFieldsSelector = "form[name='${ns}editForm'] > *, :input[class*='required'][name!='id']"; 
+function ${ns}checkEnableSave(){
+	var emptyCount = 0;
+	var requiredFields = jQuery(${ns}requiredFieldsSelector).get(); 
+	for(var i = 0; i < requiredFields.length; i++){
+		if(jQuery.trim(jQuery(requiredFields[i]).val()) == ""){
+			emptyCount++;
+		}}
+	if(emptyCount > 0){${ns}saveButton.set("disabled", true);
+	}else{${ns}saveButton.set("disabled", false);
+	}}
+
+function ${ns}cancelCreate(){
+	window.location = "<c:out value="${viewUrl}"/>";
+}
+function ${ns}cancelEdit(id){
+<c:if test="${empty viewDetailsUrl}"><portlet:renderURL var="viewDetailsUrl"><portlet:param name="operation" value="viewDetails"/><portlet:param name="id" value="CPREPLACE"/></portlet:renderURL></c:if>
+	var viewDetailsUrl = "${viewDetailsUrl}".replace("CPREPLACE", id);
+	window.location = viewDetailsUrl;
+}
+function ${ns}save(validated){
+	if(!validated){${managerFacadeName}.validate(
+		{
+			callback:function(message){
+				if(message != null){alert(message);
+				}else{${ns}save(true);
+				}},
+    		errorHandler:function(errorString, exception){alert("Error validating: " + errorString);
+    		}});
+	}else{${managerFacadeName}.save({
+			callback:function(id){
+				jQuery("form[name='${ns}editForm'] > *, :input[name='id']").val(id);
+				${ns}dirty = false;
+				${ns}cancelEdit(id);
+    		},errorHandler:function(errorString, exception){
+    			alert("Error saving: " + errorString);
+        }});}}
+
+function ${ns}setInputMessage(inputName, message){
+	var newMessage = message;
+	if(newMessage == null){newMessage = "";}
+	jQuery("form[name='${ns}editForm'] > *, :input[name='" + inputName + "']").next().html(newMessage);	
+}
+function ${ns}setField(inputName, inputValue){
+	if(!${ns}errorFlag){
+		var setterName = "set" + inputName.substring(0, 1).toUpperCase() + inputName.substring(1, inputName.length);
+		eval(
+			"${managerFacadeName}." + setterName + "('" + inputValue + "'," + 
+			"{" +
+			"	callback:function(message){" +
+			"		${ns}setInputMessage('" + inputName + "', message);" +
+			"		if(message == null){" +
+			"			${ns}dirty = true;" +
+			"			${ns}checkEnableSave();" + 
+			"		}" +
+			"	}," +
+			"	errorHandler:function(errorString, exception){" +
+			"		alert(\"Error setting input '" + inputName + "': \" + errorString);" +
+			"		${ns}errorFlag = true;" +
+   			"	}" +
+			"});"
+		);}}
+var ${ns}tooltipTitle = "";
+function ${ns}initTooltips(){
+	/* CONFIG */		
+	var xOffset = 10;
+	var yOffset = 20;		
+	// these 2 variable determine popup's distance from the cursor
+	/* END CONFIG */
+    jQuery(".cagp-tooltip").hover(function(e){
+		if(this.title != ""){											  
+			${ns}tooltipTitle = this.title;
+		}
+		this.title = "";									  
+		jQuery("body").append("<p id='cagp-tooltip'>"+ ${ns}tooltipTitle +"</p>");
+		jQuery("#cagp-tooltip")
+			.css("top",(e.pageY - xOffset) + "px")
+			.css("left",(e.pageX + yOffset) + "px")
+			.fadeIn("fast");	
+    },
+	function(){
+		if(${ns}tooltipTitle != ""){
+			this.title = ${ns}tooltipTitle;
+		}
+		jQuery("#cagp-tooltip").remove();
+    });	
+	jQuery(".cagp-tooltip").mousemove(function(e){
+		jQuery("#cagp-tooltip")
+			.css("top",(e.pageY - xOffset) + "px")
+			.css("left",(e.pageX + yOffset) + "px");
+	});
+}
+var ${ns}errorFlag = false;
+jQuery(document).ready(function() {
+	${ns}saveButton = new YAHOO.widget.Button({
+			label: "Save",
+			id: "${ns}saveButton",
+			container: "${ns}saveButtonContainer"
+		});
+	${ns}saveButton.on("click", function(evt){
+		${ns}save(false);
+	});
+	${ns}cancelButton = new YAHOO.widget.Button({
+			label: "Cancel",
+			id: "${ns}cancelButton",
+			container: "${ns}cancelButtonContainer"
+		});
+	${ns}cancelButton.on("click", function(evt){
+		var id = jQuery("form[name='${ns}editForm'] > *, :input[name='id']").val(); 
+		var saved = !(id == null || id == "");
+		var discard = true;
+		if(${ns}dirty){
+			discard = confirm("You have unsaved changes. Click OK to discard these changes.");
+		}
+		if(discard){
+			if(saved){
+				${ns}cancelEdit(id);
+			}else{
+				${ns}cancelCreate();
+			}
+		}
+	});
+	${ns}checkEnableSave();
+	jQuery(${ns}requiredFieldsSelector).bind('keyup', function(evt){
+		${ns}checkEnableSave();
+	});
+	jQuery("form[name='${ns}editForm'] :input[name!='id'], .autoSet").bind('blur', function(evt){
+		${ns}setField(evt.target.name, evt.target.value);
+	});
+	${ns}initTooltips();
+});
+/*  Edit name and description interactivity  */
+jQuery("#input-name").focus(function(){if (jQuery("#input-name").attr("value") == "Name") {jQuery(this).css({'color': '#000000'});jQuery(this).attr("value", "");}});
+jQuery("#input-name").blur( function() {if (jQuery(this).attr("value")== "") {jQuery(this).attr("value", "Name");jQuery(this).css({'color' : '#afafaf'});}});
+jQuery("#input-description").focus(function(){if (jQuery("#input-description").attr("value") == "Description") {jQuery(this).css({'color': '#000000'});jQuery(this).attr("value", "");}});
+</script>	

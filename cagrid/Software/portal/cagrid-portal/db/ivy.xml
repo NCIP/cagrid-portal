@@ -1,0 +1,57 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-db" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal</description>
+    </info>
+
+    <configurations>
+        <conf name="utils" visibility="private"/>
+        <conf name="domain" visibility="public"/>
+        <conf name="dao" extends="domain,utils" visibility="public"/>
+
+        <conf name="default" extends="dao,domain" visibility="public"/>
+        <conf name="schema" extends="default" description="Only needed to generate database schemas"/>
+        <conf name="test" extends="schema" visibility="public" description="Test configuration"/>
+    </configurations>
+
+    <publications>
+        <artifact name="caGrid-${ivy.module}-dao" conf="dao" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-domain" conf="domain" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-utils" conf="utils" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
+        <!--spring configs-->
+        <artifact name="applicationContext-db-relationships" conf="default" type="xml"/>
+        <artifact name="applicationContext-db-aspects" conf="default" type="xml"/>
+        <artifact name="applicationContext-db-run" conf="dao,default" type="xml"/>
+        <artifact name="applicationContext-db" conf="dao,default" type="xml"/>
+        <artifact name="cagrid_portal-db-changelog" conf="dao,default" type="xml"/>
+        <artifact name="cagrid_portal-db-20-changelog" conf="dao,default" type="xml"/>
+    </publications>
+
+    <dependencies>
+        <dependency rev="4.0.3" org="globus" name="globus" conf="default"/>
+
+
+        <dependency rev="1.5.3" org="aspectj" name="aspectjrt" conf="default"/>
+        <dependency rev="1.5.3" org="aspectj" name="aspectjweaver" conf="default"/>
+        <dependency rev="1.2.14" org="apache" name="log4j" conf="default->*"/>
+        <dependency rev="3.4.0" org="hibernate" name="hibernate" conf="default->full"/>
+        <dependency rev="1.4.2_08-b03" org="hibernate" name="tools" conf="schema->default"/>
+        <dependency rev="1.9.1" org="org.liquibase" name="liquibase-core" conf="dao->default;default"/>
+        <dependency rev="5.1.6" org="mysql" name="mysql-connector-java" conf="default->*"/>
+        <dependency rev="1.14" org="oopsconsultancy" name="xmltask" conf="schema->default"/>
+        <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full;test->test"/>
+
+        <!--test dependencies-->
+        <dependency rev="4.4" org="junit" name="junit" conf="test->*"/>
+        <dependency rev="2.3" org="sun" name="servlet" conf="test->*"/>
+        <dependency rev="1.8" org="cobertura" name="cobertura" conf="test->*"/>
+        <dependency rev="1.6" org="org.mockito" name="mockito-all" conf="test->*"/>
+        <dependency rev="10.1.3.1" org="org.apache.derby" name="derby" conf="test->*"/>
+        <dependency rev="2.2" org="dbunit" name="dbunit" conf="test->*"/>
+        <dependency rev="${hsql.db.version}" org="hsqldb" name="hsqldb" conf="test->*"/>
+    </dependencies>
+
+</ivy-module>

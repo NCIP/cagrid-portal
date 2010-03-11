@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<project name="liquibase" basedir=".">
+
+    <!-- Should the generated DDL include table DROP statements? -->
+    <property name="db.drop.tables" value="false"/>
+
+
+    <target name="generateChangelog"  depends="prepare" description="Will generate a changelog file from a DB">
+
+        <generateChangeLog
+                outputFile="${etc.dir}/output.xml"
+                driver="${cagrid.portal.db.driver}"
+                url="${cagrid.portal.db.url}"
+                username="${cagrid.portal.db.username}"
+                password="${cagrid.portal.db.password}"
+                classpathref="run.cp"
+                />
+    </target>
+
+
+    <target name="updateDB"  depends="prepare" description="Will update the DB with Liquibase">
+        <updateDatabase
+                changeLogFile="${etc.dir}/${db.changelog.file}"
+                driver="${cagrid.portal.db.driver}"
+                url="${cagrid.portal.db.url}"
+                username="${cagrid.portal.db.username}"
+                password="${cagrid.portal.db.password}"
+                dropFirst="false"
+                classpathref="run.cp"
+                />
+    </target>
+
+    <target name="diff-database" depends="prepare" description="Will DIFF two databases and generate a changelog">
+
+        <taskdef resource="liquibasetasks.properties">
+            <classpath refid="run.cp"/>
+
+        </taskdef>
+
+        <diffDatabaseToChangeLog
+                driver="${cagrid.portal.db.driver}"
+                url="jdbc:mysql://localhost:3306/portal2"
+                username="${cagrid.portal.db.username}"
+                password="${cagrid.portal.db.password}"
+
+                baseUrl="jdbc:mysql://localhost:3306/portal2_a"
+                baseUsername="${cagrid.portal.db.username}"
+                basePassword="${cagrid.portal.db.password}"
+
+                outputFile="${etc.dir}/changes.xml"
+                classpathref="run.cp"
+                >
+        </diffDatabaseToChangeLog>
+    </target>
+
+
+</project>

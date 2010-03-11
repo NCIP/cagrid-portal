@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+
+<project name="cagrid-portal-db" basedir=".">
+
+    <import file="${basedir}/../antfiles/build-common-test.xml"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ext.lib.dir" value="${ext.dir}/default/jars"/>
+    <property name="ext.schema.lib.dir" value="${ext.dir}/schema/jars"/>
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/jars"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.gen.dir" value="${build.dir}/gen"/>
+    <property name="build.xml.dir" value="${build.dir}/xmls"/>
+
+    <property name="build.jar.dir" value="${build.dir}/jars"/>
+
+    <property name="etc.dir" value="${basedir}/etc"/>
+    <property name="src.java.dir" value="${basedir}/src/java"/>
+    <property name="javadocs.dest.dir" value="${build.dir}/javadocs"/>
+
+    <property name="tools.hibernate.dir" value="${basedir}/tools/hibernatetools"/>
+    <property name="tools.hibernate.config" value="${tools.hibernate.dir}/hibernate.cfg.xml"/>
+
+    <property name="db.changelog.file" value="cagrid_portal-db-changelog.xml"/>
+    <!-- Should db layer be compiled with debug on? -->
+    <property name="db.debug" value="${javac.debug.flag}"/>
+
+    <import file="${basedir}/antfiles/build-liquibase.xml"/>
+
+
+    <path id="compile.cp">
+        <fileset dir="${ext.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="schema.cp">
+        <fileset dir="${ext.schema.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${build.classes.dir}"/>
+    </path>
+
+    <path id="test.compile.cp">
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="${ext.test.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="run.cp">
+        <path refid="compile.cp"/>
+        <pathelement location="${build.classes.dir}"/>
+        <pathelement location="${build.xml.dir}"/>
+    </path>
+
+    <path id="test.run.cp">
+        <pathelement location="${test.etc.dir}"/>
+        <pathelement location="${test.build.classes.dir}"/>
+        <pathelement location="${build.xml.dir}"/>
+        <path refid="test.compile.cp"/>
+    </path>
+
+    <target name="prepare" depends="prepare-ant-tasks"/>
+
+    <target name="prepare-ant-tasks" unless="defined.anttaskes">
+        <taskdef resource="liquibasetasks.properties">
+            <classpath refid="run.cp"/>
+        </taskdef>
+
+        <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"
+                 classpathref="schema.cp"/>
+
+        <xmlcatalog id="portal.catalog">
+            <dtd publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                 location="./tools/ant/resources/web-app_2_3.dtd"/>
+            <dtd publicId="-//Liferay//DTD Display 4.0.0//EN"
+                 location="./tools/ant/resources/liferay-display_4_0_0.dtd"/>
+            <dtd publicId="-//JBoss//DTD JBOSS Security Config 3.0//EN"
+                 location="./tools/ant/resources/security_config.dtd"/>
+            <dtd publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                 location="./tools/ant/resources/hibernate-configuration-3.0.dtd"/>
+
+        </xmlcatalog>
+    </target>
+
+    <target name="configure-hibernate-tools" depends="prepare-ant-tasks">
+        <copy file="${tools.hibernate.dir}/template.hibernate.cfg.xml"
+              tofile="${tools.hibernate.config}" overwrite="true">
+            <filterset>
+                <filter token="DB_DRIVER" value="${cagrid.portal.db.driver}"/>
+                <filter token="DB_URL" value="${cagrid.portal.db.url}"/>
+                <filter token="DB_USERNAME" value="${cagrid.portal.db.username}"/>
+                <filter token="DB_PASSWORD" value="${cagrid.portal.db.password}"/>
+                <filter token="DB_DIALECT" value="${cagrid.portal.db.dialect}"/>
+            </filterset>
+        </copy>
+        <delete file="${tools.hibernate.dir}/temp.xml"/>
+        <xmltask source="${etc.dir}/applicationContext-db.xml">
+            <call
+                    path="/*[local-name()='beans']/*[local-name()='bean' and @id='sessionFactory']/*[local-name()='property' and @name='annotatedClasses']/*[local-name()='list']/*[local-name()='value']">
+                <param name="classname" path="normalize-space(text())"/>
+                <actions>
+                    <concat destfile="${tools.hibernate.dir}/temp.xml" append="true"><![CDATA[<mapping class="@{classname}"/>
+]]></concat>
+                </actions>
+            </call>
+        </xmltask>
+        <xmltask source="${tools.hibernate.config}" dest="${tools.hibernate.config}"
+                 preservetype="true">
+            <xmlcatalog refid="portal.catalog"/>
+            <insert path="/hibernate-configuration/session-factory"
+                    file="${tools.hibernate.dir}/temp.xml"/>
+        </xmltask>
+        <delete file="${tools.hibernate.dir}/temp.xml"/>
+    </target>
+
+    <target name="gen-ddl" depends="configure-hibernate-tools,compile">
+
+        <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask"
+                 classpathref="schema.cp"/>
+
+        <mkdir dir="${build.gen.dir}"/>
+        <hibernatetool destdir="${build.gen.dir}">
+            <classpath>
+                <pathelement location="${tools.hibernate.dir}"/>
+                <pathelement location="${build.classes.dir}"/>
+            </classpath>
+            <annotationconfiguration configurationfile="${tools.hibernate.config}"/>
+            <hbm2ddl export="false" drop="${db.drop.tables}" outputfilename="cagrid-portal.ddl"/>
+        </hibernatetool>
+    </target>
+
+    <target name="compile" depends="resources">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" debug="${db.debug}">
+            <classpath refid="compile.cp"/>
+        </javac>
+
+    </target>
+
+    <target name="resources">
+        <mkdir dir="${build.dir}/xmls"/>
+        <copy todir="${build.dir}/xmls" overwrite="true">
+            <fileset dir="${etc.dir}">
+                <include name="applicationContext*.xml"/>
+            </fileset>
+            <fileset dir="${etc.dir}">
+                <include name="cagrid_portal-db-changelog.xml"/>
+                <include name="cagrid_portal-db-20-changelog.xml"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile-test">
+        <mkdir dir="${build.jar.dir}"/>
+
+        <jar destfile="${build.jar.dir}/caGrid-portal-db-dao.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/dao/**/*.class"/>
+                <include name="**/portal/annotation/*.class"/>
+            </fileset>
+
+        </jar>
+        <jar destfile="${build.jar.dir}/caGrid-portal-db-domain.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="*.properties"/>
+                <include name="*.xml"/>
+                <include name="**/domain/**/*.class"/>
+            </fileset>
+        </jar>
+        <jar basedir="${build.classes.dir}"
+             destfile="${build.jar.dir}/caGrid-portal-db-utils.jar"
+             includes="**/util/**/*.class"/>
+        <jar basedir="${test.build.classes.dir}"
+             destfile="${build.jar.dir}/caGrid-portal-db-test.jar"
+             includes="**/*.class"/>
+    </target>
+
+
+    <target name="load-schema" depends="gen-ddl" description="Will create the Portal DB schema.">
+
+        <sql driver="com.mysql.jdbc.Driver" url="${cagrid.portal.db.url}"
+             userid="${cagrid.portal.db.username}" password="${cagrid.portal.db.password}"
+             src="${build.gen.dir}/cagrid-portal.ddl">
+            <classpath refid="schema.cp"/>
+        </sql>
+
+    </target>
+
+
+    <target name="run">
+        <java classname="gov.nih.nci.cagrid.portal.TestDB">
+            <classpath refid="test.run.cp"/>
+        </java>
+    </target>
+
+    <target name="run-load" depends="prepare-test">
+        <java classname="gov.nih.nci.cagrid.portal.LoadCatalogEntryData">
+            <classpath refid="test.run.cp"/>
+        </java>
+    </target>
+
+    <target name="javadoc"
+            description="Generate javadocs for this project. To be called from main build.">
+
+        <javadoc packagenames="*" destdir="${javadocs.dest.dir}" author="true" version="true"
+                 use="true" windowtitle="caGrid Portal API">
+            <sourcepath>
+                <pathelement location="${src.java.dir}"/>
+            </sourcepath>
+
+            <classpath>
+                <pathelement location="${build.classes.dir}"/>
+                <path refid="compile.cp"/>
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:"/>
+            <tag name="created" scope="all" description="Created On:"/>
+
+        </javadoc>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${test.build.dir}"/>
+    </target>
+
+    <target name="all" depends="jar,gen-ddl"></target>
+
+</project>

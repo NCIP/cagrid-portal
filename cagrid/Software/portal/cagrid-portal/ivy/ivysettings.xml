@@ -1,0 +1,30 @@
+<ivysettings>
+    <settings defaultResolver="caGrid-portal-ivy-resolver"
+              circularDependencyStrategy="error"/>
+   
+  <caches checkUpToDate="false" defaultCacheDir="${user.home}/.cache" useOrigin="true"/>
+
+
+    <resolvers>
+        <chain name="caGrid-portal-ivy-resolver" returnFirst="true">
+            <filesystem name="integration-repository" local="true" checkmodified="true">
+                <ivy pattern="${ivy.integration.repository.dir}/[organisation]/[module]/ivy-[revision].xml"/>
+                <artifact pattern="${ivy.integration.repository.dir}/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+                <artifact pattern="${ivy.integration.repository.dir}/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </filesystem>
+            <filesystem name="fs-repository" local="true">
+                <ivy pattern="${ivy.repository.dir}/[organisation]/[module]/ivy-[revision].xml"/>
+                <artifact pattern="${ivy.repository.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+                <artifact pattern="${ivy.repository.dir}/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </filesystem>
+             <url name="remote-caGrid-ivy-resolver">
+                <ivy pattern="http://software.cagrid.org/repository-1.3/[organisation]/[module]/ivy-[revision].xml"/>
+                <artifact pattern="http://software.cagrid.org/repository-1.3/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+                <artifact pattern="http://software.cagrid.org/repository-1.3/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </url>
+            <ibiblio name="ibiblio-libraries" m2compatible="true" />
+        </chain>
+
+    </resolvers>
+
+</ivysettings>

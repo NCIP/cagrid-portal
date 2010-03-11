@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://model2/Model2Svc/CQLResultTypes" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <!-- Exposed Objects' schemas are imported here -->
+	<xs:import namespace="http://model2/model" schemaLocation="./model2.xsd"/>
+
+
+
+    <xs:group name="PermissibleCQLObjectResults">
+        <xs:choice>        
+        <!-- element references to exposed objects -->
+		<xs:element ref="ns0:GeneFunctionTerm" xmlns:ns0="http://model2/model"/>
+		<xs:element ref="ns0:Gene" xmlns:ns0="http://model2/model"/>
+		<xs:element ref="ns0:Chromosome" xmlns:ns0="http://model2/model"/>
+		<xs:element ref="ns0:Taxon" xmlns:ns0="http://model2/model"/>
+		<xs:element ref="ns0:Protein" xmlns:ns0="http://model2/model"/>
+ 
+        </xs:choice>
+    </xs:group>
+</xs:schema>

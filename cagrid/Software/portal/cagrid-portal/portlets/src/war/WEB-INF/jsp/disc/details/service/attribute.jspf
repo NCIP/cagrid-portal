@@ -1,0 +1,20 @@
+<table class="detailstable">
+	<tbody>
+        <tr>
+			<td class="detailslabelcell">Public ID:</td>
+			<td><c:out value="${att.publicID}"/></td>
+		</tr>
+        <tr>
+			<td class="detailslabelcell">Version:</td>
+			<td><c:out value="${att.version}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Description:</td>
+			<td><c:out value="${att.description}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Data Type Name:</td>
+			<td><c:out value="${att.dataTypeName}"/></td>
+		</tr>
+	</tbody>
+</table>

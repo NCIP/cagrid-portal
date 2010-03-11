@@ -1,0 +1,46 @@
+<liferay-portlet:actionURL var="queryLink" portletName="cagridquery_WAR_cagridportlets"
+                           portletMode="view">
+    <liferay-portlet:param name="operation" value="selectService"/>
+    <liferay-portlet:param name="dataServiceUrl" value="${gridService.url}"/>
+</liferay-portlet:actionURL>
+
+
+    <span id="${ns}queryBtnContainer" class="yui-skin-sam" />
+    <span id="${ns}queryTipContainer" class="yui-skin-sam"/>
+
+
+<script type="text/javascript">
+
+	function replacePart(inStr, beginPatt, endPatt, newPart){
+		var idx1 = inStr.indexOf(beginPatt);
+		var idx2 = inStr.indexOf(endPatt);
+		var beginStr = inStr.substring(0, idx1 + beginPatt.length);
+		var endStr = inStr.substring(idx2, inStr.length);
+		var outStr = beginStr + newPart + endStr; 
+		return outStr;
+	}
+
+    jQuery(document).ready(function() {
+
+
+        ${ns}queryButton = new YAHOO.widget.Button({
+            label: "Query",
+            id: "${ns}queryButton",
+            container: "${ns}queryBtnContainer"
+        });
+
+        ${ns}queryButton.on("click", function(evt) {
+            var queryLink = "${queryLink}";
+            queryLink = replacePart(queryLink, "web/guest/", "?", "tools/query-builder");
+            window.location = queryLink;
+        });
+
+        ${ns}queryTip = new YAHOO.widget.Tooltip("queryTip", {
+            context:"${ns}queryBtnContainer",
+            text:"Construct a Query for this Data Service.",
+            container:"${ns}queryTipContainer",
+            showDelay:200 });
+
+    });
+
+</script>

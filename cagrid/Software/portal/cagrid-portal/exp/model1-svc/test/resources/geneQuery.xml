@@ -1,0 +1,12 @@
+<ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+ <ns1:Target name="model1.domain.Gene">
+  <ns1:Association name="model1.domain.Term" roleName="terms">
+  	<ns1:Group logicRelation="OR">
+    	<ns1:Attribute name="value" predicate="EQUAL_TO" value="root"/>
+    	<ns1:Association name="model1.domain.Term" roleName="ancestors">
+    		<ns1:Attribute name="value" predicate="EQUAL_TO" value="root"/>
+    	</ns1:Association>
+    </ns1:Group>
+  </ns1:Association>
+ </ns1:Target>
+</ns1:CQLQuery>
