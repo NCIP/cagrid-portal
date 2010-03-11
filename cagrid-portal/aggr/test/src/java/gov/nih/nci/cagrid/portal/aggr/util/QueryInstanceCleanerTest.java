@@ -24,7 +24,7 @@ public class QueryInstanceCleanerTest extends DBIntegrationTestBase {
     @Override
     protected String[] getConfigLocations() {
         return new String[]{
-                "classpath:applicationContext-cleanup-utils.xml",
+                "classpath:applicationContext-aggr-utils.xml",
                 "classpath:applicationContext-service.xml",
                 "classpath:applicationContext-db.xml"
 

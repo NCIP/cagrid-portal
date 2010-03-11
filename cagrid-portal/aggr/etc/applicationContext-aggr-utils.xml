@@ -12,14 +12,11 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
     <!--utilities-->
-    
     <import resource="classpath:applicationContext-aggr.xml"/>
-    <import resource="classpath:applicationContext-service.xml"/>
-    <import resource="classpath:applicationContext-db-aspects.xml"/>
 
-    <!--<bean class="gov.nih.nci.cagrid.portal.util.GridServiceEndPointCEReClassify"-->
-          <!--autowire="byType"-->
-            <!--/>-->
+    <bean class="gov.nih.nci.cagrid.portal.util.GridServiceEndPointCEReClassify"
+          autowire="byName"
+            />
     
    	<bean id="serviceMetadataCatalogEntryBuilderAspect"
  		class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.ServiceMetadataCatalogEntryBuilderAspect"

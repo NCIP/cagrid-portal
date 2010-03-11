@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,17 +27,17 @@ public class GridServiceEndPointCEReClassify implements InitializingBean {
 
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                new String[]{"applicationContext-aggr-utils.xml"});
+                new String[]{"applicationContext-aggr-utils.xml","applicationContext-db.xml"});
     }
 
     public void afterPropertiesSet() throws Exception {
 
-        for (GridServiceEndPointCatalogEntry entry : gridServiceEndPointCatalogEntryDao.getAll()) {
-            if (entry.isData()) {
+        for (GridServiceEndPointCatalogEntry entry : getGridServiceEndPointCatalogEntryDao().getAll()) {
+            if (entry.isData() && !(entry instanceof GridDataServiceEndPointCatalogEntry)) {
                 log.debug("Service with id " + entry.getId() + " is a Data Service. Will re-classify");
                 GridService service = entry.getAbout();
 
-                DeleteCatalogs.deleteRelationships(gridServiceEndPointCatalogEntryDao.getHibernateTemplate(),getCatalogEntryRelationshipInstanceDao(),
+                DeleteCatalogs.deleteRelationships(getGridServiceEndPointCatalogEntryDao().getHibernateTemplate(),getCatalogEntryRelationshipInstanceDao(),
                 entry);
                 
                 gridServiceEndPointCatalogEntryDao.delete(entry);

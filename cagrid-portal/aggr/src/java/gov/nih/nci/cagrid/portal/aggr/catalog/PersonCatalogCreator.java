@@ -23,7 +23,7 @@ public class PersonCatalogCreator extends AbstractCatalogCreator {
         for (PortalUser user : portalUserDao.getAll()) {
 
             if (personCatalogEntryDao.isAbout(user) == null) {
-                logger.debug("Person catalog not found. WIll create for id " + user.getId());
+                logger.info("Person catalog not found. WIll create for id " + user.getId());
                 personCatalogEntryDao.createCatalogAbout(user);
 
             }

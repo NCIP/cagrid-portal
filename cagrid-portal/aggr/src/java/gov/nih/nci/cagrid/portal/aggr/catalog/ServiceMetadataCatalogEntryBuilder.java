@@ -70,7 +70,6 @@ public class ServiceMetadataCatalogEntryBuilder {
         if (endpointCe == null) {
             endpointCe = service instanceof GridDataService ? new GridDataServiceEndPointCatalogEntry() : new GridServiceEndPointCatalogEntry();
             endpointCe.setAbout(service);
-            endpointCe.setCreatedAt(new Date());
             endpointCe.setPublished(true);
             service.setCatalog(endpointCe);
 
@@ -94,7 +93,6 @@ public class ServiceMetadataCatalogEntryBuilder {
             interfaceCe.setVersion(serviceVersion);
             interfaceCe.setDescription(endpointCe.getDescription());
             interfaceCe.setPublished(true);
-            interfaceCe.setCreatedAt(new Date());
             getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
         }
         interfaceCe.setUpdatedAt(new Date());
@@ -162,7 +160,6 @@ public class ServiceMetadataCatalogEntryBuilder {
                         infoCe.setName(projectLongName);
                         infoCe.setDescription(domainModel
                                 .getProjectDescription());
-                        infoCe.setCreatedAt(new Date());
                         getInformationModelCatalogEntryDao().save(infoCe);
                     }
                     infoCe.setUpdatedAt(new Date());
@@ -317,7 +314,6 @@ public class ServiceMetadataCatalogEntryBuilder {
         InstitutionCatalogEntry institutionCe = new InstitutionCatalogEntry();
         institutionCe.setName(researchCenter.getDisplayName());
         institutionCe.setDescription(researchCenter.getDescription());
-        institutionCe.setCreatedAt(new Date());
         institutionCe.setPublished(true);
 
         Address addr = researchCenter.getAddress();
