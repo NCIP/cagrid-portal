@@ -64,7 +64,7 @@
         <!-- No DTD or Schema needed. -->
         <property name="config.file"
                   value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/jboss-service.xml"/>
-        <xmltask source="${config.file}" dest="${config.file}">
+        <xmltask source="${config.file}" dest="${config.file}" failWithoutMatch="false">
             <remove path="/server/classpath"/>
             <insert path="/server/mbean[1]" position="before">
                 <![CDATA[

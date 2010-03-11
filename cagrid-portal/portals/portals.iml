@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/liferay/test/src/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/ext" />
+      <excludeFolder url="file://$MODULE_DIR$/liferay-ext" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -20,6 +21,8 @@
     <orderEntry type="library" name="cagrid" level="project" />
     <orderEntry type="module" module-name="security" />
     <orderEntry type="library" name="liferay 5.2.3" level="project" />
+    <orderEntry type="library" name="Globus" level="application" />
+    <orderEntry type="module" module-name="cagrid-authn" />
   </component>
 </module>
 
