@@ -360,16 +360,7 @@ body .yui-skin-sam .yui-navset .yui-nav .selected a,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:focus,
 body .yui-skin-sam .yui-navset .yui-nav .selected a:hover,
 body .yui-skin-sam .yui-navset .yui-nav .selected a em, 
-#cabio .tabs li.current a{
-	background:url(../images/foop/YUI_tab_selected.png);
-	border:none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	font-weight:normal;
-	color:#fff;
-}
-#cabio .tabs li.current a {color:#ffffff;}
+
 body .yui-skin-sam .yui-navset .yui-nav .selected a em,
 body .yui-skin-sam .yui-navset .yui-nav a em {
 	padding:1px 10px;
@@ -377,36 +368,12 @@ body .yui-skin-sam .yui-navset .yui-nav a em {
 body .yui-skin-sam .yui-navset .yui-nav .selected,
 body .yui-skin-sam .yui-navset .yui-nav .selected,
 body .yui-skin-sam .yui-navset .yui-nav li,
-#cabio .tabs li, 
-#cabio .tabs li.current {
-	margin:5px;
-	top:0;
-}
-#cabio .tabs li{
-	line-height:normal;
-	background:none;
-	}
-body .yui-skin-sam .yui-navset .yui-nav a, 
+body .yui-skin-sam .yui-navset .yui-nav a,
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-nav a,
 body .yui-skin-sam .yui-navset .yui-nav a:focus,
 body .yui-skin-sam .yui-navset .yui-nav a:hover,
 body .yui-skin-sam .yui-navset .yui-nav a em, 
-#cabio .tabs li a {
-	background:url(../images/foop/YUI_tab_not_selected.png);
-	border:none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	color:#000;
-}
-#cabio .tabs li a {
-	padding:4px 10px;
-}
-#cabio .tabs li a:hover{
-	text-decoration:none;
-}
-body .yui-skin-sam .yui-navset .yui-nav, 
-#cabio ul {
+body .yui-skin-sam .yui-navset .yui-nav {
 	background:#D0D0D0;
 	border:none;
 	display:inline-block;
@@ -418,10 +385,7 @@ body .yui-skin-sam .yui-navset .yui-nav,
 	-webkit-border-radius-topright:10px;
 	padding:0 2px;
 }
-#cabio ul {
-	display:block;
-}
-body .yui-skin-sam .yui-navset .yui-content, 
+body .yui-skin-sam .yui-navset .yui-content,
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-content {
 border:2px solid #D0D0D0;
 padding: 0.5em;
