@@ -24,7 +24,7 @@
 
     jQuery(document).ready(function() {${managerFacadeName}.
         getAverageRating({callback:function(message) {${ns}renderAverageRating(message);},errorHandler:function(errorString, exception) {
-               alert("Error setting rating: " + errorString);}});});
+               }});});
 </script>
 <script type="text/javascript" src="<c:url value="/js/photo_row.js"/>"></script>
 <script>

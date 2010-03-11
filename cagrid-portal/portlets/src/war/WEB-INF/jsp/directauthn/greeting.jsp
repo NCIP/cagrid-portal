@@ -5,7 +5,7 @@
 <script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
 
-<script type="text/javascript" src="<c:url value="/js/state_country_lists.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/state_country_lists-min.js"/>"></script>
 
 <c:set var="ns"><portlet:namespace/></c:set>
 

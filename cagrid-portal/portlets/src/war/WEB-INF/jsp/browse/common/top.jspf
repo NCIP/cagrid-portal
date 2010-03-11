@@ -18,7 +18,6 @@
 
 <script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/logger/logger-min.js"/>"></script>
@@ -26,10 +25,8 @@
 <script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/tabview/tabview-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
 <script src="<c:url value="/js/yui/treeview/treeview-min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/js/yui/paginator/paginator-min.js"/>"></script>
 
 <c:set var="catalogEntry" value="${catalogEntryViewBean.catalogEntry}"/>
 <c:set var="ns"><portlet:namespace/></c:set>

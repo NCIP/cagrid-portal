@@ -9,7 +9,7 @@
 </style>
 
 <script type="text/javascript" src='<c:url value="/dwr/interface/EVSAutomcompleter.js"/>'></script>
-<script type="text/javascript" src='<c:url value="/js/autocomplete.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/js/autocomplete-min.js"/>'></script>
 
 
 <portlet:actionURL var="formAction">

@@ -222,6 +222,7 @@ public class QueryService implements ApplicationContextAware, DisposableBean {
     public void destroy() throws Exception {
         for (QueryInstance instance : getSubmittedQueries()) {
             deleteQueryInstance(instance.getId());
+            logger.info("Delete all queries for user with ID " + getUserModel().getPortalUser().getId());
         }
     }
 

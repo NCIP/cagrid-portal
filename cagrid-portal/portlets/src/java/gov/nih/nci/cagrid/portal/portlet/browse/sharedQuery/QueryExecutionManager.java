@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
+import gov.nih.nci.cagrid.portal.util.PortalUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
                         logger.error(msg);
                         throw new RuntimeException(msg);
                     }
-                    getQueryService().submitQuery(query.getXml().trim(), url);
+                    getQueryService().submitQuery(query.getXml(), url);
                 }
 
             }
@@ -111,7 +112,10 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
      * @return
      */
     public List<QueryInstance> getQueryInstances(String cql) {
-        Query query = getQueryService().loadQuery(cql.trim());
+        String queryXML = ((SharedQueryCatalogEntry) getUserModel()
+                .getCurrentCatalogEntry()).getAbout().getXml();
+        Query query = queryService.loadQuery(queryXML);
+
         List<QueryInstance> result = new ArrayList<QueryInstance>();
         if (query != null) {
             for (QueryInstance instance : getQueryService()
