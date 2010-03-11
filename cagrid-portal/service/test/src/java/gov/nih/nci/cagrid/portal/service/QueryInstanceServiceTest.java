@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
+import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 
 /**
  * User: kherm
@@ -33,6 +34,16 @@ public class QueryInstanceServiceTest extends DBIntegrationTestBase {
 
     }
 
+    public void testNPE(){
+        QueryInstance inst = new CQLQueryInstance();
+        getQueryInstanceDao().save(inst);
+
+        QueryResultTable table = new QueryResultTable();
+inst.setQueryResultTable(table);
+
+        queryInstanceService.delete(inst.getId());
+        assertEquals(0, getQueryInstanceDao().getAll().size());
+    }
     @Override
     protected String[] getConfigLocations() {
         return new String[]{
