@@ -68,27 +68,27 @@
                 <include name="**/application-config-client.xml"/>
             </fileset>
             <filterset>
-            	<filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
+                <filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
             </filterset>
         </copy>
-    	
-    	<copy todir="${build.war.dir}" overwrite="true" filtering="true">
+
+        <copy todir="${build.war.dir}" overwrite="true" filtering="true">
             <fileset dir="${src.war.dir}">
                 <include name="WEB-INF/classes/messages.properties"/>
             </fileset>
             <filterset>
-            	<filter token="CSRF_TOKEN_NAME" value="${cagrid.portal.csrfTokenName}"/>
+                <filter token="CSRF_TOKEN_NAME" value="${cagrid.portal.csrfTokenName}"/>
             </filterset>
         </copy>
-    	
-    	<copy todir="${build.war.dir}" overwrite="true" filtering="true">
-    	            <fileset dir="${src.war.dir}">
-    	                <include name="**/application-config-client.xml"/>
-    	            </fileset>
-    	            <filterset>
-    	            	<filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
-    	            </filterset>
-    	        </copy>
+
+        <copy todir="${build.war.dir}" overwrite="true" filtering="true">
+            <fileset dir="${src.war.dir}">
+                <include name="**/application-config-client.xml"/>
+            </fileset>
+            <filterset>
+                <filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
+            </filterset>
+        </copy>
 
         <copy todir="${build.war.webinf.dir}/lib" overwrite="true" flatten="true">
             <fileset dir="${ext.lib.dir}">
@@ -96,7 +96,7 @@
             </fileset>
         </copy>
 
-        <copy todir="${build.war.build.classes.dir}"  overwrite="true">
+        <copy todir="${build.war.build.classes.dir}" overwrite="true">
             <fileset dir="${build.classes.dir}">
                 <include name="**/*"/>
             </fileset>
@@ -118,8 +118,11 @@
 
     <target name="compile">
         <mkdir dir="${build.classes.dir}"/>
-        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" 
-               debug="${portlets.debug}">
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}"
+               debug="${portlets.debug}"
+               fork="true"
+               memoryinitialsize="256m"
+               memorymaximumsize="512m">
             <classpath refid="compile.cp"/>
         </javac>
     </target>
@@ -156,7 +159,7 @@
     </target>
 
 
-    <target name="trust-websso" depends="prepare-test" >
+    <target name="trust-websso" depends="prepare-test">
         <input message="Enter webSSO server URL: host[:port]" addproperty="websso.server.url"/>
         <input message="Enter passphrase" addproperty="websso.server.pass" defaultvalue="changeit"/>
 
