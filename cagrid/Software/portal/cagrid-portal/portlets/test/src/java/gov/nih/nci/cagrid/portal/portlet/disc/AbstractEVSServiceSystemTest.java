@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.portal.portlet.disc;
 
-import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.ConceptService;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigConceptService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import java.util.Set;
 
@@ -14,7 +14,14 @@ import java.util.Set;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class AbstractEVSServiceSystemTest extends PortletIntegrationTestBase {
+public class AbstractEVSServiceSystemTest extends AbstractDependencyInjectionSpringContextTests {
+
+    @Override
+    protected String[] getConfigLocations() {
+        return new String[]{
+                "classpath*:applicationContext-portlets-test.xml",
+        };
+    }
 
     protected ConceptService caCoreConceptService;
     protected LexbigConceptService lexbigEVSService;
