@@ -38,8 +38,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="db" />
-    <orderEntry type="library" name="jena" level="project" />
+    <orderEntry type="module" module-name="db" exported="" />
+    <orderEntry type="library" exported="" name="jena" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -50,12 +50,12 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="liferay 5.2.3" level="project" />
-    <orderEntry type="library" name="acegi" level="project" />
-    <orderEntry type="library" name="sun" level="project" />
+    <orderEntry type="library" exported="" name="acegi" level="project" />
+    <orderEntry type="library" exported="" name="sun" level="project" />
     <orderEntry type="library" name="dwr" level="project" />
-    <orderEntry type="module" module-name="aggr" />
-    <orderEntry type="library" name="cagrid" level="project" />
-    <orderEntry type="module" module-name="portal-search" />
+    <orderEntry type="module" module-name="aggr" exported="" />
+    <orderEntry type="library" exported="" name="cagrid" level="project" />
+    <orderEntry type="module" module-name="portal-search" exported="" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -65,7 +65,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="security" />
+    <orderEntry type="module" module-name="security" exported="" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -75,8 +75,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="cagrid-authn" />
-    <orderEntry type="library" name="Globus" level="application" />
+    <orderEntry type="library" exported="" name="Globus" level="application" />
   </component>
 </module>
 

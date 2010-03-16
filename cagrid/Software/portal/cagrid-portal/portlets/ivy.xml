@@ -10,6 +10,8 @@
         <!-- Public Configurations-->
         <conf name="default" visibility="public"
               description="runtime dependencies and master artifact can be used with this conf"/>
+        <conf name="ext-portlets" extends="default" visibility="public"
+              description="if parts of the Portlet project without deploying the portlets"/>
         <conf name="compile" extends="default" visibility="public"
               description="this is the default scope, used if none is specified. Compile dependencies are available in all classpaths."/>
         <conf name="test" extends="compile" visibility="public"
@@ -19,6 +21,11 @@
 
     <publications>
         <artifact name="cagridportlets" conf="default" type="war"/>
+        <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
+        <artifact name="common" conf="ext-portlets" type="xml"/>
+        <!--since cagrid does not publish it-->
+        <artifact name="Distributed_CQL_schema_2.0" conf="default" type="xsd"/>
     </publications>
 
     <dependencies>
@@ -27,7 +34,7 @@
         <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-security" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="default"/>
-        <dependency rev="latest.integration" org="caGrid" name="portal-authn-portlet" conf="compile->domain" />
+        <dependency rev="latest.integration" org="caGrid" name="portal-authn-portlet" conf="compile->domain"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-service" conf="default"/>
 
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="introduce-clienttools"
@@ -58,11 +65,11 @@
 
         <dependency rev="${liferay.portal.version}" org="liferay" name="portal"
                     conf="default->portlet;compile->portal-ext"/>
-                    
+
         <dependency rev="2.6.0" org="hp" name="jena" conf="*->default"/>
-        
+
         <dependency rev="1.2.1" org="apache" name="commons-fileupload"/>
-         
+
 
     </dependencies>
 

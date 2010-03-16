@@ -66,6 +66,14 @@
       <maximumStackSize value="32" />
       <properties />
     </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/ctsa-sample-portlet/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -321,7 +329,12 @@
         <option name="myLocal" value="false" />
       </profile>
     </profiles>
-    <list size="0" />
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="SERVER PROBLEM" />
+      <item index="1" class="java.lang.String" itemvalue="INFO" />
+      <item index="2" class="java.lang.String" itemvalue="WARNING" />
+      <item index="3" class="java.lang.String" itemvalue="ERROR" />
+    </list>
   </component>
   <component name="JavacSettings">
     <option name="DEBUGGING_INFO" value="true" />
@@ -486,16 +499,18 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/aggr/aggr.iml" filepath="$PROJECT_DIR$/aggr/aggr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authn-portlet/authn-portlet.iml" filepath="$PROJECT_DIR$/authn-portlet/authn-portlet.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ctsa-query-portlet/ctsa-sample-portlet.iml" filepath="$PROJECT_DIR$/ctsa-query-portlet/ctsa-sample-portlet.iml" />
       <module fileurl="file://$PROJECT_DIR$/db/db.iml" filepath="$PROJECT_DIR$/db/db.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../liquibase/trunk/liquibase.iml" filepath="$PROJECT_DIR$/../../../../liquibase/trunk/liquibase.iml" />
       <module fileurl="file://$PROJECT_DIR$/portal-search/portal-search.iml" filepath="$PROJECT_DIR$/portal-search/portal-search.iml" />
       <module fileurl="file://$PROJECT_DIR$/portals/portals.iml" filepath="$PROJECT_DIR$/portals/portals.iml" />
       <module fileurl="file://$PROJECT_DIR$/portlets/portlets.iml" filepath="$PROJECT_DIR$/portlets/portlets.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="RmicSettings">
@@ -524,31 +539,6 @@
         <entry key="$PROJECT_DIR$/../../../../liquibase/trunk/core">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchMap">
-                <map>
-                  <entry key="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1189208936020" />
-                          <option name="revision" value="317" />
-                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/refactor_migrator" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1186595381180" />
-                          <option name="revision" value="247" />
-                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/TRY-M2" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1186509751360" />
-                          <option name="revision" value="239" />
-                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/eclipse_ide" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
               <option name="branchUrls">
                 <list>
                   <option value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches" />
@@ -689,11 +679,11 @@
     </library>
     <library name="cagrid">
       <CLASSES>
-        <root url="file://$PROJECT_DIR$/../../../../../tomcat-wsrf/webapps/dev-repository/caGrid" />
+        <root url="file://$PROJECT_DIR$/../../../tomcat-wsrf/webapps/dev-repository/caGrid" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-      <jarDirectory url="file://$PROJECT_DIR$/../../../../../tomcat-wsrf/webapps/dev-repository/caGrid" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/../../../tomcat-wsrf/webapps/dev-repository/caGrid" recursive="false" />
     </library>
     <library name="velocity">
       <CLASSES>

@@ -5,6 +5,11 @@
     <property name="portlets.dir" value="${basedir}"/>
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.jar.dir" value="${build.dir}/jars"/>
+    <property name="build.xml.dir" value="${build.dir}/xmls"/>
+    <property name="build.xsd.dir" value="${build.dir}/xsds"/>
+
+
     <property name="build.war.dir" value="${build.dir}/war"/>
     <property name="build.war.webinf.dir" value="${build.war.dir}/WEB-INF"/>
     <property name="build.war.build.classes.dir" value="${build.war.webinf.dir}/classes"/>
@@ -13,6 +18,9 @@
 
     <property name="src.java.dir" value="${basedir}/src/java"/>
     <property name="src.war.dir" value="${basedir}/src/war"/>
+    <property name="src.war.webinf.dir" value="${src.war.dir}/WEB-INF"/>
+    <property name="src.war.webinf.context.dir" value="${src.war.webinf.dir}/context"/>
+
     <property name="build.wars.dir" value="${build.dir}/wars"/>
     <property name="cagrid.portlets.war.file" value="${build.wars.dir}/cagridportlets.war"/>
     <property name="portlets.context.name" value="${portlets.context.name}"/>
@@ -55,21 +63,13 @@
         <pathelement location="${build.war.webinf.dir}/context"/>
     </path>
 
-    <target name="build-war-dir" depends="compile">
+    <target name="build-war-dir" depends="jar">
 
         <mkdir dir="${build.war.webinf.dir}/lib"/>
         <mkdir dir="${build.war.build.classes.dir}"/>
 
         <copy todir="${build.war.dir}" overwrite="true" filtering="false">
             <fileset dir="${src.war.dir}"/>
-        </copy>
-        <copy todir="${build.war.dir}" overwrite="true" filtering="true">
-            <fileset dir="${src.war.dir}">
-                <include name="**/application-config-client.xml"/>
-            </fileset>
-            <filterset>
-                <filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
-            </filterset>
         </copy>
 
         <copy todir="${build.war.dir}" overwrite="true" filtering="true">
@@ -81,25 +81,16 @@
             </filterset>
         </copy>
 
-        <copy todir="${build.war.dir}" overwrite="true" filtering="true">
-            <fileset dir="${src.war.dir}">
-                <include name="**/application-config-client.xml"/>
-            </fileset>
-            <filterset>
-                <filter token="evs40.remoteAPI.url" value="${evs.remoteAPI.url}"/>
-            </filterset>
-        </copy>
-
         <copy todir="${build.war.webinf.dir}/lib" overwrite="true" flatten="true">
             <fileset dir="${ext.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${build.jar.dir}">
                 <include name="*.jar"/>
             </fileset>
         </copy>
 
         <copy todir="${build.war.build.classes.dir}" overwrite="true">
-            <fileset dir="${build.classes.dir}">
-                <include name="**/*"/>
-            </fileset>
             <fileset dir="${ext.xml.dir}">
                 <include name="*.xml"/>
             </fileset>
@@ -118,6 +109,8 @@
 
     <target name="compile">
         <mkdir dir="${build.classes.dir}"/>
+
+
         <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}"
                debug="${portlets.debug}"
                fork="true"
@@ -125,6 +118,32 @@
                memorymaximumsize="512m">
             <classpath refid="compile.cp"/>
         </javac>
+
+
+    </target>
+
+    <target name="jar" depends="compile-test">
+        <mkdir dir="${build.jar.dir}"/>
+        <mkdir dir="${build.xml.dir}"/>
+        <mkdir dir="${build.xsd.dir}"/>
+
+        <jar basedir="${build.classes.dir}" destfile="${build.jar.dir}/caGrid-portal-portlets.jar"/>
+        <copy todir="${build.xml.dir}">
+            <fileset dir="${src.war.webinf.context.dir}">
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+
+
+        <copy todir="${build.xsd.dir}">
+            <fileset dir="${src.war.webinf.dir}/classes">
+                <include name="*.xsd"/>
+            </fileset>
+        </copy>
+
+        <jar basedir="${test.build.classes.dir}"
+             destfile="${build.jar.dir}/caGrid-portal-portlets-test.jar"
+             includes="**/*.class"/>
     </target>
 
 

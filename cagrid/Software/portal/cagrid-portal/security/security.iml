@@ -15,7 +15,7 @@
     <orderEntry type="module" module-name="aggr" />
     <orderEntry type="library" name="Globus" level="application" />
     <orderEntry type="module" module-name="db" />
-    <orderEntry type="module" module-name="cagrid-authn" />
+    <orderEntry type="module" module-name="authn-portlet" />
   </component>
 </module>
 
