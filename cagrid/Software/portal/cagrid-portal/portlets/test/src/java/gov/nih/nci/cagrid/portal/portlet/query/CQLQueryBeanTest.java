@@ -3,11 +3,11 @@ package gov.nih.nci.cagrid.portal.portlet.query;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
+import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 
 /**
@@ -15,7 +15,14 @@ import static org.mockito.Mockito.stub;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class CQLQueryBeanTest extends PortletIntegrationTestBase {
+public class CQLQueryBeanTest extends AbstractDependencyInjectionSpringContextTests {
+
+    @Override
+    protected String[] getConfigLocations() {
+        return new String[]{
+                "classpath*:applicationContext-portlets-test.xml",
+        };
+    }
 
 
     public void testBean() throws Exception {
