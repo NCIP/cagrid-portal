@@ -22,7 +22,7 @@
 <liferay-portlet:actionURL var="catalogLink"
                            portletMode="view">
     <liferay-portlet:param name="operation" value="viewDetails"/>
-
+    <liferay-portlet:param name="entryId" value="ENTRY_ID"/>
 </liferay-portlet:actionURL>
 
 
@@ -33,16 +33,16 @@
 
     function ${ns}viewDetails(id) {
 
-        $("${ns}entryId").value = id;
-           $("${ns}selectedCatalogType").value = g_catalogType;
-           $("${ns}selectedCatalogLabel").value = g_catalogType_label;
-           $("${ns}catalogType").value = "${catalogType}";
-         $("${ns}aof").value = g_aof;
-         $("${ns}searchKeyword").value = wildcard;
+        $("${ns}selectedCatalogType").value = g_catalogType;
+        $("${ns}selectedCatalogLabel").value = g_catalogType_label;
+        $("${ns}catalogType").value = "${catalogType}";
+        $("${ns}aof").value = g_aof;
+        $("${ns}searchKeyword").value = wildcard;
         $("${ns}selectedIds").value = g_selectedids;
 
-
-        $("${ns}catalogDetailsForm").action = "${catalogLink}";
+        var catalogLink = "${catalogLink}";
+        catalogLink = catalogLink.replace("ENTRY_ID", id);
+        $("${ns}catalogDetailsForm").action = catalogLink;
         $("${ns}catalogDetailsForm").submit();
         return false;
     }
@@ -226,14 +226,14 @@
 </script>
 
 <form:form id="${ns}catalogDetailsForm" method="post">
-    <input type="hidden" name="entryId" id="${ns}entryId"value="">
 
-    <input type="hidden" name="selectedCatalogType"  id="${ns}selectedCatalogType" value="">
+
+    <input type="hidden" name="selectedCatalogType" id="${ns}selectedCatalogType" value="">
     <input type="hidden" name="selectedCatalogLabel" id="${ns}selectedCatalogLabel" value="">
     <input type="hidden" name="catalogType" id="${ns}catalogType" value="">
     <input type="hidden" name="aof" id="${ns}aof" value="">
     <input type="hidden" name="searchKeyword" id="${ns}searchKeyword" value="search">
-    <input type="hidden" name="selectedIds"  id="${ns}selectedIds" value="">
+    <input type="hidden" name="selectedIds" id="${ns}selectedIds" value="">
 
 
     <div>
