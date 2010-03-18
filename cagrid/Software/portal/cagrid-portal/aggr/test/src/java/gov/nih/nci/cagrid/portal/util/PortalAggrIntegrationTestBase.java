@@ -25,7 +25,7 @@ public class PortalAggrIntegrationTestBase extends AbstractDependencyInjectionSp
     protected String[] getConfigLocations() {
         return new String[]{
                 "classpath*:applicationContext-aggr.xml",
-                "applicationContext-db.xml"
+                "applicationContext-db-run.xml"
         };
     }
 
