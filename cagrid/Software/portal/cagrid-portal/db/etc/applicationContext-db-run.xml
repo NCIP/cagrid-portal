@@ -22,5 +22,7 @@
         <property name="contexts" value="production"/>
     </bean>
 
+    <bean id="baseServiceFilter" class="gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter"
+          autowire="byName"/>
 </beans>
 
