@@ -1,7 +1,7 @@
     
                          caGrid Portal
-                          Version 2.0
-                       December 28, 2007 
+                          Version 3.0
+                       March 26, 2010 
 
 
 ================================================================
@@ -22,66 +22,81 @@
 ================================================================
 
     This document contains the release notes for the caGrid 
-    Portal 2.0 release.  
+    Portal 3.0 release.
 
-    This release of caGrid Portal consolidates and extends the
-    feature sets of earlier release of both the caGrid Portal
-    and caGrid Browser applications. The portal architecture was
-    also completely redesigned for this release. While the portal
-    was previously a sub project of caGrid, it is now a separate
-    project with an independent release schedule.
-
+    This release of caGrid Portal extends the 2.0 Portal.
+    The portal User Interface was completely redesigned for this
+    release. Search has been enhanced by using Lucene and SOLR.
+    Unlike the previous release, users can now update information
+    in the Portal.
 
 ================================================================
                       2.0 Release History
 ================================================================
 
-    caGrid Portal 1.1 was released with caGrid 1.1 on 17th December 2007
+    caGrid Portal 2.0 was released on 17th December 2007
+    caGrid Portal 2.0.1 was released on 7th March 2008
+    caGrid Portal 2.0.2 was released on 19th June 2008
+    caGrid Portal 2.1 was released on 24th October 2008
+    caGrid Portal 2.2 was released on 24th Februaru 2009
+            
+
 
 ================================================================
                       3.0 New Features and Updates
 ================================================================
+caGrid Portal 3.0 has a complete new User Interface. It also
+implements the ability to catalogue data on the grid.
 
-RFE		Description
-------------------------------------------------------------   
-4133	Portal should purge retired services
+In addtion to major architectural and UI changes,
+the following RFE's were implemented in this release
 
-The complete list of new features and additional details can be 
-found on the caGrid Project wiki here:
-  http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
 
-Specific highlighted improvements of caGrid Portal 2.0 include:
- * Unification of caGrid Portal and caGrid Browser feature sets.
- * Simplified discovery interfaces for services, participants, and POCs.
- * Enhanced views of service metadata and data service domain models.
- * Integration of discovery and data service query functionality.
- * Graphical CQL query builder.
- * Enhanced data service query execution and history tracking.
- * Support for annotating and sharing CQL queries.
- * Export of data service query results to MS Excel format.
- * Enhanced GAARDS registration interface.
- 
+20257	Session timeout throws non descriptive error in DWR
+20264	Workflow Portlet
+20270	Notification Framework 
+20275	Provide interface to make participant information update
+        requests.
+20279	Portal build process and Installer should make better use
+        of caGrid target grids
+22930	Users should be able to log onto the portal using there
+        identity provider credentials
+22973	Catalog browsing should save state.
+22988	caGrid Portal: Change Search Results heading.
+22990	caGrid Portal: communities feedback
+22994	caGrid Portal: catalog search feedback
+24282	Show total query results
+24289	Simplify Catalog Entry Type Tree
+24354	Popup windows should be consistently styled
+24368	Liquibase changelog breaks with InnoDB engine
+25457	Make Add Related Item Window scrollable
+25749	Portal 3.0: Catalog Search Categories loads too slowly
+        on QA after restarting JBoss
+25800	Portal 3.0: Login text
+25803	Portal 3.0: Comments tab message
+25804	Portal 3.0: Remove Other Info Tab
+25805	Portal 3.0: Password verification field
+25818	Portal: Query results clean-up
+25824	Portal: Simplify Shared Query Page
+25825	Portal: Shared Query - Delete All button
+25828	Portal: Maximum selected data sources
+25830	Portal: Link to author of comment
+
 ================================================================
                       4.0 Bug fixes Since Last Release
 ================================================================
+For a list of bug fixed please visit the caGrid tracker here
 
-Bug		Description
-------------------------------------------------------------   
-3867	Portal not showing all operations for all services
-8409	Portal data-load code inconsistently populates database on successive loads.
+https://gforge.nci.nih.gov/tracker/?group_id=25
 
-The complete fixed bug list and additional details can be found on the project Gforge Tracker:
-  http://gforge.nci.nih.gov/tracker/index.php?group_id=25&atid=174
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
 ================================================================
 
-Update to date bug reports and feature requests can be found on the tracker section
-of the project's gforge site:
-http://gforge.nci.nih.gov/tracker/?group_id=25
+A list of open bugs can be found on the GForge tracker
 
-At the time of release, there are no known issues.
+https://gforge.nci.nih.gov/tracker/?group_id=25
 
 
 ================================================================
@@ -114,7 +129,7 @@ At the time of release, there are no known issues.
 
 	The latest documentation, including individual project design documents,
 	can be found on the caGrid wiki:
-	   http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
+	  http://wiki.cagrid.org/display/portal30/Documentation
 	
 
 ================================================================
