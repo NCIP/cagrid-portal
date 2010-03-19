@@ -66,7 +66,7 @@ public class CommunityService extends CatalogEntryService {
 
 			});
 			
-			deleteCatalogEntry(portalUser, communityCe);
+			deleteCatalogEntry(communityCe);
 			
 		} catch (Exception ex) {
 			throw new Exception("Error deleting community: " + ex.getMessage(),

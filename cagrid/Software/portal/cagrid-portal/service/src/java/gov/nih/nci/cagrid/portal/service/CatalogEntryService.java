@@ -42,13 +42,13 @@ public class CatalogEntryService {
 		return t.getReturnValue();
 	}
 	
-	public void deleteCatalogEntry(PortalUser portalUser, CatalogEntry catalogEntry){
+	public void deleteCatalogEntry(CatalogEntry catalogEntry){
 		CatalogEntry ce = getCatalogEntryDao().getById(catalogEntry.getId());
-		deleteRelationships(portalUser, ce);
+		deleteRelationships(ce);
 		getCatalogEntryDao().delete(ce);
 	}
 	
-	public void deleteRelationships(PortalUser portalUser, CatalogEntry catalogEntry) {
+	public void deleteRelationships(CatalogEntry catalogEntry) {
 		if(catalogEntry == null){
 			throw new IllegalArgumentException("CatalogEntry is null.");
 		}

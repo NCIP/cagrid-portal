@@ -31,7 +31,7 @@ public class PersonService extends CatalogEntryService {
 				});
 			}
 			getPortalUserDao().delete(toDelete);
-			deleteCatalogEntry(portalUser, personCe);
+			deleteCatalogEntry(personCe);
 			
 		} catch (Exception ex) {
 			throw new Exception("Error deleting person: " + ex.getMessage(), ex);
