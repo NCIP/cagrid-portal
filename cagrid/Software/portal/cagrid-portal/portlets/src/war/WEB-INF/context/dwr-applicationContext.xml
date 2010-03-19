@@ -97,8 +97,8 @@
 
     <bean id="filteredContentGenerator" class="gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator"
           abstract="true" autowire="byName">
-        <property name="filter">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter"/>
+        <property name="filter" ref="baseServiceFilter">
+
         </property>
     </bean>
 
@@ -121,7 +121,7 @@
           autowire="byName" parent="filteredContentGenerator">
     </bean>
 
-     <bean id="latestContentService"
+    <bean id="latestContentService"
           class="gov.nih.nci.cagrid.portal.portlet.map.ajax.LatestContentService"
           p:latestContentLimit="5"
           p:view="/WEB-INF/jsp/map/latestContent-ajax.jsp"
@@ -158,7 +158,8 @@
         </property>
     </bean>
 
-    <bean id="notificationSubscriptionService" class="gov.nih.nci.cagrid.portal.portlet.notification.NotificationSubscriptionService"
+    <bean id="notificationSubscriptionService"
+          class="gov.nih.nci.cagrid.portal.portlet.notification.NotificationSubscriptionService"
           autowire="byName"/>
 
 </beans>

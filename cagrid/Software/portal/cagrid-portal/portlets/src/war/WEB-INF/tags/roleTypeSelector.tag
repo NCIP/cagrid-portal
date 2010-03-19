@@ -1,8 +1,8 @@
-<%@tag%>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@tag %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <%@attribute name="input_name" required="true" %>
@@ -14,9 +14,8 @@
 
 <a id="${rtsId}-infoPopup-control"
    class="infoPopupLink"
-   onmouseover="$('${rtsId}-infoPopup-content').style.display='inline'"
-   onmouseout="$('${rtsId}-infoPopup-content').style.display='none'">
-   <spring:message code="${entry_type}"/>
+        >
+    <spring:message code="${entry_type}"/>
 </a>&nbsp;
 
         <span id="${rtsId}-infoPopup-content" class="infoPopup">

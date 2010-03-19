@@ -3,22 +3,17 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.util;
 
+import gov.nih.nci.cagrid.portal.PortalTestUtils;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
-import gov.nih.nci.cagrid.portal.domain.StatusChange;
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.Service;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter;
-import gov.nih.nci.cagrid.portal.PortalTestUtils;
-import junit.framework.TestCase;
+import gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter;
 import static junit.framework.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.io.IOException;
-
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -34,19 +29,17 @@ public class PortletUtilsTest {
     }
 
 
-
-
     @Test
-    public void validate(){
+    public void validate() {
         try {
             String dcqlXML = PortalTestUtils.readFileASString("test/data/microArrayLargeDataDCQL.xml");
             String cqlXML = PortalTestUtils.readFileASString("test/data/sampleCQL1.xml");
 
-            assertFalse("Not a CQL query",PortletUtils.isCQL(dcqlXML));
-            assertTrue("Is a DCQL Query",PortletUtils.isDCQL(dcqlXML));
+            assertFalse("Not a CQL query", PortletUtils.isCQL(dcqlXML));
+            assertTrue("Is a DCQL Query", PortletUtils.isDCQL(dcqlXML));
 
-            assertFalse("Not a DCQL Query",PortletUtils.isDCQL(cqlXML));
-            assertTrue("Is a CQL Query",PortletUtils.isCQL(cqlXML));
+            assertFalse("Not a DCQL Query", PortletUtils.isDCQL(cqlXML));
+            assertTrue("Is a CQL Query", PortletUtils.isCQL(cqlXML));
 
         } catch (IOException e) {
             fail(e.getMessage());

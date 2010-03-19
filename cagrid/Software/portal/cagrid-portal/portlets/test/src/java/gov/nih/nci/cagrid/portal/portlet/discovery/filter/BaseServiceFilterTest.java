@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.domain.StatusChange;
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.Service;
+import gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
