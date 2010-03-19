@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal.aggr.catalog;
 
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
@@ -40,6 +41,7 @@ public class ServiceMetadataCatalogEntryBuilder {
     private InstitutionCatalogEntryDao institutionCatalogEntryDao;
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
+    private GridServiceDao gridServiceDao;
 
 
     /**
@@ -70,9 +72,8 @@ public class ServiceMetadataCatalogEntryBuilder {
         if (endpointCe == null) {
             endpointCe = service instanceof GridDataService ? new GridDataServiceEndPointCatalogEntry() : new GridServiceEndPointCatalogEntry();
             endpointCe.setAbout(service);
-            endpointCe.setPublished(true);
-            service.setCatalog(endpointCe);
 
+            service.setCatalog(endpointCe);
             getGridServiceEndPointCatalogEntryDao().save(endpointCe);
         }
         endpointCe.setUpdatedAt(new Date());
@@ -92,7 +93,7 @@ public class ServiceMetadataCatalogEntryBuilder {
             interfaceCe.setName(intfName);
             interfaceCe.setVersion(serviceVersion);
             interfaceCe.setDescription(endpointCe.getDescription());
-            interfaceCe.setPublished(true);
+
             getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
         }
         interfaceCe.setUpdatedAt(new Date());
@@ -314,7 +315,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         InstitutionCatalogEntry institutionCe = new InstitutionCatalogEntry();
         institutionCe.setName(researchCenter.getDisplayName());
         institutionCe.setDescription(researchCenter.getDescription());
-        institutionCe.setPublished(true);
+
 
         Address addr = researchCenter.getAddress();
         if (addr != null) {
@@ -337,26 +338,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         return institutionCe;
     }
 
-//	private PersonCatalogEntry createPersonCatalogEntry(Person person) {
-//
-//		PortalUser user = getPortalUserDao().getByPersonId(person.getId());
-//
-//		PersonCatalogEntry personCe = new PersonCatalogEntry();
-//		if(user != null){
-//			personCe.setAbout(user);
-//		}
-//		personCe.setCreatedAt(new Date());
-//		personCe.setPublished(true);
-//		personCe.setName(person.getFirstName() + " " + person.getLastName());
-//		personCe.setEmailAddress(person.getEmailAddress());
-//		personCe.setEmailAddressPublic(true);
-//		if (!StringUtils.isEmpty(person.getPhoneNumber())) {
-//			personCe.setPhoneNumber(person.getPhoneNumber());
-//			personCe.setPhoneNumberPublic(true);
-//		}
-//		getPersonCatalogEntryDao().save(personCe);
-//		return personCe;
-//	}
+
 
     private CatalogEntryRelationshipInstance assertRelationship(
             String relTypeName, CatalogEntry ceA, CatalogEntry ceB,
@@ -464,4 +446,11 @@ public class ServiceMetadataCatalogEntryBuilder {
         this.portalUserDao = portalUserDao;
     }
 
+    public GridServiceDao getGridServiceDao() {
+        return gridServiceDao;
+    }
+
+    public void setGridServiceDao(GridServiceDao gridServiceDao) {
+        this.gridServiceDao = gridServiceDao;
+    }
 }

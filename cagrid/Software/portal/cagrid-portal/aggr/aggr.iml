@@ -29,7 +29,6 @@
     <orderEntry type="module" module-name="service" exported="" />
     <orderEntry type="library" name="mysql" level="project" />
     <orderEntry type="module" module-name="db" />
-    <orderEntry type="library" name="lexevs" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -39,6 +38,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="hsql 1.9" level="application" />
   </component>
 </module>
 
