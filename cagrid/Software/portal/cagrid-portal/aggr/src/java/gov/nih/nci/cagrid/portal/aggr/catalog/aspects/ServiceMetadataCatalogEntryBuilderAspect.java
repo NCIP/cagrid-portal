@@ -6,18 +6,16 @@ package gov.nih.nci.cagrid.portal.aggr.catalog.aspects;
 import gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
-import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import gov.nih.nci.cagrid.portal.service.CatalogEntryService;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.Resource;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  */
 @Aspect
 public class ServiceMetadataCatalogEntryBuilderAspect {
