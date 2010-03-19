@@ -8,6 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/samples/cagrid-evs-sample-portlet/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/samples/cagrid-evs-sample-portlet/test/src/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ctsa-sample-portlet/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ctsa-sample-portlet/ext" />
       <excludeFolder url="file://$MODULE_DIR$/ivy/integration-repository" />
       <excludeFolder url="file://$MODULE_DIR$/samples/cagrid-evs-sample-portlet" />
     </content>

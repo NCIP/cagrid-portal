@@ -501,7 +501,6 @@
       <module fileurl="file://$PROJECT_DIR$/aggr/aggr.iml" filepath="$PROJECT_DIR$/aggr/aggr.iml" />
       <module fileurl="file://$PROJECT_DIR$/authn-portlet/authn-portlet.iml" filepath="$PROJECT_DIR$/authn-portlet/authn-portlet.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ctsa-query-portlet/ctsa-sample-portlet.iml" filepath="$PROJECT_DIR$/ctsa-query-portlet/ctsa-sample-portlet.iml" />
       <module fileurl="file://$PROJECT_DIR$/db/db.iml" filepath="$PROJECT_DIR$/db/db.iml" />
       <module fileurl="file://$PROJECT_DIR$/portal-search/portal-search.iml" filepath="$PROJECT_DIR$/portal-search/portal-search.iml" />
       <module fileurl="file://$PROJECT_DIR$/portals/portals.iml" filepath="$PROJECT_DIR$/portals/portals.iml" />
