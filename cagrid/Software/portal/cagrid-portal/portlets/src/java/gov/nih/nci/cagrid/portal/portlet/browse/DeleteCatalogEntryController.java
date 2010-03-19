@@ -67,7 +67,7 @@ public class DeleteCatalogEntryController extends AbstractController {
         } else if (catalogEntry instanceof PersonCatalogEntry) {
             getPersonService().deletePerson(getUserModel().getPortalUser(), (PersonCatalogEntry) catalogEntry);
         } else {
-            getCatalogEntryService().deleteCatalogEntry(getUserModel().getPortalUser(), catalogEntry);
+            getCatalogEntryService().deleteCatalogEntry(catalogEntry);
         }
 
 //		deleteRelationships(catalogEntry);

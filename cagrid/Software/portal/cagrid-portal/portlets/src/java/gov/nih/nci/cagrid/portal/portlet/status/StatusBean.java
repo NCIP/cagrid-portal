@@ -5,17 +5,13 @@ package gov.nih.nci.cagrid.portal.portlet.status;
 
 import gov.nih.nci.cagrid.portal.aggr.TrackableMonitor;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -39,7 +35,6 @@ public class StatusBean {
     public StatusBean() {
 
     }
-
 
 
     @Required

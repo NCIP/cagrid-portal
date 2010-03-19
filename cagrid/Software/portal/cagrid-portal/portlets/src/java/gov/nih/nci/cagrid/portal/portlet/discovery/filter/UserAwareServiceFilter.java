@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.filter;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel;
+import gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

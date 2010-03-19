@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet;
 
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

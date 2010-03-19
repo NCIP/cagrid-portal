@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;

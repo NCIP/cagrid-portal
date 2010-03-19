@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.portal.portlet.diagnostics;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.directwebremoting.annotations.Param;
 import org.directwebremoting.annotations.RemoteProxy;
 import org.directwebremoting.spring.SpringCreator;

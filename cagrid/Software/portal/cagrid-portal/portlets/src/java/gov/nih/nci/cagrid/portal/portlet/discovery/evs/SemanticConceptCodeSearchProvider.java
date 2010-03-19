@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.evs;
 import gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao;
 import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class SemanticConceptCodeSearchProvider implements ConceptCodeSearchProvider{
+public class SemanticConceptCodeSearchProvider implements ConceptCodeSearchProvider {
 
     private ConceptHierarchyNodeDao conceptHierarchyNodeDao;
     private ServiceFilter servicefilter;

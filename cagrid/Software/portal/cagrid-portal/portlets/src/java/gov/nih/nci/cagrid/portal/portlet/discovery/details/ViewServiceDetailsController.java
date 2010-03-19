@@ -6,15 +6,14 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.details;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.portlet.ModelAndView;
 
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 import java.util.HashMap;
 
 /**
