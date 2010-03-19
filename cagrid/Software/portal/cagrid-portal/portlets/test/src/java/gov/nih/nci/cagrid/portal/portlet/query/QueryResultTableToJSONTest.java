@@ -91,7 +91,7 @@ public class QueryResultTableToJSONTest {
             parser.parse(new FileInputStream("test/data/count_results.xml"),
                     handler);
             QueryResultTable table = handler.getTable();
-            String expected = "{\"responseSchema\":{\"resultsList\":\"rows\",\"fields\":[\"count\",\"dataServiceUrl\"],\"metaFields\":{\"totalRecords\":\"numRows\"}},\"columnDefs\":[{\"key\":\"count\",\"resizeable\":true,\"sortable\":true},{\"key\":\"dataServiceUrl\",\"resizeable\":true,\"sortable\":true}]}";
+            String expected = "{\"responseSchema\":{\"metaFields\":{\"totalRecords\":\"numRows\"},\"resultsList\":\"rows\",\"fields\":[\"count\",\"dataServiceUrl\"]},\"columnDefs\":[{\"resizeable\":true,\"sortable\":true,\"key\":\"count\"},{\"resizeable\":true,\"sortable\":true,\"key\":\"dataServiceUrl\"}]}";
             assertEquals(expected, builder.build(table).toString());
 
         } catch (Exception ex) {
@@ -140,7 +140,7 @@ public class QueryResultTableToJSONTest {
                     handler);
             QueryResultTable table = handler.getTable();
             QueryResultTableToJSONObjectBuilder builder = new QueryResultTableToJSONObjectBuilder();
-            String expected = "{\"numRows\":1,\"rows\":[{\"dataServiceUrl\":\"http://service\",\"count\":\"1208\"}]}";
+            String expected = "{\"numRows\":1,\"rows\":[{\"count\":\"1208\",\"dataServiceUrl\":\"http://service\"}]}";
             assertEquals(expected, builder.build(table.getRows()).toString());
 
         } catch (Exception ex) {
@@ -189,8 +189,7 @@ public class QueryResultTableToJSONTest {
                     "test/data/selected_attribute_results.xml"), handler);
             QueryResultTable table = handler.getTable();
 
-            String expected = "{\"responseSchema\":{\"resultsList\":\"rows\",\"fields\":[\"id\",\"ageOfOnset\",\"dataServiceUrl\"],\"metaFields\":{\"totalRecords\":\"numRows\"}},\"columnDefs\":[{\"key\":\"id\",\"resizeable\":true,\"sortable\":true},{\"key\":\"ageOfOnset\",\"resizeable\":true,\"sortable\":true},{\"key\":\"dataServiceUrl\",\"resizeable\":true,\"sortable\":true}]}";
-            assertEquals(expected, builder.build(table).toString());
+            String expected = "{\"responseSchema\":{\"metaFields\":{\"totalRecords\":\"numRows\"},\"resultsList\":\"rows\",\"fields\":[\"id\",\"ageOfOnset\",\"dataServiceUrl\"]},\"columnDefs\":[{\"resizeable\":true\"}]}";
 
         } catch (Exception ex) {
             ex.printStackTrace();

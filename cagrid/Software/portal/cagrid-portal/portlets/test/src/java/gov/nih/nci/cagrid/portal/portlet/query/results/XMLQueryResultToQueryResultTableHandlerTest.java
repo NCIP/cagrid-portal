@@ -76,7 +76,8 @@ public class XMLQueryResultToQueryResultTableHandlerTest {
             parser.parse(new FileInputStream("test/data/count_results.xml"),
                     handler);
             QueryResultTable table = handler.getTable();
-            String expected = "{\"responseSchema\":{\"resultsList\":\"rows\",\"fields\":[\"count\",\"dataServiceUrl\"],\"metaFields\":{\"totalRecords\":\"numRows\"}},\"columnDefs\":[{\"key\":\"count\",\"resizeable\":true,\"sortable\":true},{\"key\":\"dataServiceUrl\",\"resizeable\":true,\"sortable\":true}]}";
+            String expected = "{\"responseSchema\":{\"metaFields\":{\"totalRecords\":\"numRows\"},\"resultsList\":\"rows\",\"fields\":[\"count\",\"dataServiceUrl\"]},\"columnDefs\":[{\"resizeable\":true,\"sortable\":true,\"key\":\"count\"},{\"resizeable\":true,\"sortable\":true,\"key\":\"dataServiceUrl\"}]}";
+
             assertEquals(expected, builder.build(table).toString());
 
 
