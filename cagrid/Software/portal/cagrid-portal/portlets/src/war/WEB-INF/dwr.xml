@@ -161,7 +161,13 @@
         </convert>
 
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.PortalUser">
-            <param name="include" value="person"/>
+            <param name="include" value="person,catalog"/>
+        </convert>
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry">
+            <param name="include" value="id"/>
+        </convert>
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry">
+            <param name="include" value="id"/>
         </convert>
 
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.Comment">

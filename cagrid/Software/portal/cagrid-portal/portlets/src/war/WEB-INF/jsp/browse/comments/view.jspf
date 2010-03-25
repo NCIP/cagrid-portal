@@ -47,7 +47,7 @@
                     commentDiv.innerHTML = comment.commentText;
 
                     var theLink = "${viewCommentorUrl}";
-                    var newLink = theLink.replace("COMMENTOR_ID", comment.author.id);
+                    var newLink = theLink.replace("COMMENTOR_ID", comment.author.catalog.id);
                     var authorLink = document.createElement("a");
 
                     authorLink.setAttribute("href", newLink);
