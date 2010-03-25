@@ -53,7 +53,6 @@
 
     <path id="test.run.cp">
         <pathelement location="${test.build.classes.dir}"/>
-        <pathelement location="${test.build.jar.dir}"/>
         <path refid="test.compile.cp"/>
         <pathelement location="${ext.test.xml.dir}"/>
         <pathelement location="${ext.test.xsd.dir}"/>
@@ -88,6 +87,7 @@
             </fileset>
             <fileset dir="${build.jar.dir}">
                 <include name="*.jar"/>
+                <exclude name="*-test.jar"/>
             </fileset>
         </copy>
 
@@ -127,7 +127,6 @@
         <mkdir dir="${build.jar.dir}"/>
         <mkdir dir="${build.xml.dir}"/>
         <mkdir dir="${build.xsd.dir}"/>
-        <mkdir dir="${test.build.jar.dir}"/>
 
         <jar basedir="${build.classes.dir}" destfile="${build.jar.dir}/caGrid-portal-portlets.jar"/>
         <copy todir="${build.xml.dir}">
@@ -144,7 +143,7 @@
         </copy>
 
         <jar basedir="${test.build.classes.dir}"
-             destfile="${test.build.jar.dir}/caGrid-portal-portlets-test.jar"
+             destfile="${build.jar.dir}/caGrid-portal-portlets-test.jar"
              includes="**/*.class"/>
     </target>
 
