@@ -49,6 +49,11 @@
                 />
     </target>
 
+    <target name="run-clean-queries" depends="jar" description="Clean all query results">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunQueryInstanceCleaner" classpathref="run.cp" fork="true"
+                />
+    </target>
+
     <target name="run-geocode" depends="jar">
         <java classname="gov.nih.nci.cagrid.portal.util.RunGeocode" classpathref="run.cp"
               fork="true"/>

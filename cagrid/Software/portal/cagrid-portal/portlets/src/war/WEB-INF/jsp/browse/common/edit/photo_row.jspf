@@ -1,5 +1,8 @@
 <div class="photoRow">
     <div class="photo">
+        <h2>
+            <spring:message code="${catalogEntry.class.name}"/>
+        </h2>
         <tags:catalogEntryImage entry="${catalogEntry}" thumbnail="false" id="${ns}catalogEntryImage"
                                 title="Click to edit this image." cssClass="cagp-tooltip"/>
     </div>

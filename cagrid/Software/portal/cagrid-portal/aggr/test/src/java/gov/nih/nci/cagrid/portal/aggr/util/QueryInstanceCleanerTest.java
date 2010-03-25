@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.aggr.util;
 
 import gov.nih.nci.cagrid.portal.DBIntegrationTestBase;
+import gov.nih.nci.cagrid.portal.util.QueryInstanceCleaner;
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;

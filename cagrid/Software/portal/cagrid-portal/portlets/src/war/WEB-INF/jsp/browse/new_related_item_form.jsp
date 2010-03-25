@@ -10,17 +10,12 @@
 <div id="${ns}newRelatedItemFormMsg"></div>
 <form name="${ns}newRelatedItemForm">
 
-<div class="row">
-How does the selected <spring:message code="${targetRoleType.type}"/> relate to 
-this <spring:message code="${sourceRoleType.type}"/>?<br/>
-<label for="sourceRoleDescription">Source Description</label>
-<textarea name="sourceRoleDescription" id="${ns}sourceRoleDescription" class="required"></textarea>
-</div>
+
 
 <div class="row">
 How does this <spring:message code="${sourceRoleType.type}"/> relate to 
 the selected <spring:message code="${targetRoleType.type}"/>?<br/>
-<label for="targetRoleDescription">Target Description</label>
+<label for="targetRoleDescription">Description</label>
 <textarea name="targetRoleDescription" id="${ns}targetRoleDescription" class="required"></textarea>
 </div>
 

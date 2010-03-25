@@ -196,7 +196,9 @@ body.staging {
 }
 
 .current-community {
-	display: none;
+    float:right;
+    font-size:10pt;
+    color: #408DEE;
 }
 
 /* ---------- Alerts and popups ---------- */

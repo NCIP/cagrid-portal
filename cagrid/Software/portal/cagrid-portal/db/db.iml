@@ -15,8 +15,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Globus" level="application" />
-    <orderEntry type="library" exported="" name="junit" level="application" />
     <orderEntry type="library" exported="" name="spring" level="project" />
     <orderEntry type="library" exported="" name="hibernate" level="project" />
     <orderEntry type="module-library">
@@ -78,18 +76,17 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Globus" level="application" />
-    <orderEntry type="library" name="hsql 2.0" level="project" />
-    <orderEntry type="module-library">
-      <library>
+    <orderEntry type="library" name="mysql" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library name="globus">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.5.jar!/" />
+          <root url="file://$MODULE_DIR$/../../../../globus/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../../../globus/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="mysql" level="project" />
   </component>
 </module>
 

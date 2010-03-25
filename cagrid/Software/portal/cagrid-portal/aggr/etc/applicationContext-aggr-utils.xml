@@ -14,7 +14,7 @@
     <!--utilities-->
     <import resource="classpath:applicationContext-aggr.xml"/>
 
-      <bean id="queryInstanceCleaner" class="gov.nih.nci.cagrid.portal.aggr.util.QueryInstanceCleaner"
+      <bean id="queryInstanceCleaner" class="gov.nih.nci.cagrid.portal.util.QueryInstanceCleaner"
           autowire="byName"/>
 
     <bean class="org.springframework.scheduling.timer.TimerFactoryBean">

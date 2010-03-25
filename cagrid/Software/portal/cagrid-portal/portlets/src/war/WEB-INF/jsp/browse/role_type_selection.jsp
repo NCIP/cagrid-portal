@@ -3,8 +3,6 @@
 <br/>
 <p>
 <b>Kinds of Relationships</b>
-<br/>
-
 <c:choose>
 	<c:when test="${empty roleTypes}">
 		There are no relationships that apply to this catalog entry type.
@@ -19,12 +17,12 @@
 					/>
 					<b><c:out value="${roleType.name}"/></b><br/>
 					<c:out value="${roleType.description}"/>
-					<div class="relationshipDescription">
-						<p>
-							<b><c:out value="${roleType.relationshipType.name}"/></b><br/>
-							<c:out value="${roleType.relationshipType.description}"/>
-						</p>
-					</div>					
+					<%--<div class="relationshipDescription">--%>
+						<%--<p>--%>
+							<%--<b><c:out value="${roleType.relationshipType.name}"/></b><br/>--%>
+							<%--<c:out value="${roleType.relationshipType.description}"/>--%>
+						<%--</p>--%>
+					<%--</div>					--%>
 				</li>
 			</c:forEach>
 		</ul>

@@ -47,7 +47,7 @@
 
     var ${ns}prevDisplayDiv = null;
     function ${ns}populateLists(entryType) {
-        CatalogEntryManagerFacade.renderRoleTypesForType(entryType, "${ns}",
+        CatalogEntryManagerFacade.renderRoleTypesForTargetType(entryType, "${ns}",
         {
             callback:function(html) {
                 var theId = "#${ns}" + entryType.replace(/\./g, "_") + "_roleTypesContainer";
@@ -68,16 +68,27 @@
         });
     }
 
+
+
     var ${ns}addRelationshipButton = null;
 
     jQuery(document).ready(function() {
 
-
+        /**Only show valid types **/
+        jQuery("form[name='${ns}addRelatedItemsForm']  > div[type='catalogEntryType']").each(function(index,domEl) {
+               CatalogEntryManagerFacade.isTarget(jQuery(this).attr("id"),{
+                callback:function(isValidTarget) {
+                    if(isValidTarget)
+                        jQuery(domEl).show();
+            }});
+        });
         ${ns}populateLists('gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry');
 
         jQuery("form[name='${ns}addRelatedItemsForm']  :input[name='entryType']").bind('change', function(evt) {
             ${ns}populateLists(evt.target.value);
         });
+
+
 
         ${ns}addRelationshipButton = new YAHOO.widget.Button({
             label: "Add",
@@ -89,6 +100,9 @@
         ${ns}addRelationshipButton.on("click", function(evt) {
             ${ns}addRelationship(jQuery("form[name='${ns}addRelatedItemsForm']  :input[name='roleType']").val());
         });
+
+
+
 
 
     });

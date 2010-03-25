@@ -10,11 +10,12 @@
     <property name="test.lib.dir" value="${test.dir}/lib"/>
     <property name="test.build.dir" value="${test.dir}/build"/>
     <property name="test.build.classes.dir" value="${test.build.dir}/classes"/>
+    <property name="test.build.jar.dir" value="${test.build.dir}/jars"/>
     <property name="test.src.java.dir" value="${test.dir}/src/java"/>
     <property name="junit.reports.dir" value="${test.build.dir}/junit-reports"/>
     <property name="cobertura.datafile" value="${test.build.dir}/build/cobertura.datafile"/>
 
-    <property  file="${antfiles.dir}/build-test.properties"/>
+    <property file="${antfiles.dir}/build-test.properties"/>
     <property name="test.target.property.file" value="${antfiles.dir}/build-test.properties"/>
 
     <patternset id="unit.test.pattern">

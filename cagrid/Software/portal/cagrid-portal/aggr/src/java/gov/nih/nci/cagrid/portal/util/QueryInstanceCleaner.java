@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.aggr.util;
+package gov.nih.nci.cagrid.portal.util;
 
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
