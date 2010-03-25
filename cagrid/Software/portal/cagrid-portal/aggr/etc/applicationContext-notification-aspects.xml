@@ -28,8 +28,8 @@
         <aop:aspect ref="userNotificationFilter">
             <aop:around
                     pointcut-ref="userMailSendFilter"
-                    arg-names="sub,evt"
-                    method="filter"/>
+                    arg-names="pjp,sub,evt"
+                    method="filter"></aop:around>
         </aop:aspect>
     </aop:config>
 
