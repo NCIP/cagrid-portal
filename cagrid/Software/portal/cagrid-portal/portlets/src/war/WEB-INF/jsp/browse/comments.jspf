@@ -8,7 +8,7 @@
 		[by 
 		<portlet:renderURL var="viewCommentorUrl">
 			<portlet:param name="operation" value="viewDetails"/>
-			<portlet:param name="entryId" value="${comment.commentor.id}"/>
+			<portlet:param name="entryId" value="${comment.author.catalog.id}"/>
 		</portlet:renderURL>
 		<a href="<c:out value="${viewCommentorUrl}"/>">
 			<c:out value="${comment.commentor.firstName}"/> <c:out value="${comment.commentor.lastName}"/>
@@ -18,3 +18,4 @@
 	</li>
 </c:forEach>
 </ul>
+
