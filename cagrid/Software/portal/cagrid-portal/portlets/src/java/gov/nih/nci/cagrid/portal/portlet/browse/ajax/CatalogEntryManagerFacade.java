@@ -156,12 +156,20 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
         return null;
     }
 
-    public String renderRoleTypesForType(final String targetType, final String namespace) {
-        String html = null;
-        try {
-            final String sourceType = getUserModel().getCurrentCatalogEntry()
-                    .getClass().getName();
-            Set<String> types = new HashSet<String>();
+    /**
+     * Is target type possible for the current selected CE
+     * @param targetType
+     * @return
+     */
+    public boolean isTarget(final String targetType){
+        return getRoleTypes(targetType).size() > 0;
+    }
+
+    public List<CatalogEntryRoleType> getRoleTypes(final String targetType) {
+
+        final String sourceType = getUserModel().getCurrentCatalogEntry()
+                .getClass().getName();
+        Set<String> types = new HashSet<String>();
             Set<String> sourceTypes = new HashSet<String>() {{
                 add(sourceType);
             }};
@@ -207,13 +215,21 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
                     }
                 }
             }
+        return roleTypes;
+    }
 
-            logger.debug("roleTypes.size: " + roleTypes.size());
 
-            Map<String, Object> attrMap = new HashMap<String, Object>();
-            attrMap.put("roleTypes", roleTypes);
-            attrMap.put("namespace", namespace);
+    public String renderRoleTypesForTargetType(final String targetType, final String namespace) {
+        String html = null;
 
+        List<CatalogEntryRoleType> roleTypes = getRoleTypes(targetType);
+
+        logger.debug("roleTypes.size: " + roleTypes.size());
+
+        Map<String, Object> attrMap = new HashMap<String, Object>();
+        attrMap.put("roleTypes", roleTypes);
+        attrMap.put("namespace", namespace);
+        try {
             html = getView(getRoleTypeRenderServletUrl(), attrMap);
         } catch (Exception ex) {
             String msg = "Error rendering role types: " + ex.getMessage();
@@ -311,6 +327,7 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
     public String setTargetRoleDescription(String targetRoleDescription) {
         String message = null;
         this.targetRoleDescription = targetRoleDescription;
+        this.setSourceRoleDescription(targetRoleDescription);
         return message;
     }
 
