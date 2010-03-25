@@ -64,5 +64,7 @@
     </c:if>
         loginLink = loginLink.replace("CURRENT_URL", currentLocation);
         window.location.href = loginLink;
+        return false;
+
     }
 </script>
