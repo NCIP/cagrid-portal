@@ -48,7 +48,7 @@ public class BeanUtils {
 
             }
         } catch (Exception e) {
-            logger.warn("Failed to traverse object with path. Will return null  " + path);
+            logger.info("Failed to traverse object with path. Will return null  " + path);
             value = null;
         }
         // will assume that final property value is a String
@@ -82,7 +82,7 @@ public class BeanUtils {
 
             }
         } catch (Exception e) {
-            logger.warn("Failed to traverse object with path. Will return null  " + path);
+            logger.info("Failed to traverse object with path. Will return null  " + path);
             value = null;
         }
         return (T) value;
