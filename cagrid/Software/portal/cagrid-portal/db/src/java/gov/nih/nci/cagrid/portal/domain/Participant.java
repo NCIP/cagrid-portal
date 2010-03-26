@@ -104,7 +104,7 @@ public class Participant extends AbstractDomainObject {
         this.phone = phone;
     }
 
-    @OneToOne(mappedBy = "about", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "about", cascade = CascadeType.REMOVE)
     public InstitutionCatalogEntry getCatalog() {
         return catalog;
     }

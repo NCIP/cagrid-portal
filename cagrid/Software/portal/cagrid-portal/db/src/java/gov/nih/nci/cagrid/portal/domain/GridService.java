@@ -140,7 +140,7 @@ public class GridService extends AbstractDomainObject {
         this.subscriptions = subscriptions;
     }
 
-    @OneToOne(mappedBy = "about", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "about", cascade = CascadeType.REMOVE)
     public GridServiceEndPointCatalogEntry getCatalog() {
         return catalog;
     }

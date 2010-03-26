@@ -5,10 +5,7 @@ package gov.nih.nci.cagrid.portal.service;
 
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
-import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,22 +41,10 @@ public class CatalogEntryService {
 	
 	public void deleteCatalogEntry(CatalogEntry catalogEntry){
 		CatalogEntry ce = getCatalogEntryDao().getById(catalogEntry.getId());
-		deleteRelationships(ce);
 		getCatalogEntryDao().delete(ce);
 	}
-	
-	public void deleteRelationships(CatalogEntry catalogEntry) {
-		if(catalogEntry == null){
-			throw new IllegalArgumentException("CatalogEntry is null.");
-		}
-		for (CatalogEntryRoleInstance roleInst : catalogEntry.getRoles()) {
-			CatalogEntryRelationshipInstance relInst = roleInst
-					.getRelationship();
-			getCatalogEntryRelationshipInstanceDao().delete(relInst);
-		}
-	}
 
-	public long getExecuteTimeout() {
+    public long getExecuteTimeout() {
 		return executeTimeout;
 	}
 
