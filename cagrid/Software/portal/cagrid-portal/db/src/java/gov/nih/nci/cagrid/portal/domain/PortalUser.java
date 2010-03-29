@@ -135,7 +135,7 @@ public class PortalUser extends AbstractDomainObject implements Commentable {
     }
 
     //delete all catalogs for the user
-    @OneToOne(mappedBy = "about", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "about")
     public PersonCatalogEntry getCatalog() {
         return catalog;
     }

@@ -58,7 +58,7 @@ public abstract class PointOfContact extends AbstractDomainObject {
         this.person = person;
     }
 
-    @OneToOne(mappedBy = "about")
+    @OneToOne(mappedBy = "about", cascade = CascadeType.REMOVE)
     public PointOfContactCatalogEntry getCatalog() {
         return catalog;
     }
