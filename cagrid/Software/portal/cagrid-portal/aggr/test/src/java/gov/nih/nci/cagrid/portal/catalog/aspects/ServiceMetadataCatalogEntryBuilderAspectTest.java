@@ -1,23 +1,24 @@
 package gov.nih.nci.cagrid.portal.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.TestDB;
-import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.StatusChange;
-import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceEvent;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceListener;
-import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
+import gov.nih.nci.cagrid.portal.domain.StatusChange;
 import gov.nih.nci.cagrid.portal.util.DefaultCatalogEntryRelationshipTypesFactory;
 import gov.nih.nci.cagrid.portal.util.Metadata;
 import gov.nih.nci.cagrid.portal.util.MetadataUtils;
 import gov.nih.nci.cagrid.portal.util.PortalAggrIntegrationTestBase;
+
+import java.io.FileReader;
+
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-
-import java.io.FileReader;
 
 /**
  * User: kherm
@@ -31,6 +32,7 @@ public class ServiceMetadataCatalogEntryBuilderAspectTest extends
     GridServiceDao gridServiceDao;
 
     // need to load data so initializing beans can do their job
+
     public ServiceMetadataCatalogEntryBuilderAspectTest() throws Exception {
         super();
 
@@ -71,11 +73,15 @@ public class ServiceMetadataCatalogEntryBuilderAspectTest extends
         // make sure a banned service is deleted
         GridService service = gridServiceDao.getById(1);
         gridServiceDao.banService(service);
-        assertEquals(0, gridServiceEndPointCatalogEntryDao.getAll().size()
+        assertEquals(1, gridServiceEndPointCatalogEntryDao.getAll().size()
                 - initCount);
+        assertEquals(true, gridServiceEndPointCatalogEntryDao.getById(1).isHidden());
+
         gridServiceDao.unbanService(service);
-        assertEquals(0, gridServiceEndPointCatalogEntryDao.getAll().size()
+        assertEquals(1, gridServiceEndPointCatalogEntryDao.getAll().size()
                 - initCount);
+        assertEquals(true, gridServiceEndPointCatalogEntryDao.getById(1).isHidden());
+
         StatusChange change = new StatusChange();
         change.setStatus(ServiceStatus.ACTIVE);
         service.getStatusHistory().add(change);
