@@ -18,6 +18,14 @@ public abstract class AbstractCatalogEntryDao<T extends AbstractDomainObject> ex
 
     TimestampProvider timestampProvider;
 
+    @UpdatesCatalogs
+    public void hide(T entry) {
+        if (entry instanceof CatalogEntry) {
+            CatalogEntry ent = (CatalogEntry) entry;
+            ent.setHidden(true);
+            save(entry);
+        }
+    }
 
     @Override
     /**

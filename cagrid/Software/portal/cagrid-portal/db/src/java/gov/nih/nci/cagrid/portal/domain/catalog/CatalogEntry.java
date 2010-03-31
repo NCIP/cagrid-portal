@@ -74,6 +74,8 @@ public class CatalogEntry extends AbstractDomainObject implements Commentable, M
 
     public static final int NAME_MAX_LENGTH_ALLOWED = 18;
 
+    public boolean hidden;
+
 
     public String getName() {
         return name;
@@ -299,5 +301,14 @@ public class CatalogEntry extends AbstractDomainObject implements Commentable, M
 
     public void setFeatured(boolean featured) {
         this.featured = featured;
+    }
+
+    @Column(name = "hidden")
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }

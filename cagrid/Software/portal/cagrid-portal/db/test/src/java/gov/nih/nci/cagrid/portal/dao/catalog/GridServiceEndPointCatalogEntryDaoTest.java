@@ -8,12 +8,13 @@ import gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEn
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * User: kherm
@@ -31,6 +32,16 @@ public class GridServiceEndPointCatalogEntryDaoTest extends
         pDao = (GridServiceDao) getApplicationContext().getBean(
                 "gridServiceDao");
         p = new GridService();
+
+    }
+
+    @Test
+    public void hide() {
+        GridServiceEndPointCatalogEntry entry = new GridServiceEndPointCatalogEntry();
+        getDao().save(entry);
+        assertEquals(false, getDao().getById(1).isHidden());
+        getDao().hide(entry);
+        assertEquals(true, getDao().getById(1).isHidden());
 
     }
 
@@ -71,6 +82,7 @@ public class GridServiceEndPointCatalogEntryDaoTest extends
     }
 
     // test to see if deleting the Participant deletes the catalog as well
+
     @Test
     public void delete() {
 
