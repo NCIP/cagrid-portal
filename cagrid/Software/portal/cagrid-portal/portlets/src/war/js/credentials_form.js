@@ -88,7 +88,7 @@ var CGP_CredentialsForm = Class.create({
 		});
 		this.deleteButton.set("disabled", true);
 		this.deleteButton.on("click", function(evt){
-			thisObj.delete();
+			thisObj.deleteIt();
 		});
 		
 		this.refreshButton = new YAHOO.widget.Button({
@@ -114,7 +114,7 @@ var CGP_CredentialsForm = Class.create({
 		//Set up the table
 		this.colDefs = [
 			{key: "idp", label: "Identity Provider", resizable: true, sortable: true},
-			{key: "default", label: "Default?", resizable: true, sortable: true},
+			{key: "defaults", label: "Default?", resizable: true, sortable: true},
 			{key: "validUntil", label: "Valid Until", resizable: true, sortable: true},
 			{key: "ident", label: "Grid Identity", resizable: true, sortable: true}
 		];
@@ -122,7 +122,7 @@ var CGP_CredentialsForm = Class.create({
 		this.dataSource = new YAHOO.util.DataSource([]);
 		this.dataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 		this.dataSource.responseSchema = {
-			fields: ["idp", "default", "idpUrl", "validUtil", "ident"]
+			fields: ["idp", "defaults", "idpUrl", "validUtil", "ident"]
 		};
 		this.dataTable = 
 			new YAHOO.widget.DataTable(this.credentialsTableContainerId, this.colDefs, this.dataSource, {
@@ -198,7 +198,7 @@ var CGP_CredentialsForm = Class.create({
 		this.addButton.set("disabled", false);
 		jQuery("#" + this.authnDialogContainerId).hide("normal");
 	},
-	delete: function(){
+	deleteIt: function(){
 		var selectedRows = this.dataTable.getSelectedRows();
 		var record = this.dataTable.getRecord(selectedRows[0]);
 		var recordId = record.getId();
@@ -282,7 +282,7 @@ var CGP_CredentialsForm = Class.create({
 	
 		var rec = {
 			idp: credBean.idpBean.label, 
-			default: credBean.defaultCredential, 
+			defaults: credBean.defaultCredential,
 			idpUrl: credBean.idpBean.url, 
 			validUntil: YAHOO.util.Date.format(credBean.validUntil, {format: "%Y-%m-%d %T"}), 
 			ident: credBean.identity
@@ -320,7 +320,7 @@ var CGP_CredentialsForm = Class.create({
 			var credBean = creds[i];
 			var rec = {
 				idp: credBean.idpBean.label, 
-				default: credBean.defaultCredential, 
+				defaults: credBean.defaultCredential,
 				idpUrl: credBean.idpBean.url, 
 				validUntil: YAHOO.util.Date.format(credBean.validUntil, {format: "%Y-%m-%d %T"}), 
 				ident: credBean.identity
@@ -373,7 +373,7 @@ var CGP_CredentialsForm = Class.create({
 			if(ident == identity){
 				var newRec = {
 					idp: r.getData("idp"),
-					default: "true",
+					defaults: "true",
 					idpUrl: r.getData("idpUrl"),
 					validUntil: r.getData("validUntil"),
 					ident: r.getData("ident")
@@ -382,7 +382,7 @@ var CGP_CredentialsForm = Class.create({
 			}else{
 				var newRec = {
 					idp: r.getData("idp"),
-					default: "false",
+					defaults: "false",
 					idpUrl: r.getData("idpUrl"),
 					validUntil: r.getData("validUntil"),
 					ident: r.getData("ident")
@@ -396,7 +396,7 @@ var CGP_CredentialsForm = Class.create({
 
 		var rec = {
 			idp: credBean.idpBean.label, 
-			default: credBean.defaultCredential, 
+			defaults: credBean.defaultCredential,
 			idpUrl: credBean.idpBean.url, 
 			validUntil: YAHOO.util.Date.format(credBean.validUntil, {format: "%Y-%m-%d %T"}), 
 			ident: credBean.identity
