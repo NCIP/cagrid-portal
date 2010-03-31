@@ -4,9 +4,9 @@
 package gov.nih.nci.cagrid.portal.aggr.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder;
+import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
-import gov.nih.nci.cagrid.portal.service.CatalogEntryService;
 import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
             .getLog(ServiceMetadataCatalogEntryBuilderAspect.class);
     private ServiceFilter baseServiceFilter;
     private ServiceMetadataCatalogEntryBuilder serviceMetadataCatalogEntryBuilder;
-    private CatalogEntryService catalogEntryService;
+    private GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
 
 
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.GridServiceDao.*(gov.nih.nci.cagrid.portal.domain.GridService)) && !within(gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder)  && args(service)")
@@ -32,11 +32,10 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
         try {
 
             if (baseServiceFilter.willBeFiltered(service)) {
-                logger.info("Service should be filtered. Will delete the associate CE");
+                logger.info("Service should be filtered. Will hide the associate CE");
                 GridServiceEndPointCatalogEntry entry = service.getCatalog();
-                if (entry != null){
-                    service.setCatalog(null);
-                    catalogEntryService.deleteCatalogEntry(entry);
+                if (entry != null) {
+                    gridServiceEndPointCatalogEntryDao.hide(entry);
                 }
             } else {
                 logger.debug("Grid Service being saved. Will try and create Grid Service CE");
@@ -65,11 +64,11 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
         this.serviceMetadataCatalogEntryBuilder = serviceMetadataCatalogEntryBuilder;
     }
 
-    public CatalogEntryService getCatalogEntryService() {
-        return catalogEntryService;
+    public GridServiceEndPointCatalogEntryDao getGridServiceEndPointCatalogEntryDao() {
+        return gridServiceEndPointCatalogEntryDao;
     }
 
-    public void setCatalogEntryService(CatalogEntryService catalogEntryService) {
-        this.catalogEntryService = catalogEntryService;
+    public void setGridServiceEndPointCatalogEntryDao(GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao) {
+        this.gridServiceEndPointCatalogEntryDao = gridServiceEndPointCatalogEntryDao;
     }
 }

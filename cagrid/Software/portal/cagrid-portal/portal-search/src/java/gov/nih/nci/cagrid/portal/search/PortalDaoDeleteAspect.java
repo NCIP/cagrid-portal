@@ -52,7 +52,12 @@ public class PortalDaoDeleteAspect extends AbstractSolrCommandExecutor {
             logger.warn(msg);
             throw new PortalSearchRuntimeException(msg);
         }
+    }
 
-
+    @Before("execution(* gov.nih.nci.cagrid.portal.dao.catalog..hide(*))"
+            + " && @annotation(gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs)"
+            + " && args(e,..)")
+    public void statusChange(CatalogEntry e) throws Exception {
+        runCommand(e);
     }
 }

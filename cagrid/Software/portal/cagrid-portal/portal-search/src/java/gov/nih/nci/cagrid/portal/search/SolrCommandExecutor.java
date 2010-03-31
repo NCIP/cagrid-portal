@@ -30,8 +30,6 @@ public class SolrCommandExecutor extends AbstractSolrCommandExecutor {
             String msg = "Could not execut Import command on SOLR HTTP service. Make sure SOLR is running.";
             logger.warn(msg);
             throw new PortalSearchRuntimeException(msg);
-        } finally {
-            method.releaseConnection();
         }
 
 

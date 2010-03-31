@@ -5,10 +5,10 @@
     <document name="CatalogEntry">
 
         <entity name="AllCatalogs"
-                query="select * from cat_entry"
+                query="select * from cat_entry where hidden='false'"
                 pk="id"
-                deltaImportQuery="select * from cat_entry where id=='${dataimporter.delta.id}'"
-                deltaQuery="select id from cat_entry where updatedAt > '${dataimporter.last_index_time}'">
+                deltaImportQuery="select * from cat_entry where id=='${dataimporter.delta.id}' and hidden='false'"
+                deltaQuery="select id from cat_entry where updatedAt > '${dataimporter.last_index_time}' and hidden='false'">
             <field column="id" name="id"/>
             <field column="author_id" name="id"/>
             <field column="catalog_type" name="catalog_type"/>

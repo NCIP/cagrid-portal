@@ -3,8 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.aggr.catalog;
 
-import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
@@ -72,7 +72,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         if (endpointCe == null) {
             endpointCe = service instanceof GridDataService ? new GridDataServiceEndPointCatalogEntry() : new GridServiceEndPointCatalogEntry();
             endpointCe.setAbout(service);
-
+            endpointCe.setHidden(false);
             service.setCatalog(endpointCe);
             getGridServiceEndPointCatalogEntryDao().save(endpointCe);
         }
@@ -337,7 +337,6 @@ public class ServiceMetadataCatalogEntryBuilder {
 
         return institutionCe;
     }
-
 
 
     private CatalogEntryRelationshipInstance assertRelationship(
