@@ -1,4 +1,3 @@
-
 <link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>"/>
 <link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/button/assets/skins/sam/button.css"/>"/>
 
@@ -40,8 +39,6 @@
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry"/></option>
                         <option value="PORTLET"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry"/></option>
-                        <option value="PROJECT"><spring:message
-                                code="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry"/></option>
                         <option value="SHAREDQUERY"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry"/></option>
                         <option value="TERMINOLOGY"><spring:message

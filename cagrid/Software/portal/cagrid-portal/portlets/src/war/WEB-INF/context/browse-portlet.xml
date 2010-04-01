@@ -54,6 +54,7 @@
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" value="personView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry" value="personView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry" value="portletView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry" value="catalogEntryView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" value="sharedQueryView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry" value="catalogEntryView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" value="catalogEntryView"/>
