@@ -116,6 +116,8 @@ public class PortalTreeComponent extends SearchComponent implements SolrCoreAwar
 
                 for (Field _field : _fieldArr) {
                     String _tNodeLabel = _field.stringValue();
+                    String _tNodeName = _field.stringValue();
+
 
                     // get by label
                     //keys can be space delimited
@@ -125,6 +127,7 @@ public class PortalTreeComponent extends SearchComponent implements SolrCoreAwar
                         for (int i = 0; i < typeTokens.countTokens();)
                             if (_field.stringValue().equalsIgnoreCase(typeTokens.nextToken())) {
                                 _tNodeLabel = treeLabelMap.get(type);
+                                _tNodeName = type;
                                 break outer;
                             }
 
@@ -133,7 +136,7 @@ public class PortalTreeComponent extends SearchComponent implements SolrCoreAwar
                     TreeNode node = _tree.getByLabel(_tNodeLabel);
                     if (node == null) {
                         // new node
-                        node = new TreeNode(_field.stringValue(), _tNodeLabel);
+                        node = new TreeNode(_tNodeName, _tNodeLabel);
                         _tree.addNode(node);
                     }
                     node.setCount(node.getCount() + 1);
