@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.portal.util;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
-import gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -16,11 +15,14 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Utility class. Will delete all null Information Models
+ * Utility class. Will delete all un-published
+ * catalogs. Un-Published catalogs are the ones
+ * that are created automatically and not by users
+ * through the UI.
+ * <p/>
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
@@ -28,18 +30,17 @@ import java.util.List;
 public class DeleteCatalogs {
 
     static Log logger = LogFactory.getLog(DeleteCatalogs.class);
-      private ApplicationContext ctx;
+    private ApplicationContext ctx;
 
     public DeleteCatalogs() {
         ctx = new ClassPathXmlApplicationContext(
                 new String[]{"classpath:applicationContext-db.xml"
-                       });
+                });
     }
 
     public static void main(String[] args) {
-      DeleteCatalogs util = new DeleteCatalogs();
-        util.deleteNullInfoModels();
-        util.deleteDuplicateInfoModels();
+        DeleteCatalogs util = new DeleteCatalogs();
+        util.deleteUnPublishedCatalogs();
 
     }
 
@@ -47,70 +48,31 @@ public class DeleteCatalogs {
      * Will delete duplicate Information Models. Will delete the one
      * created by the Portal and not by a user.
      */
-    public void deleteDuplicateInfoModels(){
+    public void deleteUnPublishedCatalogs() {
 
 
-           logger.debug("Will delete all duplicate InformationModel catalog entries");
-
-           HibernateTemplate templ = (HibernateTemplate) ctx
-                   .getBean("hibernateTemplate");
-
-           CatalogEntryRelationshipInstanceDao relInstDao = (CatalogEntryRelationshipInstanceDao) ctx
-                   .getBean("catalogEntryRelationshipInstanceDao");
-
-        List<InformationModelCatalogEntry> allNullAuthorEntries = templ
-                .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.author = null");
-
-        for (InformationModelCatalogEntry infoCatalog : (Iterable<InformationModelCatalogEntry>) allNullAuthorEntries) {
-            List entries1 = templ
-                    .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.projectLongName = ? and ce.author is not null",
-                                infoCatalog.getProjectLongName());
-
-            if (entries1.size() > 0) {
-                logger.debug("Found duplicate Information Model with the same project long name" + infoCatalog.getProjectLongName() + "Will delete the one created by Portal");
-                deleteRelationships(templ, relInstDao, infoCatalog);
-                templ.delete(infoCatalog);
-            }
-        }
-
-    //Further delete all duplicate Info CE's even if they were authored
-        List<InformationModelCatalogEntry> allAuthoredEntries = templ
-                      .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.author != null");
-         if(allAuthoredEntries.size()>1){
-             logger.debug("Multiple Info models with same long name exist. Will delete one");
-             for(int i=1;i<allAuthoredEntries.size();i++){
-                 logger.debug("Delete CE with projectLongName " + allAuthoredEntries.get(i).getProjectLongName());
-                 deleteRelationships(templ, relInstDao, allAuthoredEntries.get(i));
-                 templ.delete(allAuthoredEntries.get(i));
-
-             }
-             }
-       }
-
-
-
-    public void deleteNullInfoModels(){
-        logger.debug("Will delete all null InformationModel catalog entries");
+        logger.debug("Will delete all catalog entries which have not been published");
 
         HibernateTemplate templ = (HibernateTemplate) ctx
                 .getBean("hibernateTemplate");
 
         CatalogEntryRelationshipInstanceDao relInstDao = (CatalogEntryRelationshipInstanceDao) ctx
                 .getBean("catalogEntryRelationshipInstanceDao");
-        List entries1 = templ
-                .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.name = null");
-        for (Iterator<CatalogEntry> i = entries1.iterator(); i.hasNext();) {
 
-            CatalogEntry ce = i.next();
-            deleteRelationships(templ, relInstDao, ce);
-            templ.delete(ce);
+        List<CatalogEntry> allNullAuthorEntries = templ
+                .find("from CatalogEntry ce where ce.published = false");
+
+        for (CatalogEntry catalog : (Iterable<CatalogEntry>) allNullAuthorEntries) {
+            deleteRelationships(templ, relInstDao, catalog);
+            templ.delete(catalog);
         }
 
-
+        logger.debug("Deleted " + allNullAuthorEntries.size() + " catalogs from the database.");
     }
 
-    protected  static void deleteRelationships(HibernateTemplate templ,
-                                            CatalogEntryRelationshipInstanceDao relInstDao, CatalogEntry ce) {
+
+    protected static void deleteRelationships(HibernateTemplate templ,
+                                              CatalogEntryRelationshipInstanceDao relInstDao, CatalogEntry ce) {
 
         List<CatalogEntryRelationshipInstance> relInsts = relInstDao
                 .getRelationshipsForCatalogEntry(ce.getId());
