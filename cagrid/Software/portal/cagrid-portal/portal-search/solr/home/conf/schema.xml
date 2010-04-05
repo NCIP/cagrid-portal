@@ -385,6 +385,23 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="service_name" dest="text"/>
     <copyField source="service_description" dest="text"/>
 
+     <copyField source="name" dest="portalText"/>
+    <copyField source="catalogName" dest="portalText"/>
+    <copyField source="description" dest="portalText"/>
+    <copyField source="lastName" dest="portalText"/>
+    <copyField source="firstName" dest="portalText"/>
+    <copyField source="homepageUrl" dest="portalText"/>
+    <copyField source="displayName" dest="portalText"/>
+    <copyField source="shortName" dest="portalText"/>
+    <copyField source="role" dest="portalText"/>
+    <copyField source="oper_name" dest="portalText"/>
+    <copyField source="oper_description" dest="portalText"/>
+    <copyField source="conceptCode" dest="portalText"/>
+    <copyField source="concept_name" dest="portalText"/>
+    <copyField source="className" dest="portalText"/>
+    <copyField source="service_name" dest="portalText"/>
+    <copyField source="service_description" dest="portalText"/>
+
     <!-- Similarity is the scoring routine for each document vs. a query.
 A custom similarity may be specified here, but the default is fine
 for most applications.  -->
