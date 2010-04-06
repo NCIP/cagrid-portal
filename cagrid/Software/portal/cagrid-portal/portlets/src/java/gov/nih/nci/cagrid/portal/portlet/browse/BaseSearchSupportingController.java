@@ -2,10 +2,12 @@ package gov.nih.nci.cagrid.portal.portlet.browse;
 
 import org.springframework.web.portlet.ModelAndView;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * User: kherm
@@ -22,21 +24,22 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
 
     }
 
-    private void addRenderParam(ActionRequest req, ActionResponse res, String param){
-        if(req.getParameterMap().containsKey(param)){
-            res.setRenderParameter(param,req.getParameter(param));
+    private void addRenderParam(ActionRequest req, ActionResponse res, String param) {
+        if (req.getParameterMap().containsKey(param)) {
+            res.setRenderParameter(param, req.getParameter(param));
         }
 
     }
+
     public void handleActionRequestInternal(ActionRequest req, ActionResponse res)
             throws Exception {
-        addRenderParam(req,res,BrowseParams.SEARCH_KEYWORD);
-        addRenderParam(req,res,BrowseParams.SELECTED_IDS);
-        addRenderParam(req,res,BrowseParams.AREA_OF_FOCUS);
-        addRenderParam(req,res,BrowseParams.SELECTED_CATALOG_TYPE);
-        addRenderParam(req,res,BrowseParams.SELECTED_CATALOG_LABEL);
-        addRenderParam(req,res,BrowseParams.ENTRY_ID);
-        addRenderParam(req,res,"operation");
+        addRenderParam(req, res, BrowseParams.SEARCH_KEYWORD);
+        addRenderParam(req, res, BrowseParams.SELECTED_IDS);
+        addRenderParam(req, res, BrowseParams.AREA_OF_FOCUS);
+        addRenderParam(req, res, BrowseParams.SELECTED_CATALOG_TYPE);
+        addRenderParam(req, res, BrowseParams.SELECTED_CATALOG_LABEL);
+        addRenderParam(req, res, BrowseParams.ENTRY_ID);
+        addRenderParam(req, res, "operation");
     }
 
     /**
@@ -55,7 +58,14 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
         /** these parameters are need to preserve browse view state **/
         // search keyword (wildcard by default)
         String searchKeyword = request.getParameter(BrowseParams.SEARCH_KEYWORD) != null ? request.getParameter(BrowseParams.SEARCH_KEYWORD) : "*:*";
-        mav.addObject(BrowseParams.SEARCH_KEYWORD, searchKeyword);
+        try {
+
+            mav.addObject(BrowseParams.SEARCH_KEYWORD, URLEncoder.encode(searchKeyword, "UTF8"));
+
+        } catch (UnsupportedEncodingException e) {
+            //just log. This is not critical functionality
+            logger.warn("Error encoding search keyword", e);
+        }
 
         //if particular catalogs need to be displayed
         if (request.getParameterMap().containsKey(BrowseParams.SELECTED_IDS))

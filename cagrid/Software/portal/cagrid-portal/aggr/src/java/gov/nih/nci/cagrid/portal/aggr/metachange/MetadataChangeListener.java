@@ -51,13 +51,14 @@ public class MetadataChangeListener extends AbstractMetadataListener {
       *
       * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
       */
+
     public void onApplicationEvent(ApplicationEvent e) {
         try {
             if (e instanceof MetadataChangeEvent) {
                 updateServiceMetadata((MetadataChangeEvent) e);
             }
         } catch (Exception ex) {
-            logger.error("Error updated metadata: " + ex.getMessage(), ex);
+            logger.error("Error updating metadata for service: " + ex.getMessage());
         }
     }
 
@@ -67,7 +68,14 @@ public class MetadataChangeListener extends AbstractMetadataListener {
 
         Metadata meta = metadataUtils.getMetadata(event.getServiceUrl(),
                 getMetadataTimeout());
-        updateServiceMetadata(event.getServiceUrl(), meta);
+        String serviceUrl = null;
+        try {
+            serviceUrl = event.getServiceUrl();
+            updateServiceMetadata(serviceUrl, meta);
+        } catch (Exception e) {
+            logger.info(e);
+            throw new Exception("Could not Update metadata for service " + serviceUrl);
+        }
     }
 
     public void updateServiceMetadata(String serviceUrl, Metadata meta)

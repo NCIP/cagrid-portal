@@ -15,7 +15,6 @@ import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
-import gov.nih.nci.cagrid.portal.util.PortalUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
                 logger.error(msg);
                 throw new RuntimeException(msg);
             }
-            if (getActiveQueryCount() + urls.length >= getMaxActiveQueries()) {
+            if (getActiveQueryCount() + urls.length > getMaxActiveQueries()) {
                 message = "Exceeded maximum number of queries. Please wait for some queries to finish";
             } else {
 
@@ -227,6 +226,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     }
 
     // should throw no exceptions
+
     public void navigateToInstance(String instanceId) {
         logger.debug("Navigating to Query instance " + instanceId);
         QueryInstance instance = loadInstance(instanceId);
