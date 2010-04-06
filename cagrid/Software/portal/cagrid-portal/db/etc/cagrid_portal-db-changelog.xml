@@ -2500,14 +2500,4 @@
         </addColumn>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="87">
-        <preConditions onFail="MARK_RAN">
-            <columnExists tableName="cat_entry" columnName="hidden"/>
-        </preConditions>
-        <modifyColumn tableName="cat_entry">
-            <column name="hidden" type="BOOLEAN" defaultValueBoolean="false"/>
-        </modifyColumn>
-    </changeSet>
-
-
 </databaseChangeLog>
