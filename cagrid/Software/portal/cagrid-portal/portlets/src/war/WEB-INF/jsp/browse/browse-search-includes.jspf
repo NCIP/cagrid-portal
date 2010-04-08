@@ -310,8 +310,8 @@ var Catalogs = Class.create({
         };
 
         var failureCallback = function (o) {
-            this.paginatorSummaryDiv.innerHTML = "Catalog Search Error";
             this.paginator.destroy();
+            this.paginatorSummaryDiv.innerHTML = "Catalog Search Error";
             resultEvent.fire(null);
         };
 

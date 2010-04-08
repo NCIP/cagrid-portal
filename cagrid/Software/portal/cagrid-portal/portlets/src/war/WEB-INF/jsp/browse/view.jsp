@@ -188,7 +188,7 @@
             keyword = wildcard;
         }
         else {
-            if (keyword.indexOf("http:") > -1 || keyword.indexOf("www.") > -1) {
+            if (keyword.indexOf("http:") > -1 || keyword.indexOf("www.") > -1  || keyword.indexOf("https:") > -1) {
             <%-- if URL surround keyword with ""--%>
                 if (keyword.indexOf('"') != 0)
                     keyword = '"' + keyword;
