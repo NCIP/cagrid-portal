@@ -79,7 +79,6 @@ public class ExportJSONResultsController extends AbstractController {
             }
 
             List<QueryResultRow> rows = null;
-            Integer totalRowsForColumn = numRows;
 
             if (ResultConstants.DATA_SERVICE_URL_COL_NAME.equals(sort)) {
                 rows = getQueryResultTableDao().getSortedRowsByDataServiceUrl(
@@ -88,11 +87,10 @@ public class ExportJSONResultsController extends AbstractController {
             } else {
                 rows = getQueryResultTableDao().getSortedRows(table.getId(),
                         sort, dir, startIndex, results);
-                totalRowsForColumn = getQueryResultTableDao().getRowCountForColumn(table.getId(), sort);
 
             }
 
-            return getQueryResultTableToJSONObjectBuilder().build(rows, totalRowsForColumn);
+            return getQueryResultTableToJSONObjectBuilder().build(rows, numRows);
 
         } catch (Exception ex) {
             throw new RuntimeException("Error building JSON: "
