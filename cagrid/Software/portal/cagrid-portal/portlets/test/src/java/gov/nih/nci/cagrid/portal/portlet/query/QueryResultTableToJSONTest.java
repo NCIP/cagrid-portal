@@ -13,10 +13,8 @@ import gov.nih.nci.cagrid.portal.portlet.query.results.XMLQueryResultToQueryResu
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import org.json.JSONObject;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -24,6 +22,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -141,7 +142,7 @@ public class QueryResultTableToJSONTest {
             QueryResultTable table = handler.getTable();
             QueryResultTableToJSONObjectBuilder builder = new QueryResultTableToJSONObjectBuilder();
             String expected = "{\"numRows\":1,\"rows\":[{\"count\":\"1208\",\"dataServiceUrl\":\"http://service\"}]}";
-            assertEquals(expected, builder.build(table.getRows()).toString());
+            assertEquals(expected, builder.build(table.getRows(), 1).toString());
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -236,7 +237,7 @@ public class QueryResultTableToJSONTest {
             QueryResultTable table = handler.getTable();
 
             QueryResultTableToJSONObjectBuilder builder = new QueryResultTableToJSONObjectBuilder();
-            JSONObject out = builder.build(table.getRows());
+            JSONObject out = builder.build(table.getRows(), 1000);
             assertEquals(1000, out.get("numRows"));
 
         } catch (Exception ex) {
