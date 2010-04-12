@@ -173,11 +173,12 @@
     }
 
     jQuery(document).ready(function() {
-    <c:if test="${not empty searchKeyword && searchKeyword != '*:*'}">
-        wildcard = "<c:out value="${searchKeyword}"/>";
-        wildcard = unescape(wildcard);
-        $("${ns}keyword").value = wildcard;
-    </c:if>
+        var _searchKeyword = unescape('<c:out value="${searchKeyword}"/>');
+        if (_searchKeyword != null && _searchKeyword != '*:*') {
+            wildcard = "<c:out value="${searchKeyword}"/>";
+            wildcard = _searchKeyword;
+            $("${ns}keyword").value = wildcard;
+        }
         ${ns}search(wildcard);
     });
 
@@ -188,7 +189,7 @@
             keyword = wildcard;
         }
         else {
-            if (keyword.indexOf("http:") > -1 || keyword.indexOf("www.") > -1  || keyword.indexOf("https:") > -1) {
+            if (keyword.indexOf("http:") > -1 || keyword.indexOf("www.") > -1 || keyword.indexOf("https:") > -1) {
             <%-- if URL surround keyword with ""--%>
                 if (keyword.indexOf('"') != 0)
                     keyword = '"' + keyword;
