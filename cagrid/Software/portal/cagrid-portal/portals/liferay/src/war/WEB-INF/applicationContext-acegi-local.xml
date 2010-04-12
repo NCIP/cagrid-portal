@@ -31,7 +31,9 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
 		<property name="filterInvocationDefinitionSource">
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-				\A/web/guest/.*\Z=REQUIRES_SECURE_CHANNEL
+				\A/web/guest/register.*\Z=REQUIRES_SECURE_CHANNEL
+				\A/web/guest/login.*\Z=REQUIRES_SECURE_CHANNEL
+				\A/web/guest/.*\Z=REQUIRES_INSECURE_CHANNEL
 			</value>
 		</property>
 	</bean>
