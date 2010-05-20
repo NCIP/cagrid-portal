@@ -28,7 +28,7 @@ import org.junit.Test;
 public class ImageDaoTest extends DaoTestBase<ImageDao> {
 
     private String originalImgFolder = "test/data/";
-    private String originalImgName = "photo-person-cc"; // creative commons licensed photo from:
+    private String originalImgName = "photo-person-cc-medium"; // creative commons licensed photo from:
                                                         // http://www.flickr.com/photos/daexus/329687468
     private String originalImgType = "jpg";
 
