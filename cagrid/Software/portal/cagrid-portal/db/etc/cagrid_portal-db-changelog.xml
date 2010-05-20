@@ -2499,5 +2499,12 @@
             </column>
         </addColumn>
     </changeSet>
+    
+    <changeSet id="87" author="jbar">
+        <modifyColumn tableName="images">
+            <column name="data" type="mediumblob"/>
+        </modifyColumn>
+    </changeSet>
+    
 
 </databaseChangeLog>
