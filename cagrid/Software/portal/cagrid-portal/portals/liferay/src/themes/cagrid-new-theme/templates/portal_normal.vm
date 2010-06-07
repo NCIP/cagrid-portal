@@ -32,6 +32,10 @@
 <div id="bg-center"></div>
 $theme.include($top_messages_include)
 <div id="wrapper">
+	<div id="mission_statement">
+		The Discovery Tool For Collaborative e-Science.
+    	<a href="http://cagrid.org/display/portal30/Documentation">(Learn More)</a>
+    </div>
 	<div id="banner">
 		<h1 class="logo">
 			<a class="png caGRID" href="$company_url">$company_name</a> 
@@ -39,6 +43,7 @@ $theme.include($top_messages_include)
 				$community_name
 			</span>
 		</h1>
+		
 		#if ($has_navigation)
 			#parse ("$full_templates_path/navigation.vm")
 		#end

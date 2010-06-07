@@ -267,3 +267,17 @@ hr, .separator {
 	font-weight: bold;
 	padding: 0 1px;
 }
+
+#mission_statement {
+	position: absolute;
+	margin-left: 234px; 
+	margin-top: 1px; 
+	width:600px; 
+	color: RoyalBlue;
+	font-size: 1.1em;
+}
+
+#mission_statement a {
+	color: RoyalBlue;
+	font-size: .7em;
+}
