@@ -41,6 +41,32 @@ function ${ns}save(validated){
     			alert("Error saving: " + errorString);
         }});}}
 
+function ${ns}hide(){
+	${managerFacadeName}.hide({
+		callback:function(id){
+			jQuery("form[name='${ns}editForm'] > *, :input[name='id']").val(id);
+			${ns}dirty = false;
+			${ns}cancelEdit(id);
+	 	},
+	 	errorHandler:function(errorString, exception) {
+			alert("Error hidding: " + errorString);
+        }
+    });
+}
+
+function ${ns}unhide(){
+	${managerFacadeName}.unhide({
+		callback:function(id){
+			jQuery("form[name='${ns}editForm'] > *, :input[name='id']").val(id);
+			${ns}dirty = false;
+			${ns}cancelEdit(id);
+	 	},
+	 	errorHandler:function(errorString, exception) {
+			alert("Error hidding: " + errorString);
+        }
+    });
+}
+
 function ${ns}setInputMessage(inputName, message){
 	var newMessage = message;
 	if(newMessage == null){newMessage = "";}

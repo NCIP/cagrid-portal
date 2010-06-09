@@ -44,6 +44,16 @@
                     </c:if>/>
         </div>
     </c:if>
+    <c:if test='<%=request.isUserInRole("catalog-admin")%>'>
+        <%-- Render field... --%>
+        <div class="row">
+            <label>Hidden Item?</label>
+            <c:if test="${catalogEntry.hidden}">YES</c:if>
+            <c:if test="${!catalogEntry.hidden}">NO</c:if>
+        </div>
+        <a href="javascript:${ns}hide()">hide</a>
+        <a href="javascript:${ns}unhide()">unhide</a>
+    </c:if>
 </div>
 
 <script type="text/javascript">

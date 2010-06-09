@@ -96,6 +96,40 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
         return id;
     }
 
+    public Integer hide() {
+        Integer id = null;
+        try {
+            PortalUser portalUser = getUserModel().getPortalUser();
+            CatalogEntry ce = getUserModel().getCurrentCatalogEntry();
+            ce.setAuthor(portalUser);
+            logger.debug("Hidding CE named:" + ce.getName());
+            getCatalogEntryDao().hide(ce);
+            id = saveInternal(ce);
+        } catch (Exception ex) {
+            String msg = "Error hidding catalog entry: " + ex.getMessage();
+            logger.debug(msg, ex);
+            throw new RuntimeException(msg, ex);
+        }
+        return id;
+    }
+
+    public Integer unhide() {
+        Integer id = null;
+        try {
+            PortalUser portalUser = getUserModel().getPortalUser();
+            CatalogEntry ce = getUserModel().getCurrentCatalogEntry();
+            ce.setAuthor(portalUser);
+            logger.debug("Hidding CE named:" + ce.getName());
+            getCatalogEntryDao().unhide(ce);
+            id = saveInternal(ce);
+        } catch (Exception ex) {
+            String msg = "Error unhidding catalog entry: " + ex.getMessage();
+            logger.debug(msg, ex);
+            throw new RuntimeException(msg, ex);
+        }
+        return id;
+    }
+
     /**
      * Make this item a featured item
      *

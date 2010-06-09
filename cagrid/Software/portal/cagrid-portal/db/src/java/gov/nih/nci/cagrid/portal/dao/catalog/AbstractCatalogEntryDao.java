@@ -27,6 +27,15 @@ public abstract class AbstractCatalogEntryDao<T extends AbstractDomainObject> ex
         }
     }
 
+    @UpdatesCatalogs
+    public void unhide(T entry) {
+        if (entry instanceof CatalogEntry) {
+            CatalogEntry ent = (CatalogEntry) entry;
+            ent.setHidden(false);
+            save(entry);
+        }
+    }
+
     @Override
     /**
      * Saves the catalog entry with the current timestamp
