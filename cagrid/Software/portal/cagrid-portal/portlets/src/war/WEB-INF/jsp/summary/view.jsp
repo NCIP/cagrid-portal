@@ -78,12 +78,37 @@
 
 </script>
 
+<script>
+    jQuery(document).ready(function() {
+        dwr.engine.beginBatch({timeout:30000});
+
+        MapService.getSummary(function(summary) {
+            $('data-services-summary').innerHTML = summary.dataServices;
+            $('analytical-services-summary').innerHTML = summary.analyticalServices;
+            $('participant-institute-summary').innerHTML = summary.participants;
+        });
+
+        dwr.engine.endBatch({
+            async:true
+        });
+
+    });
+</script>
+
 <div id="dataSetsContent">
     <div id="summaryTitle">
      Data Set Categories
         <tags:helpLink helpURL="${usersGuideUrl}-DataSetCategories"/>
     </div>
-
+    
+    <div>
+    	<div>caBig Site Statistics:</div>
+    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;data services:</span><span id="data-services-summary">data services count</span></div>
+    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;analytical services:</span><span id="analytical-services-summary">analytical services count</span></div>
+    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;participant institute:</span><span id="participant-institute-summary">participant institutes count</span></div>
+    	<%@ include file="summaries.jsp" %>
+	</div>
+	
     <div id="${ns}categories" class="row">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
