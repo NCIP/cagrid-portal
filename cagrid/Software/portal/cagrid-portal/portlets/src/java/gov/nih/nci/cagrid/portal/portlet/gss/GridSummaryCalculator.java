@@ -37,7 +37,6 @@ public class GridSummaryCalculator implements Runnable {
         this.summaryResults = _summaryResults;
     }
 
-    @Override
     public void run() {
         synchronized (summaryResults) {
             System.out.println("********* RUNNING ********");

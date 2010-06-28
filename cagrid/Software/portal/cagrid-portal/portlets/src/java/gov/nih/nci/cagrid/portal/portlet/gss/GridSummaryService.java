@@ -21,7 +21,6 @@ public class GridSummaryService implements ApplicationContextAware {
         return (calculatorThread.isAlive()) ? null : summaryResults;
     }
 
-    @Override
     synchronized public void setApplicationContext(ApplicationContext appCtx) throws BeansException {
         if ((GridSummaryService.summaryResults == null) && (GridSummaryService.calculatorThread == null)) {
             GridSummaryService.summaryResults = new HashMap<String, Long>();
