@@ -47,7 +47,6 @@ public class GridSummaryService implements ApplicationContextAware {
         Thread t = new Thread(c);
         t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             
-            @Override
             public void uncaughtException(Thread t, Throwable e) {
                 // 
                 // just keep going , try next time
