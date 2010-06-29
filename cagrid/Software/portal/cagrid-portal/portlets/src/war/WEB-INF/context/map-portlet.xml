@@ -15,7 +15,60 @@
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-    <bean class="gov.nih.nci.cagrid.portal.portlet.gss.GridSummaryService"/>
+    <bean id="gridSummaryService" class="gov.nih.nci.cagrid.portal.portlet.gss.GridSummaryService">
+        <property name="queries">
+            <list>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+                    <property name="caption" value="countArrays"/>
+                    <property name="query">
+                        <value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.array.Array"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>
+                        ]]></value>
+                    </property>
+                    <property name="urls">
+                        <set>
+                            <value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc</value>
+                        </set>
+                    </property>
+                </bean>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+                    <property name="caption" value="countExperiments"/>
+                    <property name="query">
+                        <value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.project.Experiment"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>                       
+                        ]]></value>
+                    </property>
+                     <property name="urls">
+                        <set>
+                            <value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc</value>
+                        </set>
+                    </property>
+                </bean>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+                    <property name="caption" value="countSamples"/>
+                    <property name="query">
+                        <value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.sample.Sample"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>                       
+                        ]]></value>
+                    </property>
+                     <property name="urls">
+                        <set>
+                            <value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc</value>
+                        </set>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
     <bean
             id="viewMapController"
