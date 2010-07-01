@@ -55,7 +55,8 @@ public class GridSummaryService implements ApplicationContextAware {
             }
             
         });
-        executor.scheduleAtFixedRate(t, 0, 24 * 60 * 60, TimeUnit.SECONDS);
+        //executor.scheduleAtFixedRate(t, 0, 24 * 60 * 60, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(t, 0, 5 * 60, TimeUnit.SECONDS);
     }
 
 }

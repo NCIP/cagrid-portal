@@ -28,7 +28,7 @@ public class GridSummaryCalculator implements Runnable {
 
     public void run() {
         synchronized (GridSummaryService.class) {
-            logger.info("Summary queries background tasks started " + new java.util.Date());
+            logger.debug("************************\nSummary queries background tasks started " + new java.util.Date());
 
             for (SummaryQueryWithLocations currQueryLocs : this.queries) {
                 
@@ -58,7 +58,7 @@ public class GridSummaryCalculator implements Runnable {
                 }
             }
 
-            logger.info("Summary queries background tasks finished" + new java.util.Date());
+            logger.debug("************************\nSummary queries background tasks finished" + new java.util.Date());
         }
 
     }

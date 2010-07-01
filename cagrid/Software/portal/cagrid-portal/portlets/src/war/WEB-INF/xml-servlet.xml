@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    	<property name="interceptors">
+    		<list>
+    			<ref bean="openSessionInViewInterceptor"/>
+    		</list>
+    	</property>
+        <property name="mappings">
+            <value>
+                /form=impromptuQueryFormController
+                /view/*=impromptuQueryViewController
+            </value>
+        </property>
+    </bean>
+
+    <bean id="impromptuQueryFormController" class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryFormController">
+        <property name="formView" value="form" />
+        <property name="successView" value="success" />
+        <property name="commandName" value="impromptuQuery" />
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQuery" />
+        <property name="validator">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryValidator" />
+        </property>
+    </bean>
+
+    <bean id="impromptuQueryViewController" class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryViewController" >
+        <property name="cacheSeconds" value="60" />
+        <property name="viewName" value="results" />
+    </bean>
+          
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    	<property name="prefix" value="/WEB-INF/jsp/impromptu/"/>
+    	<property name="suffix" value=".jsp"/>
+	</bean>          
+
+</beans>
