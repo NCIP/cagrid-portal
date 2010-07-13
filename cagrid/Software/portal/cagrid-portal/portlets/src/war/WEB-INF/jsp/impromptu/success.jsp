@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <html>
 	<head>
 		<title>Success Page</title>
@@ -7,10 +7,13 @@
 	<body>
 		Query Submitted
 		<hr>
+		UUID : ${impromptuQuery.uuid}
+		<br />
 		Query : ${impromptuQuery.query}
 		<br />
 		Endpoint Url : ${impromptuQuery.endpointUrl}
 		<br />
-		Result : ${impromptuQuery.result}
+		Result : <br/>
+		<textarea cols="80" rows="17">${impromptuQuery.result}</textarea>
 	</body>
 </html>

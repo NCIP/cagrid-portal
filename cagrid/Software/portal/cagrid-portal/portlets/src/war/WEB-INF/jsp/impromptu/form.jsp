@@ -7,16 +7,20 @@
 </head>
 <body>
 
+<textarea rows="5" cols="80">
+<ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"><ns1:Target name="gov.nih.nci.caarray.domain.array.Array"/><ns1:QueryModifier countOnly="true"/></ns1:CQLQuery>
+</textarea>
+
 <form:form method="POST" commandName="impromptuQuery">
 	<table>
 		<tr>
-			<td>Query :</td>
-			<td><form:textarea path="query" /></td>
+			<td valign="top" style="font-weight:bold" >Query :</td>
+			<td><form:textarea path="query"  cols="80" rows="17"/></td>
 			<td><form:errors path="query" /></td>
 		</tr>
 		<tr>
-			<td>Endpoint Url :</td>
-			<td><form:input path="endpointUrl" /></td>
+			<td valign="top" style="font-weight:bold" >Endpoint Url :</td>
+			<td><form:input path="endpointUrl" size="80" /></td>
 			<td><form:errors path="endpointUrl" /></td>
 		</tr>
 		<tr>

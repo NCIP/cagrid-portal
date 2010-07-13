@@ -1,27 +1,38 @@
 package gov.nih.nci.cagrid.portal.portlet.gss;
 
+import java.util.UUID;
+
 public class ImpromptuQuery {
-    
-    private String query = "<ns1:CQLQuery xmlns:ns1=\"http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery\"><ns1:Target name=\"gov.nih.nci.caarray.domain.array.Array\"/><ns1:QueryModifier countOnly=\"true\"/></ns1:CQLQuery>";
+
+    private UUID uuid;
+    private String query = "";
     private String endpointUrl = "http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc";
     private String result;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     public String getQuery() {
         return query;
     }
-    
+
     public void setQuery(String query) {
         this.query = query;
     }
-    
+
     public String getEndpointUrl() {
         return endpointUrl;
     }
-    
+
     public void setEndpointUrl(String endpointUrl) {
         this.endpointUrl = endpointUrl;
     }
-    
+
     public String getResult() {
         return result;
     }
@@ -32,7 +43,7 @@ public class ImpromptuQuery {
 
     @Override
     public String toString() {
-        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + "]";
+        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + ", uuid=" + uuid + "]";
     }
 
     @Override
@@ -65,5 +76,8 @@ public class ImpromptuQuery {
             return false;
         return true;
     }
+
+    
+
     
 }

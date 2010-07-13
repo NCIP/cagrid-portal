@@ -11,8 +11,6 @@ import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,7 +26,7 @@ public class GridSummaryCalculator implements Runnable {
 
     public void run() {
         synchronized (GridSummaryService.class) {
-            logger.debug("************************\nSummary queries background tasks started " + new java.util.Date());
+            logger.info("************************\nSummary queries background tasks started " + new java.util.Date());
 
             for (SummaryQueryWithLocations currQueryLocs : this.queries) {
                 
@@ -42,23 +40,21 @@ public class GridSummaryCalculator implements Runnable {
                         
                         String out = SummaryQueryWithLocations.queryResultAsString(result);
                         
-                        System.out.println("vvvvvvvvvvvvvvv OUT vvvvvvvvvvvvvvvv");
-                        System.out.println(out);
-                        System.out.println("^^^^^^^^^^^^^^^ OUT ^^^^^^^^^^^^^^^^");
+                        logger.info("vvvvvvvvvvvvvvv OUT vvvvvvvvvvvvvvvv\n" + out + "^^^^^^^^^^^^^^^ OUT ^^^^^^^^^^^^^^^^");
 
                         currQueryLocs.setCounterFromFullAnswer(currUrl, out);
 
                     } catch (Exception e) {
-                        System.out.println("vvvvvvvvvvvvvvv ERROR vvvvvvvvvvvvvvvv");
-                        System.out.println("querying for " + currQueryLocs.getShortClassName());
-                        System.out.println("failed for url " + currUrl);
-                        System.out.println("with error " + e.getMessage());
-                        System.out.println("^^^^^^^^^^^^^^^ ERROR ^^^^^^^^^^^^^^^^");
+                        logger.error("vvvvvvvvvvvvvvv ERROR vvvvvvvvvvvvvvvv");
+                        logger.error("querying for " + currQueryLocs.getShortClassName());
+                        logger.error("failed for url " + currUrl);
+                        logger.error("with error " + e.getMessage());
+                        logger.error("^^^^^^^^^^^^^^^ ERROR ^^^^^^^^^^^^^^^^");
                     }
                 }
             }
 
-            logger.debug("************************\nSummary queries background tasks finished" + new java.util.Date());
+            logger.info("************************\nSummary queries background tasks finished" + new java.util.Date());
         }
 
     }
