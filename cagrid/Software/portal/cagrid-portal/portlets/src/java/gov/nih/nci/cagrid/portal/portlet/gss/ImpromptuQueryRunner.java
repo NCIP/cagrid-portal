@@ -9,10 +9,11 @@ import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
 import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.StringWriter; 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.rmi.RemoteException;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.apache.axis.types.URI.MalformedURIException;
@@ -46,9 +47,18 @@ public class ImpromptuQueryRunner implements Runnable {
             
             System.out.println("vvvvvvvvvvvv IMPROMPTU QUERY vvvvvvvvvvvvvvvvvvv");
             System.out.println(out);
-            System.out.println("^^^^^^^^^^^^ IMPROMPTU QUERY ^^^^^^^^^^^^^^^^^^^");
-
+            Iterator i = ImpromptuQueryViewController.results.keySet().iterator();
+            while (i.hasNext()) {
+                String k = (String)i.next();
+                System.out.println(k + " => " + ImpromptuQueryViewController.results.get(k));
+            }
             ImpromptuQueryViewController.results.put(this.query.getUuid().toString(), out);
+            i = ImpromptuQueryViewController.results.keySet().iterator();
+            while (i.hasNext()) {
+                String k = (String)i.next();
+                System.out.println(k + " => " + ImpromptuQueryViewController.results.get(k));
+            }
+            System.out.println("^^^^^^^^^^^^ IMPROMPTU QUERY ^^^^^^^^^^^^^^^^^^^");
 
         } catch (MalformedQueryExceptionType e) {
             // TODO Auto-generated catch block
