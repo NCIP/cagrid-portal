@@ -115,7 +115,7 @@
 
     function ${ns}showRegisterDialog() {
         ${ns}registerDialog =
-        new Liferay.Popup({title: "Register", modal:true, width:800 , height:400});
+        new Liferay.Popup({title: "Register", modal:true, width:800 , height:500});
         jQuery(
                 ${ns}registerDialog
                 ).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {});
