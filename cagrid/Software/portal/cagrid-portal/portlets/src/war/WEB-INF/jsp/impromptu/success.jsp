@@ -13,7 +13,5 @@
 		<br />
 		Endpoint Url : ${impromptuQuery.endpointUrl}
 		<br />
-		Result : <br/>
-		<textarea cols="80" rows="17">${impromptuQuery.result}</textarea>
 	</body>
 </html>

@@ -7,7 +7,6 @@ public class ImpromptuQuery {
     private UUID uuid;
     private String query = "";
     private String endpointUrl = "http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc";
-    private String result;
 
     public UUID getUuid() {
         return uuid;
@@ -33,17 +32,9 @@ public class ImpromptuQuery {
         this.endpointUrl = endpointUrl;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
     @Override
     public String toString() {
-        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + ", uuid=" + uuid + "]";
+        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + "]";
     }
 
     @Override
@@ -77,7 +68,4 @@ public class ImpromptuQuery {
         return true;
     }
 
-    
-
-    
 }
