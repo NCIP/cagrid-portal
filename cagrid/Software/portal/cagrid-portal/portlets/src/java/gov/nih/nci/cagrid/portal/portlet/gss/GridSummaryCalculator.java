@@ -8,6 +8,7 @@ package gov.nih.nci.cagrid.portal.portlet.gss;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,6 +54,8 @@ public class GridSummaryCalculator implements Runnable {
                     }
                 }
             }
+            
+            GridSummaryService.lastUpdated = new Date();
 
             logger.info("************************\nSummary queries background tasks finished" + new java.util.Date());
         }

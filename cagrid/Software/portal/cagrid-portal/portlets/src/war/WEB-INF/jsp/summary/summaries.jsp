@@ -19,4 +19,12 @@ for (SummaryQueryWithLocations q : queries) {
 	<%
 }
 %>
-    	
+    
+<%
+java.util.Date lastUpdated = GridSummaryService.lastUpdated;
+java.text.Format formatter = new java.text.SimpleDateFormat("HH:mm z MMM dd, yyyy");
+if (lastUpdated != null) {
+	%><div class="gss_last_update">as of <%=formatter.format(lastUpdated)%></div><%
+}
+%>
+	

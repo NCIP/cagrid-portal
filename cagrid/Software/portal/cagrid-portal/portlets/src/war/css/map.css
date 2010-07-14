@@ -56,3 +56,10 @@ div.gss_line {
 div.gss_line span {
 	margin-right: 5px;
 }
+
+div.gss_last_update {
+	margin-top: 10px;
+	margin-left: 90px;
+	color: Gray;
+	font-size:7pt;
+}

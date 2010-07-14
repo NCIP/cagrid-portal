@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.portlet.gss;
 
 import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,6 +23,8 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class GridSummaryService implements ApplicationContextAware {
 
+    static public volatile Date lastUpdated;
+    
     private volatile List<SummaryQueryWithLocations> queries;
     
     public List<SummaryQueryWithLocations> getQueries() {
