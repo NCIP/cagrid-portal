@@ -7,7 +7,7 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
 
 
-<div>caArray Statistics:</div>
+<div class="gss_section">caArray Statistics:</div>
 
 <% 
 ApplicationContext context = RequestContextUtils.getWebApplicationContext(request);
@@ -15,7 +15,7 @@ List<SummaryQueryWithLocations> queries = ((GridSummaryService) context.getBean(
 
 for (SummaryQueryWithLocations q : queries) {
 	%>
-	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;<%= q.getCaption() %>:</span><span id="<%= q.getCaption().replace(" ", "-") %>-summary"><%= q.getSum() %></span></div>
+	<div class="gss_line"><span><%= q.getCaption() %>:</span><span id="<%= q.getCaption().replace(" ", "-") %>-summary"><%= q.getSum() %></span></div>
 	<%
 }
 %>

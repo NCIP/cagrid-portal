@@ -43,3 +43,16 @@ span.mapLink{
     color:#032C5A;
     font-weight:bold;
 }
+
+
+div.gss_section {
+	color: Navy;
+}
+
+div.gss_line {
+	margin-left: 10px;
+	color: Gray;
+}
+div.gss_line span {
+	margin-right: 5px;
+}

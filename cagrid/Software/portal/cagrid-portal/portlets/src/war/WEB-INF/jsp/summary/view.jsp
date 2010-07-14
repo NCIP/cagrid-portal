@@ -96,16 +96,22 @@
 </script>
 
 <div id="dataSetsContent">
+<%--
     <div id="summaryTitle">
      Data Set Categories
         <tags:helpLink helpURL="${usersGuideUrl}-DataSetCategories"/>
     </div>
-    
+ --%>
+
+    <div id="summaryTitle">
+    	Grid Statistics <tags:helpLink helpURL="${usersGuideUrl}-GridStatistics"/>
+    </div>
+     
     <div>
-    	<div>caBig Site Statistics:</div>
-    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;data services:</span><span id="data-services-summary">data services count</span></div>
-    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;analytical services:</span><span id="analytical-services-summary">analytical services count</span></div>
-    	<div><span>&nbsp;&nbsp;&nbsp;&nbsp;participant institute:</span><span id="participant-institute-summary">participant institutes count</span></div>
+    	<div class="gss_section">caBig Site Statistics:</div>
+    	<div class="gss_line"><span>data services:</span><span id="data-services-summary">data services count</span></div>
+    	<div class="gss_line"><span>analytical services:</span><span id="analytical-services-summary">analytical services count</span></div>
+    	<div class="gss_line"><span>participant institute:</span><span id="participant-institute-summary">participant institutes count</span></div>
     	<%@ include file="summaries.jsp" %>
 	</div>
 	
@@ -113,7 +119,9 @@
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
     <br/>
+    <%--
     <a href="/web/guest/catalog/datasets">More...</a>
+    --%>
 </div>
 
 
