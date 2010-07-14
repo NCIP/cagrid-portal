@@ -7,9 +7,11 @@
 </head>
 <body>
 
-<textarea rows="5" cols="80">
+<!-- 
 <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"><ns1:Target name="gov.nih.nci.caarray.domain.array.Array"/><ns1:QueryModifier countOnly="true"/></ns1:CQLQuery>
-</textarea>
+
+http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
+-->
 
 <form:form method="POST" commandName="impromptuQuery">
 	<table>

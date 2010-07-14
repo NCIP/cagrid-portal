@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/xml" pageEncoding="UTF-8"%>
 
 <%@ page import="java.util.*"%>
-<%@ page import="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryViewController"%>
-<%@ page import="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQuery"%>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryViewController"%>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQuery"%>
 <%@ page import="org.springframework.web.util.UrlPathHelper"%>
 
 <%

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.portlet.gss;
+package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

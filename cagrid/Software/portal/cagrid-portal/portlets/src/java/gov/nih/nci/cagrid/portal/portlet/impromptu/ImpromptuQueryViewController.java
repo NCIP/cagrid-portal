@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.portlet.gss;
+package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.portlet.gss;
+package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ public class ImpromptuQuery {
 
     private UUID uuid;
     private String query = "";
-    private String endpointUrl = "http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc";
+    private String endpointUrl = "";
 
     public UUID getUuid() {
         return uuid;
@@ -34,7 +34,7 @@ public class ImpromptuQuery {
 
     @Override
     public String toString() {
-        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + "]";
+        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + ", uuid=" + uuid + "]";
     }
 
     @Override

@@ -22,17 +22,17 @@
         </property>
     </bean>
 
-    <bean id="impromptuQueryFormController" class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryFormController">
+    <bean id="impromptuQueryFormController" class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryFormController">
         <property name="formView" value="form" />
         <property name="successView" value="success" />
         <property name="commandName" value="impromptuQuery" />
-        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQuery" />
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQuery" />
         <property name="validator">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryValidator" />
+            <bean class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryValidator" />
         </property>
     </bean>
 
-    <bean id="impromptuQueryViewController" class="gov.nih.nci.cagrid.portal.portlet.gss.ImpromptuQueryViewController" >
+    <bean id="impromptuQueryViewController" class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryViewController" >
         <property name="cacheSeconds" value="60" />
         <property name="viewName" value="results" />
     </bean>
