@@ -26,6 +26,16 @@ http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
 			<td><form:errors path="endpointUrl" /></td>
 		</tr>
 		<tr>
+			<td valign="top" style="font-weight:bold" >Run Synchronously :</td>
+			<td><form:checkbox path="runSync"/></td>
+			<td><form:errors path="runSync" /></td>
+		</tr>
+		<tr>
+			<td valign="top" style="font-weight:bold" >Clear Previous Results :</td>
+			<td><form:checkbox path="clearPrevious"/></td>
+			<td><form:errors path="clearPrevious" /></td>
+		</tr>
+		<tr>
 			<td colspan="2"><input type="submit"></td>
 		</tr>
 	</table>

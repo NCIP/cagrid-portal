@@ -7,6 +7,8 @@ public class ImpromptuQuery {
     private UUID uuid;
     private String query = "";
     private String endpointUrl = "";
+    private boolean runSync = false;
+    private boolean clearPrevious = false;
 
     public UUID getUuid() {
         return uuid;
@@ -32,6 +34,22 @@ public class ImpromptuQuery {
         this.endpointUrl = endpointUrl;
     }
 
+    public boolean isRunSync() {
+        return runSync;
+    }
+
+    public void setRunSync(boolean runSync) {
+        this.runSync = runSync;
+    }
+
+    public boolean isClearPrevious() {
+        return clearPrevious;
+    }
+
+    public void setClearPrevious(boolean clearPrevious) {
+        this.clearPrevious = clearPrevious;
+    }
+    
     @Override
     public String toString() {
         return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + ", uuid=" + uuid + "]";

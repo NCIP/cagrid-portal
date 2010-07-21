@@ -108,7 +108,7 @@
     </div>
      
     <div>
-    	<div class="gss_section">caBig Site Statistics:</div>
+    	<div class="gss_section">caBIG Site Statistics:</div>
     	<div class="gss_line"><span>data services:</span><span id="data-services-summary">data services count</span></div>
     	<div class="gss_line"><span>analytical services:</span><span id="analytical-services-summary">analytical services count</span></div>
     	<div class="gss_line"><span>participant institute:</span><span id="participant-institute-summary">participant institutes count</span></div>

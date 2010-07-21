@@ -13,11 +13,25 @@ public class ImpromptuQueryFormController extends SimpleFormController {
     protected void doSubmitAction(Object command) throws Exception {
         ImpromptuQuery q = (ImpromptuQuery) command;
 
+        if (q.isClearPrevious() && ImpromptuQueryViewController.submited.containsKey(q)) {
+            ImpromptuQueryViewController.results.remove(q.getUuid());
+            ImpromptuQueryViewController.submited.remove(q);
+        }
+        
         if (!ImpromptuQueryViewController.submited.containsKey(q)) {
             q.setUuid(UUID.randomUUID());
             ImpromptuQueryViewController.submited.put(q, q.getUuid());
-            Thread t = new Thread(new ImpromptuQueryRunner(q));
-            t.start();
+            
+            logger.info("q.isRunAsync() = " + q.isRunSync());
+            ImpromptuQueryRunner runner = new ImpromptuQueryRunner(q);
+            if (q.isRunSync()) {
+                runner.run();
+            } else {
+                Thread t = new Thread(runner);
+                t.start();
+            }
+            logger.info("doSubmitAction done");
+            
         } else {
             q.setUuid(ImpromptuQueryViewController.submited.get(q));
         }
