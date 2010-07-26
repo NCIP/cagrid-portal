@@ -11,14 +11,4 @@
 	int pos = s.lastIndexOf("/");
 	String key = s.substring(pos+1);
 %>
-<%--= key --%>
 <%= ImpromptuQueryViewController.results.get(key) %>
-
-<%--
-	Iterator i = ImpromptuQueryViewController.results.keySet().iterator();
-	while (i.hasNext()) {
-	    String k = (String)i.next();
-	    out.println("==="+k+"===" + " => " + ImpromptuQueryViewController.results.get(k));
-	}
-
---%>
