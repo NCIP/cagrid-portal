@@ -10,7 +10,5 @@
 	String s = h.getOriginatingRequestUri(request);
 	int pos = s.lastIndexOf("/");
 	String key = s.substring(pos+1);
-	System.out.println("=====> results.jsp , key=: " + key);
-
 %>
 <%= ImpromptuQueryStorage.instance.getResult(key) %>
