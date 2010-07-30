@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 public class ImpromptuQueryRunner implements Runnable {
 
     private final Log logger = LogFactory.getLog(getClass());
-    
+
     private ImpromptuQuery query;
 
     public ImpromptuQueryRunner(ImpromptuQuery q) {
@@ -24,6 +24,8 @@ public class ImpromptuQueryRunner implements Runnable {
     public void run() {
 
         try {
+            logger.info("=====> Start running impromptu query: " + this.query);
+
             /* TODO: this shouldn't be necessary */
             String urlDecodedQuery = this.query.getQuery().replace("& ", "&");
             urlDecodedQuery = urlDecodedQuery.replace("&lt;", "<");
@@ -37,9 +39,10 @@ public class ImpromptuQueryRunner implements Runnable {
             Utils.serializeObject(result, DataServiceConstants.CQL_RESULT_SET_QNAME, writer);
             String out = writer.getBuffer().toString();
 
-            logger.info("Running impromptu query: " + this.query);
-
-            ImpromptuQueryViewController.results.put(this.query.getUuid().toString(), out);
+            logger.info("=====> Done running impromptu query: " + this.query);
+            logger.info("=====> " + out);
+            
+            ImpromptuQueryStorage.instance.setResult(this.query, out);
 
         } catch (Exception e) {
             logger.error("Exception running impromptu query (" + this.query + ") with message: " + e.getMessage());

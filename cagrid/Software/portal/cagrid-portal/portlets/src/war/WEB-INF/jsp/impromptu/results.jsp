@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/xml" pageEncoding="UTF-8"%>
 
 <%@ page import="java.util.*"%>
-<%@ page import="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryViewController"%>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryStorage"%>
 <%@ page import="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQuery"%>
 <%@ page import="org.springframework.web.util.UrlPathHelper"%>
 
@@ -10,5 +10,7 @@
 	String s = h.getOriginatingRequestUri(request);
 	int pos = s.lastIndexOf("/");
 	String key = s.substring(pos+1);
+	System.out.println("=====> results.jsp , key=: " + key);
+
 %>
-<%= ImpromptuQueryViewController.results.get(key) %>
+<%= ImpromptuQueryStorage.instance.getResult(key) %>

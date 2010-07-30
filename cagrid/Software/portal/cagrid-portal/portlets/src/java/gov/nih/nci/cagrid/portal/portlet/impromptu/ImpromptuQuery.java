@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class ImpromptuQuery {
@@ -7,8 +8,8 @@ public class ImpromptuQuery {
     private UUID uuid;
     private String query = "";
     private String endpointUrl = "";
-    private boolean runSync = false;
     private boolean clearPrevious = false;
+    private long accessedOn = 0;
 
     public UUID getUuid() {
         return uuid;
@@ -34,14 +35,6 @@ public class ImpromptuQuery {
         this.endpointUrl = endpointUrl;
     }
 
-    public boolean isRunSync() {
-        return runSync;
-    }
-
-    public void setRunSync(boolean runSync) {
-        this.runSync = runSync;
-    }
-
     public boolean isClearPrevious() {
         return clearPrevious;
     }
@@ -49,10 +42,19 @@ public class ImpromptuQuery {
     public void setClearPrevious(boolean clearPrevious) {
         this.clearPrevious = clearPrevious;
     }
-    
+
+    public long getAccessedOn() {
+        return accessedOn;
+    }
+
+    public void setAccessedOn(long accessedOn) {
+        this.accessedOn = accessedOn;
+    }
+
     @Override
     public String toString() {
-        return "ImpromptuQuery [endpointUrl=" + endpointUrl + ", query=" + query + ", uuid=" + uuid + "]";
+        return "ImpromptuQuery [clearPrevious=" + clearPrevious + ", endpointUrl=" + endpointUrl + ", query=" + query + ", accessedOn=" + accessedOn + ", uuid=" + uuid
+                + "]";
     }
 
     @Override
