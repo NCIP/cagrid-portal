@@ -34,6 +34,10 @@ public class ImpromptuQueryStorage {
     }
     
     static public ImpromptuQueryStorage instance = new ImpromptuQueryStorage();
+    
+    private ImpromptuQueryStorage() {
+        //just to make it private
+    }
 
     private Queue<ImpromptuQuery> indexByAccessTime = new PriorityQueue<ImpromptuQuery>(100, new ImpromptuQueryAccessTimeComparator());
     private Map<String, ImpromptuQuery> indexInvertedByUuid = new HashMap<String, ImpromptuQuery>();
