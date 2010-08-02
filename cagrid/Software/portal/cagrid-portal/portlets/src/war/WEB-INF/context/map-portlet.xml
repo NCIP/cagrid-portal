@@ -35,7 +35,7 @@
                     </property>
                 </bean>
                 <bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-                    <property name="caption" value="Number of Array Experiments in caBIG"/>
+                    <property name="caption" value="Number of Experiments in caBIG"/>
                     <property name="query">
                         <value><![CDATA[
                         <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -51,7 +51,7 @@
                     </property>
                 </bean>
                 <bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-                    <property name="caption" value="Number of Array Samples is caBIG"/>
+                    <property name="caption" value="Number of Samples is caBIG"/>
                     <property name="query">
                         <value><![CDATA[
                         <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
