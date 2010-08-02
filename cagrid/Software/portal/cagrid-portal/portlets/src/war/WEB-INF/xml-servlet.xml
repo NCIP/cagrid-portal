@@ -14,6 +14,14 @@ http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 
 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:cagridportlets.properties</value>
+		</property>
+	</bean>
+	
+
     <bean
 class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
      <property name="interceptors">
@@ -41,8 +49,8 @@ value="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQuery" />
 class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryValidator"
 />
         </property>
-        <property name="minMillisecondsBetweenQuerySubmissions" value="60000" />
-        <property name="maxCachedQueriesCount" value="50" />
+        <property name="minMillisecondsBetweenQuerySubmissions" value="${impromptu.min.milliseconds.between.submissions}" />
+        <property name="maxCachedQueriesCount" value="${imprompty.max.cached.queries.count}" />
     </bean>
 
     <bean id="impromptuQueryViewController"

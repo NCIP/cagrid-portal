@@ -81,6 +81,17 @@
             </filterset>
         </copy>
 
+
+        <copy todir="${build.war.dir}" overwrite="true" filtering="true">
+            <fileset dir="${src.war.dir}">
+                <include name="WEB-INF/classes/cagridportlets.properties"/>
+            </fileset>
+            <filterset>
+                <filter token="IMPROMPTU_MIN_MILLIS" value="${cagrid.portal.impromptu.min.milliseconds.between.submissions}"/>
+            	<filter token="IMPROMPTU_MAX_CACHED" value="${cagrid.portal.imprompty.max.cached.queries.count}"/>
+            </filterset>
+        </copy>
+    	
         <copy todir="${build.war.webinf.dir}/lib" overwrite="true" flatten="true">
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar"/>
