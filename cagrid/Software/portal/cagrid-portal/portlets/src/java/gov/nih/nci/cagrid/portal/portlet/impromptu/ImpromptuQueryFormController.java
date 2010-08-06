@@ -56,4 +56,8 @@ public class ImpromptuQueryFormController extends SimpleFormController {
     public void setMaxCachedQueriesCount(int maxCachedQueriesCount) {
         this.maxCachedQueriesCount = maxCachedQueriesCount;
     }
+    
+    public void setFqpUrl(String fqpUrl) {
+        ImpromptuQueryRunner.fqpUrl = fqpUrl;
+    }
 }

@@ -41,7 +41,7 @@ public class GridSummaryCalculator implements Runnable {
                         
                         String out = SummaryQueryWithLocations.queryResultAsString(result);
                         
-                        logger.info("vvvvvvvvvvvvvvv OUT vvvvvvvvvvvvvvvv\n" + out + "^^^^^^^^^^^^^^^ OUT ^^^^^^^^^^^^^^^^");
+                        logger.info("\nvvvvvvvvvvvvvvv OUT vvvvvvvvvvvvvvvv\n" + out + "\n^^^^^^^^^^^^^^^ OUT ^^^^^^^^^^^^^^^^\n");
 
                         currQueryLocs.setCounterFromFullAnswer(currUrl, out);
 

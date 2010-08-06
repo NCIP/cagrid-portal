@@ -1,41 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
 <beans xmlns="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:aop="http://www.springframework.org/schema/aop"
-xmlns:util="http://www.springframework.org/schema/util"
-    xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-http://www.springframework.org/schema/aop
-http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
-http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"><!--beans-->
 
-
-
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>classpath:cagridportlets.properties</value>
-		</property>
-	</bean>
-	
-
-    <bean
-class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-     <property name="interceptors">
-     <list>
-     <ref bean="openSessionInViewInterceptor"/>
-     </list>
-     </property>
-        <property name="mappings">
-            <value>
-                /form=impromptuQueryFormController
-                /view/*=impromptuQueryViewController
-            </value>
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
         </property>
-    </bean>
+    </bean><!--handler mapping-->
+
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+       <property name="interceptors">
+           <list>
+               <ref bean="openSessionInViewInterceptor"/>
+           </list>
+       </property>
+       <property name="mappings">
+           <props>
+               <prop key="/form">impromptuQueryFormController</prop>
+               <prop key="/view/*">impromptuQueryViewController</prop>
+           </props>
+       </property>
+   </bean>
+    
 
     <bean id="impromptuQueryFormController"
 class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryFormController">
@@ -51,6 +51,7 @@ class="gov.nih.nci.cagrid.portal.portlet.impromptu.ImpromptuQueryValidator"
         </property>
         <property name="minMillisecondsBetweenQuerySubmissions" value="${impromptu.min.milliseconds.between.submissions}" />
         <property name="maxCachedQueriesCount" value="${imprompty.max.cached.queries.count}" />
+        <property name="fqpUrl" value="${fqp.service.url}"/>
     </bean>
 
     <bean id="impromptuQueryViewController"
