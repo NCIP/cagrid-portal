@@ -1,6 +1,6 @@
     
                          caGrid Portal
-                          Version 3.0
+                          Version 3.1
                        March 26, 2010 
 
 
@@ -81,6 +81,8 @@ the following RFE's were implemented in this release
 25825	Portal: Shared Query - Delete All button
 25828	Portal: Maximum selected data sources
 25830	Portal: Link to author of comment
+28564   caGrid Data Service Query HTTP service for the Portal
+28571   Summary of data in caGrid
 
 ================================================================
                       4.0 Bug fixes Since Last Release
