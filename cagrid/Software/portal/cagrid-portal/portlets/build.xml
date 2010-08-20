@@ -87,8 +87,14 @@
                 <include name="WEB-INF/classes/cagridportlets.properties"/>
             </fileset>
             <filterset>
+
                 <filter token="IMPROMPTU_MIN_MILLIS" value="${cagrid.portal.impromptu.min.milliseconds.between.submissions}"/>
             	<filter token="IMPROMPTU_MAX_CACHED" value="${cagrid.portal.imprompty.max.cached.queries.count}"/>
+
+            	<filter token="GSS_MIN_MILLIS" value="${cagrid.portal.gss.min.milliseconds.between.runs}"/>
+            	<filter token="GSS_PERIOD_SECONDS" value="${cagrid.portal.gss.seconds.between.auto.runs}"/>
+                <filter token="GSS_MAX_HISTORY" value="${cagrid.portal.gss.max.history.count}"/>
+
             </filterset>
         </copy>
     	

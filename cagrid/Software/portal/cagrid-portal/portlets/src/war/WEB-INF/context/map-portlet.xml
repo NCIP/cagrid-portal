@@ -13,8 +13,21 @@
 	<bean
 		class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
-	<bean id="gridSummaryService"
-		class="gov.nih.nci.cagrid.portal.portlet.gss.GridSummaryService">
+	<bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="gridSummaryService" class="gov.nih.nci.cagrid.portal.portlet.gss.GridSummaryService">
+        <property name="minMillisecondsBetweenRuns" value="${gss.min.milliseconds.between.runs}" />
+        <property name="secondsBetweenAutoRuns" value="${gss.seconds.between.auto.runs}" />
+        <property name="maxHistoryCount" value="${gss.max.history.count}" />
 		<property name="queries">
 			<list>
 				<bean
@@ -30,8 +43,7 @@
 					</property>
 					<property name="urls">
 						<set>
-							<value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
-							</value>
+							<value>http://cagrid.moffitt.org:8005/wsrf/services/cagrid/CaArraySvc</value>
 						</set>
 					</property>
 				</bean>
@@ -48,8 +60,7 @@
 					</property>
 					<property name="urls">
 						<set>
-							<value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
-							</value>
+							<value>http://cagrid.moffitt.org:8005/wsrf/services/cagrid/CaArraySvc</value>
 						</set>
 					</property>
 				</bean>
@@ -66,8 +77,7 @@
 					</property>
 					<property name="urls">
 						<set>
-							<value>http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
-							</value>
+							<value>http://cagrid.moffitt.org:8005/wsrf/services/cagrid/CaArraySvc</value>
 						</set>
 					</property>
 				</bean>

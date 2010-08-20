@@ -8,10 +8,12 @@ package gov.nih.nci.cagrid.portal.portlet.gss;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,45 +21,52 @@ public class GridSummaryCalculator implements Runnable {
 
     private final Log logger = LogFactory.getLog(getClass());
 
-    private List<SummaryQueryWithLocations> queries;
+    private GridSummaryService gss;
 
-    public GridSummaryCalculator(List<SummaryQueryWithLocations> _queries) {
-        this.queries = _queries;
+    public GridSummaryCalculator(GridSummaryService _gss) {
+        this.gss = _gss;
     }
 
+    private void l(Object o) {
+        //logger.info(o);
+        System.out.println(o);
+    }
+    
     public void run() {
         synchronized (GridSummaryService.class) {
-            logger.info("************************\nSummary queries background tasks started " + new java.util.Date());
-
-            for (SummaryQueryWithLocations currQueryLocs : this.queries) {
-                
-                Iterator<String> i = currQueryLocs.getUrlsIterator();
+            
+            l("Summary queries background tasks started " + new java.util.Date());
+            List<SummaryQueryResults> accum = new ArrayList<SummaryQueryResults>();
+            for (SummaryQueryWithLocations currentQueryWithLocations : gss.getQueries()) {
+                List<CalculatorHelper> detailsForCurrQuery = new ArrayList<CalculatorHelper>();
+                Iterator<String> i = currentQueryWithLocations.getUrlsIterator();
                 while (i.hasNext()) {
                     String currUrl = i.next();
                     try {
                         DataServiceClient client = new DataServiceClient(currUrl);
-
-                        CQLQueryResults result = client.query(currQueryLocs.getCqlQuery());
-                        
-                        String out = SummaryQueryWithLocations.queryResultAsString(result);
-                        
-                        logger.info("\nvvvvvvvvvvvvvvv OUT vvvvvvvvvvvvvvvv\n" + out + "\n^^^^^^^^^^^^^^^ OUT ^^^^^^^^^^^^^^^^\n");
-
-                        currQueryLocs.setCounterFromFullAnswer(currUrl, out);
-
+                        CQLQueryResults result = client.query(currentQueryWithLocations.getCqlQuery());
+                        CalculatorHelper resUrl = new CalculatorHelper(currUrl, result);
+                        detailsForCurrQuery.add(resUrl);
+                        l(resUrl.getResultNumber());
+                        l(resUrl.getStrResult());
                     } catch (Exception e) {
-                        logger.error("vvvvvvvvvvvvvvv ERROR vvvvvvvvvvvvvvvv");
-                        logger.error("querying for " + currQueryLocs.getShortClassName());
+                        logger.error("querying for " + currentQueryWithLocations.getShortClassName());
                         logger.error("failed for url " + currUrl);
                         logger.error("with error " + e.getMessage());
-                        logger.error("^^^^^^^^^^^^^^^ ERROR ^^^^^^^^^^^^^^^^");
                     }
                 }
+                Map<String, Long> m = new HashMap<String, Long>(); 
+                for (CalculatorHelper r: detailsForCurrQuery) {
+                    m.put(r.getUrl(), r.getResultNumber());
+                }
+                SummaryQueryResults resultsForCurrQuery = new SummaryQueryResults(currentQueryWithLocations, m);
+                accum.add(resultsForCurrQuery);
             }
-            
+            GSSRun currRun = new GSSRun(accum);
             GridSummaryService.lastUpdated = new Date();
+            this.gss.addResult(currRun);
 
-            logger.info("************************\nSummary queries background tasks finished" + new java.util.Date());
+            l("Summary queries background tasks finished" + new java.util.Date());
         }
 
     }

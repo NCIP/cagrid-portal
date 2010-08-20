@@ -11,17 +11,6 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"><!--beans-->
 
-    <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-          p:ignoreUnresolvablePlaceholders="true">
-        <property name="locations">
-            <list>
-                <value>classpath:cagridportlets.properties</value>
-                <value>classpath:cagridportal.properties</value>
-            </list>
-        </property>
-    </bean>
-
     <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
        <property name="interceptors">
            <list>
