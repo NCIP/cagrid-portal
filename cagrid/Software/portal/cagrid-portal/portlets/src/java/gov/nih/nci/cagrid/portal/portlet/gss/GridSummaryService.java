@@ -42,6 +42,7 @@ public class GridSummaryService implements ApplicationContextAware {
     }
 
     private void l(Object o) {
+        //logger.info(o);
         System.out.println(o);
     }
     
