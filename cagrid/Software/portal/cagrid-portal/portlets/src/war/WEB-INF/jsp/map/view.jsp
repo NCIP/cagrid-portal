@@ -190,7 +190,8 @@
     <liferay-portlet:param name="operation" value="refreshStats"/>
 </liferay-portlet:renderURL>
 
-<a href="${refreshStatsUrl}">Refresh Stats</a>
-
+<c:if test="${liferayUser.admin}">
+	<a href="${refreshStatsUrl}">Refresh Stats</a>
+</c:if>
 
 

@@ -5,9 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Refresh started OK</title>
+<title>Refresh Statistics Results</title>
 </head>
 <body>
-<c:out value="${triggered}"/>
+<c:out value="${message}"/>
 </body>
 </html>
