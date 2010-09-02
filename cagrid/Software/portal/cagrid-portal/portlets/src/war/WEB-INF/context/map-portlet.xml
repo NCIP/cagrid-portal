@@ -133,8 +133,6 @@
 	</bean>
 	
 	<bean id="refreshController" class="gov.nih.nci.cagrid.portal.portlet.gss.RefreshController" autowire="byName" >
-        <property name="cacheSeconds" value="60" />
-        <property name="viewName" value="results" />
     </bean>
 
 	<bean id="portletModeParameterHandlerMapping"

@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.ParameterizableViewController;
+import org.springframework.web.portlet.mvc.AbstractController;
 
-public class RefreshController extends ParameterizableViewController {
+public class RefreshController extends AbstractController {
 
     private DiscoveryModel discoveryModel;
     
