@@ -185,3 +185,12 @@
     }
 
 </script>
+
+<liferay-portlet:renderURL var="refreshStatsUrl">
+    <liferay-portlet:param name="operation" value="refreshStats"/>
+</liferay-portlet:renderURL>
+
+<a href="${refreshStatsUrl}">Refresh Stats</a>
+
+
+

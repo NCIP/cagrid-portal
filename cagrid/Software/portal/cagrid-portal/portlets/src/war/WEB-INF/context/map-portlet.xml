@@ -131,6 +131,11 @@
 			value="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean" />
 		<property name="successOperation" value="viewMap" />
 	</bean>
+	
+	<bean id="refreshController" class="gov.nih.nci.cagrid.portal.portlet.gss.RefreshController" autowire="byName" >
+        <property name="cacheSeconds" value="60" />
+        <property name="viewName" value="results" />
+    </bean>
 
 	<bean id="portletModeParameterHandlerMapping"
 		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
@@ -145,6 +150,7 @@
 						<entry key="selectItemsForDiscovery" value-ref="selectItemsForDiscoveryController" />
 						<entry key="selectDirectory" value-ref="selectDirectoryController" />
 						<entry key="viewMap" value-ref="viewMapController" />
+						<entry key="refreshStats" value-ref="refreshController" />
 					</map>
 				</entry>
 			</map>
