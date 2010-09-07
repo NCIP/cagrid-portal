@@ -190,8 +190,8 @@
     <liferay-portlet:param name="operation" value="refreshStats"/>
 </liferay-portlet:renderURL>
 
-<c:if test="${liferayUser.admin}">
+<% if (request.isUserInRole("Administrator")) {  %>
 	<a href="${refreshStatsUrl}">Refresh Stats</a>
-</c:if>
+<% } %>
 
 

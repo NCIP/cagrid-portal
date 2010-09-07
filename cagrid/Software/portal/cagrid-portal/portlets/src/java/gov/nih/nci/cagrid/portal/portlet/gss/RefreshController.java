@@ -29,6 +29,7 @@ public class RefreshController extends AbstractController {
         
         //msg.append("+update stats process triggered? "+GridSummaryService.instance.triggerCalculator() + "</br>");
         
+        /*
         if (getDiscoveryModel() != null) {
             if (getDiscoveryModel().getLiferayUser() != null) {
                 msg.append("getDiscoveryModel().getLiferayUser().isAdmin()=" + getDiscoveryModel().getLiferayUser().isAdmin() + "<br/>");
@@ -42,6 +43,14 @@ public class RefreshController extends AbstractController {
 
         } else {
             mav.addObject("message", "getDiscoveryModel() is null<br/>");
+        }
+        */
+        
+        if (request.isUserInRole("Administrator")) {
+            boolean b = GridSummaryService.instance.triggerCalculator();
+            msg.append("update stats process triggered? " + new Boolean(b));
+        } else {
+            msg.append("You need to be an administrator to refresh statistics");
         }
 
         mav.addObject("message", msg.toString());
