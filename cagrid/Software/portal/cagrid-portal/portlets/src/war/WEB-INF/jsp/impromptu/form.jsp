@@ -31,6 +31,10 @@ http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
 			<td><form:errors path="clearPrevious" /></td>
 		</tr>
 		<tr>
+			<td valign="top" style="font-weight:bold" >Format Results In HTML :</td>
+			<td><form:checkbox path="htmlSuccessPage"/></td>
+		</tr>
+		<tr>
 			<td colspan="2"><input type="submit"></td>
 		</tr>
 	</table>

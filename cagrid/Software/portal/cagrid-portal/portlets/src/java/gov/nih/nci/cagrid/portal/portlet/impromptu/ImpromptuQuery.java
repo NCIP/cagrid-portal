@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
-import java.util.Date;
 import java.util.UUID;
 
 public class ImpromptuQuery {
@@ -10,6 +9,7 @@ public class ImpromptuQuery {
     private String endpointUrl = "";
     private boolean clearPrevious = false;
     private long accessedOn = 0;
+    private boolean htmlSuccessPage = false;
 
     public UUID getUuid() {
         return uuid;
@@ -51,10 +51,18 @@ public class ImpromptuQuery {
         this.accessedOn = accessedOn;
     }
 
+    public boolean isHtmlSuccessPage() {
+        return htmlSuccessPage;
+    }
+
+    public void setHtmlSuccessPage(boolean htmlSuccessPage) {
+        this.htmlSuccessPage = htmlSuccessPage;
+    }
+
     @Override
     public String toString() {
-        return "ImpromptuQuery [clearPrevious=" + clearPrevious + ", endpointUrl=" + endpointUrl + ", query=" + query + ", accessedOn=" + accessedOn + ", uuid=" + uuid
-                + "]";
+        return "ImpromptuQuery [clearPrevious=" + clearPrevious + ", endpointUrl=" + endpointUrl + ", query=" + query + ", accessedOn=" + accessedOn + ", uuid=" + uuid + ", htmlSuccessPage="
+                + htmlSuccessPage + "]";
     }
 
     @Override
