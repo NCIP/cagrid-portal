@@ -1,10 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+
 <html>
 <head>
-<title>Submit An Impromptu Query</title>
+	<title>Submit An Impromptu Query</title>
+
+	<script type="text/javascript" src="/html/js/jquery/jquery.js"></script>
+	<script type="text/javascript">
+	    jQuery(document).ready(function() {
+
+			jQuery('#htmlSuccessPage_check_td > :checkbox').attr('checked', true);
+	
+	    });
+	
+	</script>
+
 </head>
+
 <body>
 
 <!-- 
@@ -32,7 +46,7 @@ http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
 		</tr>
 		<tr>
 			<td valign="top" style="font-weight:bold" >Format Results In HTML :</td>
-			<td><form:checkbox path="htmlSuccessPage"/></td>
+			<td id="htmlSuccessPage_check_td"><form:checkbox path="htmlSuccessPage"/></td>
 		</tr>
 		<tr>
 			<td colspan="2"><input type="submit"></td>
