@@ -14,7 +14,6 @@
 			jQuery('#htmlSuccessPage_check_td > :checkbox').attr('checked', true);
 	
 	    });
-	
 	</script>
 
 </head>
