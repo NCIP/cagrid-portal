@@ -4,7 +4,7 @@
 
 <div class="row">
 	<label></label>
-	<div class="value"><a href="/web${catalogEntry.communityUrl}"><img src="<c:url value="/images/try-it_button.png"/>"  alt="Visit this Community!"/></a></div>
+	<div class="value"><a href="/web${catalogEntry.communityUrl}"><img src="<c:url value="/images/visit-community_button.png"/>"  alt="Visit this Community!"/></a></div>
 </div>
 
 
