@@ -7,13 +7,13 @@
 
 <c:choose>
     <c:when test="${result.status == 'Passed'}">
-        <img src="<c:url value="/images/diagnostic_passed_icon.jpg"/>"
+        <img alt="Passed" src="<c:url value="/images/diagnostic_passed_icon.jpg"/>"
     </c:when>
     <c:when test="${result.status == 'Failed'}">
-        <img src="<c:url value="/images/diagnostic_failed_icon.png"/>"
+        <img alt="Failed"  src="<c:url value="/images/diagnostic_failed_icon.png"/>"
     </c:when>
     <c:otherwise>
-        <img src="<c:url value="/images/diagnostic_problem_icon.png"/>"
+        <img alt="Problem"  src="<c:url value="/images/diagnostic_problem_icon.png"/>"
     </c:otherwise>
 </c:choose>
 <c:if test="${not empty result.message}">

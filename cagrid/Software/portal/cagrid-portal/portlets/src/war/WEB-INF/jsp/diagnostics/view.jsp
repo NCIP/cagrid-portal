@@ -18,16 +18,29 @@
 <c:set var="wikiURL" value="${diagnosticsBean.wikiURL}"/>
 
 
-<div class="row">
-    <div class="label">
-        Service URL:&nbsp;
-    </div>
-    <div>
-        <input id="${prefix}url" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>
+<table>
+    <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr>
+        <td>
+            <label for="url">
+            Service URL:&nbsp;
+        </label>
+        </td>
+        <td>
+            <input id="${prefix}url" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>
+        </td>
+    </tr>
+    <tr>
+        <td  style="padding-top:20px;">&nbsp;</td>
+        <td>
         <input id="${prefix}diagnoseBtn" type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose(true)" />
         <tags:infoPopup id="${prefix}diagnosticsInfo" popup_text="Enter URL of caGrid service to run diagnostics on."/>
-    </div>
-</div>
+        </td>
+    </tr>
+</table>
 
 <div id="${prefix}outerDiv">
     <div id="${prefix}errorMsg" class="errorMsg">
@@ -144,7 +157,7 @@
         $("statusIndicator").style.visibility='hidden';
 
         $("${prefix}diagnoseBtn").enable();
-        $("${prefix}diagnoseBtn").style.background='#3876C1';
+        $("${prefix}diagnoseBtn").style.background='';
         $("${prefix}diagnoseBtn").value='Diagnose';
     }
 

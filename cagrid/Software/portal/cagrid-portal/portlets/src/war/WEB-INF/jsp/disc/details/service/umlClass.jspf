@@ -1,10 +1,10 @@
 <table class="detailstable">
 	<tbody>
-		<tr>
-			<td colspan="2">
-				<input type="button" value="Select For Query" onclick="${prefix}selectUMLClass('${umlClass.id}')"/>
-			</td>
-		</tr>
+		<%--<tr>--%>
+			<%--<td colspan="2">--%>
+				<%--<input type="button" value="Select For Query" onclick="${prefix}selectUMLClass('${umlClass.id}')"/>--%>
+			<%--</td>--%>
+		<%--</tr>--%>
 		<tr>
 			<td class="detailslabelcell">Package Name:</td>
 			<td><c:out value="${umlClass.packageName}"/></td>

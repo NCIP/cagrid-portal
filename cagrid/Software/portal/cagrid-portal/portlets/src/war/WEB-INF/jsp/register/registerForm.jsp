@@ -10,6 +10,13 @@
     <br/>
     <br/>
     <table>
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
         <tr>
             <td style="padding-right:5px; text-align:right">
                 First Name:
@@ -106,6 +113,7 @@
                 <c:out value="${application.country}"/>
             </td>
         </tr>
+        </tbody>
     </table>
 </c:when>
 <c:otherwise>
@@ -148,6 +156,13 @@
 		<form:errors path="*"/>
 	</span>
         <table>
+            <thead>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </thead>
+            <tbody>
             <tr>
                 <td style="padding-right:5px; text-align:right">
                     First Name:
@@ -285,6 +300,7 @@
                     <input id="${prefix}submit" alt="Submit" type="submit" value="Submit"/>
                 </td>
             </tr>
+            </tbody>
         </table>
 
     </form:form>

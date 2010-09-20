@@ -17,27 +17,30 @@
 </portlet:actionURL>
 
 <table>
-<tr>
-<td>
+    <thead>
+    <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
 
-    <%@ include file="/WEB-INF/jsp/disc/search/discovery_advanced.jspf" %>
-    <%@ include file="/WEB-INF/jsp/disc/search/discovery_simple.jspf" %>
-    <%@ include file="/WEB-INF/jsp/disc/search/discovery_evs.jspf" %>
+            <%@ include file="/WEB-INF/jsp/disc/search/discovery_advanced.jspf" %>
+            <%@ include file="/WEB-INF/jsp/disc/search/discovery_simple.jspf" %>
 
+        </td>
 
-
-</td>
-
-<td valign="top">
-    <form>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <input name="level" value="simple" type="radio" checked
-               onclick="jQuery('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>simpleDiv').show();"/>Simple&nbsp;
-        <input name="level" value="advanced" type="radio"
-               onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/>Advanced&nbsp;
-        <input name="level" value="evs" type="radio"
-               onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>evsDiv').show();"/>EVS&nbsp;
-    </form>
-</td>
-</tr>
+        <td valign="top">
+            <form>
+                &nbsp;
+                <input name="level" value="simple" type="radio" checked
+                       onclick="jQuery('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>simpleDiv').show();"/>Simple&nbsp;
+                <input name="level" value="advanced" type="radio"
+                       onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/>Advanced&nbsp;
+            </form>
+        </td>
+    </tr>
+    </tbody>
 </table>

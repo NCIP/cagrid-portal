@@ -1,4 +1,11 @@
 <table class="detailstable">
+    <thead>
+    <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    </thead>
+    <tbody>
 	<tbody>
 		<tr class="detailslabelcell">
 			<td>Description:</td>

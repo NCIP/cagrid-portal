@@ -2,6 +2,12 @@
 <c:if test="${!empty catalogEntryViewBean.pocRoleType.orderedRoleInstances}">
 Points of Contact<br/>
 <table>
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
 	<tbody>
 		<tr>
 			<th>Name</th><th>POC Type</th><th>Email</th>

@@ -1,4 +1,10 @@
 <table class="detailstable">
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
 	<tbody>
 		<tr>
 			<td class="detailslabelcell">QName:</td>

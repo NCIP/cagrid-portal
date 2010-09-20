@@ -46,6 +46,13 @@
                 </c:if>
                 <span style="color:red"><form:errors path="*"/></span>
                 <table>
+                    <thead>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td style="padding-right:5px; text-align:right">Username:</td>
                         <td><form:input path="username" size="29"/></td>
@@ -71,6 +78,7 @@
 
                         </td>
                     </tr>
+                    </tbody>
                 </table>
                 <input type="hidden" name="portalAuthnUrl" value="<c:out value="${portalAuthnUrl}"/>"/>
             </form:form>

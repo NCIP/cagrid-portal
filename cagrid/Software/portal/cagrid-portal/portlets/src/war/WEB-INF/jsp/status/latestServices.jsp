@@ -17,10 +17,10 @@
         <div class="value">
             <c:choose>
                 <c:when test="${serviceInfo.type == 'DATA'}">
-                    <img src="<c:url value="/images/data-services.png"/>"/>
+                    <img alt="Data Services" src="<c:url value="/images/data-services.png"/>"/>
                 </c:when>
                 <c:otherwise>
-                    <img src="<c:url value="/images/analytical_services.png"/>"/>
+                    <img alt="Analytical Services" src="<c:url value="/images/analytical_services.png"/>"/>
                 </c:otherwise>
             </c:choose>
         </div>

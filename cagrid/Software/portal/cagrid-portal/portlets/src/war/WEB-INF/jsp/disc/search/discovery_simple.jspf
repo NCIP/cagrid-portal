@@ -10,19 +10,27 @@
 
         <table style="cellpadding:5px;" valign="top">
             <tr>
-                <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
+                <td valign="top" style="padding-right:5px; text-align:right">
+                    <label for="keywords">
+                        Keyword:
+                    </label>
+                </td>
                 <td valign="top">
                     <input type="text" name="keywords" class="searchField"/>
                 </td>
             </tr>
             <tr>
-                <td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
+                <td valign="top" style="padding-right:5px; text-align:right">
+                    <label for="searchFields">
+                        Search Fields:
+                    </label>
+                   </td>
                 <td valign="top">
                     <select id="${prefix}searchFields" name="searchFields" multiple size="8">
                         <option id="${prefix}CDEPublicId" value="publicID">caDSR Public ID (CDE)</option>
                         <option id="${prefix}ConceptCode" value="conceptCode">Concept Code</option>
                         <option id="${prefix}ConceptName" value="conceptName">Concept Name</option>
-                        <option id="${prefix}URL"  value="serviceUrl">URL</option>
+                        <option id="${prefix}URL" value="serviceUrl">URL</option>
                         <option id="${prefix}ServName" value="serviceName">Name</option>
                         <option id="${prefix}ServDesc" value="serviceDescription">Description</option>
                         <option id="${prefix}InputOutput" value="inputOutput">Input/Output Class Names</option>

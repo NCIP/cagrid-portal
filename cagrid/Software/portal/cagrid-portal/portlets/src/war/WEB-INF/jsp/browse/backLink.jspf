@@ -34,7 +34,7 @@
     <c:if test="${backLink !=null}">
         <form:form id="${ns}backLinkForm" method="post">
         <div style="float:left;">
-            <a href="javascript:${ns}returnToSearch();"><img src="/cagridportlets/images/foop/back-arrow.png" alt=""/> Back to Results</a>
+            <a href="javascript:${ns}returnToSearch();"><img src="/cagridportlets/images/foop/back-arrow.png" alt="Back"/> Back to Results</a>
         </div>
         </form:form>
     </c:if>

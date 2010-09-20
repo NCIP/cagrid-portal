@@ -37,7 +37,11 @@
 >
 <table>
 	<tr>
-		<td style="padding-right:5px;"><b>Keyword:</b></td>
+		<td style="padding-right:5px;">
+            <label for="keywords">
+                Keyword:
+            </label>
+        </td>
 		<td>
 			<input type="text" id="${formName}Keywords" name="keywords"/>
 		</td>

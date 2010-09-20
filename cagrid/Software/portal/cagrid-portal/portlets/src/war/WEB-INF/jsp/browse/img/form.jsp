@@ -60,7 +60,7 @@ Select an image and click the Upload button. Only PNG and JPEG files are support
 <form action="" method="POST" enctype="multipart/form-data">
 <label for="image">Image</label>
 <input id="image" type="file" name="image"/>
-<img id="loading" src="<c:url value="/js/upload/loading.gif"/>" style="display:none;">
+<img id="loading" alt="Loading" src="<c:url value="/js/upload/loading.gif"/>" style="display:none;">
 <input type="button" value="Upload" onclick="${ns}upload();"/>
 <br/>
 

@@ -2,7 +2,7 @@
 	<thead>
 		<th colspan="2">
 			<c:if test="${!empty researchCenter.imageUrl}">
-				<img src="<c:out value="${researchCenter.imageUrl}"/>"/>
+				<img  alt="Research Center" src="<c:out value="${researchCenter.imageUrl}"/>"/>
 			</c:if>
 			<c:out value="${researchCenter.displayName}"/>
 		</th>

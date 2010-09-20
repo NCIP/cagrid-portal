@@ -22,7 +22,7 @@ function runIt() {
         QueryExecutionManager.submitQuery($("${ns}serviceUrl").value,{
             callback:function(running) {
                 if(running==null){
-                    jQuery("#${ns}resultsDiv").html("Running Query <img src='<c:url value="/images/indicator.gif"/>'/>");
+                    jQuery("#${ns}resultsDiv").html("Running Query <img alt='Running' src='<c:url value="/images/indicator.gif"/>'/>");
                     ${ns}showResultsTab();
                     ${ns}loadResults(false);
                 }

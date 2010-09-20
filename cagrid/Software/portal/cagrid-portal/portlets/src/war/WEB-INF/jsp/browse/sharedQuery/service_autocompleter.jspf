@@ -29,7 +29,7 @@
 
     function ${ns}getGSCatalogEntries(sQuery) {
 
-        jQuery("#${ns}gridServiceSearchMsg").html("Searching <img src='<c:url value="/images/indicator.gif"/>'/>");
+        jQuery("#${ns}gridServiceSearchMsg").html("Searching <img alt='Searching' src='<c:url value="/images/indicator.gif"/>'/>");
         var xml = jQuery("#input-query").val();
         var results = new Array();
 

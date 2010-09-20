@@ -1,4 +1,10 @@
 <table class="detailstable">
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
 	<tbody>
 		<c:forEach var="contextProperty" items="${cps}">
 		<tr>

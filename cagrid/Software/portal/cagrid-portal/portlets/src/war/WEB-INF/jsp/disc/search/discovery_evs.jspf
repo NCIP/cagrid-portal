@@ -26,7 +26,11 @@
 
     <table style="cellpadding:5px;" valign="top">
         <tr>
-            <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
+            <td valign="top" style="padding-right:5px; text-align:right">
+                 <label for="evsConcept">
+                    Keyword:
+                 </label>
+            </td>
                          <td valign="top">
                 <input id="evsConcept" type="text" alt="Search Keyword" class="searchField auto_complete"/>
 
@@ -81,7 +85,7 @@
                     $('evsConceptDefinitionValue').innerHTML= selectedTag.definitation;
                     $('keywords').value=selectedTag.code;
                     $('evsConceptCodeValue').innerHTML= selectedTag.code;
-                    $("discoveryResultDiv").innerHTML = '<img src="<c:url value="/images/indicator.gif"/>"/>';
+                    $("discoveryResultDiv").innerHTML = '<img alt="Working Indicator" src="<c:url value="/images/indicator.gif"/>"/>';
                     $("evsConceptResultDiv").style.display="";
                     EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
                     }});

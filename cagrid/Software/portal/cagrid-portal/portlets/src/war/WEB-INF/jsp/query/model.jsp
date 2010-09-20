@@ -9,18 +9,29 @@
 <form:form id="${prefix}" action="${selectServiceAction}" commandName="selectServiceCommand">
 <input type="hidden" name="operation" value="selectService"/>
 <table>
+    <thead>
+    <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    </thead>
+    <tbody>
 	<tr>
 		<td style="padding-right:5px;  text-align:right" valign="top">
-			<b>Service URL:</b>
+            <label for="${prefix}url">
+                Service URL:
+            </label>
 		</td>
 		<td style="padding-right:5px;  text-align:right" valign="top">
-			<form:input id="${prefix}url" alt="Data Service Url" path="dataServiceUrl" size="50" maxlength="1000"/><br/>
+			<form:input id="${prefix}url" alt="Data Service Url" path="dataServiceUrl" size="40" maxlength="1000"/><br/>
 			<span style="color:red"><form:errors path="dataServiceUrl"/></span>
 		</td>
 		<td valign="top">
 			<input type="submit" id="${prefix}Select" alt="Select" value="Select"/>
 		</td>
 	</tr>
+    </tbody>
 </table>
 <br/>
 <br/>

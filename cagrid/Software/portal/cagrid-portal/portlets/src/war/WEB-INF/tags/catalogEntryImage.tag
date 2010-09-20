@@ -42,9 +42,14 @@
         <c:if test="${!empty height}">
             height="${height}"
         </c:if>
-        <c:if test="${!empty alt}">
-            alt="${alt}"
-        </c:if>
+        <c:choose>
+            <c:when test="${!empty alt}">
+                alt="${alt}"
+            </c:when>
+            <c:otherwise>
+                alt=""
+            </c:otherwise>
+        </c:choose>
           <c:if test="${!empty title}">
             title="${title}"
         </c:if>

@@ -68,7 +68,7 @@ function ${ns}getCatalogEntries(sQuery){
 
 	var targetRoleType = jQuery("#${ns}targetRoleType").val();
 
-	jQuery("#${ns}relatedEntrySearchMsg").html("Searching <img src='<c:url value="/images/indicator.gif"/>'/>");
+	jQuery("#${ns}relatedEntrySearchMsg").html("Searching <img alt='Searching' src='<c:url value="/images/indicator.gif"/>'/>");
 	var results = new Array();
 
 	CatalogEntryManagerFacade.getCatalogEntriesForPartialName(sQuery, targetRoleType,
@@ -147,7 +147,7 @@ function ${ns}saveNewRelatedItem(){
 }
 
 function ${ns}renderUpdatedRelatedItemsView(){
-	jQuery("#${ns}relatedItemsDiv").html("Rendering related items <img src='<c:url value="/images/indicator.gif"/>'/>");
+	jQuery("#${ns}relatedItemsDiv").html("Rendering related items <img alt='Rendering' src='<c:url value="/images/indicator.gif"/>'/>");
 
 	var callback = {
 		success: function(o){
