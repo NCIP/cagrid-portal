@@ -29,20 +29,16 @@
     </p>
  --%>
  
-    <p>
-    	<span>
-	    	<div id="${ns}selectEndpointsButtonContainer"></div>
-	    	<div id="${ns}checkAllEndpointsButtonContainer"></div>
-	    	<div id="${ns}invertSelectionEndpointsButtonContainer"></div>
-    	</span>
-    </p>
+   	<span>
+    	<span id="${ns}selectEndpointsButtonContainer"></span>
+    	<span id="${ns}checkAllEndpointsButtonContainer"></span>
+    	<span id="${ns}invertSelectionEndpointsButtonContainer"></span>
+   	</span>
     
     </br>
     
-    <p>
-	    <form name="${ns}selectEndpointsForm">
-		</form>
-    </p>
+    <form name="${ns}selectEndpointsForm">
+	</form>
     
 </div>
 
