@@ -118,7 +118,7 @@
 	        id: "${ns}invertSelectionEndpointsButton",
 	        container: "${ns}invertSelectionEndpointsButtonContainer"
 	    });
-	    ${ns}invertSelectionEndpointsButtonContainer.on("click", function (evt) {
+	    ${ns}invertSelectionEndpointsButton.on("click", function (evt) {
 	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").click();
 	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
