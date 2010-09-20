@@ -110,6 +110,7 @@
 	    });
 	    ${ns}checkAllEndpointsButton.on("click", function (evt) {
 	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").attr('checked', true);
+	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
 
 	    ${ns}invertSelectionEndpointsButton = new YAHOO.widget.Button({
@@ -118,7 +119,8 @@
 	        container: "${ns}invertSelectionEndpointsButtonContainer"
 	    });
 	    ${ns}invertSelectionEndpointsButtonContainer.on("click", function (evt) {
-	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").attr('checked', false);
+	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").click();
+	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
 	    
 	});
