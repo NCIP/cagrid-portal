@@ -30,9 +30,11 @@
  --%>
  
     <p>
-    	<div id="${ns}selectEndpointsButtonContainer"></div>
-    	<div id="${ns}checkAllEndpointsButtonContainer"></div>
-    	<div id="${ns}invertSelectionEndpointsButtonContainer"></div>
+    	<span>
+	    	<div id="${ns}selectEndpointsButtonContainer"></div>
+	    	<div id="${ns}checkAllEndpointsButtonContainer"></div>
+	    	<div id="${ns}invertSelectionEndpointsButtonContainer"></div>
+    	</span>
     </p>
     
     </br>
