@@ -28,6 +28,10 @@
 
         <table>
             <tr>
+                 <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+            </tr>
+            <tr>
                 <td style="padding-right:5px; text-align:right">Username:</td>
                 <td><form:input path="username" size="29"/></td>
             </tr>
