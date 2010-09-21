@@ -33,6 +33,7 @@
     	<span id="${ns}selectEndpointsButtonContainer"></span>
     	<span id="${ns}checkAllEndpointsButtonContainer"></span>
     	<span id="${ns}invertSelectionEndpointsButtonContainer"></span>
+    	<span id="${ns}clearAllEndpointsButtonContainer"></span>
    	</span>
     
     </br>
@@ -128,6 +129,17 @@
 	    	
 	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
-	    
+
+
+    	${ns}clearAllEndpointsButton = new YAHOO.widget.Button({
+	        label: "Clear All",
+	        id: "${ns}clearAllEndpointsButton",
+	        container: "${ns}clearAllEndpointsButtonContainer"
+	    });
+	    ${ns}clearAllEndpointsButton.on("click", function (evt) {
+	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").attr('checked', false);
+	    	${ns}checkEnableSelectEndpoints(evt);
+	    });    
+    
 	});
 </script>
