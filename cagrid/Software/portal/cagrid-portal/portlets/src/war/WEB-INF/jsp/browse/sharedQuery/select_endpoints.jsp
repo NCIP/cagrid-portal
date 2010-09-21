@@ -103,7 +103,9 @@
 	        ${ns}selectEndpoints(endpoints);
 	    });
 
-
+		//
+		//Check All
+		//
 	    ${ns}checkAllEndpointsButton = new YAHOO.widget.Button({
 	        label: "Check All",
 	        id: "${ns}checkAllEndpointsButton",
@@ -114,6 +116,9 @@
 	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
 
+		//
+		//Invert Selection
+		//
 	    ${ns}invertSelectionEndpointsButton = new YAHOO.widget.Button({
 	        label: "Invert Selection",
 	        id: "${ns}invertSelectionEndpointsButton",
@@ -130,7 +135,9 @@
 	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
 
-
+		//
+		//Clear All
+		//
     	${ns}clearAllEndpointsButton = new YAHOO.widget.Button({
 	        label: "Clear All",
 	        id: "${ns}clearAllEndpointsButton",
