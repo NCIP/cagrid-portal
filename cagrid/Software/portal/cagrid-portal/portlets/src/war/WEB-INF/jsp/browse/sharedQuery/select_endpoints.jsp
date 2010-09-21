@@ -130,7 +130,7 @@
 
 	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").each( function() {
 				$( this ).attr( 'checked', $( this ).is( ':checked' ) ? '' : 'checked' );
-			}
+			};
 	    	
 	    	${ns}checkEnableSelectEndpoints(evt);
 	    });
