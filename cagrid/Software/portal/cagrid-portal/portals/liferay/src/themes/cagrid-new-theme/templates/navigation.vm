@@ -11,7 +11,7 @@
 
         #if ($show_my_account)
                     <li class="my-account">
-                        <a href="$my_account_url">$my_account_text</a>
+                        <a href="$my_account_url" id="my_account">$my_account_text</a>
                     </li>
                 #end
 

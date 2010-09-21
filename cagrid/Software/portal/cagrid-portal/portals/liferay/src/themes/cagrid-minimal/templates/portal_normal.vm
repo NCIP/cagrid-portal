@@ -24,6 +24,11 @@ $theme.include($top_messages_include)
         <!-- Begin NCICB Banner -->
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="hdrBG">
             <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
                 <td width="283" height="37" align="left">
                     <a href="http://www.cancer.gov">
                         <img alt="National Cancer Institute" src="$images_folder/ncicb/logotype.gif" width="283"
@@ -71,6 +76,20 @@ $theme.include($top_messages_include)
         <div class="footerMenu">
             <table summary="" align="center" cellpadding="0" cellspacing="0" border="0">
                 <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+
+                <tr>
                     <!--
                         <td height="20" class="footerMenuItem"  onclick="document.location.href='#'">
                         &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/help">HELP</a>&nbsp;&nbsp;
@@ -114,6 +133,9 @@ $theme.include($top_messages_include)
             </table>
         </div>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftrTable">
+            <tr>
+                <th>&nbsp;</th>
+            </tr>
             <tr>
                 <td valign="top">
                     <div align="center">

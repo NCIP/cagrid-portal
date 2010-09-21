@@ -1,6 +1,11 @@
 <div class="columns-3" id="content-wrapper">
 	<table id="layout-grid">
 	<tr>
+    	<th>&nbsp;</th>
+	    <th>&nbsp;</th>
+	    <th>&nbsp;</th>
+	</tr>
+	<tr>
 		<td class="lfr-column twenty" id="column-1" valign="top">
 			$processor.processColumn("column-1")
 		</td>
