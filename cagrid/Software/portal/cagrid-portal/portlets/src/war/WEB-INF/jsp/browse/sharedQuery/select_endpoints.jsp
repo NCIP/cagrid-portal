@@ -44,6 +44,7 @@
 </div>
 
 <script type="text/javascript">
+
 	function ${ns}renderAvailableEndpoints() {
 	    ${ns}selectEndpointsButton.set("label", "Loading...");
 	    var cql = jQuery("#input-query").val();
@@ -60,6 +61,7 @@
 	        }
 	    });
 	}
+	
 	function ${ns}checkEnableSelectEndpoints(evt) {
 	    if (jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked").length > maxQueries) {
 	        alert("You have selected the maximum allowed services to query");
@@ -72,8 +74,10 @@
 	        ${ns}selectEndpointsButton.set("disabled", true);
 	    }
 	}
+	
 	var ${ns}selectEndpointsButton = null;
 	var maxQueries = 5;
+	
 	jQuery(document).ready(function () { 
 		<%-- set to a default --%> 
 		jQuery("#${ns}queryCount").html(maxQueries); 
