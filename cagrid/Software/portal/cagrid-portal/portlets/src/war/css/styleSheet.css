@@ -119,3 +119,10 @@ ul.fdtablePaginater li a, ul.fdtablePaginater li div {
     padding: 0;
     width: 2em;
 }
+
+.loginNotice {
+    margin-top:30px;
+    font-size: 8pt;
+    width:70%;
+    color: #6f6f6f;
+}
