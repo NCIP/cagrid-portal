@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/styleSheet.css"/>"/>
+
 <script type='text/javascript'
         src='/cagridportlets/dwr/interface/CredentialManagerFacade.js'></script>
 <script type='text/javascript' src='/cagridportlets/dwr/engine.js'></script>
@@ -23,10 +25,10 @@
             <span style="vertical-align:top;">
                 <tags:helpLink helpURL="${usersGuideUrl}-UsingthecaGridPortalfortheFirstTime"/>
             </span>
-            
+
             <br/>
             <br/>
-          
+
             <c:choose>
                 <c:when test="${! empty redirectUrl}">
                     <c:set var="portalAuthnUrl" value="${redirectUrl}"/>
@@ -35,7 +37,7 @@
                     <portlet:renderURL var="portalAuthnUrl"/>
                 </c:otherwise>
             </c:choose>
-            
+
             <portlet:actionURL var="action">
                 <portlet:param name="operation" value="login"/>
             </portlet:actionURL>
@@ -47,10 +49,10 @@
                 <span style="color:red"><form:errors path="*"/></span>
                 <table>
                     <thead>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
                     </thead>
                     <tbody>
                     <tr>
@@ -82,6 +84,31 @@
                 </table>
                 <input type="hidden" name="portalAuthnUrl" value="<c:out value="${portalAuthnUrl}"/>"/>
             </form:form>
+
+            <div class="loginNotice">
+                <div class="row">
+                    <div class="label">
+                        Notice:
+                    </div>
+                </div>
+                <div class="row">
+                    This is a U.S. Government computer system, which may be accessed and
+                    used only for authorized Government business by authorized personnel.
+                    Unauthorized access or use of this computer system may subject
+                    violators to criminal, civil, and/or administrative action.
+                </div>
+                <div class="row">
+                    All information on this computer system may be intercepted, recorded,
+                    read, copied, and disclosed by and to authorized personnel for official
+                    purposes, including criminal investigations. Such information includes
+                    sensitive data encrypted to comply with confidentiality and privacy
+                    requirements. Access or use of this computer system by any person,
+                    whether authorized or unauthorized, constitutes consent to these terms.
+                    There is no right of privacy in this system.
+                </div>
+
+
+            </div>
 
 
         </c:when>
@@ -123,7 +150,7 @@
 
     function ${ns}showRegisterDialog() {
         ${ns}registerDialog =
-        new Liferay.Popup({title: "Register", modal:true, width:800 , height:500});
+                new Liferay.Popup({title: "Register", modal:true, width:800 , height:500});
         jQuery(
                 ${ns}registerDialog
                 ).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {});
