@@ -1,6 +1,6 @@
     
                          caGrid Portal
-                          Version 3.1
+                          Version 3.0
                        March 26, 2010 
 
 
@@ -22,10 +22,13 @@
 ================================================================
 
     This document contains the release notes for the caGrid 
-    Portal 3.1 release.
+    Portal 3.0 release.
 
-    This release is a point release and introduces some new features
-    to the 3.0 release.
+    This release of caGrid Portal extends the 2.0 Portal.
+    The portal User Interface was completely redesigned for this
+    release. Search has been enhanced by using Lucene and SOLR.
+    Unlike the previous release, users can now update information
+    in the Portal.
 
 ================================================================
                       2.0 Release History
@@ -35,18 +38,49 @@
     caGrid Portal 2.0.1 was released on 7th March 2008
     caGrid Portal 2.0.2 was released on 19th June 2008
     caGrid Portal 2.1 was released on 24th October 2008
-    caGrid Portal 2.2 was released on 24th February 2009
-    caGrid Portal 3.0 was release on 19th March 2010
+    caGrid Portal 2.2 was released on 24th Februaru 2009
             
 
 
 ================================================================
                       3.0 New Features and Updates
 ================================================================
-The following major new features were implemented in this release
+caGrid Portal 3.0 has a complete new User Interface. It also
+implements the ability to catalogue data on the grid.
 
-28564   caGrid Data Service Query HTTP service for the Portal
-28571   Summary of data in caGrid
+In addtion to major architectural and UI changes,
+the following RFE's were implemented in this release
+
+
+20257	Session timeout throws non descriptive error in DWR
+20264	Workflow Portlet
+20270	Notification Framework 
+20275	Provide interface to make participant information update
+        requests.
+20279	Portal build process and Installer should make better use
+        of caGrid target grids
+22930	Users should be able to log onto the portal using there
+        identity provider credentials
+22973	Catalog browsing should save state.
+22988	caGrid Portal: Change Search Results heading.
+22990	caGrid Portal: communities feedback
+22994	caGrid Portal: catalog search feedback
+24282	Show total query results
+24289	Simplify Catalog Entry Type Tree
+24354	Popup windows should be consistently styled
+24368	Liquibase changelog breaks with InnoDB engine
+25457	Make Add Related Item Window scrollable
+25749	Portal 3.0: Catalog Search Categories loads too slowly
+        on QA after restarting JBoss
+25800	Portal 3.0: Login text
+25803	Portal 3.0: Comments tab message
+25804	Portal 3.0: Remove Other Info Tab
+25805	Portal 3.0: Password verification field
+25818	Portal: Query results clean-up
+25824	Portal: Simplify Shared Query Page
+25825	Portal: Shared Query - Delete All button
+25828	Portal: Maximum selected data sources
+25830	Portal: Link to author of comment
 
 ================================================================
                       4.0 Bug fixes Since Last Release
