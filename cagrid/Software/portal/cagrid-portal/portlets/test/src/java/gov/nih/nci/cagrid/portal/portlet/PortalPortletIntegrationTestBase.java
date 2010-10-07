@@ -34,6 +34,7 @@ public class PortalPortletIntegrationTestBase extends AbstractDependencyInjectio
                 "applicationContext-security.xml",
                 "browse-portlet.xml",
                 "facades.xml",
+                "query-portlet.xml",
                 "greeting-portlet.xml",
                 "applicationContext-portal-search.xml"
         };
