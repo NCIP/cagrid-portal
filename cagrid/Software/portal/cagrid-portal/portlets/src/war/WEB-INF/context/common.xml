@@ -374,16 +374,6 @@
         <property name="memberRelationshipTypeName" value="CommunityPersonMember"/>
     </bean>
 
-    <bean id="cqlXMLSchemaValidator"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory" factory-method="initialize">
-        <constructor-arg type="java.lang.String" value="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"/>
-    </bean>
-
-    <bean id="dcqlXMLSchemaValidator"
-          class="gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory" factory-method="initialize">
-        <constructor-arg type="java.lang.String" value="Distributed_CQL_schema_2.0.xsd"/>
-    </bean>
-
     <bean id="queryResultColumnNameResolver"
           class="gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultColumnNameResolver" autowire="byName"/>
 

@@ -203,17 +203,17 @@
         <property name="errorsAttributeName" value="submitQueryErrors"/>
     </bean>
 
+    <bean id="cqlQuerySchemaValidator" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator"
+                      p:cqlSchema="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"
+                      p:dcqlSchema="Distributed_CQL_schema_2.0.xsd"/>
+
     <bean
             id="submitQueryController"
             class="gov.nih.nci.cagrid.portal.portlet.query.builder.SubmitQueryController"
             autowire="byName">
         <property name="validators">
             <list>
-                <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName">
-                </bean>
-                <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator"
-                      p:cqlXMLSchemaValidator-ref="cqlXMLSchemaValidator"
-                      p:dcqlXMLSchemaValidator-ref="dcqlXMLSchemaValidator"/>
+                <ref bean="cqlQuerySchemaValidator"/>
             </list>
         </property>
 
