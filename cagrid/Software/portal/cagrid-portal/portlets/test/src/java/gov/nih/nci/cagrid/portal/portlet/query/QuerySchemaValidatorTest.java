@@ -3,12 +3,14 @@ package gov.nih.nci.cagrid.portal.portlet.query;
 import gov.nih.nci.cagrid.portal.PortalTestUtils;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator;
-import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
 import org.springframework.validation.Errors;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * User: kherm
@@ -23,8 +25,8 @@ public class QuerySchemaValidatorTest {
     @Before
     public void setup() throws Exception {
         validator = new CQLQuerySchemaValidator();
-        validator.setCqlXMLSchemaValidator(XMLSchemaValidatorFactory.initialize("1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"));
-        validator.setDcqlXMLSchemaValidator(XMLSchemaValidatorFactory.initialize("Distributed_CQL_schema_2.0.xsd"));
+        validator.setCqlSchema("1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd");
+        validator.setDcqlSchema("Distributed_CQL_schema_2.0.xsd");
     }
 
     @Test
