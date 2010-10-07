@@ -79,7 +79,7 @@ public class CommunityCatalogEntryManagerFacade extends
 
 			id = saveInternal(ce);
 		} catch (Exception ex) {
-			String msg = "Error saving catalog entry: " + ex.getMessage();
+			String msg = "Error saving catalog entry. Please try again!";
 			logger.debug(msg, ex);
 			throw new RuntimeException(msg, ex);
 		}
