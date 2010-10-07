@@ -25,16 +25,16 @@
         <c:if test="${cqlQueryCommand.dcql == 'false'}">
             <tr>
                 <td style="padding-right:5px"><b>URL:</b></td>
-                <td><form:input id="${formName}Url" path="dataServiceUrl" size="80"/><br/>
+                <td><form:input id="${formName}Url" path="dataServiceUrl" size="60"/>
                     <span style="color:red"><form:errors path="dataServiceUrl"/></span></td>
             </tr>
         </c:if>
         <tr>
-            <td valign="top" style="padding-right:5px;"><b>Query:</b></td>
+            <td style="padding-right:5px;"><b>Query:</b></td>
             <td>
                 <form:textarea id="${resizablePrefix}" cssStyle="width:420px; height:200px" path="cqlQuery"/>
                 <br/>
-                <span style="color:red"><form:errors path="cqlQuery"/></span>
+              
             </td>
         </tr>
         <tr>
