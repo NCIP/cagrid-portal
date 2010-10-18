@@ -15,17 +15,16 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.dir.AbstractDirectoryBean;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.PointOfContactDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -132,7 +131,7 @@ public class MapBean extends AbstractDirectoryBean {
 	public void addService(GridService service) {
 		String key = getGeoKey(service);
 		if (key == null) {
-			logger.warn("Got null key for service " + service.getUrl() + ". Not adding to map.");
+			logger.info("Got null key for service " + service.getUrl() + ". Not adding to map.");
 		} else {
 			ServiceMapNode node = this.svcNodes.get(key);
 			if (node == null) {
