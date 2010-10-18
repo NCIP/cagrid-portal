@@ -45,7 +45,8 @@ public class PointOfContactCatalogEntryDao extends
         List l = getHibernateTemplate().find("from " + domainClass().getSimpleName() + " where about.person.emailAddress = ?",
                 new Object[]{d.getPerson().getEmailAddress()});
         if (l.size() > 1) {
-            throw new NonUniqueResultException("More than one CatalogEntry found for Domain Object with ID = " + d.getId());
+            throw new NonUniqueResultException("More than one " + domainClass().getSimpleName() + "" +
+                    "  found for person with email = " + d.getPerson().getEmailAddress());
         }
         if (l.size() == 1) {
             catalog = (PointOfContactCatalogEntry) l.iterator().next();

@@ -40,7 +40,7 @@ public abstract class AboutCatalogEntryDao<T extends CatalogEntry, D extends Dom
         List l = getHibernateTemplate().find("from " + domainClass().getSimpleName() + " where about.id = ?",
                 new Object[]{d.getId()});
         if (l.size() > 1) {
-            throw new NonUniqueResultException("More than one CatalogEntry found for Domain Object with ID = " + d.getId());
+            throw new NonUniqueResultException("More than one CatalogEntry found for " + d.getClass() + "  with ID = " + d.getId());
         }
         if (l.size() == 1) {
             catalog = (T) l.iterator().next();
