@@ -59,6 +59,7 @@ The following bugs were fixed in this release
 
 28682 Could not validate query XML against XML Schema. Query XML is invalid
 29796 Edit Grid Data Service catalog throws an exception
+29937 Portal startup errors in production
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
