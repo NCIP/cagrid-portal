@@ -38,7 +38,7 @@ public class AddressMonitor {
                     geocode = getGeocoder().getGeocode(address);
                 } catch (Exception ex) {
                     String msg = "Error geocoding: " + ex.getMessage();
-                    logger.info(msg);
+                    logger.debug(msg);
                 }
                 if (geocode == null) {
                     logger.warn("Couldn't geocode address '" + address + "'");

@@ -14,6 +14,11 @@
     <bean id="queryInstanceCleaner" class="gov.nih.nci.cagrid.portal.util.QueryInstanceCleaner"
           autowire="byName"/>
 
+
+     <bean id="catalogServiceStatusSync"
+          class="gov.nih.nci.cagrid.portal.aggr.catalog.CatalogServiceStatusSync"
+          autowire="byName"/>
+
     <bean class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
             <list>
@@ -25,6 +30,17 @@
                         <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
                             <property name="targetObject" ref="queryInstanceCleaner"/>
                             <property name="targetMethod" value="clean"/>
+                        </bean>
+                    </property>
+                </bean>
+                  <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="delay" ref="slowDefaultDelay"/>
+                    <property name="period" ref="slowDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="catalogServiceStatusSync"/>
+                            <property name="targetMethod" value="sync"/>
                         </bean>
                     </property>
                 </bean>

@@ -22,7 +22,11 @@ public class InstitutionCatalogCreator extends AbstractCatalogCreator {
         for (Participant p : participantDao.getAll()) {
             if (institutionCatalogEntryDao.isAbout(p) == null) {
                 logger.debug("Instition catalog not found. Will create for id " + p.getId());
-                institutionCatalogEntryDao.createCatalogAbout(p);
+                try {
+                    institutionCatalogEntryDao.createCatalogAbout(p);
+                } catch (Exception e) {
+                    logger.warn("Error cresting Institution catalog for Participant ID " + p.getId() + ". Will skip");
+                }
             }
         }
 

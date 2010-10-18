@@ -50,8 +50,8 @@ public class ServiceStatusChangeMonitor extends AbstractMonitor {
                     dynamicStatus = getDynamicServiceStatusProvider()
                             .getStatus(serviceUrl);
                 } catch (Exception ex) {
-                    logger.warn("Could not get dynamic service status: "
-                            + ex.getMessage(), ex);
+                    logger.warn("Could not get dynamic service status for: " + serviceUrl
+                            + "  " + ex.getMessage(), ex);
                     continue;
                 }
                 ServiceStatus cachedStatus = null;

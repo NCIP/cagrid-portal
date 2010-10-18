@@ -24,7 +24,11 @@ public class PersonCatalogCreator extends AbstractCatalogCreator {
 
             if (personCatalogEntryDao.isAbout(user) == null) {
                 logger.info("Person catalog not found. WIll create for id " + user.getId());
-                personCatalogEntryDao.createCatalogAbout(user);
+                try {
+                    personCatalogEntryDao.createCatalogAbout(user);
+                } catch (Exception e) {
+                    logger.warn("Error cresting Person catalog for ID " + user.getId() + ". Will skip");
+                }
 
             }
         }

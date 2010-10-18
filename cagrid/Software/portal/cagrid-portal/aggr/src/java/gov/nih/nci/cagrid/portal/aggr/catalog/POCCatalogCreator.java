@@ -22,7 +22,11 @@ public class POCCatalogCreator extends AbstractCatalogCreator {
 
     public void afterPropertiesSet() throws Exception {
         for (PointOfContact poc : pointOfContactDao.getAll()) {
-            pointOfContactCatalogService.create(poc);
+            try {
+                pointOfContactCatalogService.create(poc);
+            } catch (Exception e) {
+                logger.warn("Error cresting POC catalog for POC ID " + poc.getId() + ". Will skip");
+            }
         }
     }
 

@@ -17,7 +17,7 @@ public abstract class AbstractMonitor implements ApplicationContextAware {
 	
 	private String[] indexServiceUrls = new String[0];
 
-	/* (non-Javadoc)
+   /* (non-Javadoc)
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
 	 */
 	public void setApplicationContext(ApplicationContext applicationContext)

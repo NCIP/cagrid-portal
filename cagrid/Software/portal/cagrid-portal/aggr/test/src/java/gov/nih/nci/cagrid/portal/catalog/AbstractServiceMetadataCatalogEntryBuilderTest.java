@@ -24,6 +24,10 @@ public class AbstractServiceMetadataCatalogEntryBuilderTest extends
                 "applicationContext-aggr.xml"};
     }
 
+    public Object getBean(String beanName) {
+         return getApplicationContext().getBean(beanName);
+    }
+
     @Before
     public void initRelationships() {
         DefaultCatalogEntryRelationshipTypesFactory b = (DefaultCatalogEntryRelationshipTypesFactory) TestDB
