@@ -22,6 +22,7 @@
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
     ${ns}query.setRows(7);
+    ${ns}query.addFacet("catalog_type", "!poc !person");
 
     function ${ns}navigateToCatalog(id) {
         var searchLink = "${dataSetLnk}";

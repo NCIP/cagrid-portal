@@ -23,134 +23,23 @@
         Available Data Sources
     </h3>
 
-<%--
     <p>
         You can select up to <span id="${ns}queryCount"></span> services to query.
     </p>
- --%>
- 
-   	<span>
-    	<span id="${ns}selectEndpointsButtonContainer"></span>
-    	<span id="${ns}checkAllEndpointsButtonContainer"></span>
-    	<span id="${ns}invertSelectionEndpointsButtonContainer"></span>
-    	<span id="${ns}clearAllEndpointsButtonContainer"></span>
-   	</span>
-    
+
+    <p>
+
+    <div id="${ns}selectEndpointsButtonContainer"></div>
+    </p>
     </br>
-    
+    <p>
+
     <form name="${ns}selectEndpointsForm">
-	</form>
-    
+
+    </form>
+    </p>
 </div>
 
 <script type="text/javascript">
-
-	function ${ns}renderAvailableEndpoints() {
-	    ${ns}selectEndpointsButton.set("label", "Loading...");
-	    var cql = jQuery("#input-query").val();
-	    SharedQueryCatalogEntryManagerFacade.renderAvailableEndpointsFormContent(cql, "${ns}", {
-	        callback: function (html) {
-	            jQuery("form[name='${ns}selectEndpointsForm']").html(html);
-	            jQuery("form[name='${ns}selectEndpointsForm'] :checkbox[name='endpoints']").bind("click", function (evt) {
-	                ${ns}checkEnableSelectEndpoints(evt);
-	            });
-	            ${ns}selectEndpointsButton.set("label", "Select");
-	        },
-	        errorHandler: function (errorString, exception) {
-	            alert(errorString);
-	        }
-	    });
-	}
-	
-	function ${ns}checkEnableSelectEndpoints(evt) {
-	    if (jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked").length > maxQueries) {
-	        alert("You have selected the maximum allowed services to query");
-	        evt.preventDefault();
-	        return false
-	    }
-	    if (jQuery().length > 0) {
-	        ${ns}selectEndpointsButton.set("disabled", false);
-	    } else {
-	        ${ns}selectEndpointsButton.set("disabled", true);
-	    }
-	}
-	
-	var ${ns}selectEndpointsButton = null;
-	var maxQueries = 5;
-	
-	jQuery(document).ready(function () { 
-		<%-- set to a default --%> 
-		jQuery("#${ns}queryCount").html(maxQueries); 
-		<%-- then update --%>
-		SharedQueryCatalogEntryManagerFacade.getMaxActiveQueries({
-	        callback: function (count) {
-	            maxQueries = count;
-	            jQuery("#${ns}queryCount").html(maxQueries + " ");
-	        }
-	    });
-	    ${ns}selectEndpointsButton = new YAHOO.widget.Button({
-	        label: "Select",
-	        id: "${ns}selectEndpointsButton",
-	        container: "${ns}selectEndpointsButtonContainer"
-	    });
-	    ${ns}selectEndpointsButton.set("disabled", true);
-	    ${ns}renderAvailableEndpoints();
-	    ${ns}selectEndpointsButton.on("click", function (evt) {
-	        var endpoints = new Array();
-	        var l = jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked");
-	        for (var i = 0; i < l.length; i++) {
-	            endpoints.push({
-	                url: jQuery(l[i]).val(),
-	                name: jQuery(l[i]).next().text()
-	            });
-	        }
-	        ${ns}selectEndpoints(endpoints);
-	    });
-
-		//
-		//Check All
-		//
-	    ${ns}checkAllEndpointsButton = new YAHOO.widget.Button({
-	        label: "Check All",
-	        id: "${ns}checkAllEndpointsButton",
-	        container: "${ns}checkAllEndpointsButtonContainer"
-	    });
-	    ${ns}checkAllEndpointsButton.on("click", function (evt) {
-	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").attr('checked', true);
-	    	${ns}checkEnableSelectEndpoints(evt);
-	    });
-
-		//
-		//Invert Selection
-		//
-	    ${ns}invertSelectionEndpointsButton = new YAHOO.widget.Button({
-	        label: "Invert Selection",
-	        id: "${ns}invertSelectionEndpointsButton",
-	        container: "${ns}invertSelectionEndpointsButtonContainer"
-	    });
-	    ${ns}invertSelectionEndpointsButton.on("click", function (evt) {
-		    //jtest
-	    	//jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").click();
-
-	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").each( function() {
-				$( this ).attr( 'checked', $( this ).is( ':checked' ) ? '' : 'checked' );
-			};
-	    	
-	    	${ns}checkEnableSelectEndpoints(evt);
-	    });
-
-		//
-		//Clear All
-		//
-    	${ns}clearAllEndpointsButton = new YAHOO.widget.Button({
-	        label: "Clear All",
-	        id: "${ns}clearAllEndpointsButton",
-	        container: "${ns}clearAllEndpointsButtonContainer"
-	    });
-	    ${ns}clearAllEndpointsButton.on("click", function (evt) {
-	    	jQuery("form[name='${ns}selectEndpointsForm'] :checkbox").attr('checked', false);
-	    	${ns}checkEnableSelectEndpoints(evt);
-	    });    
-    
-	});
+   function ${ns}renderAvailableEndpoints(){${ns}selectEndpointsButton.set("label","Loading...");var cql=jQuery("#input-query").val();SharedQueryCatalogEntryManagerFacade.renderAvailableEndpointsFormContent(cql,"${ns}",{callback:function(html){jQuery("form[name='${ns}selectEndpointsForm']").html(html);jQuery("form[name='${ns}selectEndpointsForm'] :checkbox[name='endpoints']").bind("click",function(evt){${ns}checkEnableSelectEndpoints(evt);});${ns}selectEndpointsButton.set("label","Select");},errorHandler:function(errorString,exception){alert(errorString);}});}function ${ns}checkEnableSelectEndpoints(evt){if(jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked").length>maxQueries){alert("You have selected the maximum allowed services to query");evt.preventDefault();return false}if(jQuery().length>0){${ns}selectEndpointsButton.set("disabled",false);}else{${ns}selectEndpointsButton.set("disabled",true);}}var ${ns}selectEndpointsButton=null;var maxQueries=5;jQuery(document).ready(function(){<%--set to a default--%>jQuery("#${ns}queryCount").html(maxQueries);<%--then update--%>SharedQueryCatalogEntryManagerFacade.getMaxActiveQueries({callback:function(count){maxQueries=count;jQuery("#${ns}queryCount").html(maxQueries + " ");}});${ns}selectEndpointsButton=new YAHOO.widget.Button({label:"Select",id:"${ns}selectEndpointsButton",container:"${ns}selectEndpointsButtonContainer"});${ns}selectEndpointsButton.set("disabled",true);${ns}renderAvailableEndpoints();${ns}selectEndpointsButton.on("click",function(evt){var endpoints=new Array();var l=jQuery("form[name='${ns}selectEndpointsForm'] :input[name='endpoints']:checked");for(var i=0;i<l.length;i++){endpoints.push({url:jQuery(l[i]).val(),name:jQuery(l[i]).next().text()});}${ns}selectEndpoints(endpoints);});});
 </script>
