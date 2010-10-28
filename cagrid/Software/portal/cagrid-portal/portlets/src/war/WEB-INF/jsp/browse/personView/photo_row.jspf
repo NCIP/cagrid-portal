@@ -6,7 +6,7 @@
     </div>
     <div class="photoRightContent">
         <div class="row">
-            <input id="input-name" class="pAutoSet pRequired" style="font-size:23pt;
+            <input id="input-name" alt="Name" class="pAutoSet pRequired" style="font-size:23pt;
 				<c:if test="${empty catalogEntry.name}">color:#afafaf;</c:if>
 			" type="text" name="name" value="
 			<c:choose>
@@ -30,13 +30,13 @@
     <c:if test='<%=request.isUserInRole("catalog-admin")%>'>
         <div class="row">
             <label>Featured Item?</label>
-            Yes: <input type="radio" name="featured" class="pAutoSet" value="true"
+            Yes: <input type="radio" alt="Featured" name="featured" class="pAutoSet" value="true"
                 <c:if test="${catalogEntry.featured}">
                     checked
                 </c:if>
                 />
             No:
-            <input type="radio" name="featured" class="pAutoSet" value="false"
+            <input type="radio" alt="Featured"  name="featured" class="pAutoSet" value="false"
                     <c:if test="${!catalogEntry.featured}">
                         checked
                     </c:if>

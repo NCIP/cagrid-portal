@@ -18,13 +18,13 @@
         <td>
             <form:form id="${prefix}directoryMap" action="${action}" commandName="mapCommand">
                 <%@ include file="/WEB-INF/jsp/disc/directory/directoriesSelect.jspf" %>
-                <input type="hidden" name="operation" value="selectDirectoryMap"/>
+                <input type="hidden" alt="Hidden" name="operation" value="selectDirectoryMap"/>
             </form:form>
         </td>
         <td>
             <form:form id="${prefix}resultsMap" action="${action}" commandName="mapCommand">
                 <%@ include file="/WEB-INF/jsp/disc/directory/searchResultsSelect.jspf" %>
-                <input type="hidden" name="operation" value="selectResultsMap"/>
+                <input type="hidden" alt="Hidden" name="operation" value="selectResultsMap"/>
             </form:form>
         </td>
     </tr>

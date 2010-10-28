@@ -141,8 +141,8 @@ No queries to display.
 <portlet:actionURL var="action" />
 <c:set var="formName"><portlet:namespace/>HistoryOperationForm</c:set>
 <form:form action="${action}" id="${formName}" name="${formName}">
-<input type="hidden" name="operation" value=""/>
-<input type="hidden" name="instanceId" value=""/>
+<input type="hidden" name="operation" value="" alt="Hidden"/>
+<input type="hidden" name="instanceId" value="" alt="Hidden"/>
 </form:form>
 
 <c:forEach var="instance" items="${instances}">

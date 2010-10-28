@@ -56,7 +56,7 @@ http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
             <td id="htmlSuccessPage_check_td"><form:checkbox path="htmlSuccessPage"/></td>
         </tr>
         <tr>
-            <td colspan="2"><input type="submit"></td>
+            <td colspan="2"><input alt="Submit" type="submit"></td>
         </tr>
         </tbody>
     </table>

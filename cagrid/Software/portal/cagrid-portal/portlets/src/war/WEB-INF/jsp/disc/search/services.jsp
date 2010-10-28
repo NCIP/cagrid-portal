@@ -35,9 +35,9 @@
         <td valign="top">
             <form>
                 &nbsp;
-                <input name="level" value="simple" type="radio" checked
+                <input name="level" alt="Simple" value="simple" type="radio" checked
                        onclick="jQuery('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>simpleDiv').show();"/>Simple&nbsp;
-                <input name="level" value="advanced" type="radio"
+                <input name="level" alt="Advanced" value="advanced" type="radio"
                        onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/>Advanced&nbsp;
             </form>
         </td>

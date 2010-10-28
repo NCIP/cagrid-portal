@@ -57,9 +57,9 @@
 		</td>				
 	</tr>
 </table>
-<input type="hidden" name="editOp" value="save"/>
-<input type="hidden" name="operation" value="updateSharedQuery"/>
-<input type="hidden" name="selectedTabPath" value=""/>
+<input type="hidden" name="editOp" value="save" alt="Save"/>
+<input type="hidden" name="operation" value="updateSharedQuery" alt="Operation"/>
+<input type="hidden" name="selectedTabPath" value="" alt="Tab"/>
 <c:if test="${!empty sharedQueryBean.query.id}">
 	<input type="button" id="${formName}Delete" alt="Delete" value="Delete" onclick="<portlet:namespace/>doEditSharedQueryOp('delete')"/>
 </c:if>

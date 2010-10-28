@@ -58,23 +58,23 @@
             <div class="leftpanel">
                 <div class="row">
                     <div class="label">First Name</div>
-                    <div class="value"><input type="text" name="firstName" class="autoSet required"/></div>
+                    <div class="value"><input type="text" alt="First Name" name="firstName" class="autoSet required"/></div>
                 </div>
                 <div class="row">
                     <label for="lastName">Last Name</label>
-                    <input type="text" name="lastName" class="autoSet required"/>
+                    <input type="text" name="lastName" alt="Last Name" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="username">User Name</label>
-                    <input type="text" name="username" class="autoSet required"/>
+                    <input type="text" name="username" alt="Username" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password"/>
+                    <input type="password" name="password" alt="Password" id="password"/>
                 </div>
                 <div class="row">
                     <label for="password">ReType Password</label>
-                    <input type="password" id="password2"/>
+                    <input type="password" id="password2" alt="Password"/>
 
                     <div id="passwordError" class="errorMsg" style="display:none;">
                         Passwords don't match
@@ -83,29 +83,29 @@
 
                 <div class="row">
                     <label for="email">e-mail</label>
-                    <input type="text" name="email" class="autoSet required"/>
+                    <input type="text" name="email" alt="Email" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="phone">Phone</label>
-                    <input type="text" name="phone" class="autoSet required"/>
+                    <input type="text" name="phone" alt="Phone" class="autoSet required"/>
                 </div>
             </div>
             <div class="rightpanel">
                 <div class="row">
                     <label for="organization">Organization</label>
-                    <input type="text" name="organization" class="autoSet required"/>
+                    <input type="text" name="organization" alt="Organization" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="street1">Street 1</label>
-                    <input type="text" name="street1" class="autoSet required"/>
+                    <input type="text" name="street1" alt="Street 1" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="street2">Street 2</label>
-                    <input type="text" name="street2" class="autoSet"/>
+                    <input type="text" name="street2" alt="Street 2" class="autoSet"/>
                 </div>
                 <div class="row">
                     <label for="locality">City/Locality</label>
-                    <input type="text" name="locality" class="autoSet required"/>
+                    <input type="text" name="locality" alt="Locality" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="stateProvince">State/Province</label>
@@ -116,13 +116,13 @@
                 </div>
                 <div class="row">
                     <label for="postalCode">Postal Code</label>
-                    <input type="text" name="postalCode" class="autoSet required"/>
+                    <input type="text" name="postalCode"  alt="Postal Code" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="country">Country</label>
 
                     <div class="value">
-                        <select name="country" id="country" class="autoSet required"></select>
+                        <select name="country" id="country" alt="Country" class="autoSet required"></select>
                     </div>
                 </div>
             </div>

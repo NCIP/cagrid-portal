@@ -22,10 +22,10 @@ the selected <spring:message code="${targetRoleType.type}"/>?<br/>
 <div class="row">
 Enter the name of the related catalog entry.<br/>
 <label for="relatedEntryName">Related Entry</label>
-<input type="text" name="relatedEntryName" id="${ns}relatedEntryName" style="width:50em;"/>
+<input type="text" name="relatedEntryName" alt="Related Entry Name"  id="${ns}relatedEntryName" style="width:50em;"/>
 
-<input type="hidden" name="relatedEntryId" id="${ns}relatedEntryId" value="" class="required"/>
-<input type="hidden" name="targetRoleType" id="${ns}targetRoleType" value="${targetRoleType.type}"/>
+<input type="hidden" alt="Hidden" name="relatedEntryId" id="${ns}relatedEntryId" value="" class="required"/>
+<input type="hidden" alt="Hidden" name="targetRoleType" id="${ns}targetRoleType" value="${targetRoleType.type}"/>
 </div>
 <div class="row">
 <label>&nbsp;</label>

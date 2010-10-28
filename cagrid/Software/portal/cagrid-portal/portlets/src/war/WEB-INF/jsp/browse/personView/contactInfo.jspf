@@ -6,7 +6,7 @@
             <label for="phoneNumber">
                 Phone
             </label>
-            <input type="text" name="phoneNumber" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
+            <input type="text" name="phoneNumber" alt="phoneNumber" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
             "></span>
 
         </div>
@@ -14,7 +14,7 @@
             <label for="emailAddress">
                 e-mail
             </label>
-            <input type="text" name="emailAddress" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
+            <input type="text" name="emailAddress" alt="emailAddress" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
             "></span>
 
         </div>
@@ -23,7 +23,7 @@
             <label for="street1">
                 Street Line 1
             </label>
-            <input type="text" name="street1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
+            <input type="text" name="street1" alt="street1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
             "></span>
 
         </div>
@@ -31,7 +31,7 @@
             <label for="street2">
                 Street Line 2
             </label>
-            <input type="text" name="street2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
+            <input type="text" name="street2" alt="street2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
             "></span>
 
         </div>
@@ -39,7 +39,7 @@
             <label for="locality">
                 City/Locality
             </label>
-            <input type="text" name="locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
+            <input type="text" name="locality" alt="locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
             "></span>
 
         </div>
@@ -47,7 +47,7 @@
             <label for="stateProvince">
                 State/Province
             </label>
-            <select name="stateProvince" id="${ns}contactInfoStateProvince" class="autoSet">
+            <select name="stateProvince" alt="stateProvince" id="${ns}contactInfoStateProvince" class="autoSet">
             </select>
         </div>
         
@@ -57,13 +57,13 @@
             <label for="phoneNumberPublic">
                 Public Phone Number?
             </label>
-            Yes: <input type="radio" name="phoneNumberPublic" class="autoSet" value="true"
+            Yes: <input type="radio" name="phoneNumberPublic" alt="Phone Number" class="autoSet" value="true"
             <c:if test="${catalogEntry.phoneNumberPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="phoneNumberPublic" class="autoSet" value="false"
+            <input type="radio" name="phoneNumberPublic" alt="Phone Number" class="autoSet" value="false"
             <c:if test="${!catalogEntry.phoneNumberPublic}">
                 checked
             </c:if>
@@ -73,13 +73,13 @@
             <label for="emailAddressPublic">
                 Public Email?
             </label>
-            Yes: <input type="radio" name="emailAddressPublic" class="autoSet" value="true"
+            Yes: <input type="radio" name="emailAddressPublic" alt="Email Address" class="autoSet" value="true"
             <c:if test="${catalogEntry.emailAddressPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="emailAddressPublic" class="autoSet" value="false"
+            <input type="radio" name="emailAddressPublic" class="autoSet" alt="Email Address" value="false"
             <c:if test="${!catalogEntry.emailAddressPublic}">
                 checked
             </c:if>
@@ -90,13 +90,13 @@
             <label for="addressPublic">
                 Public Address?
             </label>
-            Yes: <input type="radio" name="addressPublic" class="autoSet" value="true"
+            Yes: <input type="radio" name="addressPublic" alt="Address" class="autoSet" value="true"
             <c:if test="${catalogEntry.addressPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="addressPublic" class="autoSet" value="false"
+            <input type="radio" name="addressPublic" class="autoSet" alt="Address" value="false"
             <c:if test="${!catalogEntry.addressPublic}">
                 checked
             </c:if>
@@ -115,7 +115,7 @@
             <label for="webSite">
                 Website
             </label>
-            <input type="text" name="webSite" class="autoSet" value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
+            <input type="text" name="webSite" alt="website" class="autoSet" value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
             "></span>
         </div>
         

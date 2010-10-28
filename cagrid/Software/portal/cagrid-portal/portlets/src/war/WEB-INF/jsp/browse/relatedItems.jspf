@@ -71,7 +71,7 @@ if(request.isUserInRole("catalog-user")){
 %>
 				<c:set var="canDelete" value="<%=userIsOwnerUser || userIsAdmin%>"/>
 				<c:if test="${canDelete}">
-					<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
+					<input type="button" value="Delete" alt="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
 				</c:if>
 
 

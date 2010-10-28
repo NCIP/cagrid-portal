@@ -235,12 +235,12 @@
 <form:form id="${ns}catalogDetailsForm" method="post">
 
 
-    <input type="hidden" name="selectedCatalogType" id="${ns}selectedCatalogType" value="">
-    <input type="hidden" name="selectedCatalogLabel" id="${ns}selectedCatalogLabel" value="">
-    <input type="hidden" name="catalogType" id="${ns}catalogType" value="">
-    <input type="hidden" name="aof" id="${ns}aof" value="">
-    <input type="hidden" name="searchKeyword" id="${ns}searchKeyword" value="search">
-    <input type="hidden" name="selectedIds" id="${ns}selectedIds" value="">
+    <input type="hidden" alt="Hidden" name="selectedCatalogType" id="${ns}selectedCatalogType" value="">
+    <input type="hidden" alt="Hidden" name="selectedCatalogLabel" id="${ns}selectedCatalogLabel" value="">
+    <input type="hidden" alt="Hidden" name="catalogType" id="${ns}catalogType" value="">
+    <input type="hidden" alt="Hidden" name="aof" id="${ns}aof" value="">
+    <input type="hidden" alt="Hidden" name="searchKeyword" id="${ns}searchKeyword" value="search">
+    <input type="hidden" alt="Hidden" name="selectedIds" id="${ns}selectedIds" value="">
 
 
     <div>

@@ -22,7 +22,7 @@ No browse types</br>
 	</c:forEach>
 </form:select>
 
-<input type="hidden" name="operation" value="update"/>
+<input type="hidden" name="operation" value="update" alt="Update"/>
 <button id="${formName}UpdateBtn" type="submit">Update</button>
 	
 </form:form>

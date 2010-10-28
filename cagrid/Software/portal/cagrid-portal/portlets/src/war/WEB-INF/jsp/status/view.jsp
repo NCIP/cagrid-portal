@@ -34,7 +34,7 @@
         </a>
     </div>
     <form:form id="${formName}" action="${action}">
-        <input type="hidden" name="selectedId"/>
+        <input type="hidden" alt="Hidden" name="selectedId"/>
 
         <div class="label" id="numberNew">
             Here are the newest services...

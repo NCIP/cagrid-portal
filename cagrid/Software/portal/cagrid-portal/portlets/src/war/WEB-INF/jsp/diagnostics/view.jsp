@@ -30,13 +30,13 @@
         </label>
         </td>
         <td>
-            <input id="${prefix}url" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>
+            <input id="${prefix}url" alt="URL" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>
         </td>
     </tr>
     <tr>
         <td  style="padding-top:20px;">&nbsp;</td>
         <td>
-        <input id="${prefix}diagnoseBtn" type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose(true)" />
+        <input id="${prefix}diagnoseBtn" alt="Diagnose" type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose(true)" />
         <tags:infoPopup id="${prefix}diagnosticsInfo" popup_text="Enter URL of caGrid service to run diagnostics on."/>
         </td>
     </tr>
@@ -96,7 +96,7 @@
     if(!isValidURL(url)){
     $("${prefix}errorMsg").innerHTML="Invalid URL";
     $("${prefix}errorMsg").innerHTML+=" &nbsp; ";
-    $("${prefix}errorMsg").innerHTML+='<input type="checkbox" onclick="${prefix}beginDiagnose(false)">';
+    $("${prefix}errorMsg").innerHTML+='<input type="checkbox" alt="Begin Diagnose" onclick="${prefix}beginDiagnose(false)">';
     $("${prefix}errorMsg").innerHTML+=" Ignore Warning!";
     $("${prefix}errorMsg").innerHTML+="</input>";
     return false;

@@ -37,8 +37,8 @@
 
 
         <div class="flow-buttons">
-            <span id="cancelButton"><input type="button" value="Cancel" id="${ns}cancelBtn"></span>
-            <span id="submitButtonContainer"><input type="button" value="Add Comments" disabled="disabled"
+            <span id="cancelButton"><input type="button" value="Cancel" alt="Cancel" id="${ns}cancelBtn"></span>
+            <span id="submitButtonContainer"><input type="button" value="Add Comments" alt="Add Comments" disabled="disabled"
                                                     id="${ns}addCommentBtn"></span>
         </div>
 

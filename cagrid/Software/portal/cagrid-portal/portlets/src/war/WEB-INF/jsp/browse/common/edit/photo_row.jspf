@@ -8,7 +8,7 @@
     </div>
     <div class="photoRightContent">
         <div class="row">
-            <input id="input-name" class="required autoSet" style="font-size:23pt;
+            <input id="input-name" alt="Name" class="required autoSet" style="font-size:23pt;
 				<c:if test="${empty catalogEntry.name}">color:#afafaf;</c:if>
 			" type="text" name="name" value="
 			<c:choose>
@@ -32,13 +32,13 @@
         <%-- Render field... --%>
         <div class="row">
             <label>Featured Item?</label>
-            Yes: <input type="radio" name="featured" class="autoSet" value="true"
+            Yes: <input type="radio" alt="Featured" name="featured" class="autoSet" value="true"
                 <c:if test="${catalogEntry.featured}">
                     checked
                 </c:if>
                 />
             No:
-            <input type="radio" name="featured" class="autoSet" value="false"
+            <input type="radio" name="featured" alt="Featured" class="autoSet" value="false"
                     <c:if test="${!catalogEntry.featured}">
                         checked
                     </c:if>/>

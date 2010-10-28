@@ -41,7 +41,7 @@
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
 <form:form id="${criteriaBeanFormName}" name="${criteriaBeanFormName}">
     <c:if test="${cqlQueryBean.DCQLQuery == 'false'}">
-        <input type="button" id="${criteriaBeanFormName}EQuery" value="Edit Query Modifiers"
+        <input type="button" id="${criteriaBeanFormName}EQuery" alt="Edit" value="Edit Query Modifiers"
                onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
     </c:if>
     <input type="button" id="${criteriaBeanFormName}AQuery" alt="Aggregate Query"
@@ -58,8 +58,8 @@
               value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
     </c:if>
 
-    <input type="hidden" name="selectedTabPath" value=""/>
-    <input type="hidden" name="operation" value=""/>
+    <input type="hidden" alt="Hidden" name="selectedTabPath" value=""/>
+    <input type="hidden" alt="Hidden" name="operation" value=""/>
 </form:form>
 <br/>
 <b>Querying:</b> <c:out

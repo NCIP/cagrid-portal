@@ -7,7 +7,7 @@
 
 <portlet:actionURL var="selectServiceAction"/>
 <form:form id="${prefix}" action="${selectServiceAction}" commandName="selectServiceCommand">
-<input type="hidden" name="operation" value="selectService"/>
+<input type="hidden" alt="Hidden" name="operation" value="selectService"/>
 <table>
     <thead>
     <tr>
@@ -28,7 +28,7 @@
 			<span style="color:red"><form:errors path="dataServiceUrl"/></span>
 		</td>
 		<td valign="top">
-			<input type="submit" id="${prefix}Select" alt="Select" value="Select"/>
+			<input type="submit" alt="Hidden" id="${prefix}Select" alt="Select" value="Select"/>
 		</td>
 	</tr>
     </tbody>

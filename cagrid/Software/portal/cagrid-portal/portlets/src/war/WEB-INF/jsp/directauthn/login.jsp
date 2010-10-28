@@ -66,7 +66,7 @@
                     <tr>
                         <td style="padding-right:5px; text-align:right;">Identity Provider:</td>
                         <td>
-                            <input name="idpUrl" id="idpUrl" type="hidden"/>
+                            <input name="idpUrl" id="idpUrl" alt="Hidden" type="hidden"/>
                             <select id="${ns}idpSelect">
                                 <option>Loading...</option>
                             </select>
@@ -82,7 +82,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <input type="hidden" name="portalAuthnUrl" value="<c:out value="${portalAuthnUrl}"/>"/>
+                <input type="hidden" alt="Hidden" name="portalAuthnUrl" value="<c:out value="${portalAuthnUrl}"/>"/>
             </form:form>
 
             <div class="loginNotice">

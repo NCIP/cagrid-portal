@@ -24,7 +24,7 @@
 		
 		<input type="text" size="50" style="margin-left:8em;"/>
 		<a href="#">Advanced Search</a><br/>
-		<input type="button" value="Search" style="margin-top:10px;"/>
+		<input type="button" value="Search" alt="Search" style="margin-top:10px;"/>
 	</form>
 	</p>
 	

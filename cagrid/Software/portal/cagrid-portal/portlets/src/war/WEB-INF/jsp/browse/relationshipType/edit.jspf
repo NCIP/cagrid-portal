@@ -10,7 +10,7 @@
 <form name="${ns}editForm">	
 <div class="row">
 <label for="name">Name</label>
-<input name="name" class="required autoSet" type="text" value="${relType.name}"/>
+<input name="name" class="required autoSet" type="text" value="${relType.name}" alt="Name"/>
 <span style="color: red"></span>
 </div>
 
@@ -29,7 +29,7 @@
 
 <div class="row">
 <label for="roleAName">Role A Name</label>
-<input name="roleAName" class="required autoSet" type="text" value="${relType.roleTypeA.name}"/>
+<input name="roleAName" class="required autoSet" type="text" value="${relType.roleTypeA.name}" />
 <span style="color: red"></span>
 </div>
 
@@ -47,7 +47,7 @@
 
 <div class="row">
 <label for="roleBName">Role B Name</label>
-<input name="roleBName" class="required autoSet" type="text" value="${relType.roleTypeB.name}"/>
+<input name="roleBName" class="required autoSet" type="text" value="${relType.roleTypeB.name}" alt="Role B Name"/>
 <span style="color: red"></span>
 </div>
 

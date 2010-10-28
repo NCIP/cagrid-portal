@@ -11,9 +11,9 @@
         </label>
         <div class="value" style="width:80%;">
         <div id="${ns}serviceUrlAutoComplete" >
-            <input id="${ns}serviceUrl" type="text" style="width:94%;"/>
-            <input type="hidden" id="${ns}serviceId"/>
-              <input type="hidden" id="${ns}queryCEId"/>
+            <input id="${ns}serviceUrl" alt="Service URL" type="text" style="width:94%;"/>
+            <input type="hidden" alt="Hidden" id="${ns}serviceId"/>
+              <input type="hidden" alt="Hidden" id="${ns}queryCEId"/>
 
             <span id="${ns}gridServiceSearchMsg"></span>
             <span id="${ns}serviceUrlContainer"></span>

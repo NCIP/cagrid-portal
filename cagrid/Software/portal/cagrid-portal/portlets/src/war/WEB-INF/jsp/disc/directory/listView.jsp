@@ -32,14 +32,14 @@
             <b>Directories:</b>
             <form:form id="${prefix}listDirectories" action="${action}" commandName="listCommand">
                 <%@ include file="/WEB-INF/jsp/disc/directory/directoriesSelect.jspf" %>
-                <input type="hidden" name="operation" value="selectDirectoryList"/>
+                <input type="hidden" name="operation" value="selectDirectoryList" alt="Hidden"/>
             </form:form>
         </td>
         <td style="padding-right: 5px;">
             <b>Search Results:</b>
             <form:form id="${prefix}listResults" action="${action}" commandName="listCommand">
                 <%@ include file="/WEB-INF/jsp/disc/directory/searchResultsSelect.jspf" %>
-                <input type="hidden" name="operation" value="selectResultsList"/>
+                <input type="hidden" name="operation" value="selectResultsList" alt="Hidden"/>
             </form:form>
         </td>
     </tr>

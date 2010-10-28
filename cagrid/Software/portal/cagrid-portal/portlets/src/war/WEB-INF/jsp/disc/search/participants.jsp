@@ -26,7 +26,7 @@
                 </label>
             </td>
             <td>
-                <input type="text" name="keywords"/>
+                <input type="text" alt="Keywords" name="keywords"/>
             </td>
         </tr>
         <tr>
@@ -79,5 +79,5 @@
         </tr>
         </tbody>
     </table>
-    <input type="hidden" name="discoveryType" value="PARTICIPANT"/>
+    <input type="hidden" alt="Hidden" name="discoveryType" value="PARTICIPANT"/>
 </form:form>

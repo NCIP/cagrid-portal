@@ -13,7 +13,8 @@
             <c:otherwise>
                 <a href="javascript:${prefix}expandNotifications('<c:out value="${gridService.id}"/>');">Manage Notifications</a>
                 <div id="${prefix}notificationSection" style="padding:5px;display:none; width:120px; height:30px;">
-                    <input type="button" id="${prefix}notificationBtn" onclick="${prefix}subscribeUnsubscribe('<c:out value="${gridService.id}"/>');"/>
+                    <input type="button" alt="Notifications"
+                           id="${prefix}notificationBtn" onclick="${prefix}subscribeUnsubscribe('<c:out value="${gridService.id}"/>');"/>
                </div>
             </c:otherwise>
         </c:choose>

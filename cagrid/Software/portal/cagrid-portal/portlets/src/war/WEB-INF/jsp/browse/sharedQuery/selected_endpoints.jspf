@@ -9,7 +9,7 @@
         <select id="${ns}selectedEndpoints" name="selectedEndpoints" multiple="true" size="3">
             <option>No data sources selected.</option>
         </select>
-        <input type="button" value="View Data Sources" onclick="${ns}showSelectEndpointsForm();"
+        <input type="button" value="View Data Sources" alt="Data Sources" onclick="${ns}showSelectEndpointsForm();"
                style="vertical-align: top;"/>
 
     </div>

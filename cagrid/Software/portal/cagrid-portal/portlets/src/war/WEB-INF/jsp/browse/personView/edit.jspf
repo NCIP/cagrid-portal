@@ -16,7 +16,7 @@
 		<%@ include file="/WEB-INF/jsp/browse/common/edit/terms.jspf" %>
         --%>		
 	   
-		<input type="hidden" name="id" value="${catalogEntry.id}"/>
+		<input type="hidden" name="id" value="${catalogEntry.id}" alt="hidden" />
 	</form>
 	
 	<div class="flow-buttons">

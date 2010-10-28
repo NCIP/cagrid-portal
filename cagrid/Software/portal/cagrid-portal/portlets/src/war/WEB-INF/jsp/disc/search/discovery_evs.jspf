@@ -43,7 +43,7 @@
                         />
 
 
-                <input type="hidden" name="keywords" id="keywords"/>
+                <input type="hidden" name="keywords" alt="Keywords" id="keywords"/>
 
                 <div id="evsConceptList" class="auto_complete"></div>
                 <div id="evsConceptDefinition" style="display:none;">
@@ -107,7 +107,7 @@
             </td>
         </tr>
     </table>
-    <input type="hidden" name="discoveryType" value="SERVICE"/>
-    <input type="hidden" name="searchFields" value="conceptCode"/>
+    <input type="hidden" name="discoveryType" value="SERVICE" alt="service"/>
+    <input type="hidden" name="searchFields" value="conceptCode" alt="service"/>
 </form:form>
 </div>

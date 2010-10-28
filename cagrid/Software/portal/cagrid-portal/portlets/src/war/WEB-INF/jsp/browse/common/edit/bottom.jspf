@@ -1,4 +1,4 @@
-<input type="hidden" name="id" value="${catalogEntry.id}"/>
+<input type="hidden" alt="id" name="id" value="${catalogEntry.id}"/>
 </form>
 <div class="flow-buttons">
 	<span id="${ns}cancelButtonContainer" class="button-red"></span>

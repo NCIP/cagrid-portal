@@ -61,14 +61,14 @@
                 </span>
 
             <c:if test="${gridService.currentStatus != 'ACTIVE'}">
-                <input type="button"
+                <input type="button" alt="Diagnose"
                        onclick="${prefix}diagnoseService('<c:out value="${gridService.url}"/>')"
                        value="Diagnose"
                         />
             </c:if>
 
             <c:if test="${liferayUser.admin}">
-                <input id="banUnbanBtn" type="button"
+                <input id="banUnbanBtn" alt="Ban Service" type="button"
                         <c:choose>
                             <c:when test="${gridService.currentStatus == 'BANNED'}">
                                 value="Unban Service"

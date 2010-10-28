@@ -15,8 +15,8 @@
 </script>
 <portlet:actionURL var="action" />
 <form:form action="${action}" id="${formName}" name="${formName}">
-<input type="hidden" name="operation" value=""/>
-<input type="hidden" name="queryId" value=""/>
+<input type="hidden" name="operation" value="" alt="Hidden" />
+<input type="hidden" name="queryId" value="" alt="Hidden" />
 </form:form>
 <br/>
 <c:choose>

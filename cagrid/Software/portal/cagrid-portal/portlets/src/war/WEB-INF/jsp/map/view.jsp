@@ -161,8 +161,8 @@
 
 <c:set var="formName">${prefix}mapNodeForm</c:set>
 <form:form id="${formName}">
-    <input type="hidden" name="entryId"/>
-    <input type="hidden" name="selectedIds"/>
+    <input type="hidden" alt="Hidden" name="entryId"/>
+    <input type="hidden" alt="Hidden" name="selectedIds"/>
 </form:form>
 
 

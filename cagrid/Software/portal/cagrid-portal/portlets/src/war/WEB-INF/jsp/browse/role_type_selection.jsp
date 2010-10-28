@@ -12,7 +12,7 @@
 		<ul>
 			<c:forEach var="roleType" items="${roleTypes}" varStatus="status">
 				<li>
-					<input type="radio" name="roleType" value="<c:out value="${roleType.id}"/>"
+					<input type="radio" alt="Role" name="roleType" value="<c:out value="${roleType.id}"/>"
 						<c:if test="${status.index eq 0}">checked="true"</c:if>
 					/>
 					<b><c:out value="${roleType.name}"/></b><br/>
