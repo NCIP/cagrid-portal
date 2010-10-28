@@ -24,7 +24,7 @@
 
     </div>
     <div class="R-tip">
-        <a href="tips" onclick="showHelpTips();return false;"><tags:image name="help.gif"/></a>
+        <a href="tips" onclick="showHelpTips();return false;"><tags:image name="help.gif" alt="Help"/></a>
     </div>
 </div>
 <span id="tipWindow" class="yui-skin-sam">

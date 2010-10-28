@@ -22,7 +22,7 @@
                 alt="${alt}"
             </c:when>
             <c:otherwise>
-                alt=""
+                alt="Image"
             </c:otherwise>
         </c:choose>
         <c:if test="${!empty title}">

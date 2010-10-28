@@ -89,7 +89,7 @@
             <%= link_text%>
         </c:when>
         <c:otherwise>
-            <tags:image name="information_icon.png" height="13"/>
+            <tags:image name="information_icon.png" height="13" alt="More Information"/>
         </c:otherwise>
     </c:choose>
 </a>

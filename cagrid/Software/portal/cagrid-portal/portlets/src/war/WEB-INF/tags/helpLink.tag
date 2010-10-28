@@ -18,7 +18,7 @@
 <c:if test="${empty context}">
  <span id="summaryHelpLink">
             <a id="${id_prefix}helpLink" href="${helpURL}" target="_blank">
-                <tags:image name="help.gif"/>
+                <tags:image name="help.gif" alt="Help Link"/>
             </a>
 </span>
     <c:set var="context">${id_prefix}helpLink</c:set>

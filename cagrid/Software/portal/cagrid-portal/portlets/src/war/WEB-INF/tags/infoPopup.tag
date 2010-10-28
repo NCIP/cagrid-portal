@@ -23,10 +23,10 @@
                 >
                 <c:choose>
                 <c:when test="${not empty icon_image}">
-                    <tags:image name="${icon_image}" height="16"/>
+                    <tags:image name="${icon_image}" height="16" alt="More Information"/>
                 </c:when>
                 <c:otherwise>
-                    <tags:image name="information_icon.png" height="16"/>
+                    <tags:image name="information_icon.png" height="16" alt="More Information"/>
                 </c:otherwise>
                 </c:choose>
             </c:otherwise>
