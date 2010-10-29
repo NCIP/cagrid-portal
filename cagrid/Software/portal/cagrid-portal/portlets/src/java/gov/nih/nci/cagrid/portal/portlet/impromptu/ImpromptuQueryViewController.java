@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
-import org.springframework.web.util.UrlPathHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ImpromptuQueryViewController extends ParameterizableViewController {
 
@@ -23,6 +22,7 @@ public class ImpromptuQueryViewController extends ParameterizableViewController 
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.setContentType("text/xml");
         ModelAndView mav = new ModelAndView("results");
         //String key = tail((new UrlPathHelper()).getOriginatingRequestUri(request));
         //mav.addObject("a", ImpromptuQueryStorage.instance.getResult(key));

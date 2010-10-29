@@ -10,16 +10,14 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
 import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.URLDecoder;
-
-import javax.xml.namespace.QName;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.oasis.wsrf.lifetime.Destroy;
+
+import javax.xml.namespace.QName;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URLDecoder;
 
 public class ImpromptuQueryRunner implements Runnable {
 
@@ -36,16 +34,18 @@ public class ImpromptuQueryRunner implements Runnable {
     public void run() {
 
         try {
-            logger.info("=====> Start running impromptu query: " + this.query);
 
-            /* TODO: this shouldn't be necessary */
-            String urlDecodedQuery = this.query.getQuery().replace("& ", "&");
-            urlDecodedQuery = urlDecodedQuery.replace("&lt;", "<");
-            urlDecodedQuery = urlDecodedQuery.replace("&gt;", ">");
-            urlDecodedQuery = URLDecoder.decode(urlDecodedQuery, "UTF-8");
+            String urlDecodedQuery = this.query.getQuery();
+            try {
+                /* TODO: this shouldn't be necessary */
+                urlDecodedQuery = urlDecodedQuery.replace("& ", "&");
+                urlDecodedQuery = urlDecodedQuery.replace("&lt;", "<");
+                urlDecodedQuery = urlDecodedQuery.replace("&gt;", ">");
+                urlDecodedQuery = URLDecoder.decode(urlDecodedQuery, "UTF-8");
+            } catch (Exception e) {
+                logger.info("Error decoding query. Will skip");
+            }
 
-            logger.debug("PortletUtils.isDCQL(urlDecodedQuery)=" + PortletUtils.isDCQL(urlDecodedQuery));
-            logger.debug("PortletUtils.isCQL(urlDecodedQuery)=" + PortletUtils.isCQL(urlDecodedQuery));
 
             String out = "";
             if (PortletUtils.isDCQL(urlDecodedQuery)) {
@@ -64,7 +64,7 @@ public class ImpromptuQueryRunner implements Runnable {
                 resultsClilent.destroy(new Destroy());
             }
 
-            if (PortletUtils.isCQL(urlDecodedQuery)) { 
+            if (PortletUtils.isCQL(urlDecodedQuery)) {
                 DataServiceClient client = new DataServiceClient(this.query.getEndpointUrl());
                 CQLQuery cqlQuery = (CQLQuery) Utils.deserializeObject(new StringReader(urlDecodedQuery), CQLQuery.class);
                 CQLQueryResults result = client.query(cqlQuery);
@@ -74,10 +74,7 @@ public class ImpromptuQueryRunner implements Runnable {
 
                 ImpromptuQueryStorage.instance.setResult(this.query, out);
             }
-            
-            logger.info("=====> Done running impromptu query: " + this.query);
-            logger.info("=====> " + out);
-            
+
         } catch (Exception e) {
             logger.error("Exception running impromptu query (" + this.query + ") with message: " + e.getMessage());
         }

@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.portal.portlet.impromptu;
 
-import java.net.URLDecoder;
-
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class ImpromptuQueryValidator implements Validator {
 
@@ -21,11 +21,18 @@ public class ImpromptuQueryValidator implements Validator {
         try {
             ImpromptuQuery q = (ImpromptuQuery) obj;
 
-            /* TODO: this shouldn't be necessary */
-            String urlDecodedQuery = q.getQuery().replace("& ", "&");
-            urlDecodedQuery = urlDecodedQuery.replace("&lt;", "<");
-            urlDecodedQuery = urlDecodedQuery.replace("&gt;", ">");
-            urlDecodedQuery = URLDecoder.decode(urlDecodedQuery, "UTF-8");
+            String urlDecodedQuery = q.getQuery();
+
+            try {
+                
+                urlDecodedQuery = urlDecodedQuery.replace("& ", "&");
+                urlDecodedQuery = urlDecodedQuery.replace("&lt;", "<");
+                urlDecodedQuery = urlDecodedQuery.replace("&gt;", ">");
+                urlDecodedQuery = URLDecoder.decode(urlDecodedQuery, "UTF-8");
+            } catch (UnsupportedEncodingException e1) {
+                //do nothing. This can happen when CQL is submitted from browser
+            }
+            
             if (PortletUtils.isCQL(urlDecodedQuery)) {
                 ValidationUtils.rejectIfEmptyOrWhitespace(e, "endpointUrl", "impromptu.url.empty");
             }
