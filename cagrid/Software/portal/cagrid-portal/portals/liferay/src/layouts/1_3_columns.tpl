@@ -1,7 +1,7 @@
 <div class="columns-1-3" id="content-wrapper">
 	<table class="lfr-grid" id="layout-grid">
 	<tr>
-	<th>&nbsp;</th>
+	<th></th>
 	</tr>
 	<tr>
 		<td class="lfr-column" colspan="3" id="column-1" valign="top">
