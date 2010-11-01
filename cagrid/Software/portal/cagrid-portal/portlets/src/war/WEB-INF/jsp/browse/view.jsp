@@ -137,12 +137,6 @@
                         descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
                     }
                     resultDiv.appendChild(descDiv);
-                    var descDiv2 = document.createElement('div');
-                    descDiv2.className = "oneResultDescription";
-                    descDiv2.appendChild(document.createTextNode("Number of Experiements: 2"));
-                    resultDiv.appendChild(descDiv2);
-
-
 
                     if (result.featured) {
                         $("featuredDiv").setStyle({display: 'block'});
