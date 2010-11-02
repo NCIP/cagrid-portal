@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.*;
@@ -11,6 +12,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.*;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -73,6 +75,28 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
 
 		return classes;
 
+	}
+	
+	public UMLClass getClassInGivenService(final String umlClassName, final int serviceId) {
+
+		UMLClass umlClass = null;
+
+		int idx = umlClassName.lastIndexOf(".");
+		String packageName = umlClassName.substring(0, idx);
+		String className = umlClassName.substring(idx + 1);
+		List l = getHibernateTemplate()
+				.find(
+						"from UMLClass c where c.model.service.id = ? and c.className = ? and c.packageName = ?",
+						new Object[] { serviceId, className,packageName });
+		if (l.size() > 1) {
+			throw new NonUniqueResultException("More than one UMLClass for '"
+					+ umlClassName + "' found in Service:"
+					+ serviceId);
+		}
+		if(l.size() == 1){
+			umlClass = (UMLClass) l.iterator().next();
+		}
+		return umlClass;
 	}
 
 	public List<UMLClass> getClassesWithSameConceptCode(final UMLClass example) {
