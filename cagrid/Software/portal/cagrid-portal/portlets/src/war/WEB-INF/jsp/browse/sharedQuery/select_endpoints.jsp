@@ -24,7 +24,7 @@
     </h3>
 
     <p>
-        You can select up to <span id="${ns}queryCount"></span> services to query.
+        Select data services to query.
     </p>
 
     <p>
