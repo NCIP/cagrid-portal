@@ -1795,9 +1795,26 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="asrinivasa (generated)" id="20-131">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="grid_svc_uml_class"/>
+            </not>
+        </preConditions>
+        <createTable tableName="grid_svc_uml_class">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="grid_svc_id" type="INT"/>
+            <column name="uml_class_id" type="INT"/>
+            <column name="object_count" type="INT"/>
+        </createTable>
+    </changeSet>
+    
     <changeSet id="20-final" author="kherm">
         <tagDatabase tag="version_2.0"/>
     </changeSet>
+	
 
 
 </databaseChangeLog>
