@@ -69,6 +69,17 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
         assertEquals(1, getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass).size());
         assertEquals(0, getDao().getClassesWithSameConceptCode(uClass).size());
     }
+    
+    @Test
+    public void testGetClassInGivenService() {
+        UMLClass uClass = getDao().getClassInGivenService("pkg1.SomeClass", -1);
+
+        assertEquals(-1, uClass.getId().intValue());
+        uClass = getDao().getClassInGivenService("pkg1.SomeClass", -2);
+        assertEquals(-2, uClass.getId().intValue());
+ 
+    }
+    
 
     @Override
     protected String getDataSet() throws Exception {
