@@ -89,7 +89,8 @@
                 <value>gov.nih.nci.cagrid.portal.domain.NotificationLogMessage</value>
                 <value>gov.nih.nci.cagrid.portal.domain.ServiceAnnotation</value>
                 <value>gov.nih.nci.cagrid.portal.domain.StatusChange</value>
-
+				<value>gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass</value>
+				
                 <value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery</value>
                 <value>gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance</value>
                 <value>gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQuery</value>
@@ -382,6 +383,9 @@
 
     <bean id="pointOfContactCatalogEntryDao" parent="baseCatalogEntryDao"
           class="gov.nih.nci.cagrid.portal.dao.catalog.PointOfContactCatalogEntryDao"/>
+          
+    <bean id="gridServiceUmlClassDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.GridServiceUmlClassDao"/>
 
     <bean id="openSessionInViewForTesting"
           class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
