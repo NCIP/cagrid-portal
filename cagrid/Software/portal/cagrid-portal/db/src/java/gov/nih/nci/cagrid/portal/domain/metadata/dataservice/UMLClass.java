@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.domain.metadata.dataservice;
 
+import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class UMLClass extends
 	private List<UMLAssociationEdge> associations = new ArrayList<UMLAssociationEdge>();
 	private UMLClass superClass;
 	private List<UMLClass> subClasses = new ArrayList<UMLClass>();
+	private List<GridServiceUmlClass> gridServiceUmlClasses = new ArrayList<GridServiceUmlClass>();
 	
 	public UMLClass(){
 		
@@ -77,5 +80,16 @@ public class UMLClass extends
 	public void setSuperClass(UMLClass superClass) {
 		this.superClass = superClass;
 	}
+	
+    @OneToMany(mappedBy = "umlClass" , cascade = CascadeType.ALL)
+    public List<GridServiceUmlClass> getGridServiceUmlClasses() {
+        return gridServiceUmlClasses;
+    }
+
+	public void setGridServiceUmlClasses(
+			List<GridServiceUmlClass> gridServiceUmlClasses) {
+		this.gridServiceUmlClasses = gridServiceUmlClasses;
+	}
+	
 	
 }
