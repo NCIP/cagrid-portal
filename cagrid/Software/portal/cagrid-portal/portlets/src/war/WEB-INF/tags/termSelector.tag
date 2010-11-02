@@ -11,7 +11,7 @@
 <c:set var="rtsId">${id_prefix}${term.uri}</c:set>
 <div class="row">
 	<div class="label">
-<input id="${rtsId}" type="checkbox" name="${input_name}" value="${term.uri}">
+<input id="${rtsId}" type="checkbox" name="${input_name}" alt="Term" value="${term.uri}">
         <span style="display:none;">${term.label}</span>
         <span style="display:none;">${term.comment}</span>
   </input>

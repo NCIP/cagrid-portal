@@ -11,7 +11,7 @@
 
 <c:set var="rtsId">${id_prefix}${fn:replace(entry_type, ".", "_")}</c:set>
 <div id="${entry_type}" type="catalogEntryType" style="display:none;">
-<input type="radio" name="${input_name}" value="${entry_type}"/>
+<input type="radio" alt="Name" name="${input_name}" value="${entry_type}"/>
 
 <a id="${rtsId}-infoPopup-control"
    class="infoPopupLink"

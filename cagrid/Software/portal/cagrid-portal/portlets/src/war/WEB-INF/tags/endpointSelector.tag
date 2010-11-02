@@ -10,7 +10,7 @@
 <%@attribute name="id_prefix" required="false" %>
 
 <c:set var="rtsId">${id_prefix}${endpoint.id}</c:set>
-<input type="checkbox" name="${input_name}" value="${endpoint.about.url}"/>
+<input type="checkbox" alt="Name" name="${input_name}" value="${endpoint.about.url}"/>
 
 <a id="${rtsId}-infoPopup-control"
    class="infoPopupLink
