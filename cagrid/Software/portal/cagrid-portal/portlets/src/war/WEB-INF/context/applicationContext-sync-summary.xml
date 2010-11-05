@@ -14,6 +14,7 @@
     	<property name="gridServiceUmlClassDao" ref="gridServiceUmlClassDao"/>
     	<property name="sharedQueryCatalogEntryManagerFacade" ref="sharedQueryCatalogEntryManagerFacade"/>
     	<property name="umlClassDao" ref="umlClassDao"/>
+    	<property name="cachedMap" ref="cachedMap/>
 		<property name="queries">
 			<list>
 				<bean
@@ -75,7 +76,7 @@
     <bean id="startUpDelay" class="java.lang.Long">
         <constructor-arg value="2000"/>
     </bean>
-
+   
 
     <bean class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
