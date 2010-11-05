@@ -1,19 +1,23 @@
 package gov.nih.nci.cagrid.portal.portlet.map.ajax;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
+import gov.nih.nci.cagrid.portal.dao.GridServiceUmlClassDao;
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Bean that caches the map of
@@ -29,6 +33,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
     private GridServiceDao gridServiceDao;
     private ParticipantDao participantDao;
     private SummaryBean summary;
+    private GridServiceUmlClassDao gridServiceUmlClassDao;
 
     private Map<Enum, MapBean> cachedServiceMap = Collections.synchronizedMap(new HashMap<Enum, MapBean>());
 
@@ -44,7 +49,45 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             return createMap();
 
     }
-
+	public String getClassCountHtml() {
+		Map<String,Integer> classCountMap = new HashMap<String,Integer>();
+		List<GridServiceUmlClass> gridServiceUmlClassList = gridServiceUmlClassDao.getAll();
+		
+		for (GridServiceUmlClass gridServiceUmlClass:gridServiceUmlClassList) {
+			int count = gridServiceUmlClass.getObjectCount();
+			String className = gridServiceUmlClass.getUmlClass().getClassName();
+			Object obj = classCountMap.get(className);
+			if (obj == null) {
+				classCountMap.put(className, count);
+			} else {
+				Integer currCount = (Integer)obj;
+				classCountMap.put(className, currCount+count);
+			}
+		}
+        
+        Iterator it = classCountMap.entrySet().iterator();
+        StringBuffer sb = new StringBuffer();
+        String divS = "<div class='gss_line'>";
+        String divE = "</div>";
+        String spanS = "<span>";
+        String spanE = "</span>";
+        
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            sb.append(divS);
+            sb.append(spanS);
+            sb.append("# of " + pairs.getKey() +"s throughout caBIG¨: ");
+            sb.append(spanE);
+            sb.append(spanS);
+            sb.append(pairs.getValue());
+            sb.append(spanE);
+            sb.append(divE);
+            //System.out.println(pairs.getKey() + " = " + pairs.getValue());
+        }
+        return sb.toString();
+        
+	}
+	
     @Transactional
     public void refreshCache() {
         logger.debug("Refreshing cached Map");
@@ -78,7 +121,10 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             _defaulMap.addParticipant(participant);
             _pMap.addParticipant(participant);
         }
+        
 
+        summary.setClassCountStats(getClassCountHtml());
+        
         cachedServiceMap.put(null, _defaulMap);
         cachedServiceMap.put(ParticipantDirectoryType.ALL, _pMap);
         cachedServiceMap.put(ServiceDirectoryType.ALL, _allMap);
@@ -111,4 +157,9 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
     public void setParticipantDao(ParticipantDao participantDao) {
         this.participantDao = participantDao;
     }
+
+	public void setGridServiceUmlClassDao(
+			GridServiceUmlClassDao gridServiceUmlClassDao) {
+		this.gridServiceUmlClassDao = gridServiceUmlClassDao;
+	}
 }

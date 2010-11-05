@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet.map.ajax;
 
+
 /**
  * User: kherm
  *
@@ -8,6 +9,7 @@ package gov.nih.nci.cagrid.portal.portlet.map.ajax;
 public class SummaryBean {
 
     private int participants, analyticalServices, dataServices;
+    private String classCountStats ;
 
     public int getParticipants() {
         return participants;
@@ -32,4 +34,13 @@ public class SummaryBean {
     public void setDataServices(int dataServices) {
         this.dataServices = dataServices;
     }
+
+
+	public String getClassCountStats() {
+		return classCountStats;
+	}
+
+	public void setClassCountStats(String classCountStats) {
+		this.classCountStats = classCountStats;
+	}
 }
