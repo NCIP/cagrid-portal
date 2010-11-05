@@ -47,7 +47,7 @@ public class RefreshController extends AbstractController {
         */
         
         if (request.isUserInRole("Administrator")) {
-            boolean b = GridSummaryService.instance.triggerCalculator();
+            boolean b = false ; // GridSummaryService.instance.triggerCalculator();
             msg.append("update stats process triggered? " + new Boolean(b));
         } else {
             msg.append("You need to be an administrator to refresh statistics");
