@@ -86,6 +86,7 @@
             $('data-services-summary').innerHTML = summary.dataServices;
             $('analytical-services-summary').innerHTML = summary.analyticalServices;
             $('participant-institute-summary').innerHTML = summary.participants;
+            $('class-count-stats-summary').innerHTML = summary.classCountStats;
         });
 
         dwr.engine.endBatch({
@@ -109,10 +110,13 @@
      
     <div>
     	<div class="gss_section">caBIG Site Statistics:</div>
-    	<div class="gss_line"><span>Data Services:</span><span id="data-services-summary">data services count</span></div>
+    	<div class="gss_line"><span>Data Services:  </span><span id="data-services-summary">data services count</span></div>
     	<div class="gss_line"><span>Analytical Services:</span><span id="analytical-services-summary">analytical services count</span></div>
     	<div class="gss_line"><span>Participant Institutes:</span><span id="participant-institute-summary">participant institutes count</span></div>
-    	<%@ include file="summaries.jsp" %>
+    	
+    	<div class="gss_section">caArray Statistics:</div>
+
+		<span id="class-count-stats-summary"> counts </span>
 	</div>
 	
     <%--
