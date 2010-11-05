@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.SharedQueryCatalogEntryManagerFacade;
+import gov.nih.nci.cagrid.portal.portlet.map.ajax.CachedMap;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 
 import java.util.List;
@@ -28,7 +29,10 @@ public class GridSummarySyncService {
     
     private final Log logger = LogFactory.getLog(getClass());
     
-    private void l(Object o) {
+    private CachedMap cachedMap;
+    
+
+	private void l(Object o) {
         System.out.println(o);
     }
     
@@ -73,6 +77,7 @@ public class GridSummarySyncService {
 		    		   }
 		    	   }
 		       }  
+		       cachedMap.refreshCache();
 		       logger.info("************************\nSummary queries background tasks end " + new java.util.Date());
 	}
 
@@ -93,4 +98,9 @@ public class GridSummarySyncService {
     public void setQueries(List<SummaryQueryWithLocations> queries) {
         this.queries = queries;
     }
+    
+    public void setCachedMap(CachedMap cachedMap) {
+		this.cachedMap = cachedMap;
+	}
+
 }
