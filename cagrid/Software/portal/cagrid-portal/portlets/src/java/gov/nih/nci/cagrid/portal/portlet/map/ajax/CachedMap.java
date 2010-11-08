@@ -13,9 +13,11 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,19 +51,42 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             return createMap();
 
     }
+    
+    public static String removeCharAt(String s, int pos) {
+    	   return s.substring(0,pos)+s.substring(pos+1);
+    }
+    
 	public String getClassCountHtml() {
-		Map<String,Integer> classCountMap = new HashMap<String,Integer>();
+		Map<String,ClassCounter> classCountMap = new HashMap<String,ClassCounter>();
 		List<GridServiceUmlClass> gridServiceUmlClassList = gridServiceUmlClassDao.getAll();
+		Map<String,Set> classCatalogMap = new HashMap<String,Set>();
 		
 		for (GridServiceUmlClass gridServiceUmlClass:gridServiceUmlClassList) {
 			int count = gridServiceUmlClass.getObjectCount();
 			String className = gridServiceUmlClass.getUmlClass().getClassName();
 			Object obj = classCountMap.get(className);
 			if (obj == null) {
-				classCountMap.put(className, count);
+				ClassCounter cc = new ClassCounter();
+				cc.setClassName(className);
+				cc.setCount(count);
+				cc.setCaption(gridServiceUmlClass.getCaption());
+				classCountMap.put(className, cc);
 			} else {
-				Integer currCount = (Integer)obj;
-				classCountMap.put(className, currCount+count);
+				ClassCounter cc = (ClassCounter)obj;
+				cc.setCount(cc.getCount()+count);
+				classCountMap.put(className, cc);
+			}
+			
+			Integer catalogId = gridServiceUmlClass.getGridService().getCatalog().getId();
+			Object cat = classCatalogMap.get(className);
+			if (cat == null) {
+				Set s = new HashSet();
+				s.add(catalogId);
+				classCatalogMap.put(className, s);
+			} else {
+				Set s = (Set)cat;
+				s.add(catalogId);
+				classCatalogMap.put(className, s);
 			}
 		}
         
@@ -76,14 +101,26 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             Map.Entry pairs = (Map.Entry)it.next();
             sb.append(divS);
             sb.append(spanS);
-            sb.append("# of " + pairs.getKey() +"s throughout caBIG¨: ");
+            // get catalog Ids ..
+            Iterator catalogIds = ((Set)classCatalogMap.get(pairs.getKey())).iterator();
+            String catIds = "";
+            while(catalogIds.hasNext()) {
+            	catIds = catIds + catalogIds.next() + ",";
+        	}
+            int li = catIds.lastIndexOf(',');
+            catIds = removeCharAt(catIds,li);
+            
+            ClassCounter cc = (ClassCounter)pairs.getValue();
+            
+            sb.append("<a href=\"javascript:selectItemsForDiscovery('"+catIds+"','SERVICE')\"> " + cc.getCaption() + "</a>");
             sb.append(spanE);
             sb.append(spanS);
-            sb.append(pairs.getValue());
+            sb.append(cc.getCount());
             sb.append(spanE);
             sb.append(divE);
             //System.out.println(pairs.getKey() + " = " + pairs.getValue());
         }
+        System.out.println(sb.toString());
         return sb.toString();
         
 	}
@@ -162,4 +199,6 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 			GridServiceUmlClassDao gridServiceUmlClassDao) {
 		this.gridServiceUmlClassDao = gridServiceUmlClassDao;
 	}
+
 }
+
