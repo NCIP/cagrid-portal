@@ -66,7 +66,8 @@ public class GridSummarySyncService {
 		 	                   if (gridServiceUmlClass == null) {
 			 	                   gridServiceUmlClass = new GridServiceUmlClass();
 			 	                   gridServiceUmlClass.setUmlClass(resultClass);
-			 	                   gridServiceUmlClass.setGridService(service);	 	                	   
+			 	                   gridServiceUmlClass.setGridService(service);	 
+			 	                   gridServiceUmlClass.setCaption(currentQueryWithLocations.getCaption());
 		 	                   } 
 		 	                   gridServiceUmlClass.setObjectCount(count.intValue());
 		 	                   gridServiceUmlClassDao.save(gridServiceUmlClass);
