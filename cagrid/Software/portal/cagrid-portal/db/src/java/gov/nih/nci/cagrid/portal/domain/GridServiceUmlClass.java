@@ -18,7 +18,10 @@ public class GridServiceUmlClass extends AbstractDomainObject {
 	private UMLClass umlClass;
 	private GridService gridService;
 	private int objectCount;
+	private String caption;
 	
+
+
 	public GridServiceUmlClass() {
 		
 	}
@@ -48,5 +51,14 @@ public class GridServiceUmlClass extends AbstractDomainObject {
 	public void setObjectCount(int objectCount) {
 		this.objectCount = objectCount;
 	}
+	
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+	}
+	
 	
 }
