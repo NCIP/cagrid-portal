@@ -1810,7 +1810,16 @@
             <column name="object_count" type="INT"/>
         </createTable>
     </changeSet>
-    
+
+    <changeSet author="asrinivasa (generated)" id="20-132">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="grid_svc_uml_class"/>
+        </preConditions>
+        <addColumn tableName="grid_svc_uml_class">
+            <column name="caption" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+        
     <changeSet id="20-final" author="kherm">
         <tagDatabase tag="version_2.0"/>
     </changeSet>
