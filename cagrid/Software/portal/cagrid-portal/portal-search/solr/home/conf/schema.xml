@@ -316,6 +316,9 @@ via copyField further on in this schema  -->
         <field name="author" type="string" indexed="true" stored="true"/>
         <field name="status" type="string" indexed="true" stored="true"/>
         <field name="service_type" type="string" indexed="true" stored="true"/>
+        
+        <field name="classCount" multiValued="true" type="string" indexed="true"/>
+
 
         <!-- Since we want to search multiple fields (description, title, user, etc.),
 we’ll set the default search field to a catchall text field called text -->
