@@ -148,7 +148,7 @@
                     var countsArray = result.classCount;
                     var class_count;
                     
-                    if (countsArray != undefined) {
+                    if (countsArray != undefined && classNameForCounts != "" && classNameForCounts !=null) {
                     	countsArray.each(function(item) {
   							class_count=item.split(":");
                    		    if (classNameForCounts == class_count[0]) {
@@ -159,6 +159,7 @@
                    		    }
 						});
 					}
+					
 
                     if (result.featured) {
                         $("featuredDiv").setStyle({display: 'block'});
