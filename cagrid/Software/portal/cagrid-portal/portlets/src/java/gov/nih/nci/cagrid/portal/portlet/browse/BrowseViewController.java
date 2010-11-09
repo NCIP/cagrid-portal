@@ -49,9 +49,16 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
       */
     public ModelAndView handleRenderRequest(RenderRequest request,
                                             RenderResponse response) throws Exception {
+    
         ModelAndView mav = new ModelAndView(getSuccessViewName());
         BrowseTypeEnum browseType = getBrowseType(request);
 
+        
+        Object className = getClassName(request);
+        if (className != null) {
+        	mav.addObject(BrowseParams.CLASS_NAME,className);
+        } 
+        
         mav.addObject(BrowseParams.BROWSE_TYPE, browseType.toString());
         String entryTypeName = null;
         if (browseType.equals(BrowseTypeEnum.DATASET)) {
