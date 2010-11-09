@@ -163,6 +163,7 @@
 <form:form id="${formName}">
     <input type="hidden" alt="Hidden" name="entryId"/>
     <input type="hidden" alt="Hidden" name="selectedIds"/>
+    <input type="hidden" name="className"/>
 </form:form>
 
 
@@ -176,8 +177,19 @@
     }
 
     function selectItemsForDiscovery(ids, type) {
+    	$('${prefix}mapNodeForm').className.value = "";
         ids = ids.replace(/,/g, " ");
         $('${prefix}mapNodeForm').selectedIds.value = ids;
+        var viewCatalogsLink = "${viewCatalogs}";
+        viewCatalogsLink = viewCatalogsLink.replace("/guest/home", "/guest/catalog/all");
+        $("${prefix}mapNodeForm").action = viewCatalogsLink;
+        $('${prefix}mapNodeForm').submit();
+    }
+    
+    function selectItemsForCounts(ids, type , className) {
+        ids = ids.replace(/,/g, " ");
+        $('${prefix}mapNodeForm').selectedIds.value = ids;
+        $('${prefix}mapNodeForm').className.value = className;
         var viewCatalogsLink = "${viewCatalogs}";
         viewCatalogsLink = viewCatalogsLink.replace("/guest/home", "/guest/catalog/all");
         $("${prefix}mapNodeForm").action = viewCatalogsLink;
