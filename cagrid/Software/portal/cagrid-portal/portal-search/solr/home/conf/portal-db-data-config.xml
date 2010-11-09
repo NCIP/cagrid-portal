@@ -81,6 +81,13 @@
                          and time=(Select max(time) from status_change where service_id='${GridService.id}')">
                     <field name="status" column="status"/>
                 </entity>
+                <!-- get class names and counts for this grid service , joining with uml class table to get the class name  -->
+ 				<entity name="GridServiceUmlClass"
+                        query="select concat_ws(':',className,cast(object_count as char)) as c from grid_svc_uml_class gsu , uml_class uc 
+                        where grid_svc_id='${GridService.id}' and uc.id=gsu.uml_class_id
+                        ">
+                        <field name="classCount" column="c"/>
+                </entity>                
             </entity>
             <entity name="AreaOfFocusTerm"
                     query="select term_id from cat_entry_aofterms where entry_id='${AllCatalogs.id}'">
