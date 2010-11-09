@@ -23,6 +23,12 @@ public class BaseSearchSupportingController extends BaseCatalogEntryAbstractCont
                 BrowseTypeEnum.DATASET.toString()));
 
     }
+    
+    protected String getClassName(PortletRequest request) {
+        return request.getParameter(BrowseParams.CLASS_NAME);
+
+    }
+    
 
     private void addRenderParam(ActionRequest req, ActionResponse res, String param) {
         if (req.getParameterMap().containsKey(param)) {
