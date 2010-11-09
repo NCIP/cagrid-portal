@@ -24,12 +24,17 @@
     <liferay-portlet:param name="operation" value="viewDetails"/>
     <liferay-portlet:param name="entryId" value="ENTRY_ID"/>
 </liferay-portlet:actionURL>
+<%
 
+	String className = (String)request.getAttribute("className");
+
+
+%>
 
 <script type="text/javascript">
 
     var wildcard = "*:*";
-
+	var classNameForCounts = "<%=className%>";
 
     function ${ns}viewDetails(id) {
 
@@ -136,7 +141,24 @@
                         descDiv.className = "oneResultDescription";
                         descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
                     }
+                    
+                   
                     resultDiv.appendChild(descDiv);
+				    var countDiv;
+                    var countsArray = result.classCount;
+                    var class_count;
+                    
+                    if (countsArray != undefined) {
+                    	countsArray.each(function(item) {
+  							class_count=item.split(":");
+                   		    if (classNameForCounts == class_count[0]) {
+                   		    	countDiv = document.createElement('div');
+                   		    	countDiv.className = "oneResultDescription";
+                   		    	countDiv.appendChild(document.createTextNode("Number of "+classNameForCounts+"s : " + class_count[1]));
+                   		    	resultDiv.appendChild(countDiv);
+                   		    }
+						});
+					}
 
                     if (result.featured) {
                         $("featuredDiv").setStyle({display: 'block'});
