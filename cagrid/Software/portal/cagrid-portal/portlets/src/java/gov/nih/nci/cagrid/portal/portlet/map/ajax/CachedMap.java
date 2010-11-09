@@ -112,7 +112,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             
             ClassCounter cc = (ClassCounter)pairs.getValue();
             
-            sb.append("<a href=\"javascript:selectItemsForDiscovery('"+catIds+"','SERVICE')\"> " + cc.getCaption() + "</a>");
+            sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+cc.getClassName()+"')\"> " + "# of "+cc.getClassName()+"s throughout caBIG¨ : " + "</a>");
             sb.append(spanE);
             sb.append(spanS);
             sb.append(cc.getCount());
