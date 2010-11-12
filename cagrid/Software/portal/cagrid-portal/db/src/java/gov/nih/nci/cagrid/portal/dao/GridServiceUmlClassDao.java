@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao;
 
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
 	}
 	
     @Override
+    @UpdatesCatalogs
     public void save(GridServiceUmlClass gridServiceUmlClass) {
         super.save(gridServiceUmlClass);    //To change body of overridden methods use File | Settings | File Templates.
     }
