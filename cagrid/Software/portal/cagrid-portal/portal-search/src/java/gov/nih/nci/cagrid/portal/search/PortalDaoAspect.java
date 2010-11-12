@@ -23,6 +23,7 @@ public class PortalDaoAspect extends AbstractSolrCommandExecutor {
     }
 
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.catalog..*(*))"
+    		+ " || execution(* gov.nih.nci.cagrid.portal.dao.GridServiceUmlClassDao.*(*))"
             + " && @annotation(gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs)")
     public void runCommand() throws Exception {
         try {
