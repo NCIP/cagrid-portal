@@ -17,6 +17,11 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Timer task to iterated thru configured queries and populate GridServiceUmlClass
+ * @author akkalas srini.akkala@semanticbits.com
+ *
+ */
 public class GridSummarySyncService {
 	
 	private SharedQueryCatalogEntryManagerFacade sharedQueryCatalogEntryManagerFacade ;
