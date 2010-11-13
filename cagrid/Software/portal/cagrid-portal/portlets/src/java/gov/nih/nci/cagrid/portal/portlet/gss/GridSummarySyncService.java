@@ -46,7 +46,7 @@ public class GridSummarySyncService {
 		    	  for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
 		    		  l("url " + endPoint.getId() + " > " + endPoint.getAbout().getUrl());
 		    		  
-		    		   if (endPoint.isData()) {
+		    		   if (endPoint.isData() && !endPoint.isHidden()) {
 		    			  
 		    			   try {
 		    				  String umlClassName = PortletUtils.getTargetUMLClassName(cql);
