@@ -58,19 +58,20 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
    }
     
    public Map<Object,Set> getCatalogIdsGroupedByClassName() {
-	   List list = getHibernateTemplate().find("select gsu.umlClass.className as className , gsu.gridService.catalog.id as id from GridServiceUmlClass gsu");
+	   List list = getHibernateTemplate().find("select gsu.umlClass.className as className , gsu.gridService.catalog.id as id , caption from GridServiceUmlClass gsu");
 	   Map<Object ,Set> map = new HashMap<Object , Set>();
 	   	for (int i=0; i<list.size();i++) {
 	   		Object[] obj = (Object[])list.get(i);
-	   		Object cat = map.get(obj[0]);
+	   		String key = obj[0]+"_"+obj[2];
+	   		Object cat = map.get(key);
 	   		if (cat == null) {
 				Set s = new HashSet();
 				s.add(obj[1]);
-				map.put(obj[0], s);
+				map.put(key, s);
 			} else {
 				Set s = (Set)cat;
 				s.add(obj[1]);
-				map.put(obj[0], s);
+				map.put(key, s);
 			}
 
 	   	}
