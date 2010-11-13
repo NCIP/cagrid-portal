@@ -64,7 +64,9 @@ public class GridSummarySyncService {
 		 	                   DataServiceClient client = new DataServiceClient(serviceUrl);
 		 	                   CQLQueryResults result = client.query(currentQueryWithLocations.getCqlQuery());
 		 	                   Long count = result.getCountResult().getCount();
-		 	                        
+		 	                   if (count.intValue() == 0) {
+		 	                	  continue;
+		 	                   }
 		 	                   GridServiceUmlClass gridServiceUmlClass =gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), resultClass.getId());
 		 	                   if (gridServiceUmlClass == null) {
 			 	                   gridServiceUmlClass = new GridServiceUmlClass();
