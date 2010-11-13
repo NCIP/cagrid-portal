@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
+ * @author akkalas srini.akkala@semanticbits.com
  */
 public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 
@@ -57,15 +58,31 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
     	   return s.substring(0,pos)+s.substring(pos+1);
     }
     
+    /*
+     * builds html to show summeries on home page (summeries/view.jsp)
+     * generated html sample 
+		<div class='gss_section'>caArray Statistics:</div>  
+			<div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Array')"> # of Arrays throughout caBIG¨ : </a></span><span>15</span></div>
+		    <div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Experiment')"> # of Experiments throughout caBIG¨ : </a></span><span>3</span></div>
+	    <div class='gss_section'>caBIO Statistics:</div>
+	        <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Pathway')"> # of Pathways throughout caBIG¨ : </a></span><span>1777</span></div>
+	        <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Gene')"> # of Genes throughout caBIG¨ : </a></span><span>259071</span></div>
+		----
+     */
 	public String getClassCountHtml() {
-		Map<String,List<ClassCounter>> groupByCaptionMap = new HashMap<String,List<ClassCounter>>();
-		
-		
+		// category map , key is the caption (caArray , caBIO etc ) .
+		// for each ctegory we store list uml class info (ClassCounter) . 
+		Map<String,List<ClassCounter>> groupByCaptionMap = new HashMap<String,List<ClassCounter>>();		
+		// class name is the key , details( name , count , caption etc ) are the value 
 		Map<String,ClassCounter> classCountMap = new HashMap<String,ClassCounter>();
+		
 		List<GridServiceUmlClass> gridServiceUmlClassList = gridServiceUmlClassDao.getAll();
+		
+		// what catelogs does each class belong to .
 		Map<String,Set> classCatalogMap = new HashMap<String,Set>();
 		
 		for (GridServiceUmlClass gridServiceUmlClass:gridServiceUmlClassList) {
+			// get counts for each class per service and build the map
 			int count = gridServiceUmlClass.getObjectCount();
 			String className = gridServiceUmlClass.getUmlClass().getClassName();
 			Object obj = classCountMap.get(className);
@@ -81,6 +98,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 				classCountMap.put(className, cc);
 			}
 			
+			// build catelog ids for each class . 
 			Integer catalogId = gridServiceUmlClass.getGridService().getCatalog().getId();
 			Object cat = classCatalogMap.get(className);
 			if (cat == null) {
@@ -96,6 +114,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 		}
         
         Iterator it = classCountMap.entrySet().iterator();
+        // set up classes by caption . 
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             ClassCounter cc = (ClassCounter)pairs.getValue();
@@ -111,6 +130,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             }
         }
         
+        // build html 
         StringBuffer sb = new StringBuffer();
         Iterator catItr = groupByCaptionMap.entrySet().iterator();
         String divS = "<div class='gss_line'>";
