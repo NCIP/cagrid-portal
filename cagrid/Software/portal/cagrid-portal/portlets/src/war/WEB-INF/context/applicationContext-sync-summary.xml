@@ -8,7 +8,7 @@
 		<property name="queries">
 			<list>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Experiments throughout caBIG®"/>
+					<property name="caption" value="caArray"/>
 					<property name="query">
 						<value><![CDATA[
                         <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -24,7 +24,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Array Samples throughout caBIG®"/>
+					<property name="caption" value="caArray"/>
 					<property name="query">
 						<value><![CDATA[
                         <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -40,7 +40,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Arrays throughout caBIG®"/>
+					<property name="caption" value="caArray"/>
 					<property name="query">
 						<value><![CDATA[
                         <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -56,7 +56,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Genes throughout caBIG®"/>
+					<property name="caption" value="caBIO"/>
 					<property name="query">
 						<value><![CDATA[
                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -72,7 +72,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Pathways throughout caBIG®"/>
+					<property name="caption" value="caBIO"/>
 					<property name="query">
 						<value><![CDATA[
                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -88,7 +88,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Nanotechnology Samples throughout caBIG®"/>
+					<property name="caption" value="caNano"/>
 					<property name="query">
 						<value><![CDATA[
                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
@@ -104,7 +104,7 @@
 					</property>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
-					<property name="caption" value="# of Nanotechnology Characterization throughout caBIG®"/>
+					<property name="caption" value="caNano"/>
 					<property name="query">
 						<value><![CDATA[
                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
