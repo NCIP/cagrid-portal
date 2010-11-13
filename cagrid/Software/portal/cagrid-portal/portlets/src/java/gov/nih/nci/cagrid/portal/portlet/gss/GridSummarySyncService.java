@@ -37,14 +37,12 @@ public class GridSummarySyncService {
     }
     
 	public void sync() {
-				l ( " in sync ");
 			   logger.info("************************\nSummary queries background tasks started " + new java.util.Date());
 		       for (SummaryQueryWithLocations currentQueryWithLocations : queries) {
 		    	   String cql = currentQueryWithLocations.getQuery();
    		    	   List<GridServiceEndPointCatalogEntry> endPoints = sharedQueryCatalogEntryManagerFacade.getAvailableEndpoints(cql);
 		    	  
 		    	  for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
-		    		  l("url " + endPoint.getId() + " > " + endPoint.getAbout().getUrl());
 		    		  
 		    		   if (endPoint.isData() && !endPoint.isHidden()) {
 		    			  
