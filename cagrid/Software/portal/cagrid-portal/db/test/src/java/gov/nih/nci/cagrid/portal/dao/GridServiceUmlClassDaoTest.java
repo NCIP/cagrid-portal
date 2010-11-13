@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.DBTestBase;
 import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -24,6 +25,19 @@ public class GridServiceUmlClassDaoTest extends DBTestBase<GridServiceUmlClassDa
 		obj = this.getDao().getByGridServiceAndUmlClass(-2, -1);
 		assertEquals(obj.getObjectCount(),5);
 	}
+	
+	@Test
+	public void testGetUniqueCaptions() {
+		List list = this.getDao().getUniqueCaptions();
+		assertEquals(list.size(),2);
+	}
+	
+	@Test
+	public void testGetAggregatedClassCountByCaption() {
+		Map map = this.getDao().getAggregatedClassCountByCaption("caArray");
+
+	}
+	
 
 
 }

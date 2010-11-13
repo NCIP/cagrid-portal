@@ -74,7 +74,7 @@
     <UML_ATTR_SEM_META UML_ATTR_ID="-5" SEM_META_ID="-2"/>
     <UML_ATTR_SEM_META UML_ATTR_ID="-6" SEM_META_ID="-3"/>
                
-	<grid_svc_uml_class id="-1" GRID_SVC_ID="-1" uml_class_id="-1" object_count="6"/>
-	<grid_svc_uml_class id="-2" GRID_SVC_ID="-2" uml_class_id="-1" object_count="5"/>
+	<grid_svc_uml_class id="-1" GRID_SVC_ID="-1" uml_class_id="-1" object_count="6" caption="caArray"/>
+	<grid_svc_uml_class id="-2" GRID_SVC_ID="-2" uml_class_id="-1" object_count="5" caption="caBIO"/>
 
 </dataset>
