@@ -58,16 +58,16 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
     	   return s.substring(0,pos)+s.substring(pos+1);
     }
     
-    /*
+    /**
      * builds html to show summeries on home page (summeries/view.jsp)
      * generated html sample 
-		<div class='gss_section'>caArray Statistics:</div>  
-			<div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Array')"> # of Arrays throughout caBIG¨ : </a></span><span>15</span></div>
-		    <div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Experiment')"> # of Experiments throughout caBIG¨ : </a></span><span>3</span></div>
-	    <div class='gss_section'>caBIO Statistics:</div>
-	        <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Pathway')"> # of Pathways throughout caBIG¨ : </a></span><span>1777</span></div>
-	        <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Gene')"> # of Genes throughout caBIG¨ : </a></span><span>259071</span></div>
-		----
+	 *	<div class='gss_section'>caArray Statistics:</div>  
+	 * 		<div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Array')"> # of Arrays throughout caBIG¨ : </a></span><span>15</span></div>
+	 *	    <div class='gss_line'><span><a href="javascript:selectItemsForCounts('767','SERVICE','Experiment')"> # of Experiments throughout caBIG¨ : </a></span><span>3</span></div>
+	 *  <div class='gss_section'>caBIO Statistics:</div>
+	 *       <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Pathway')"> # of Pathways throughout caBIG¨ : </a></span><span>1777</span></div>
+	 *       <div class='gss_line'><span><a href="javascript:selectItemsForCounts('769','SERVICE','Gene')"> # of Genes throughout caBIG¨ : </a></span><span>259071</span></div>
+	 *	----
      */
 	public String getClassCountHtml() {
 		// category map , key is the caption (caArray , caBIO etc ) .
