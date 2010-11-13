@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,6 +58,9 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
     }
     
 	public String getClassCountHtml() {
+		Map<String,List<ClassCounter>> groupByCaptionMap = new HashMap<String,List<ClassCounter>>();
+		
+		
 		Map<String,ClassCounter> classCountMap = new HashMap<String,ClassCounter>();
 		List<GridServiceUmlClass> gridServiceUmlClassList = gridServiceUmlClassDao.getAll();
 		Map<String,Set> classCatalogMap = new HashMap<String,Set>();
@@ -88,39 +92,56 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 				s.add(catalogId);
 				classCatalogMap.put(className, s);
 			}
+
 		}
         
         Iterator it = classCountMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            ClassCounter cc = (ClassCounter)pairs.getValue();
+            Object obj = groupByCaptionMap.get(cc.getCaption());
+            if (obj == null) {
+            	List<ClassCounter> list = new ArrayList<ClassCounter>();
+            	list.add(cc);
+            	groupByCaptionMap.put(cc.getCaption(), list);
+            } else {
+            	List<ClassCounter> list = (List<ClassCounter>)obj;
+            	list.add(cc);
+            	groupByCaptionMap.put(cc.getCaption(), list);
+            }
+        }
+        
         StringBuffer sb = new StringBuffer();
+        Iterator catItr = groupByCaptionMap.entrySet().iterator();
         String divS = "<div class='gss_line'>";
         String divE = "</div>";
         String spanS = "<span>";
         String spanE = "</span>";
-        
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
-            sb.append(divS);
-            sb.append(spanS);
-            // get catalog Ids ..
-            Iterator catalogIds = ((Set)classCatalogMap.get(pairs.getKey())).iterator();
-            String catIds = "";
-            while(catalogIds.hasNext()) {
-            	catIds = catIds + catalogIds.next() + ",";
-        	}
-            int li = catIds.lastIndexOf(',');
-            catIds = removeCharAt(catIds,li);
-            
-            ClassCounter cc = (ClassCounter)pairs.getValue();
-            
-            sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+cc.getClassName()+"')\"> " + "# of "+cc.getClassName()+"s throughout caBIG¨ : " + "</a>");
-            sb.append(spanE);
-            sb.append(spanS);
-            sb.append(cc.getCount());
-            sb.append(spanE);
-            sb.append(divE);
-            //System.out.println(pairs.getKey() + " = " + pairs.getValue());
+        while (catItr.hasNext()) {
+            Map.Entry pairs = (Map.Entry)catItr.next();
+            List<ClassCounter> list = (List<ClassCounter>)groupByCaptionMap.get(pairs.getKey());
+            sb.append("<div class='gss_section'>"+pairs.getKey()+" Statistics:</div>");
+            for (ClassCounter cc:list) {
+            	sb.append(divS);
+                sb.append(spanS);
+                Iterator catalogIds = ((Set)classCatalogMap.get(cc.getClassName())).iterator();
+                String catIds = "";
+                while(catalogIds.hasNext()) {
+                	catIds = catIds + catalogIds.next() + ",";
+            	}
+                int li = catIds.lastIndexOf(',');
+                catIds = removeCharAt(catIds,li);
+                
+                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+cc.getClassName()+"')\"> " + "# of "+cc.getClassName()+"s throughout caBIG¨ : " + "</a>");
+                sb.append(spanE);
+                sb.append(spanS);
+                sb.append(cc.getCount());
+                sb.append(spanE);
+                sb.append(divE);
+                
+            }
         }
-        //System.out.println(sb.toString());
+
         return sb.toString();
         
 	}
