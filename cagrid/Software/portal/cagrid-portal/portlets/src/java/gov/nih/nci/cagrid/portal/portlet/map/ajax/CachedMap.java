@@ -4,17 +4,14 @@ import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.GridServiceUmlClassDao;
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -70,98 +67,43 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 	 *	----
      */
 	public String getClassCountHtml() {
-		// category map , key is the caption (caArray , caBIO etc ) .
-		// for each ctegory we store list uml class info (ClassCounter) . 
-		Map<String,List<ClassCounter>> groupByCaptionMap = new HashMap<String,List<ClassCounter>>();		
-		// class name is the key , details( name , count , caption etc ) are the value 
-		Map<String,ClassCounter> classCountMap = new HashMap<String,ClassCounter>();
-		
-		List<GridServiceUmlClass> gridServiceUmlClassList = gridServiceUmlClassDao.getAll();
-		
-		// what catelogs does each class belong to .
-		Map<String,Set> classCatalogMap = new HashMap<String,Set>();
-		
-		for (GridServiceUmlClass gridServiceUmlClass:gridServiceUmlClassList) {
-			// get counts for each class per service and build the map
-			int count = gridServiceUmlClass.getObjectCount();
-			String className = gridServiceUmlClass.getUmlClass().getClassName();
-			Object obj = classCountMap.get(className);
-			if (obj == null) {
-				ClassCounter cc = new ClassCounter();
-				cc.setClassName(className);
-				cc.setCount(count);
-				cc.setCaption(gridServiceUmlClass.getCaption());
-				classCountMap.put(className, cc);
-			} else {
-				ClassCounter cc = (ClassCounter)obj;
-				cc.setCount(cc.getCount()+count);
-				classCountMap.put(className, cc);
-			}
-			
-			// build catelog ids for each class . 
-			Integer catalogId = gridServiceUmlClass.getGridService().getCatalog().getId();
-			Object cat = classCatalogMap.get(className);
-			if (cat == null) {
-				Set s = new HashSet();
-				s.add(catalogId);
-				classCatalogMap.put(className, s);
-			} else {
-				Set s = (Set)cat;
-				s.add(catalogId);
-				classCatalogMap.put(className, s);
-			}
-
-		}
-        
-        Iterator it = classCountMap.entrySet().iterator();
-        // set up classes by caption . 
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
-            ClassCounter cc = (ClassCounter)pairs.getValue();
-            Object obj = groupByCaptionMap.get(cc.getCaption());
-            if (obj == null) {
-            	List<ClassCounter> list = new ArrayList<ClassCounter>();
-            	list.add(cc);
-            	groupByCaptionMap.put(cc.getCaption(), list);
-            } else {
-            	List<ClassCounter> list = (List<ClassCounter>)obj;
-            	list.add(cc);
-            	groupByCaptionMap.put(cc.getCaption(), list);
-            }
-        }
-        
-        // build html 
-        StringBuffer sb = new StringBuffer();
-        Iterator catItr = groupByCaptionMap.entrySet().iterator();
+		StringBuffer sb = new StringBuffer();
         String divS = "<div class='gss_line'>";
         String divE = "</div>";
         String spanS = "<span>";
         String spanE = "</span>";
-        while (catItr.hasNext()) {
-            Map.Entry pairs = (Map.Entry)catItr.next();
-            List<ClassCounter> list = (List<ClassCounter>)groupByCaptionMap.get(pairs.getKey());
-            sb.append("<div class='gss_section'>"+pairs.getKey()+" Statistics:</div>");
-            for (ClassCounter cc:list) {
-            	sb.append(divS);
+		
+		// get captions 
+		List<String> captions = gridServiceUmlClassDao.getUniqueCaptions();
+		Map<Object,Set> catalogIdsMap = gridServiceUmlClassDao.getCatalogIdsGroupedByClassName();
+		for  (String caption:captions) {
+			sb.append("<div class='gss_section'>"+caption+" Statistics:</div>");
+			Map classCountMap = gridServiceUmlClassDao.getAggregatedClassCountByCaption(caption);
+			Iterator it = classCountMap.entrySet().iterator();
+	        // set up classes by caption . 
+	        while (it.hasNext()) {
+	        	Map.Entry ps = (Map.Entry)it.next();
+	        	String className = ps.getKey().toString();
+	        	String count = ps.getValue().toString();
+	        	String keyTogetCatIds = className+"_"+caption;
+	        	sb.append(divS);
                 sb.append(spanS);
-                Iterator catalogIds = ((Set)classCatalogMap.get(cc.getClassName())).iterator();
                 String catIds = "";
+                Iterator catalogIds = ((Set)catalogIdsMap.get(keyTogetCatIds)).iterator();
                 while(catalogIds.hasNext()) {
                 	catIds = catIds + catalogIds.next() + ",";
             	}
                 int li = catIds.lastIndexOf(',');
                 catIds = removeCharAt(catIds,li);
-                
-                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+cc.getClassName()+"')\"> " + "# of "+cc.getClassName()+"s throughout caBIG¨ : " + "</a>");
+                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+className+"')\"> " + "# of "+className+"s throughout caBIG¨ : " + "</a>");
                 sb.append(spanE);
                 sb.append(spanS);
-                sb.append(cc.getCount());
+                sb.append(count);
                 sb.append(spanE);
                 sb.append(divE);
-                
-            }
-        }
-
+	        }
+		}
+		//System.out.println(sb.toString());
         return sb.toString();
         
 	}
