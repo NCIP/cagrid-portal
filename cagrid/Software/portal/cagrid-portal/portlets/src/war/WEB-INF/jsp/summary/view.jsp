@@ -114,7 +114,7 @@
     	<div class="gss_line"><span>Analytical Services:</span><span id="analytical-services-summary">analytical services count</span></div>
     	<div class="gss_line"><span>Participant Institutes:</span><span id="participant-institute-summary">participant institutes count</span></div>
     	
-    	<div class="gss_section">caArray Statistics:</div>
+    	
 
 		<span id="class-count-stats-summary"> counts </span>
 	</div>
