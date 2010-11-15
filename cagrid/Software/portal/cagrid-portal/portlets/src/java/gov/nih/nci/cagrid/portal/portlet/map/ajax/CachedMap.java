@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectoryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,8 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Bean that caches the map of
@@ -95,7 +94,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             	}
                 int li = catIds.lastIndexOf(',');
                 catIds = removeCharAt(catIds,li);
-                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+className+"')\"> " + "# of "+className+"s throughout caBIG¨ : " + "</a>");
+                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+className+"')\"> " + "# of "+className+"s throughout caBIG¨: " + "</a>");
                 sb.append(spanE);
                 sb.append(spanS);
                 sb.append(count);

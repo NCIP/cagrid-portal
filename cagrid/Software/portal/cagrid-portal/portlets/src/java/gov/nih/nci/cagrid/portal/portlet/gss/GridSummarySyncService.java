@@ -11,11 +11,10 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.SharedQueryCatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.map.ajax.CachedMap;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.List;
 
 /**
  * Timer task to iterated thru configured queries and populate GridServiceUmlClass
@@ -77,7 +76,7 @@ public class GridSummarySyncService {
 		 	                   gridServiceUmlClass.setObjectCount(count.intValue());
 		 	                   gridServiceUmlClassDao.save(gridServiceUmlClass);
 		    			   } catch (Exception e) {
-		    				   e.printStackTrace();
+		    				   logger.warn("Could not query service at " + e.getMessage());
 		    			   }
 		    			   
 		    		   }

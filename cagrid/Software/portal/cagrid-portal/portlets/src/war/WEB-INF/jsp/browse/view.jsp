@@ -153,8 +153,8 @@
   							class_count=item.split(":");
                    		    if (classNameForCounts == class_count[0]) {
                    		    	countDiv = document.createElement('div');
-                   		    	countDiv.className = "oneResultDescription";
-                   		    	countDiv.appendChild(document.createTextNode("Number of "+classNameForCounts+"s : " + class_count[1]));
+                   		    	countDiv.className = "oneResultDescription gssStatisticsDescription";
+                   		    	countDiv.appendChild(document.createTextNode("Number of "+classNameForCounts+"s: " + class_count[1]));
                    		    	resultDiv.appendChild(countDiv);
                    		    }
 						});
