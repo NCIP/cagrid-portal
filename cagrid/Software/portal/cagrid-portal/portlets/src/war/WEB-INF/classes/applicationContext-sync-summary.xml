@@ -1,0 +1,106 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	<bean id="gridSummarySync" class="gov.nih.nci.cagrid.portal.portlet.gss.GridSummarySyncService">
+		<property name="gridServiceUmlClassDao" ref="gridServiceUmlClassDao"/>
+		<property name="sharedQueryCatalogEntryManagerFacade" ref="sharedQueryCatalogEntryManagerFacade"/>
+		<property name="umlClassDao" ref="umlClassDao"/>
+		<property name="cachedMap" ref="cachedMap"/>
+		<property name="queries">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caArray"/>
+					<property name="query">
+						<value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.project.Experiment"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>                       
+                        ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caArray"/>
+					<property name="query">
+						<value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.sample.Sample"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>                       
+                        ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caArray"/>
+					<property name="query">
+						<value><![CDATA[
+                        <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                            <ns1:Target name="gov.nih.nci.caarray.domain.array.Array"/>
+                            <ns1:QueryModifier countOnly="true"/>
+                        </ns1:CQLQuery>
+                        ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caBIO"/>
+					<property name="query">
+						<value><![CDATA[
+                       <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                           <ns1:Target name="gov.nih.nci.cabio.domain.Gene"/>
+                           <ns1:QueryModifier countOnly="true"/>
+                       </ns1:CQLQuery>
+                       ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caBIO"/>
+					<property name="query">
+						<value><![CDATA[
+                       <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                           <ns1:Target name="gov.nih.nci.cabio.domain.Pathway"/>
+                           <ns1:QueryModifier countOnly="true"/>
+                       </ns1:CQLQuery>
+                       ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caNano"/>
+					<property name="query">
+						<value><![CDATA[
+                       <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                           <ns1:Target name="gov.nih.nci.cananolab.domain.particle.Sample"/>
+                           <ns1:QueryModifier countOnly="true"/>
+                       </ns1:CQLQuery>
+                       ]]></value>
+					</property>
+				</bean>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
+					<property name="caption" value="caNano"/>
+					<property name="query">
+						<value><![CDATA[
+                       <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+                           <ns1:Target name="gov.nih.nci.cananolab.domain.particle.Characterization"/>
+                           <ns1:QueryModifier countOnly="true"/>
+                       </ns1:CQLQuery>
+                       ]]></value>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<bean class="org.springframework.scheduling.timer.ScheduledTimerTask">
+					<property name="delay" ref="defaultDelay"/>
+					<property name="period" ref="slowDefaultPeriod"/>
+					<property name="timerTask">
+						<bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+							<property name="targetObject" ref="gridSummarySync"/>
+							<property name="targetMethod" value="sync"/>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>
