@@ -39,7 +39,6 @@
             /WEB-INF/context/common.xml
             /WEB-INF/context/facades.xml
             /WEB-INF/context/dwr-applicationContext.xml
-            /WEB-INF/context/applicationContext-sync-summary.xml
         </param-value>
     </context-param>
 
