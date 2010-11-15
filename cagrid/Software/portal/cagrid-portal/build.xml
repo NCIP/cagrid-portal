@@ -252,7 +252,7 @@
 
     <target name="report-svcs-with-status" depends="prepare"
             description="Will generate a list of services with the given status.">
-        <ant inheritall="false" target="report-svcs-with-status"
+        <ant inheritall="false" target="report:svcs-with-status"
              dir="${projects.dir}/aggr">
         </ant>
     </target>
