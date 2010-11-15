@@ -49,18 +49,25 @@
 .resultsCount {
     font-weight: bold;
 }
-#cagp-tooltip{
-	position:absolute;
-	border:1px solid #333;
-	background:#f7f5d1;
-	padding:2px 5px;
-	color:#333;
-	display:none;
-	}
- span.resultStatus {
-        padding-left: 50px;
-    }
 
-    div.results {
-        width: 100%;
-    }
+#cagp-tooltip {
+    position: absolute;
+    border: 1px solid #333;
+    background: #f7f5d1;
+    padding: 2px 5px;
+    color: #333;
+    display: none;
+}
+
+span.resultStatus {
+    padding-left: 50px;
+}
+
+div.results {
+    width: 100%;
+}
+
+.gssStatisticsDescription{
+    font-weight:bold;
+    color:#404040;
+}
