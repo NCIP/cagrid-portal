@@ -90,14 +90,9 @@
 
                 <filter token="IMPROMPTU_MIN_MILLIS" value="${cagrid.portal.impromptu.min.milliseconds.between.submissions}"/>
             	<filter token="IMPROMPTU_MAX_CACHED" value="${cagrid.portal.imprompty.max.cached.queries.count}"/>
-
-            	<filter token="GSS_MIN_MILLIS" value="${cagrid.portal.gss.min.milliseconds.between.runs}"/>
-            	<filter token="GSS_PERIOD_SECONDS" value="${cagrid.portal.gss.seconds.between.auto.runs}"/>
-                <filter token="GSS_MAX_HISTORY" value="${cagrid.portal.gss.max.history.count}"/>
-
             </filterset>
         </copy>
-    	
+
         <copy todir="${build.war.webinf.dir}/lib" overwrite="true" flatten="true">
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar"/>
@@ -130,7 +125,7 @@
 
 
         <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}"
-               debug="${portlets.debug}"
+               debug="true"
                fork="true"
                memoryinitialsize="256m"
                memorymaximumsize="512m">
