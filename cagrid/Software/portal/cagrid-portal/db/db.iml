@@ -72,11 +72,11 @@
     <orderEntry type="module-library" exported="">
       <library name="globus">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../../globus/lib" />
+          <root url="file://$MODULE_DIR$/../../../globus/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../../../../globus/lib" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../../../globus/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="test" level="project" />

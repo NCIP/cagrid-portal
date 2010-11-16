@@ -119,6 +119,34 @@ public class GridServiceEndPointCatalogEntryDaoTest extends
         assertEquals(1, getDao().getByPartialUrl("complete").size());
         assertEquals(0, getDao().getByPartialUrl("someother.url").size());
 
+
+    }
+
+    /**
+     * Test to see tha that hidden catalogs
+     * are not returned
+     * 
+     */
+    @Test
+    public void getByPartialUrlHiddenCatalogs() {
+        p.setUrl("http://complete.url");
+        pDao.save(p);
+
+        GridServiceEndPointCatalogEntry catalog = new GridServiceEndPointCatalogEntry();
+        catalog.setAbout(p);
+        p.setCatalog(catalog);
+        catalog.setHidden(true);
+        getDao().save(catalog);
+
+        assertEquals(0, getDao().getByPartialUrl("http://").size());
+        assertEquals(0, getDao().getByPartialUrl("url").size());
+
+//        un-hide the catalog
+        catalog.setHidden(false);
+        getDao().save(catalog);
+        interruptSession();
+        assertEquals(1, getDao().getByPartialUrl("http://").size());
+        assertEquals(1, getDao().getByPartialUrl("url").size());
     }
 
     @Test

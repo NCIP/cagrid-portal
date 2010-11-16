@@ -1,22 +1,19 @@
 package gov.nih.nci.cagrid.portal.dao.catalog;
 
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.ConceptHierarchyNode;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
-import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import javax.persistence.NonUniqueResultException;
-import java.util.List;
 import java.sql.SQLException;
-
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.hibernate.Session;
-import org.hibernate.HibernateException;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
+import java.util.List;
 
 /**
  * User: kherm
@@ -41,6 +38,7 @@ public class GridServiceEndPointCatalogEntryDao extends
 
 	/**
 	 * Returns CE's for services matching the URL. For autocompleter
+     * Will not return hidden catalogs
 	 * 
 	 * @param url
 	 * @return
@@ -54,6 +52,7 @@ public class GridServiceEndPointCatalogEntryDao extends
 
 						return session.createCriteria(
 								GridServiceEndPointCatalogEntry.class)
+                                .add(Restrictions.eq("hidden",false))
 								.createCriteria("about").add(
 										Restrictions.like("url", url,
 												MatchMode.ANYWHERE))
@@ -76,6 +75,7 @@ public class GridServiceEndPointCatalogEntryDao extends
 								GridServiceEndPointCatalogEntry.class)
 								.setResultTransformer(
 										Criteria.DISTINCT_ROOT_ENTITY)
+                                .add(Restrictions.eq("hidden",false))
 								.createCriteria("about").add(
 										Restrictions.like("url", url,
 												MatchMode.ANYWHERE)).add(
