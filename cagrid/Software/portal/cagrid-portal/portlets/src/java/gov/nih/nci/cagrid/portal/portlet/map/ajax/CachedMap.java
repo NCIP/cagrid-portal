@@ -94,7 +94,7 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
             	}
                 int li = catIds.lastIndexOf(',');
                 catIds = removeCharAt(catIds,li);
-                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+className+"')\"> " + "# of "+className+"s throughout caBIG¨: " + "</a>");
+                sb.append("<a href=\"javascript:selectItemsForCounts('"+catIds+"','SERVICE','"+className+"')\"> " + "# of "+className+"s throughout caBIG: " + "</a>");
                 sb.append(spanE);
                 sb.append(spanS);
                 sb.append(count);
