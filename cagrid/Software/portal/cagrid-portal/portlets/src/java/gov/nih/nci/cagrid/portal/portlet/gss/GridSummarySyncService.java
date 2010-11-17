@@ -45,11 +45,14 @@ public class GridSummarySyncService {
 		       for (SummaryQueryWithLocations currentQueryWithLocations : queries) {
 		    	   String cql = currentQueryWithLocations.getQuery();
    		    	   List<GridServiceEndPointCatalogEntry> endPoints = sharedQueryCatalogEntryManagerFacade.getAvailableEndpoints(cql);
-		    	  
+   		    	   logger.debug(" Class Name :" + PortletUtils.getTargetUMLClassName(cql));
+		    	   logger.debug(" # of available end points :" + endPoints.size());
+		    	   
 		    	  for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
 		    		  
 		    		   if (endPoint.isData() && !endPoint.isHidden()) {
-		    			  
+		    			   logger.debug("Processing end point ID :" + endPoint.getId() + " , Grid Service ID : " + endPoint.getAbout().getId()+ " , URL : " + endPoint.getAbout().getUrl());
+
 		    			   try {
 		    				  String umlClassName = PortletUtils.getTargetUMLClassName(cql);
 		    				  GridService service = endPoint.getAbout();
