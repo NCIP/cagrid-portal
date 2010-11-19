@@ -1,7 +1,7 @@
 
                          caGrid Portal
-                          Version 3.2
-                       September 27, 2010
+                          Version 3.3
+                       November 19, 2010
 
 
 ================================================================
@@ -22,10 +22,10 @@
 ================================================================
 
     This document contains the release notes for the caGrid
-    Portal 3.2 release.
+    Portal 3.3 release.
 
     This release is a point release and introduces some new features
-    and bug fixes to the 3.1 release.
+    and bug fixes, which are outlined below
 
 ================================================================
                       2.0 Release History
@@ -38,7 +38,7 @@
     caGrid Portal 2.2 was released on 24th February 2009
     caGrid Portal 3.0 was release on 19th March 2010
     caGrid Portal 3.1 was released on 7th August 2010
-
+    caGrid Portal 3.2 was released on 27th September 2010
 
 
 ================================================================
@@ -46,10 +46,8 @@
 ================================================================
 The following major new features were implemented in this release
 
-28568	Improve 508 Compliance
-29792   Format results in the ad-hoc query interface.
-29374   Login page should warn this is a US Government System
-
+30168 Create ability to drill down from summary to detailed counts
+30169 Add more data sets to GSS
 
 ================================================================
                       4.0 Bug fixes Since Last Release
@@ -57,9 +55,7 @@ The following major new features were implemented in this release
 
 The following bugs were fixed in this release
 
-28682 Could not validate query XML against XML Schema. Query XML is invalid
-29796 Edit Grid Data Service catalog throws an exception
-29937 Portal startup errors in production
+30167 Shared query select datasources shows Dormant services
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
