@@ -51,6 +51,9 @@ public class GridSummarySyncService {
 		    	  for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
 		    		  
 		    		   if (endPoint.isData() && !endPoint.isHidden()) {
+		    			   if (endPoint.getAbout().getUrl().equals("http://cabiogrid40.nci.nih.gov:80/wsrf/services/cagrid/CaBIO40GridSvc")) {
+		    				   continue;
+		    			   }
 		    			   logger.debug("Processing end point ID :" + endPoint.getId() + " , Grid Service ID : " + endPoint.getAbout().getId()+ " , URL : " + endPoint.getAbout().getUrl());
 
 		    			   try {
