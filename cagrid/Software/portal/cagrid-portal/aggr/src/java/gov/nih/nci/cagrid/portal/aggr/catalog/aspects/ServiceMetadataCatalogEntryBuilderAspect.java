@@ -4,8 +4,10 @@
 package gov.nih.nci.cagrid.portal.aggr.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder;
+import gov.nih.nci.cagrid.portal.dao.GridServiceUmlClassDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
@@ -25,6 +27,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
     private ServiceFilter baseServiceFilter;
     private ServiceMetadataCatalogEntryBuilder serviceMetadataCatalogEntryBuilder;
     private GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
+    private GridServiceUmlClassDao gridServiceUmlClassDao;
 
 
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.GridServiceDao.*(gov.nih.nci.cagrid.portal.domain.GridService)) && !within(gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder)  && args(service)")
@@ -36,6 +39,20 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                 GridServiceEndPointCatalogEntry entry = service.getCatalog();
                 if (entry != null) {
                     gridServiceEndPointCatalogEntryDao.hide(entry);
+
+                    //clean up the statistics
+                    try {
+                        for (GridServiceUmlClass guc : service.getGridServiceUmlClasses()) {
+                            GridServiceUmlClass umlClass = gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), guc.getId());
+                            if (umlClass != null) {
+                                logger.info("Will delete gridServiceUml with id " + umlClass.getId());
+                                gridServiceUmlClassDao.delete(umlClass);
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.error("Error deleting GridServiceUmlClass class", e);
+                    }
+
                 }
             } else {
                 logger.debug("Grid Service being saved. Will try and create Grid Service CE");
@@ -46,6 +63,14 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                     .error("Error creating catalog entry: " + ex.getMessage(),
                             ex);
         }
+    }
+
+    public GridServiceUmlClassDao getGridServiceUmlClassDao() {
+        return gridServiceUmlClassDao;
+    }
+
+    public void setGridServiceUmlClassDao(GridServiceUmlClassDao gridServiceUmlClassDao) {
+        this.gridServiceUmlClassDao = gridServiceUmlClassDao;
     }
 
     public ServiceFilter getBaseServiceFilter() {
