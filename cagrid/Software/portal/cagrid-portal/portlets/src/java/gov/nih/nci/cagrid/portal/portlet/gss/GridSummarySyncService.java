@@ -47,95 +47,77 @@ public class GridSummarySyncService {
         System.out.println(o);
     }
 
+
+    @Transactional
 	public void sync() {
 	   logger.info("************************\nSummary queries background tasks started " + new java.util.Date());
        for (SummaryQueryWithLocations currentQueryWithLocations : queries) {
     	   String cql = currentQueryWithLocations.getQuery();
-    	   List<GridServiceEndPointCatalogEntry> endPoints = sharedQueryCatalogEntryManagerFacade.getAvailableEndpoints(cql);
+
     	   String umlClassName = PortletUtils.getTargetUMLClassName(cql);
     	   logger.debug(" Class Name :" + PortletUtils.getTargetUMLClassName(cql));
-    	   logger.debug(" # of available end points :" + endPoints.size());
 
-           System.out.println(" custom url for " +currentQueryWithLocations.getCaption()+ ".... : " + currentQueryWithLocations.getUrl() );
-
-
-    	   if (!StringUtils.isEmpty(currentQueryWithLocations.getUrl())) {
-    		   // query provided url
-    		   queryCustomUrl(currentQueryWithLocations.getUrl() , currentQueryWithLocations, umlClassName);
-    	   } else {
-    		   // auto discovery ..
-    		   autoDiscovery (endPoints , currentQueryWithLocations , umlClassName );
-    	   }
-    	   cachedMap.refreshCache();
-    	   logger.info("************************\nSummary queries background tasks end " + new java.util.Date());
-       }
-	}
-	private void queryCustomUrl(String url , SummaryQueryWithLocations currentQueryWithLocations , String umlClassName){
-	    System.out.println("Querying custom url .... : " + url );
-        try {
-		  GridService service = gridServiceDao.getByUrl(url);
-		  if (service == null) {
-			  logger.error(" Service Entry for provided url not found :" + url);
-			  return;
-		  }
-		  GridServiceEndPointCatalogEntry endPoint = service.getCatalog();
-		  if (endPoint == null) {
-			  logger.error(" Service is not associated with catalog :" + service.getId() +">"+url);
-			  return;
-		  }
-
-		  if (endPoint.isData() && !endPoint.isHidden()) {
-			  UMLClass umlClass = getUMLClass(umlClassName,service.getId());
-		      if (umlClass == null ) {
-		       	 return;
-		       }
-	           int count = executeQuery (currentQueryWithLocations.getCqlQuery() , service.getUrl());
-	           if (count == 0) {
-	        	   return;
-	           }
-	          saveResults(service , umlClass , currentQueryWithLocations.getCaption(), count);
-		  }
-	   } catch (Exception e) {
-		   logger.warn("Could not query service at " + e.getMessage());
-	   }
-	}
-    private void autoDiscovery(List<GridServiceEndPointCatalogEntry> endPoints , SummaryQueryWithLocations currentQueryWithLocations , String umlClassName  ) {
-  	  for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
-		   if (endPoint.isData() && !endPoint.isHidden()) {
-			   logger.debug("Processing end point ID :" + endPoint.getId() + " , Grid Service ID : " + endPoint.getAbout().getId()+ " , URL : " + endPoint.getAbout().getUrl());
-
-			   try {
-				  GridService service = endPoint.getAbout();
-    			  UMLClass umlClass = getUMLClass(umlClassName,service.getId());
-    		      if (umlClass == null ) {
-    		       	 return;
-    		       }
-                   int count = executeQuery (currentQueryWithLocations.getCqlQuery() , service.getUrl());
-                   if (count == 0) {
-                	   continue;
+           int count = 0 ;
+           try {
+               if (!StringUtils.isEmpty(currentQueryWithLocations.getUrl())) {
+                   // query provided url
+                   logger.debug(" using provided URL " +currentQueryWithLocations.getUrl());
+                   GridService service = gridServiceDao.getByUrl(currentQueryWithLocations.getUrl());
+                   if (service != null) {
+                       count = executeQuery (service.getCatalog() , currentQueryWithLocations.getCqlQuery() );
+                       UMLClass umlClass = getUMLClass(umlClassName,service.getId());
+                       if (count != 0 && umlClass != null) {
+                        saveResults(service , umlClass , currentQueryWithLocations.getCaption(), count);
+                       }
                    }
-                  saveResults(service , umlClass , currentQueryWithLocations.getCaption(), count);
+
+               } else {
+                   // auto discovery ..
+                   logger.debug(" auto discovery ");
+                   List<GridServiceEndPointCatalogEntry> endPoints = sharedQueryCatalogEntryManagerFacade.getAvailableEndpoints(cql);
+                   logger.debug(" # of available end points :" + endPoints.size());
+                   for (GridServiceEndPointCatalogEntry endPoint : endPoints) {
+                     count = executeQuery (endPoint , currentQueryWithLocations.getCqlQuery() );
+                     UMLClass umlClass = getUMLClass(umlClassName,endPoint.getAbout().getId());
+                     if (count != 0 && umlClass != null) {
+                       saveResults(endPoint.getAbout() , umlClass , currentQueryWithLocations.getCaption(), count);
+                     }
+                   }
+               }
+           } catch (Exception e) {
+              e.printStackTrace();
+           }
+       }
+
+       cachedMap.refreshCache();
+   	   logger.info("************************\nSummary queries background tasks end " + new java.util.Date());
+	}
+
+    
+    private int executeQuery(GridServiceEndPointCatalogEntry endPoint , CQLQuery cql  ) {
+		int count = 0;
+        if (endPoint.isData() && !endPoint.isHidden()) {
+			   logger.debug ("Processing end point ID :" + endPoint.getId() + " , Grid Service ID : " + endPoint.getAbout().getId()+ " , URL : " + endPoint.getAbout().getUrl());
+			   try {
+                     DataServiceClient client = new DataServiceClient(endPoint.getAbout().getUrl());
+                     CQLQueryResults result = client.query(cql);
+                     Long countL = result.getCountResult().getCount();
+                     return countL.intValue();
 			   } catch (Exception e) {
 				   logger.warn("Could not query service at " + e.getMessage());
 			   }
 
-		   }
-	   }
+		}
+        return count;
    }
 
-	private int executeQuery (CQLQuery cql , String serviceUrl) throws Exception {
-		 DataServiceClient client = new DataServiceClient(serviceUrl);
-         CQLQueryResults result = client.query(cql);
-         Long count = result.getCountResult().getCount();
-         return count.intValue();
-	}
 
 	private UMLClass getUMLClass(String umlClassName,int serviceId) {
 		return umlClassDao.getClassInGivenService(umlClassName,serviceId);
 	}
 
-    @Transactional
-	private void saveResults(GridService service , UMLClass umlClass, String caption, int count) {
+  
+	private void saveResults(GridService service , UMLClass umlClass, String caption, int count) throws Exception {
          GridServiceUmlClass gridServiceUmlClass =gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), umlClass.getId());
           if (gridServiceUmlClass == null) {
               gridServiceUmlClass = new GridServiceUmlClass();
