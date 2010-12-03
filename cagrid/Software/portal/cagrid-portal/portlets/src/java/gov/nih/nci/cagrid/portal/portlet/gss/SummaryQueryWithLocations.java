@@ -11,6 +11,7 @@ import java.io.StringReader;
 public class SummaryQueryWithLocations {
     private String caption;
     private String query;
+    private String url;
 
     public String getCaption() {
         return caption;
@@ -34,6 +35,14 @@ public class SummaryQueryWithLocations {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+    
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 
