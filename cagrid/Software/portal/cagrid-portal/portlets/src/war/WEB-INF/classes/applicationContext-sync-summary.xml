@@ -4,6 +4,7 @@
 		<property name="gridServiceUmlClassDao" ref="gridServiceUmlClassDao"/>
 		<property name="sharedQueryCatalogEntryManagerFacade" ref="sharedQueryCatalogEntryManagerFacade"/>
 		<property name="umlClassDao" ref="umlClassDao"/>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
 		<property name="cachedMap" ref="cachedMap"/>
 		<property name="queries">
 			<list>
@@ -50,6 +51,7 @@
                        </ns1:CQLQuery>
                        ]]></value>
 					</property>
+                    <property name="url" value="${cabio.service.url}"/>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
 					<property name="caption" value="caBIO"/>
@@ -61,6 +63,7 @@
                        </ns1:CQLQuery>
                        ]]></value>
 					</property>
+                    <property name="url" value="${cabio.service.url}"/>
 				</bean>
 				<bean class="gov.nih.nci.cagrid.portal.portlet.gss.SummaryQueryWithLocations">
 					<property name="caption" value="caNano"/>
