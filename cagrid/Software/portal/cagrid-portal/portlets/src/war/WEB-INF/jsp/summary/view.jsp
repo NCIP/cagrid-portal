@@ -110,9 +110,9 @@
      
     <div>
     	<div class="gss_section">caBIG Site Statistics:</div>
-    	<div class="gss_line"><span>Data Services:  </span><span id="data-services-summary">data services count</span></div>
-    	<div class="gss_line"><span>Analytical Services:</span><span id="analytical-services-summary">analytical services count</span></div>
-    	<div class="gss_line"><span>Participant Institutes:</span><span id="participant-institute-summary">participant institutes count</span></div>
+    	<div class="gss_line"><span>Data Services:  </span><span id="data-services-summary">&nbsp;</span></div>
+    	<div class="gss_line"><span>Analytical Services:</span><span id="analytical-services-summary">&nbsp;</span></div>
+    	<div class="gss_line"><span>Participant Institutes:</span><span id="participant-institute-summary">&nbsp;</span></div>
     	
     	
 
