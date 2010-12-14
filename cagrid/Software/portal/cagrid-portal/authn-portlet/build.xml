@@ -9,6 +9,7 @@
     <property name="src.dir" value="${basedir}/src"/>
     <property name="src.java.dir" value="${src.dir}/java"/>
     <property name="src.war.dir" value="${src.dir}/war"/>
+    <property name="src.war.webinf.dir" value="${src.war.dir}/WEB-INF"/>
 
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
@@ -118,6 +119,7 @@
 
         <mkdir dir="${build.wars.dir}"/>
         <war file="${build.war.file}"
+             webxml="${src.war.webinf.dir}"
              basedir="${build.war.dir}"/>
     </target>
 
