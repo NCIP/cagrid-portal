@@ -45,7 +45,7 @@
         <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full;test->test"/>
 
         <!--test dependencies-->
-        <dependency rev="4.4" org="junit" name="junit" conf="test->*"/>
+        <dependency rev="4.8.2" org="junit" name="junit" conf="test->*"/>
         <dependency rev="2.3" org="sun" name="servlet" conf="test->*"/>
         <dependency rev="1.8" org="cobertura" name="cobertura" conf="test->*"/>
         <dependency rev="1.6" org="org.mockito" name="mockito-all" conf="test->*"/>
