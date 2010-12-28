@@ -9,13 +9,15 @@ import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
 import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import gov.nih.nci.cagrid.portal.util.PortalAggrIntegrationTestBase;
-import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.ByteArrayInputStream;
 import java.util.zip.GZIPOutputStream;
-import java.util.zip.GZIPInputStream;
+
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: kherm
@@ -28,7 +30,7 @@ public class ExportQueryResultTableToXMLControllerTest extends PortalAggrIntegra
     @Override
     protected void onSetUp() throws Exception {
         super.onSetUp();    //To change body of overridden methods use File | Settings | File Templates.
-        cqlResultsValidator = XMLSchemaValidatorFactory.initialize("1_gov.nih.nci.cagrid.CQLResultSet-1.3.xsd");
+        cqlResultsValidator = XMLSchemaValidatorFactory.initialize("1_gov.nih.nci.cagrid.CQLResultSet-1.4.xsd");
 
     }
 
