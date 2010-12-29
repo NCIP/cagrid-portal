@@ -58,7 +58,7 @@
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="advertisement" conf="default"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service"
                     conf="default->client"/>
-        <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="cql" conf="default->cql"/>
+        <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="cql" conf="default->utils"/>
         <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="data"
                     conf="default->utils"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="discovery" conf="default"/>
