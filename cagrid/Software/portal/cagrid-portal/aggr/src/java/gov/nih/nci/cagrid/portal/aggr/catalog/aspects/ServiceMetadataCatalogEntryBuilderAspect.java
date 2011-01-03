@@ -46,6 +46,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                             GridServiceUmlClass umlClass = gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), guc.getId());
                             if (umlClass != null) {
                                 logger.info("Will delete gridServiceUml with id " + umlClass.getId());
+                                service.getGridServiceUmlClasses().remove(umlClass);
                                 gridServiceUmlClassDao.delete(umlClass);
                             }
                         }
