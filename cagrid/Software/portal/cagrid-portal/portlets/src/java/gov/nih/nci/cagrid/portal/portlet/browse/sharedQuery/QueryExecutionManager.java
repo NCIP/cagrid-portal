@@ -73,7 +73,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
                     GridService service = getGridServiceDao().getByUrl(url);
                     
                     boolean isServiceSecured = service.getServiceInfo().isSecure();
-                    System.out.println("is secured : " + isServiceSecured);
+                    logger.info(url + " is secured : "+ isServiceSecured);
                     if (isServiceSecured) {
                     	GlobusCredential cred = getCredentials();
                     	if (cred == null) {
