@@ -39,7 +39,7 @@ function ${ns}renderAddTermsFormInputs(terminologyUri){
 	});
 }
 
-function ${ns}checkEnableAddTermsButton(){
+function ${ns}checkEnableAddTermsButton(){	
 	//alert("Checked: " + jQuery("form[name='${ns}addTermsForm'] :input[name='terms']:checked").length);
 	if(jQuery("form[name='${ns}addTermsForm'] :input[name='terms']:checked").length == 0){
 		${ns}addTermsButton.set("disabled", true);
@@ -49,7 +49,7 @@ function ${ns}checkEnableAddTermsButton(){
 }
 
 function ${ns}initAddTermsForm(){
-	jQuery("form[name='${ns}addTermsForm'] :input[name='terms']").bind("change", function(evt){
+	jQuery("form[name='${ns}addTermsForm'] :input[name='terms']").bind("click", function(evt){
 		${ns}checkEnableAddTermsButton();
 	});
 }
