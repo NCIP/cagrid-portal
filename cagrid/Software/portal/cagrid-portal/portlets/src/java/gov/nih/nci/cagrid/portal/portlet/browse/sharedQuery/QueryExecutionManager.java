@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery;
 
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.dao.QueryResultTableDao;
@@ -15,8 +16,11 @@ import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
 import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
+
+import org.globus.gsi.GlobusCredential;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +43,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     private String errorView;
     private QueryInstanceDao queryInstanceDao;
     private QueryResultTableDao queryResultTableDao;
+    private EncryptionService encryptionService;
 
     private List<ServiceErrorInterpretor> serviceErrorInterpretors = new ArrayList<ServiceErrorInterpretor>();
 
@@ -51,7 +56,6 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
 
     public String startQueries(String[] urls) {
-
         String message = null;
         try {
             if (urls == null) {
@@ -67,6 +71,18 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
                         .getCurrentCatalogEntry()).getAbout();
                 for (String url : urls) {
                     GridService service = getGridServiceDao().getByUrl(url);
+                    
+                    boolean isServiceSecured = service.getServiceInfo().isSecure();
+                    System.out.println("is secured : " + isServiceSecured);
+                    if (isServiceSecured) {
+                    	GlobusCredential cred = getCredentials();
+                    	if (cred == null) {
+                    		String msg = "You are trying to execute query on secured service , please login to execute  queries on secured services" ;
+                    		logger.error(msg);
+                    		throw new RuntimeException(msg);
+                    	}
+                    }
+
                     if (service == null) {
                         String msg = "No service with the selected URL was found: "
                                 + url;
@@ -245,6 +261,24 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
         }
         return null;
     }
+    private GlobusCredential getCredentials() {
+    	GlobusCredential cred = null;
+    	
+	    if (getUserModel().getPortalUser() != null) {
+	        String proxyStr = getUserModel().getPortalUser().getGridCredential();
+	        proxyStr = getEncryptionService().decrypt(proxyStr);	
+	        if (proxyStr != null) {
+	            try {
+	                cred = new GlobusCredential(new ByteArrayInputStream(
+	                        proxyStr.getBytes()));
+	            } catch (Exception ex) {
+	                logger.warn("Error instantiating GlobusCredential: "
+	                        + ex.getMessage(), ex);
+	            }
+	        }
+	    }
+	    return cred;
+    }
 
     public void deleteQueryInstance(Integer instanceId) {
 
@@ -323,5 +357,12 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
     public void setServiceErrorInterpretors(List<ServiceErrorInterpretor> serviceErrorInterpretors) {
         this.serviceErrorInterpretors = serviceErrorInterpretors;
+    }
+    public EncryptionService getEncryptionService() {
+        return encryptionService;
+    }
+
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
     }
 }
