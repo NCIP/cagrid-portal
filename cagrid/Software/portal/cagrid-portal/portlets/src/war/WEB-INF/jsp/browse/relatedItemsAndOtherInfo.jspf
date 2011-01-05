@@ -376,7 +376,7 @@ function ${ns}newButton(label, baseName){
 
 jQuery(document).ready(function() {
     var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
-    commentsTab = myTabs.getTab(1);
+    var commentsTab = myTabs.getTab(1);
     commentsTab.addListener('click', ${ns}loadComments);
 
 
