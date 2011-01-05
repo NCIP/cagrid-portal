@@ -240,6 +240,7 @@
           p:errorView="/WEB-INF/jsp/browse/sharedQuery/query_error_display.jsp"
           autowire="byName">
         <property name="maxActiveQueries" ref="maxActiveQueries"/>
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
     </bean>
 
     <bean id="terminologyService" class="gov.nih.nci.cagrid.portal.portlet.terms.TerminologyService" autowire="byName">
