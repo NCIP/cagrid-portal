@@ -195,6 +195,12 @@
         $("${prefix}mapNodeForm").action = viewCatalogsLink;
         $('${prefix}mapNodeForm').submit();
     }
+    
+    function selectTextMap(){
+    	var textMapUrl = "${viewCatalogs}";
+    	textMapUrl = textMapUrl.replace("/guest/home", "/guest/catalog/textmap");
+	window.location = textMapUrl;
+    }
 
 </script>
 
@@ -206,4 +212,6 @@
 	<a href="${refreshStatsUrl}">Refresh Stats</a>
 <% } %>
 
+
+<a href="#" onClick="selectTextMap()" >Text Version of the map</a>
 
