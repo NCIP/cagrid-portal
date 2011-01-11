@@ -26,7 +26,7 @@
             <div class="bd">
                 <form name="${ns}addCatalogEntryForm" method="POST" action="<c:out value="${addCatalogEntryUrl}"/>">
                     <label for="entryType" value="Type"/>
-                    <select name="entryType" size="5">
+                    <select id="entryType" name="entryType" size="5">
                         <option value="COMMUNITY"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry"/></option>
                         <option value="DATASET"><spring:message
@@ -49,7 +49,7 @@
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry"/></option>
                         <option value="WORKSPACE"><spring:message
                                 code="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry"/></option>
-                    </select>
+                    </select>                    
                 </form>
             </div>
         </div>

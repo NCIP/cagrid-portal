@@ -62,6 +62,7 @@
                 var thumbImg = document.createElement('img');
                 thumbImg.setAttribute('src', '/cagridportlets/images/catalog_icons/'+institution.catalog_type+'.png');
                 thumbImg.setAttribute('align','middle');
+                thumbImg.setAttribute('alt',institution.catalog_type);
                 thumbImgDiv.appendChild(thumbImg);
                 resultDiv.appendChild(thumbImgDiv);
                 

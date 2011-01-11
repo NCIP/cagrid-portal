@@ -122,7 +122,7 @@
                     iconLnk.className = "oneResultIcon";
                     var icon = document.createElement('img');
                     icon.setAttribute('src', '<c:url value="/images/catalog_icons/"/>' + result.catalog_type + '.png');
-                    icon.setAttribute('alt', '');
+                    icon.setAttribute('alt', result.catalog_type);
                     iconLnk.appendChild(icon);
                     resultDiv.appendChild(iconLnk);
 
