@@ -23,6 +23,7 @@ public class BrowseCommand {
 		browseTypes.add(BrowseTypeEnum.TOOL.toString());
 		browseTypes.add(BrowseTypeEnum.INSTITUTION.toString());
 		browseTypes.add(BrowseTypeEnum.COMMUNITY.toString());
+		browseTypes.add(BrowseTypeEnum.TEXTMAP.toString());
 	}
 
 	public List<String> getBrowseTypes() {

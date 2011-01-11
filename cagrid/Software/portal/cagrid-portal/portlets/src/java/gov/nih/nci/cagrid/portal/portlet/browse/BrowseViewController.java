@@ -78,7 +78,10 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
             entryTypeName = "ToolCatalogEntry";
             mav.addObject(BrowseParams.CATALOG_TYPE, "tool_* tools");
         } else if (browseType.equals(BrowseTypeEnum.ALL)) {
-            entryTypeName = "CatalogEntry";
+        	entryTypeName = "CatalogEntry";
+        } else if (browseType.equals(BrowseTypeEnum.TEXTMAP)) {
+        	entryTypeName = "CatalogEntry";  
+            mav.addObject(BrowseParams.CATALOG_TYPE, "tool_grid_data_service_endpoint institution tool_grid_service_endpoint");
         } else {
             throw new RuntimeException("Unknown browse type: " + browseType);
         }
