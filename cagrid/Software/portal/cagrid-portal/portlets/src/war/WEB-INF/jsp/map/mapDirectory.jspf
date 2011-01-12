@@ -1,28 +1,35 @@
 <div style="display:none;">
-	<form:form commandName="mapBean">
-	    Categories:
-	    <form:select id="${prefix}directory" onchange="loadMap();" path="selectedDirectory">
-	        <form:option value="all"></form:option>
-	        <%@ include file="/WEB-INF/jsp/map/directories.jspf" %>
-	    </form:select>
-	</form:form>
+    <form:form commandName="mapBean">
+        Categories:
+        <form:select id="${prefix}directory" onchange="loadMap();" path="selectedDirectory">
+            <form:option value="all"></form:option>
+            <%@ include file="/WEB-INF/jsp/map/directories.jspf" %>
+        </form:select>
+    </form:form>
 </div>
 <div id="mapLegend">
     <span class="mapLink" mapType="dataServices">
-	<img alt="Data Service" src="<c:url value="/images/data-services.png"/>"/>Data Service<span class="summary" id="${ns}dCount"></span>
+	<img alt="Data Service" src="<c:url value="/images/data-services.png"/>"/>Data Service<span class="summary"
+                                                                                                id="${ns}dCount"></span>
         </span>
 
     <span class="mapLink" mapType="analyticalServices">
-	<img alt="Analytical Service" src="<c:url value="/images/analytical_services.png"/>"/>Analytical Service<span class="summary"
-                                                                                         id="${ns}aCount"></span>
+	<img alt="Analytical Service" src="<c:url value="/images/analytical_services.png"/>"/>Analytical Service<span
+            class="summary"
+            id="${ns}aCount"></span>
         </span>
 
     <span class="mapLink" mapType="participants">
-	<img alt="Participant" src="<c:url value="/images/participant_institute.png"/>"/>Participant Institute<span class="summary"
-                                                                                              id="${ns}pCount"></span>
+	<img alt="Participant" src="<c:url value="/images/participant_institute.png"/>"/>Participant Institute<span
+            class="summary"
+            id="${ns}pCount"></span>
         </span>
 
     <img alt="Research Center" src="<c:url value="/images/hosting-research-center.png"/>"/>Hosting Research Center
+
+    <div id="textMap">
+        <a href="#" onClick="selectTextMap()">Text Version of the map</a>
+    </div>
 
 </div>
 
@@ -46,16 +53,15 @@
             $(subMaps[i]).addClassName("subMapIcon");
             $(subMaps[i]).observe('click', function(event) {
                 var subMap = Event.element(event);
-                if ($(subMap).readAttribute("mapType")){
+                if ($(subMap).readAttribute("mapType")) {
                     $("${ns}directory").value = $(subMap).readAttribute("mapType");
-                loadMap();
+                    loadMap();
                 }
-                <%--reset it after loading the map--%>
-                 $("${ns}directory").value="all";
+            <%--reset it after loading the map--%>
+                $("${ns}directory").value = "all";
 
             });
         }
-
 
 
     });
