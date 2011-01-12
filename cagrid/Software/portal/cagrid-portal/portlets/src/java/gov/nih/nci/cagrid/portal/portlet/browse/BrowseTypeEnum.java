@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.browse;
 
@@ -8,5 +8,5 @@ package gov.nih.nci.cagrid.portal.portlet.browse;
  *
  */
 public enum BrowseTypeEnum {
-	ALL, PERSON, DATASET, INSTITUTION, TOOL, COMMUNITY, TOOLDEPLOYMENT
+	ALL, PERSON, DATASET, INSTITUTION, TOOL, COMMUNITY, TOOLDEPLOYMENT, TEXTMAP;
 }
