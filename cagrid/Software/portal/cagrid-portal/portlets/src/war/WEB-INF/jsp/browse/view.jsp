@@ -197,7 +197,7 @@
 
     jQuery(document).ready(function() {
         var _searchKeyword = unescape('<c:out value="${searchKeyword}"/>');
-        if (_searchKeyword != null && _searchKeyword != '*:*') {
+        if (_searchKeyword != null && _searchKeyword != '*:*' &&_searchKeyword != '*%3A*') {
             wildcard = "<c:out value="${searchKeyword}"/>";
             wildcard = _searchKeyword;
             $("${ns}keyword").value = wildcard;
