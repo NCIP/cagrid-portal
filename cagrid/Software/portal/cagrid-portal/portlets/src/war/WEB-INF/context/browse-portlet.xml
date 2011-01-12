@@ -193,6 +193,7 @@
                 <entry key="view">
                     <map>
                         <entry key="view" value-ref="browseViewController"/>
+                        <entry key="textMap" value-ref="browseViewController"/>
                         <entry key="viewDetails" value-ref="browseViewDetailsController"/>
                         <entry key="viewProfile" value-ref="browseViewProfileController"/>
                         <entry key="createPortalCommunity" value-ref="createPortalCommunity"/>
