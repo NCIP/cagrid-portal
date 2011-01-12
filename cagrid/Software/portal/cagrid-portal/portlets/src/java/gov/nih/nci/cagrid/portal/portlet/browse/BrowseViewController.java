@@ -10,11 +10,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.portlet.ModelAndView;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import java.net.URLEncoder;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
@@ -35,6 +32,7 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
       *
       * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
       */
+
     public void afterPropertiesSet() throws Exception {
 
     }
@@ -47,18 +45,19 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
       *      javax.portlet.RenderResponse)
       * ToDo use properties not strings
       */
+
     public ModelAndView handleRenderRequest(RenderRequest request,
                                             RenderResponse response) throws Exception {
-    
+
         ModelAndView mav = new ModelAndView(getSuccessViewName());
         BrowseTypeEnum browseType = getBrowseType(request);
 
-        
+
         Object className = getClassName(request);
         if (className != null) {
-        	mav.addObject(BrowseParams.CLASS_NAME,className);
-        } 
-        
+            mav.addObject(BrowseParams.CLASS_NAME, className);
+        }
+
         mav.addObject(BrowseParams.BROWSE_TYPE, browseType.toString());
         String entryTypeName = null;
         if (browseType.equals(BrowseTypeEnum.DATASET)) {
@@ -78,14 +77,15 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
             entryTypeName = "ToolCatalogEntry";
             mav.addObject(BrowseParams.CATALOG_TYPE, "tool_* tools");
         } else if (browseType.equals(BrowseTypeEnum.ALL)) {
-        	entryTypeName = "CatalogEntry";
-        } else if (browseType.equals(BrowseTypeEnum.TEXTMAP)) {
-        	entryTypeName = "CatalogEntry";  
-            mav.addObject(BrowseParams.CATALOG_TYPE, "tool_grid_data_service_endpoint institution tool_grid_service_endpoint");
+            if (request.getParameterMap().containsKey(BrowseParams.TEXTMAP)
+                    && request.getParameter(BrowseParams.TEXTMAP).equalsIgnoreCase("true")) {
+                mav.addObject(BrowseParams.CATALOG_TYPE, "tool_grid_data_service_endpoint institution tool_grid_service_endpoint");
+            }
+            entryTypeName = "CatalogEntry";
         } else {
             throw new RuntimeException("Unknown browse type: " + browseType);
         }
-               mav.addObject("userGuideUrl", getUserGuideUrl());
+        mav.addObject("userGuideUrl", getUserGuideUrl());
 
         encodeWithSearchParams(mav, request);
         return mav;
