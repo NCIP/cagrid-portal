@@ -98,7 +98,7 @@
     </target>
 
     <target name="report:svcs-with-status" depends="jar" description="Will report all services with the given status">
-        <input message="Enter Service Status to report on:" validargs="DORMANT,BANNED,ACTIVE,INACTIVE"
+        <input message="Enter Service Status to report on:" validargs="DORMANT,BANNED,ACTIVE,INACTIVE,UNKNOWN"
                defaultvalue="DORMANT" addproperty="status"/>
         <java classname="gov.nih.nci.cagrid.portal.util.ReportServicesWithStatus" classpathref="run.cp">
             <arg value="${status}"/>

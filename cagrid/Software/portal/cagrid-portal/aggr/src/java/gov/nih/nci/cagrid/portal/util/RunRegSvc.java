@@ -18,6 +18,7 @@ public class RunRegSvc {
         new ClassPathXmlApplicationContext(new String[]{
         		"classpath:applicationContext-db-relationships.xml",
         		"classpath:applicationContext-db-aspects.xml",
+                "classpath:applicationContext-aggr-catalog-aspects.xml",
                 "classpath:applicationContext-aggr-regsvc.xml"});
 
     }
