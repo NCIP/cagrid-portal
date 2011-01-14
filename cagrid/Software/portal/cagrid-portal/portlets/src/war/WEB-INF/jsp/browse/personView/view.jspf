@@ -14,9 +14,9 @@
 			</c:if>
 			<c:if test="${!empty catalogEntry.webSite}">
             <div class="row">
-                <label for="website">
+                <span >
                     Website
-                </label>
+                </span>
                 <a href="${catalogEntry.webSite}" target="_blank">${catalogEntry.webSite}</a>
             </div>
 			</c:if>

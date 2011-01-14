@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/browse/common/view/photo_row.jspf" %>
 
 <div class="row">
-	<label></label>
+	<span></span>
 	<div class="value"><a href="/web${catalogEntry.communityUrl}">Visit this Community!</a></div>
 </div>
 

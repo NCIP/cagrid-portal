@@ -258,6 +258,14 @@ div.row label{
 	margin-right:10px;
 	text-align:right;
 }
+div.row span{
+	display:block;
+	float:left;
+	font-weight:bold;
+	width:180px;
+	margin-right:10px;
+	text-align:right;
+}
 div.row div.value, div.row address {
 	margin-left:190px;
 }
