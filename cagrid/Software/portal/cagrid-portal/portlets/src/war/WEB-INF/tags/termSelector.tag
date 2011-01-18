@@ -15,7 +15,7 @@
         <span style="display:none;">${term.label}</span>
         <span style="display:none;">${term.comment}</span>
   </input>
-
+<label for="${rtsId}"/>
 </div>
 <div class="value">
     <tags:yuiPopup popupContent="Area of Focus: ${term.comment}" label="${term.label}" id="${rtsId}-infoPopup-control"/>
