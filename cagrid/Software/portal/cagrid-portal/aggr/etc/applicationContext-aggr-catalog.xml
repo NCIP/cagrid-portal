@@ -33,6 +33,10 @@
           class="gov.nih.nci.cagrid.portal.aggr.catalog.POCCatalogCreator"
           autowire="byName"/>
 
+     <bean id="gridServiceEndPointCatalogCreatorDelegate" 
+          class="gov.nih.nci.cagrid.portal.aggr.catalog.GridServiceEndPointCatalogCreatorDelegate"
+          autowire="byName"/>
+          
      <bean id="gridServiceEndPointCatalogCreator" parent="abstractCatalogCreator"
           class="gov.nih.nci.cagrid.portal.aggr.catalog.GridServiceEndPointCatalogCreator"
           autowire="byName"/>
