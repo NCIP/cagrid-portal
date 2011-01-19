@@ -1,7 +1,7 @@
 
                          caGrid Portal
-                          Version 3.3
-                       November 19, 2010
+                          Version 3.4
+                       January 21, 2011
 
 
 ================================================================
@@ -22,7 +22,7 @@
 ================================================================
 
     This document contains the release notes for the caGrid
-    Portal 3.3 release.
+    Portal 3.4 release.
 
     This release is a point release and introduces some new features
     and bug fixes, which are outlined below
@@ -39,6 +39,7 @@
     caGrid Portal 3.0 was release on 19th March 2010
     caGrid Portal 3.1 was released on 7th August 2010
     caGrid Portal 3.2 was released on 27th September 2010
+    caGrid Portal 3.3 was released on 19th November 2010
 
 
 ================================================================
@@ -46,8 +47,9 @@
 ================================================================
 The following major new features were implemented in this release
 
-30168 Create ability to drill down from summary to detailed counts
-30169 Add more data sets to GSS
+	Upgraded to caGrid 4.0 
+	Upgraded to Java 6
+30420	Implemented Text version of the Map as part for 508 compliance
 
 ================================================================
                       4.0 Bug fixes Since Last Release
@@ -55,7 +57,14 @@ The following major new features were implemented in this release
 
 The following bugs were fixed in this release
 
-30167 Shared query select datasources shows Dormant services
+16914	Portal does not notice when credentials are required by a serivce, but the user isn't logged in	
+	Hidden catalog items are still reachable by guest if they are a related item of another
+30054 	Unable to execute shared queries in IE
+30016 	Enable Add button issue in IE for Area of focus page
+29977 	JavaScript errors in IE
+27505 	Comments and Related Entries are listed on the same tab in IE
+27500 	Shared Query: "Edit XML" does not show XML for query in IE
+30460 	Log In link should be clicked 2 times to reach login page in IE
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
