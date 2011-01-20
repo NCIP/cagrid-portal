@@ -9,27 +9,26 @@
         <span>
             URL
         </span>
-        <span class="value">
+        <div class="value">
                 ${gridService.url}
-        </span>
+        </div>
     </div>
     <c:if test="${gridService.class.simpleName == 'GridDataService'}">
     <div class="row">
     	<span>&nbsp;</span>
     	<%@ include file="/WEB-INF/jsp/browse/gridService/view_query.jspf" %>
-    </div>
-    </c:if>
-
+    </div>    
+    </c:if>	
     <div class="row">
         <span>
             Status
         </span>
         <div class="value">
-        	<span
+        	
         	<c:if test="${gridService.currentStatus != 'ACTIVE'}">
 			style="color:red;"        	
         	</c:if>
-        	><c:out value="${gridService.currentStatus}"/></span>
+        	${gridService.currentStatus}
         </div>
    </div>
    <c:if test="${gridService.currentStatus != 'ACTIVE'}">
@@ -46,7 +45,7 @@
     <div class="row">
             <span>Notifications</span>
     <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
-    </div>
+    </div>    
     <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>
 
 </c:if>

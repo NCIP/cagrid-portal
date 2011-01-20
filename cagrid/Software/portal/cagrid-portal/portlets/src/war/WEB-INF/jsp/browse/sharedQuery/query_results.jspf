@@ -12,15 +12,15 @@
 
 <div>
     <div class="row">
-        <label>
+        <span>
             Query Results
-        </label>
+        </span>
 
-        <div class="value">
-            <span id="${ns}queryResultsCount">
+        
+            <div id="${ns}queryResultsCount">
 				<img alt="Loading" src='<c:url value="/images/indicator.gif"/>'/>
-            </span>
-        </div>
+            </div>
+      
     </div>
 </div>
 <div id="${ns}resultsTab" class="yui-navset" style="margin-top:10px;margin-bottom:10px;display:none;">
