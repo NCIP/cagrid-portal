@@ -65,7 +65,7 @@ The following bugs were fixed in this release
 27505 	Comments and Related Entries are listed on the same tab in IE
 27500 	Shared Query: "Edit XML" does not show XML for query in IE
 30460 	Log In link should be clicked 2 times to reach login page in IE
-	Query buttion not getting displayed in data service view page in IE
+30272	Query button alignment is not showing properly in IE 8
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
