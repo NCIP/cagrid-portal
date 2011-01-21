@@ -12,9 +12,9 @@
 
 <div>
     <div class="row">
-        <span>
+        <div class="title">
             Query Results
-        </span>
+        </div>
 
         
             <div id="${ns}queryResultsCount">

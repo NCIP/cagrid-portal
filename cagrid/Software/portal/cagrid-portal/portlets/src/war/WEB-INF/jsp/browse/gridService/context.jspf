@@ -1,9 +1,9 @@
 <c:if test="${!empty sd.serviceContextCollection}">
 
     <div class="row">
-        <span>
+        <div class="title">
             Service Contexts
-        </span>	
+        </div>	
         <div class="label">
             <span id="${ns}ctxTree"></span>
         </div>

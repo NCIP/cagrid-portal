@@ -6,7 +6,7 @@
 
 <div class="yui-skin-sam">
     <div class="row">
-        <label>
+        <label for="${ns}serviceUrl">
             Service URL 
         </label>
         <div class="value" style="width:80%;">

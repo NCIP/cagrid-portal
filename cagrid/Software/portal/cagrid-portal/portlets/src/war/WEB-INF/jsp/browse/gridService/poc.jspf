@@ -1,9 +1,9 @@
 <c:if test="${!empty sd.pointOfContactCollection}">
 
     <div class="row">
-        <span>
+        <div class="title">
             POC
-        </span>
+        </div>
 
         <div class="value">
 

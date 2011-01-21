@@ -5,7 +5,8 @@
                                 title="Click to edit this image." cssClass="cagp-tooltip"/>
     </div>
     <div class="photoRightContent">
-        <div class="row">
+        <div >
+            <label for="input-name"/>
             <input id="input-name" alt="Name" class="pAutoSet pRequired" style="font-size:23pt;
 				<c:if test="${empty catalogEntry.name}">color:#afafaf;</c:if>
 			" type="text" name="name" value="
@@ -16,7 +17,8 @@
 			"/>
             <span style="color: red"></span><br/>
         </div>
-        <div class="row">
+        <div >
+            <label for="input-description"/>
             <textarea id="input-description" class="pAutoSet pRequired" wrap="virtual" name="description"
                       style="height:100px;width:590px;<c:if test="${empty catalogEntry.description}">color:#afafaf;</c:if>"><c:choose><c:when
                     test="${empty catalogEntry.description}">Description</c:when><c:otherwise><c:out

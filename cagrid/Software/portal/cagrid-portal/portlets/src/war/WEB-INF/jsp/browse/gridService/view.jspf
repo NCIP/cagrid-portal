@@ -6,23 +6,23 @@
     <c:set var="gridService" value="${catalogEntry.about}"/>
 
     <div class="row">
-        <span>
+        <div class="title">
             URL
-        </span>
+        </div>
         <div class="value">
                 ${gridService.url}
         </div>
     </div>
     <c:if test="${gridService.class.simpleName == 'GridDataService'}">
     <div class="row">
-    	<span>&nbsp;</span>
+    	<div class="title">&nbsp;</div>
     	<%@ include file="/WEB-INF/jsp/browse/gridService/view_query.jspf" %>
     </div>    
     </c:if>	
     <div class="row">
-        <span>
+        <div class="title">
             Status
-        </span>
+        </div>
         <div class="value">
         	
         	<c:if test="${gridService.currentStatus != 'ACTIVE'}">
@@ -33,7 +33,7 @@
    </div>
    <c:if test="${gridService.currentStatus != 'ACTIVE'}">
    <div class="row">
-   		<span>&nbsp;</span>
+   		<div class="title">&nbsp;</div>
    		<%@ include file="/WEB-INF/jsp/browse/gridService/view_diagnose.jspf" %>
    </div>   
    </c:if>
@@ -43,7 +43,7 @@
 	<script type="text/javascript" src='<c:url value="/js/scriptaculous/controls.js"/>'></script>
 
     <div class="row">
-            <span>Notifications</span>
+            <div class="title">Notifications</div>
     <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
     </div>    
     <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>

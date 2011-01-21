@@ -244,7 +244,7 @@ div.row label{
 	text-align:right;
 }
 
-div.row span{
+div.row div.title{
 	display:block;
 	float:left;
 	font-weight:bold;
