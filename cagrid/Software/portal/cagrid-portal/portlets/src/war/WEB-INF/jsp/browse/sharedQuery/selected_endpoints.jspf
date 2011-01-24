@@ -2,7 +2,7 @@
 
 <div class="yui-skin-sam">
     <div class="row">
-        <label for="selectedEndpoints">
+        <label for="${ns}selectedEndpoints">
             Selected Data Sources
         </label>
 
