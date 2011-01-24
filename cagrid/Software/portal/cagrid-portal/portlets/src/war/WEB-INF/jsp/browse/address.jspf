@@ -1,5 +1,5 @@
 <div class="row">
-	<span>Address</span>
+	<div class="title">Address</div>
 	<address>
 		<c:if test="${not empty catalogEntry.street1}">
 			<c:out value="${catalogEntry.street1}"/><br/>
