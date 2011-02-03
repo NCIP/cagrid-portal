@@ -38,6 +38,7 @@ public class ServiceMetadataCatalogEntryBuilder {
     private InformationModelCatalogEntryDao informationModelCatalogEntryDao;
     private CatalogEntryRelationshipTypeDao catalogEntryRelationshipTypeDao;
     private CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao;
+    private CatalogEntryRoleInstanceDao catalogEntryRoleInstanceDao;
     private InstitutionCatalogEntryDao institutionCatalogEntryDao;
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
@@ -66,7 +67,6 @@ public class ServiceMetadataCatalogEntryBuilder {
             logger.warn("Service has no name. Will not create a CE for service no name" + service.getUrl());
             return null;
         }
-
         GridServiceEndPointCatalogEntry endpointCe = getGridServiceEndPointCatalogEntryDao()
                 .isAbout(service);
         if (endpointCe == null) {
@@ -77,7 +77,6 @@ public class ServiceMetadataCatalogEntryBuilder {
             getGridServiceEndPointCatalogEntryDao().save(endpointCe);
         }
         endpointCe.setUpdatedAt(new Date());
-
         endpointCe.setName(serviceName + " (" + serviceVersion + ") @ "
                 + institutionName);
         endpointCe.setDescription(BeanUtils.traverse(service,
@@ -97,14 +96,12 @@ public class ServiceMetadataCatalogEntryBuilder {
             getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
         }
         interfaceCe.setUpdatedAt(new Date());
-
         // See if the implements relationship already exists
         CatalogEntryRelationshipInstance implRelInst = getCatalogEntryRelationshipInstanceDao()
                 .getDynamicRelationship(
                         RelationshipTypeConstants.GRID_SERVICE_ENDPOINT_IMPLEMENTS_GRID_SERVICE_INTERFACE,
                         endpointCe, interfaceCe);
         if (implRelInst == null) {
-
             implRelInst = assertRelationship(
                     RelationshipTypeConstants.GRID_SERVICE_ENDPOINT_IMPLEMENTS_GRID_SERVICE_INTERFACE,
                     endpointCe, interfaceCe, interfaceCe.getName()
@@ -114,14 +111,13 @@ public class ServiceMetadataCatalogEntryBuilder {
         }
         implRelInst.setUpdatedAt(new Date());
         getCatalogEntryRelationshipInstanceDao().save(implRelInst);
-
 //		handlePOCRelationships(endpointCe, service.getServiceMetadata()
 //				.getServiceDescription().getPointOfContactCollection(),
 //				RelationshipTypeConstants.PERSON_POC_FOR_GRID_SERVICE_ENDPOINT);
 
         // Handle the hosting institution
         ResearchCenter researchCenter = BeanUtils.traverse(service,
-                "serviceMetadata.hostingResearchCenter", ResearchCenter.class);
+                "serviceMetadata.hostingResearchCenter", ResearchCenter.class);       
         if (researchCenter != null) {
             InstitutionCatalogEntry institutionCe = handleHostingInstitution(
                     researchCenter, endpointCe);
@@ -134,7 +130,6 @@ public class ServiceMetadataCatalogEntryBuilder {
 
 //			}
         }
-
         // Create the information model
         if (service instanceof GridDataService) {
 
@@ -179,10 +174,8 @@ public class ServiceMetadataCatalogEntryBuilder {
             }
 
         }
-
         getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
         getGridServiceEndPointCatalogEntryDao().save(endpointCe);
-
         return endpointCe;
     }
 
@@ -268,7 +261,6 @@ public class ServiceMetadataCatalogEntryBuilder {
     private InstitutionCatalogEntry handleHostingInstitution(
             ResearchCenter researchCenter,
             GridServiceEndPointCatalogEntry endpointCe) {
-
         InstitutionCatalogEntry institutionCe = null;
         String displayName = researchCenter.getDisplayName();
         if (!StringUtils.isEmpty(displayName)) {
@@ -286,7 +278,7 @@ public class ServiceMetadataCatalogEntryBuilder {
                 }
             }
             if (institutionCe == null) {
-                institutionCe = createInstitutionCatalogEntry(researchCenter);
+                institutionCe = createInstitutionCatalogEntry(researchCenter);                
             }
             institutionCe.setUpdatedAt(new Date());
 
@@ -296,13 +288,12 @@ public class ServiceMetadataCatalogEntryBuilder {
                             RelationshipTypeConstants.HOSTING_INSTITUTION_OF_GRID_SERVICE_ENDPOINT,
                             institutionCe, endpointCe);
             if (hostRelInst == null) {
-
                 hostRelInst = assertRelationship(
                         RelationshipTypeConstants.HOSTING_INSTITUTION_OF_GRID_SERVICE_ENDPOINT,
                         institutionCe, endpointCe, institutionCe.getName()
                                 + " hosts " + endpointCe.getName(), endpointCe
                                 .getName()
-                                + " is hosted by " + institutionCe.getName());
+                                + " is hosted by " + institutionCe.getName());                
             }
             hostRelInst.setUpdatedAt(new Date());
             getCatalogEntryRelationshipInstanceDao().save(hostRelInst);
@@ -342,35 +333,27 @@ public class ServiceMetadataCatalogEntryBuilder {
     private CatalogEntryRelationshipInstance assertRelationship(
             String relTypeName, CatalogEntry ceA, CatalogEntry ceB,
             String roleADesc, String roleBDesc) {
-
         CatalogEntryRelationshipType relType = getCatalogEntryRelationshipTypeDao()
                 .getByName(relTypeName);
-
         CatalogEntryRelationshipInstance relInst = new CatalogEntryRelationshipInstance();
         relInst.setType(relType);
         relInst.setCreatedAt(new Date());
         getCatalogEntryRelationshipInstanceDao().save(relInst);
-
-        CatalogEntryRoleInstance roleA = new CatalogEntryRoleInstance();
-        roleA.setType(relType.getRoleTypeA());
-        roleA.setDescription(roleADesc);
+        CatalogEntryRoleInstance roleA = new CatalogEntryRoleInstance();         
+        roleA.setType(relType.getRoleTypeA());        
+        roleA.setDescription(roleADesc);         
         roleA.setRelationship(relInst);
         roleA.setCatalogEntry(ceA);
-        getCatalogEntryRelationshipInstanceDao().getHibernateTemplate().save(
-                roleA);
+        getCatalogEntryRoleInstanceDao().save(roleA);        
         relInst.setRoleA(roleA);
-
         CatalogEntryRoleInstance roleB = new CatalogEntryRoleInstance();
         roleB.setType(relType.getRoleTypeB());
         roleB.setDescription(roleBDesc);
         roleB.setRelationship(relInst);
         roleB.setCatalogEntry(ceB);
-        getCatalogEntryRelationshipInstanceDao().getHibernateTemplate().save(
-                roleB);
-        relInst.setRoleB(roleB);
-
-        getCatalogEntryRelationshipInstanceDao().save(relInst);
-
+        getCatalogEntryRoleInstanceDao().save(roleB);
+        relInst.setRoleB(roleB);        
+        getCatalogEntryRelationshipInstanceDao().save(relInst);        
         return relInst;
     }
 
@@ -418,8 +401,18 @@ public class ServiceMetadataCatalogEntryBuilder {
             CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao) {
         this.catalogEntryRelationshipInstanceDao = catalogEntryRelationshipInstanceDao;
     }
+    
 
-    public InstitutionCatalogEntryDao getInstitutionCatalogEntryDao() {
+	public CatalogEntryRoleInstanceDao getCatalogEntryRoleInstanceDao() {
+		return catalogEntryRoleInstanceDao;
+	}
+
+	public void setCatalogEntryRoleInstanceDao(
+			CatalogEntryRoleInstanceDao catalogEntryRoleInstanceDao) {
+		this.catalogEntryRoleInstanceDao = catalogEntryRoleInstanceDao;
+	}
+
+	public InstitutionCatalogEntryDao getInstitutionCatalogEntryDao() {
         return institutionCatalogEntryDao;
     }
 
