@@ -1,8 +1,11 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
+import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
+import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,9 +49,27 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
     }
     
     
-    public Map getAggregatedClassCountByCaption (String caption) {
-    	List list = getHibernateTemplate().find(
-    			"select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = ? group by className order by className", new Object[]{caption});
+    public Map getAggregatedClassCountByCaption (String caption) {   	
+    	//Get list of services whose status is not DORMANT and not BANNED (not hidden services)
+    	List services = getHibernateTemplate().find("from GridService");    	
+    	List<Integer> serviceIds = new ArrayList<Integer>();
+    	for(int i=0;i<services.size();i++){
+    		GridService service =(GridService) services.get(i);
+    		if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) && 
+    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED)) ){
+    			serviceIds.add(service.getId());
+    		}
+    	}
+    	
+    	String hql;
+    	if(serviceIds.size()>0){
+    		hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption and gsu.gridService.id in (:listOfIds)  group by className order by className";
+    	}else{
+    		hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption group by className order by className";
+    	}
+    	String[] params = { "caption","listOfIds"};
+    	Object[] values = { caption, serviceIds };
+    	List list = getHibernateTemplate().findByNamedParam(hql, params, values);
     	Map map = new HashMap();
     	for (int i=0; i<list.size();i++) {
     		Object[] obj = (Object[])list.get(i);
