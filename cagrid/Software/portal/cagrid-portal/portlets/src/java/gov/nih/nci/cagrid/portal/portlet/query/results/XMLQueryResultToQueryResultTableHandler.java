@@ -97,6 +97,11 @@ public class XMLQueryResultToQueryResultTableHandler extends
 
                 QueryResultRow row = new QueryResultRow();
                 row.setTable(table);
+                if (dataServiceUrl == null) {
+                    throw new RuntimeException(
+                            "Couldn't determine source URL");
+                }
+                row.setServiceUrl(dataServiceUrl);
                 if (persist) {
                     getQueryResultTableDao().getHibernateTemplate().save(row);
                 }
@@ -108,16 +113,7 @@ public class XMLQueryResultToQueryResultTableHandler extends
                 cell.setColumn(col);
                 if (persist) {
                     getQueryResultTableDao().getHibernateTemplate().save(cell);
-                }
-                row.getCells().add(cell);
-                if (dataServiceUrl == null) {
-                    throw new RuntimeException(
-                            "Couldn't determine source URL");
-                }
-                row.setServiceUrl(dataServiceUrl);
-                if (persist) {
-                    getQueryResultTableDao().getHibernateTemplate().save(row);
-                }
+                }                
 
             } else if (ResultType.ATTRIBUTE.equals(resultType)) {            	
                 if ("AttributeResult".equals(localName)) {                	
