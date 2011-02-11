@@ -111,6 +111,7 @@ public class XMLQueryResultToQueryResultTableHandler extends
                 cell.setValue(attributes.getValue("count"));
                 cell.setRow(row);
                 cell.setColumn(col);
+                row.getCells().add(cell);
                 if (persist) {
                     getQueryResultTableDao().getHibernateTemplate().save(cell);
                 }                
