@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.portal.dao.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.domain.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
@@ -175,6 +176,13 @@ public class ServiceMetadataCatalogEntryBuilder {
 
         }
         getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
+        
+        if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) && 
+    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED))){
+        	endpointCe.setHidden(false);
+        }else{
+        	endpointCe.setHidden(true);
+        }    
         getGridServiceEndPointCatalogEntryDao().save(endpointCe);
         return endpointCe;
     }
