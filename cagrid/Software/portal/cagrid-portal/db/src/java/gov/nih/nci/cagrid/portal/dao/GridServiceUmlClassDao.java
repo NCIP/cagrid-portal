@@ -56,7 +56,10 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
     	for(int i=0;i<services.size();i++){
     		GridService service =(GridService) services.get(i);
     		if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) && 
-    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED)) ){
+    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED)) &&
+    			service.getServiceMetadata()!=null && 
+    			service.getServiceMetadata().getServiceDescription()!=null){   			
+    			
     			serviceIds.add(service.getId());
     		}
     	}
