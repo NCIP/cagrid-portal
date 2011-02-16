@@ -5,25 +5,43 @@ package gov.nih.nci.cagrid.portal.aggr.catalog;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
-import gov.nih.nci.cagrid.portal.dao.catalog.*;
+import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipTypeDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRoleInstanceDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceInterfaceCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.InformationModelCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.InstitutionCatalogEntryDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
-import gov.nih.nci.cagrid.portal.domain.catalog.*;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipType;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.RelationshipTypeConstants;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
 import gov.nih.nci.cagrid.portal.util.PortalDBRuntimeException;
 import gov.nih.nci.cagrid.portal.util.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.transaction.annotation.Transactional;
+import gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter;
 
 import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -44,6 +62,7 @@ public class ServiceMetadataCatalogEntryBuilder {
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
     private GridServiceDao gridServiceDao;
+    private BaseServiceFilter baseServiceFilter;
 
 
     /**
@@ -177,12 +196,12 @@ public class ServiceMetadataCatalogEntryBuilder {
         }
         getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
         
-        if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) && 
-    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED))){
-        	endpointCe.setHidden(false);
-        }else{
+        if(baseServiceFilter.willBeFiltered(service)){
         	endpointCe.setHidden(true);
-        }    
+        }else{
+        	endpointCe.setHidden(false);
+        }
+        
         getGridServiceEndPointCatalogEntryDao().save(endpointCe);
         return endpointCe;
     }
@@ -453,4 +472,12 @@ public class ServiceMetadataCatalogEntryBuilder {
     public void setGridServiceDao(GridServiceDao gridServiceDao) {
         this.gridServiceDao = gridServiceDao;
     }
+
+	public BaseServiceFilter getBaseServiceFilter() {
+		return baseServiceFilter;
+	}
+
+	public void setBaseServiceFilter(BaseServiceFilter baseServiceFilter) {
+		this.baseServiceFilter = baseServiceFilter;
+	}
 }
