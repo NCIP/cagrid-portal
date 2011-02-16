@@ -33,7 +33,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
 import gov.nih.nci.cagrid.portal.util.PortalDBRuntimeException;
 import gov.nih.nci.cagrid.portal.util.StringUtils;
-import gov.nih.nci.cagrid.portal.util.filter.BaseServiceFilter;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 
 import java.net.MalformedURLException;
 import java.util.Date;
@@ -62,7 +62,7 @@ public class ServiceMetadataCatalogEntryBuilder {
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
     private GridServiceDao gridServiceDao;
-    private BaseServiceFilter baseServiceFilter;
+    private ServiceFilter baseServiceFilter;
 
 
     /**
@@ -473,11 +473,12 @@ public class ServiceMetadataCatalogEntryBuilder {
         this.gridServiceDao = gridServiceDao;
     }
 
-	public BaseServiceFilter getBaseServiceFilter() {
+	public ServiceFilter getBaseServiceFilter() {
 		return baseServiceFilter;
 	}
 
-	public void setBaseServiceFilter(BaseServiceFilter baseServiceFilter) {
+	public void setBaseServiceFilter(ServiceFilter baseServiceFilter) {
 		this.baseServiceFilter = baseServiceFilter;
 	}
+	
 }
