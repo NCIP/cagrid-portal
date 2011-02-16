@@ -11,4 +11,10 @@
 	int pos = s.lastIndexOf("/");
 	String key = s.substring(pos+1);
 %>
-<%= ImpromptuQueryStorage.instance.getResult(key) %>
+<% if (ImpromptuQueryStorage.instance.getResult(key)!=null) {
+	 out.println(ImpromptuQueryStorage.instance.getResult(key));
+}else{
+	 out.println("<QueryResults>Query execution failed</QueryResults>");
+}
+
+%>
