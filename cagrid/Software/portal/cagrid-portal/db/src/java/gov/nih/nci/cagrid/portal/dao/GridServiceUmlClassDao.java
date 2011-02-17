@@ -64,15 +64,19 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
     		}
     	}
     	
-    	String hql;
+    	List list = new ArrayList();
     	if(serviceIds.size()>0){
-    		hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption and gsu.gridService.id in (:listOfIds)  group by className order by className";
+    		String hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption and gsu.gridService.id in (:listOfIds)  group by className order by className";
+    		String[] params = { "caption","listOfIds"};
+        	Object[] values = { caption, serviceIds };
+        	list = getHibernateTemplate().findByNamedParam(hql, params, values);
     	}else{
-    		hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption group by className order by className";
+    		String hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption group by className order by className";
+    		String[] params = { "caption"};
+        	Object[] values = { caption};
+        	list = getHibernateTemplate().findByNamedParam(hql, params, values);
     	}
-    	String[] params = { "caption","listOfIds"};
-    	Object[] values = { caption, serviceIds };
-    	List list = getHibernateTemplate().findByNamedParam(hql, params, values);
+    	
     	Map map = new HashMap();
     	for (int i=0; i<list.size();i++) {
     		Object[] obj = (Object[])list.get(i);
