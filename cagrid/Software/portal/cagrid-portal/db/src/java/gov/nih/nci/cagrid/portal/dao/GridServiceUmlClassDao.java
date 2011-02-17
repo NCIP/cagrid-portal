@@ -14,8 +14,8 @@ import java.util.Set;
 
 import javax.persistence.NonUniqueResultException;
 
-public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
-
+public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {	
+	
 	@Override
 	public Class domainClass() {
 		// TODO Auto-generated method stub
@@ -70,11 +70,6 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
     		String[] params = { "caption","listOfIds"};
         	Object[] values = { caption, serviceIds };
         	list = getHibernateTemplate().findByNamedParam(hql, params, values);
-    	}else{
-    		String hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption group by className order by className";
-    		String[] params = { "caption"};
-        	Object[] values = { caption};
-        	list = getHibernateTemplate().findByNamedParam(hql, params, values);
     	}
     	
     	Map map = new HashMap();
@@ -104,6 +99,6 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
 
 	   	}
 	   	return map;
-   }
+   }	
 
 }
