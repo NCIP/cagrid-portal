@@ -38,22 +38,22 @@ http://cagrid1.duhs.duke.edu:18080/wsrf/services/cagrid/CaArraySvc
         <tbody>
         <tr>
             <td valign="top" style="font-weight:bold">Query :</td>
-            <td><form:textarea path="query" cols="80" rows="17"/></td>
+            <td><label for="query"/><form:textarea id="query" path="query" cols="80" rows="17"/></td>
             <td><form:errors path="query"/></td>
         </tr>
         <tr>
             <td valign="top" style="font-weight:bold">Endpoint Url :</td>
-            <td><form:input path="endpointUrl" size="80"/></td>
+            <td><label for="endpointUrl"/><form:input id="endpointUrl" path="endpointUrl" size="80"/></td>
             <td><form:errors path="endpointUrl"/></td>
         </tr>
         <tr>
             <td valign="top" style="font-weight:bold">Clear Previous Results :</td>
-            <td><form:checkbox path="clearPrevious"/></td>
+            <td><label for="clearPrevious"/><form:checkbox id="clearPrevious" path="clearPrevious"/></td>
             <td><form:errors path="clearPrevious"/></td>
         </tr>
         <tr>
             <td valign="top" style="font-weight:bold">Format Results In HTML :</td>
-            <td id="htmlSuccessPage_check_td"><form:checkbox path="htmlSuccessPage"/></td>
+            <td id="htmlSuccessPage_check_td"><label for="htmlSuccessPage"/><form:checkbox id="htmlSuccessPage" path="htmlSuccessPage"/></td>
         </tr>
         <tr>
             <td colspan="2"><input alt="Submit" type="submit"></td>

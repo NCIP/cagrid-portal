@@ -14,18 +14,18 @@
 
 
 <div class="searchBox" id="searchBox">
-    <div class="L-endcap"></div>
+    <div class="L-endcap"></div><label for="${id}"/>
     <input id="<c:out value="${id}"/>"  alt="Search" class="search" type="text" size="19"
            value="Catalog Search" style="color:#afafaf;"
            onkeypress="return <c:out value="${searchCallback}(event,this.value);"/>
     "/>
-
+	
     <div class="R-endcap">
 
     </div>
     <div class="R-tip">
         <a href="tips" onclick="showHelpTips();return false;"><tags:image name="help.gif" alt="Help"/></a>
-    </div>
+    </div>    
 </div>
 <span id="tipWindow" class="yui-skin-sam">
 </span>
