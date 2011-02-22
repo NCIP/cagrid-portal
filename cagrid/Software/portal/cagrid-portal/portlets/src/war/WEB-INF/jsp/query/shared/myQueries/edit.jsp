@@ -42,14 +42,14 @@
 <span style="color:red"><form:errors path="*"/></span><br/>
 <table>
 	<tr>
-		<td style="padding-right:5px"><b>Name:</b></td>
+		<td style="padding-right:5px"><label for="${formName}QueryName"/><b>Name:</b></td>
 		<td>
 			<form:input id="${formName}QueryName" alt="Query Name" path="query.name" size="100"/><br/>
 			<span style="color:red"><form:errors path="query.name"/></span>
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" style="padding-right:5px"><b>Description:</b></td>
+		<td valign="top" style="padding-right:5px"><label for="${resizablePrefix}"/><b>Description:</b></td>
 		<td>
 			<form:textarea id="${resizablePrefix}" cssStyle="width:100%; height:50px" path="query.description"/>
 		<br/>

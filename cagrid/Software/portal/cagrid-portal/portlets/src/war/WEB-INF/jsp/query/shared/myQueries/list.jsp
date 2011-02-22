@@ -44,7 +44,7 @@
 				</c:choose>
 			
 			<tr class="<c:out value="${rowClass}"/>">
-				<td class="dataCellText">
+				<td class="dataCellText"><label for="${formName}Operation"/>
 					<select name="operation" id="${formName}Operation"
 						onchange="<portlet:namespace/>doMySharedQueryOp('<c:out value="${sharedQuery.id}"/>', this.options[this.selectedIndex].value)">
 						<option id="${formName}Selected" value="---" selected>---</option>

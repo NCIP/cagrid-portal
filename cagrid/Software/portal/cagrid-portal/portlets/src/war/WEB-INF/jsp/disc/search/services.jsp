@@ -35,10 +35,10 @@
         <td valign="top">
             <form>
                 &nbsp;
-                <input name="level" alt="Simple" value="simple" type="radio" checked
-                       onclick="jQuery('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>simpleDiv').show();"/>Simple&nbsp;
-                <input name="level" alt="Advanced" value="advanced" type="radio"
-                       onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/>Advanced&nbsp;
+                <input id="simple" name="level" alt="Simple" value="simple" type="radio" checked
+                       onclick="jQuery('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>simpleDiv').show();"/><label for="simple">Simple&nbsp;</label>
+                <input id="advanced" name="level" alt="Advanced" value="advanced" type="radio"
+                       onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/><label for="advanced">Advanced&nbsp;</label>
             </form>
         </td>
     </tr>

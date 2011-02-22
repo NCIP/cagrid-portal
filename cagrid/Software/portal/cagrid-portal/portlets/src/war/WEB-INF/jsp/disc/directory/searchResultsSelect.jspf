@@ -1,3 +1,4 @@
+	<label for="selectedResults" />
 	<form:select id="selectedResults" onchange="submit()" path="selectedResults">
 		<c:choose>
 		<c:when test="${empty results}">

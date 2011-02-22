@@ -16,12 +16,12 @@
                     </label>
                 </td>
                 <td valign="top">
-                    <input type="text" name="keywords" alt="keywords" class="searchField"/>
+                    <input type="text" id="keywords" name="keywords" alt="keywords" class="searchField"/>
                 </td>
             </tr>
             <tr>
                 <td valign="top" style="padding-right:5px; text-align:right">
-                    <label for="searchFields">
+                    <label for="${prefix}searchFields">
                         Search Fields:
                     </label>
                    </td>
