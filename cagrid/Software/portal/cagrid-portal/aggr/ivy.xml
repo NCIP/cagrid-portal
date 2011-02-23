@@ -35,6 +35,7 @@
         <artifact name="applicationContext-aggr-utils" type="xml"/>
         <artifact name="applicationContext-aggr-xmlschemas" type="xml"/>
         <artifact name="applicationContext-aggr" type="xml"/>
+        <artifact name="applicationContext-cleanup-utils" type="xml"/>
         <artifact name="applicationContext-notification" type="xml"/>
         <artifact name="applicationContext-notification-aspects" type="xml"/>
         <artifact name="applicationContext-trust" type="xml"/>

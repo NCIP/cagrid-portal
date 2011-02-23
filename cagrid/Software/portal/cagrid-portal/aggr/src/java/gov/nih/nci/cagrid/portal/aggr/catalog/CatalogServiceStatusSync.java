@@ -5,10 +5,12 @@ import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author kherm manav.kher@semanticbits.com
  */
+@Transactional
 public class CatalogServiceStatusSync {
 
     protected final Log logger = LogFactory

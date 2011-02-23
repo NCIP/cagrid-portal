@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
+import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
 
 import java.net.MalformedURLException;
 import java.util.Date;
@@ -38,10 +39,12 @@ public class ServiceMetadataCatalogEntryBuilder {
     private InformationModelCatalogEntryDao informationModelCatalogEntryDao;
     private CatalogEntryRelationshipTypeDao catalogEntryRelationshipTypeDao;
     private CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao;
+    private CatalogEntryRoleInstanceDao catalogEntryRoleInstanceDao;
     private InstitutionCatalogEntryDao institutionCatalogEntryDao;
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
     private GridServiceDao gridServiceDao;
+    private ServiceFilter baseServiceFilter;
 
 
     /**
@@ -181,6 +184,12 @@ public class ServiceMetadataCatalogEntryBuilder {
         }
 
         getGridServiceInterfaceCatalogEntryDao().save(interfaceCe);
+        //Update catalog entry status based on the service status
+		if(getBaseServiceFilter().willBeFiltered(service)){
+			endpointCe.setHidden(true);
+		}else{
+			endpointCe.setHidden(false);
+        }
         getGridServiceEndPointCatalogEntryDao().save(endpointCe);
 
         return endpointCe;
@@ -356,8 +365,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         roleA.setDescription(roleADesc);
         roleA.setRelationship(relInst);
         roleA.setCatalogEntry(ceA);
-        getCatalogEntryRelationshipInstanceDao().getHibernateTemplate().save(
-                roleA);
+        getCatalogEntryRoleInstanceDao().save(roleA);
         relInst.setRoleA(roleA);
 
         CatalogEntryRoleInstance roleB = new CatalogEntryRoleInstance();
@@ -365,8 +373,7 @@ public class ServiceMetadataCatalogEntryBuilder {
         roleB.setDescription(roleBDesc);
         roleB.setRelationship(relInst);
         roleB.setCatalogEntry(ceB);
-        getCatalogEntryRelationshipInstanceDao().getHibernateTemplate().save(
-                roleB);
+        getCatalogEntryRoleInstanceDao().save(roleB);
         relInst.setRoleB(roleB);
 
         getCatalogEntryRelationshipInstanceDao().save(relInst);
@@ -419,6 +426,15 @@ public class ServiceMetadataCatalogEntryBuilder {
         this.catalogEntryRelationshipInstanceDao = catalogEntryRelationshipInstanceDao;
     }
 
+    public CatalogEntryRoleInstanceDao getCatalogEntryRoleInstanceDao() {
+		return catalogEntryRoleInstanceDao;
+	}
+
+	public void setCatalogEntryRoleInstanceDao(
+				CatalogEntryRoleInstanceDao catalogEntryRoleInstanceDao) {
+		this.catalogEntryRoleInstanceDao = catalogEntryRoleInstanceDao;
+	}
+
     public InstitutionCatalogEntryDao getInstitutionCatalogEntryDao() {
         return institutionCatalogEntryDao;
     }
@@ -452,4 +468,12 @@ public class ServiceMetadataCatalogEntryBuilder {
     public void setGridServiceDao(GridServiceDao gridServiceDao) {
         this.gridServiceDao = gridServiceDao;
     }
+
+    public ServiceFilter getBaseServiceFilter() {
+		return baseServiceFilter;
+	}
+
+	public void setBaseServiceFilter(ServiceFilter baseServiceFilter) {
+		this.baseServiceFilter = baseServiceFilter;
+	}
 }

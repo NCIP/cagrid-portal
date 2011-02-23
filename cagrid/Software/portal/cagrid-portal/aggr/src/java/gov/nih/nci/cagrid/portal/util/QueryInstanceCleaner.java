@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.portal.service.QueryInstanceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  *
  * @author kherm manav.kher@semanticbits.com
  */
+@Transactional
 public class QueryInstanceCleaner {
 
     private QueryInstanceDao queryInstanceDao;
