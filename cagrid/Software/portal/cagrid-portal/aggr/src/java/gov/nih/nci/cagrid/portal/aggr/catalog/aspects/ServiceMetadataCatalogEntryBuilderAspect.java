@@ -39,6 +39,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                 GridServiceEndPointCatalogEntry entry = service.getCatalog();
                 if (entry != null) {
                     gridServiceEndPointCatalogEntryDao.hide(entry);
+                    gridServiceEndPointCatalogEntryDao.getHibernateTemplate().flush();
 
                     //clean up the statistics
                     try {
@@ -47,6 +48,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                             if (umlClass != null) {
                                 logger.info("Will delete gridServiceUml with id " + umlClass.getId());
                                 gridServiceUmlClassDao.delete(umlClass);
+                                gridServiceUmlClassDao.getHibernateTemplate().flush();
                             }
                         }
                     } catch (Exception e) {
