@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.GridServiceUmlClass;
 import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
 import gov.nih.nci.cagrid.portal.util.filter.ServiceFilter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -27,18 +28,19 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
     private ServiceFilter baseServiceFilter;
     private ServiceMetadataCatalogEntryBuilder serviceMetadataCatalogEntryBuilder;
     private GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
-    private GridServiceUmlClassDao gridServiceUmlClassDao;
+    private GridServiceUmlClassDao gridServiceUmlClassDao;   
 
 
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.GridServiceDao.*(gov.nih.nci.cagrid.portal.domain.GridService)) && !within(gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder)  && args(service)")
     public void onSave(GridService service) throws Throwable {
-        try {
+    	try {
 
             if (baseServiceFilter.willBeFiltered(service)) {
                 logger.info("Service should be filtered. Will hide the associate CE");
                 GridServiceEndPointCatalogEntry entry = service.getCatalog();
                 if (entry != null) {
                     gridServiceEndPointCatalogEntryDao.hide(entry);
+                    gridServiceEndPointCatalogEntryDao.getHibernateTemplate().flush();
 
                     //clean up the statistics
                     try {
@@ -46,8 +48,9 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                             GridServiceUmlClass umlClass = gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), guc.getId());
                             if (umlClass != null) {
                                 logger.info("Will delete gridServiceUml with id " + umlClass.getId());
-                                service.getGridServiceUmlClasses().remove(umlClass);
-                                gridServiceUmlClassDao.delete(umlClass);
+                                service.getGridServiceUmlClasses().remove(umlClass);                                
+                                gridServiceUmlClassDao.delete(umlClass);  
+                                gridServiceUmlClassDao.getHibernateTemplate().flush();
                             }
                         }
                     } catch (Exception e) {
@@ -96,5 +99,5 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
 
     public void setGridServiceEndPointCatalogEntryDao(GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao) {
         this.gridServiceEndPointCatalogEntryDao = gridServiceEndPointCatalogEntryDao;
-    }
+    }	
 }
