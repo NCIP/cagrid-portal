@@ -1,22 +1,22 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.browse;
 
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
- * 
+ *
  */
 public class RelatedCatalogEntryViewBean {
 
 	private CatalogEntry catalogEntry;
-	private SortedSet<CatalogEntryRoleTypeViewBean> orderedRoleTypes = new TreeSet<CatalogEntryRoleTypeViewBean>();
+	private Set<CatalogEntryRoleTypeViewBean> orderedRoleTypes = new LinkedHashSet<CatalogEntryRoleTypeViewBean>();
 
 	public RelatedCatalogEntryViewBean(CatalogEntry catalogEntry) {
 		this.catalogEntry = catalogEntry;
@@ -30,12 +30,12 @@ public class RelatedCatalogEntryViewBean {
 		this.catalogEntry = catalogEntry;
 	}
 
-	public SortedSet<CatalogEntryRoleTypeViewBean> getOrderedRoleTypes() {
+	public Set<CatalogEntryRoleTypeViewBean> getOrderedRoleTypes() {
 		return orderedRoleTypes;
 	}
 
 	public void setOrderedRoleTypes(
-			SortedSet<CatalogEntryRoleTypeViewBean> orderedRoleTypes) {
+			Set<CatalogEntryRoleTypeViewBean> orderedRoleTypes) {
 		this.orderedRoleTypes = orderedRoleTypes;
 	}
 
