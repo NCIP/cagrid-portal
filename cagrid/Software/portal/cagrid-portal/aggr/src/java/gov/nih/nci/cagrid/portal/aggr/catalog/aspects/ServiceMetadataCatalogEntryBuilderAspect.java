@@ -28,7 +28,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
     private ServiceFilter baseServiceFilter;
     private ServiceMetadataCatalogEntryBuilder serviceMetadataCatalogEntryBuilder;
     private GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
-    private GridServiceUmlClassDao gridServiceUmlClassDao;   
+    private GridServiceUmlClassDao gridServiceUmlClassDao;
 
 
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.GridServiceDao.*(gov.nih.nci.cagrid.portal.domain.GridService)) && !within(gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder)  && args(service)")
@@ -48,8 +48,8 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                             GridServiceUmlClass umlClass = gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), guc.getId());
                             if (umlClass != null) {
                                 logger.info("Will delete gridServiceUml with id " + umlClass.getId());
-                                service.getGridServiceUmlClasses().remove(umlClass);                                
-                                gridServiceUmlClassDao.delete(umlClass);  
+                                service.getGridServiceUmlClasses().remove(umlClass);
+                                gridServiceUmlClassDao.delete(umlClass);
                                 gridServiceUmlClassDao.getHibernateTemplate().flush();
                             }
                         }
@@ -64,8 +64,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
             }
         } catch (Exception ex) {
             logger
-                    .error("Error creating catalog entry: " + ex.getMessage(),
-                            ex);
+                    .error("Error creating catalog entry: ",ex);
         }
     }
 
@@ -99,5 +98,5 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
 
     public void setGridServiceEndPointCatalogEntryDao(GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao) {
         this.gridServiceEndPointCatalogEntryDao = gridServiceEndPointCatalogEntryDao;
-    }	
+    }
 }
