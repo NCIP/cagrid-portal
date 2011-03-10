@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.util;
 
@@ -19,40 +19,65 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ *
  */
 public class KillGridServices {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(
 				new String[] { "classpath:applicationContext-db.xml" });
 
 		HibernateTemplate templ = (HibernateTemplate) ctx
 				.getBean("hibernateTemplate");
+		//To delete all services
+		if(args.length==0){
+			templ.execute(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
 
-		templ.execute(new HibernateCallback() {
-			public Object doInHibernate(Session session)
-					throws HibernateException, SQLException {
+					List services = session.createQuery("from GridService").list();
+					for (Iterator i = services.iterator(); i.hasNext();) {
+						GridService svc = (GridService) i.next();
+						System.out.println("Deleting Service " + svc.getUrl());
 
-				List services = session.createQuery("from GridService").list();
-				for (Iterator i = services.iterator(); i.hasNext();) {
-					GridService svc = (GridService) i.next();
-					System.out.println("Deleting metadata for " + svc.getUrl());
-
-					for (final IndexService idx : svc.getIndexServices()) {
-						idx.getServices().remove(svc);
-						session.update(idx);
+						for (final IndexService idx : svc.getIndexServices()) {
+							idx.getServices().remove(svc);
+							session.update(idx);
+						}
+						session.delete(svc);
 					}
-					session.delete(svc);
+
+					return null;
 				}
-
-				return null;
-			}
-		});
-
+			});
+			//To delete given service from given index url
+		}else if(args.length==2){
+			templ.execute(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					List services = session.createQuery("from GridService").list();
+					for (Iterator i = services.iterator(); i.hasNext();) {
+						GridService svc = (GridService) i.next();
+						if(svc.getUrl().equals(args[1])){
+							System.out.println("Deleting Service " + svc.getUrl());
+							for (final IndexService idx : svc.getIndexServices()) {
+								if(idx.getUrl().equals(args[0])){
+									System.out.println("Service found in index" );
+									idx.getServices().remove(svc);
+									session.update(idx);
+								}
+							}
+							session.delete(svc);
+							System.out.println("Service deleted" );
+						}
+					}
+					return null;
+				}
+			});
+		}
 	}
 
 }

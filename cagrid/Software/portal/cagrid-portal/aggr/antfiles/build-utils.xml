@@ -72,6 +72,17 @@
         <java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="run.cp" maxmemory="2048M"
               fork="true"/>
     </target>
+    
+    <target name="run-kill-grid-svcman" depends="jar">
+	<input message="Index Service URL: " addproperty="manual.index.url"
+		       defaultvalue="${cagrid.portal.indexServiceUrls}"/>
+	<input message="Service URL: " addproperty="manual.service.url"/>
+    	<java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" 
+		classpathref="run.cp" maxmemory="2048M" fork="true">
+		<arg value="${manual.index.url}"/>
+		<arg value="${manual.service.url}"/>
+    	</java>
+    </target>
 
     <target name="run-deletequeries" depends="jar">
         <java classname="gov.nih.nci.cagrid.portal.util.DeleteQueries" classpathref="run.cp" maxmemory="2048M"
