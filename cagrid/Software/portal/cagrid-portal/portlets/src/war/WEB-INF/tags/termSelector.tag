@@ -10,13 +10,13 @@
 
 <c:set var="rtsId">${id_prefix}${term.uri}</c:set>
 <div class="row">
-	<div class="label">
+<div class="label"><label for="${rtsId}">
 <input id="${rtsId}" type="checkbox" name="${input_name}" alt="Term" value="${term.uri}">
         <span style="display:none;">${term.label}</span>
         <span style="display:none;">${term.comment}</span>
-  </input>
-<label for="${rtsId}"/>
+  </input></label>
 </div>
+
 <div class="value">
     <tags:yuiPopup popupContent="Area of Focus: ${term.comment}" label="${term.label}" id="${rtsId}-infoPopup-control"/>
 </div>

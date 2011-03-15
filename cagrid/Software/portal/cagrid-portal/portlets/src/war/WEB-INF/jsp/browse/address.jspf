@@ -17,4 +17,4 @@
 			<c:out value="${catalogEntry.countryCode}"/>
 		</c:if>
 	</address>
-</div>
+</div> 

@@ -28,4 +28,4 @@ if (q.isHtmlSuccessPage()) {
 		out.print("Query execution failed");
 	}
 }
-%>
+%> 

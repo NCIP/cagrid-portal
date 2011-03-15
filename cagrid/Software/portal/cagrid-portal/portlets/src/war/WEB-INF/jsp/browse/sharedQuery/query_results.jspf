@@ -42,4 +42,4 @@ function deleteQueryInstance(instanceId){if(!confirm("Are you sure you want to d
 <%--temporarily disabled--%>
     //    resultsCountDiv.appendChild(document.createTextNode("Total Results: "+paginator.totalRecords));
     YAHOO.util.Dom.get(container).appendChild(resultsCountDiv);}jQuery(document).ready(function(){var myTabs=new YAHOO.widget.TabView("${ns}resultsTab");${ns}loadResults(true);});
-</script>
+</script> 

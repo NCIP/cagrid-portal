@@ -74,4 +74,4 @@
 <c:otherwise>
 There are no shared queries to display. Use the <i>Query</i> tab to select queries that you would like to share.
 </c:otherwise>
-</c:choose>
+</c:choose> 

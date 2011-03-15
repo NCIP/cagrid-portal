@@ -14,4 +14,4 @@
 			</c:forEach>
 		</c:otherwise>
 		</c:choose>
-	</form:select>
+	</form:select> 

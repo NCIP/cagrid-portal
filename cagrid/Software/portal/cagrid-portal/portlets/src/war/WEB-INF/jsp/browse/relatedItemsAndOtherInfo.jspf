@@ -384,4 +384,4 @@ jQuery(document).ready(function() {
 	${ns}newHyperlinkButton = ${ns}newButton("New Hyperlink", "${ns}newHyperlink");
 	${ns}newFileButton = ${ns}newButton("New File", "${ns}newFile");
 });
-</script>
+</script> 

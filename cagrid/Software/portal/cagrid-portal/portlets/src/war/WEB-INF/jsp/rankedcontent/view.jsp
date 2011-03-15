@@ -96,6 +96,6 @@
     </div>
     <br/>
     <a href="/web/guest/catalog/all">More...</a>
-</div>
+</div> 
 
 

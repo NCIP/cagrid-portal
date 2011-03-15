@@ -15,7 +15,7 @@
 <%@ attribute name="loggedInText" required="false" %>
 
 
-<portlet:renderURL var="currentRenderURL"/>
+<portlet:renderURL var="currentRenderURL"/> 
 
 <liferay-portlet:renderURL var="loginLink" portletName="cagriddirectauthn_WAR_cagridportlets"
                            portletMode="view">

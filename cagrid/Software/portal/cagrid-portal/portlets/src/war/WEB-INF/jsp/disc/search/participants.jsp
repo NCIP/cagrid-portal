@@ -80,4 +80,4 @@
         </tbody>
     </table>
     <input type="hidden" alt="Hidden" name="discoveryType" value="PARTICIPANT"/>
-</form:form>
+</form:form> 

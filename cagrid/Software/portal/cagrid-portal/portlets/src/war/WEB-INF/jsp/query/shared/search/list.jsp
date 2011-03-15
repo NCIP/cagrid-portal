@@ -104,4 +104,4 @@
 		
 		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>
 	</c:otherwise>
-</c:choose>
+</c:choose> 

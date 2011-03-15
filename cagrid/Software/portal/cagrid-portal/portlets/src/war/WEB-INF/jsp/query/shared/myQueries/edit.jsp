@@ -66,4 +66,4 @@
 <input type="button" id="${formName}Save" alt="Save" value="Save" onclick="<portlet:namespace/>doEditSharedQueryOp('save')"/>
 <input type="button" id="${formName}Cancel" alt="Cancel" value="Cancel" onclick="<portlet:namespace/>doEditSharedQueryOp('cancel')"/>
 </form:form>
-</c:if>
+</c:if> 

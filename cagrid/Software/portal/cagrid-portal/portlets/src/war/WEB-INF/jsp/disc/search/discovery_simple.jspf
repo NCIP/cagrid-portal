@@ -47,4 +47,4 @@
         </table>
         <input type="hidden" name="discoveryType" value="SERVICE" alt="service"/>
     </form:form>
-</div>
+</div> 

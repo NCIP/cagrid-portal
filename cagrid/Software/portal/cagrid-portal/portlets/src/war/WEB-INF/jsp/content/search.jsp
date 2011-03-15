@@ -37,4 +37,4 @@
     <input type="hidden" name="searchKeyword" alt="Keywords" id="${ns}searchKeyword"/>    
     <tags:searchBox searchCallback="${ns}search" id="${ns}keyword"/>
 
-</form:form>
+</form:form> 

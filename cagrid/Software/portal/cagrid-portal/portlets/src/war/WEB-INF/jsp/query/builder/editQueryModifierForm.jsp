@@ -115,4 +115,4 @@
 <div id="<portlet:namespace/>selectedAttributesDiv" style="border:3px">
 </div>
 
-</form:form>
+</form:form> 

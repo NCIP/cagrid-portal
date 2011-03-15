@@ -212,6 +212,6 @@
 
 <% if (request.isUserInRole("Administrator")) {  %>
 	<a href="${refreshStatsUrl}">Refresh Stats</a>
-<% } %>
+<% } %> 
 
 

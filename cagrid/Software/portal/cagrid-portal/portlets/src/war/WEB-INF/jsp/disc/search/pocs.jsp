@@ -50,4 +50,4 @@
         </tbody>
     </table>
     <input type="hidden" name="discoveryType" alt="Hidden" value="POC"/>
-</form:form>
+</form:form> 

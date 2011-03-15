@@ -13,4 +13,4 @@
 
 <%-- TODO: add POCs --%>
 
-<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %> 

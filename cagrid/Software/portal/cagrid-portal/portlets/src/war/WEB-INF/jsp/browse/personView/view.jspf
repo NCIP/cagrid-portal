@@ -24,4 +24,4 @@
 		
 <%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
 
-<%@ include file="/WEB-INF/jsp/browse/personView/relatedItemsAndOtherInfo.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/personView/relatedItemsAndOtherInfo.jspf" %> 

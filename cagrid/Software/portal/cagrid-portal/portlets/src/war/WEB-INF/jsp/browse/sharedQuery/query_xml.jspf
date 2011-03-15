@@ -16,4 +16,4 @@
 </div>
  <script type="text/javascript">
  <%--if query is being copied--%><c:if test="${queryCopy !=null}">jQuery(document).ready(function(){${ns}copyQuery('${queryCopy}');});</c:if>function ${ns}copyQuery(queryXML){jQuery("#input-query").val((decodeURIComponent(queryXML)).replace(/\+/g,  " "));${ns}submitQuery();}function ${ns}submitQuery(){${managerFacadeName}.setQuery($("input-query").value,{callback:function(response){if(response!=null)alert(response);},errorHandler:function(errorString,exception){alert("Error setting query "+errorString);},async:true});}function ${ns}showQueryXml(){jQuery("#input-query").toggle();if(jQuery("#${ns}showQueryXml").html()=="View XML"){jQuery("#${ns}showQueryXml").html("Hide XML");}else{jQuery("#${ns}showQueryXml").html("View XML");}}
- </script>
+ </script> 

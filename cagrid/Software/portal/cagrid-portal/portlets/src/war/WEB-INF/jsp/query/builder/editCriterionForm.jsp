@@ -54,4 +54,4 @@
 <input type="hidden" name="operation" value="updateCriterion"/>
 <input type="hidden" name="path" value="<c:out value="${path}"/>"/>
 <input type="hidden" name="editOperation" value=""/>
-</form:form>
+</form:form> 
