@@ -75,10 +75,12 @@ public class CachedMap<E extends Enum> extends FilteredContentGenerator {
 		// get captions 
 		List<String> captions = gridServiceUmlClassDao.getUniqueCaptions();
 		Map<Object,Set> catalogIdsMap = gridServiceUmlClassDao.getCatalogIdsGroupedByClassName();
-		for  (String caption:captions) {
-			sb.append("<div class='gss_section'>"+caption+" Statistics:</div>");
+		for  (String caption:captions) {			
 			Map classCountMap = gridServiceUmlClassDao.getAggregatedClassCountByCaption(caption);
 			Iterator it = classCountMap.entrySet().iterator();
+			if(classCountMap.size()>0){
+				sb.append("<div class='gss_section'>"+caption+" Statistics:</div>");
+			}
 	        // set up classes by caption . 
 	        while (it.hasNext()) {
 	        	Map.Entry ps = (Map.Entry)it.next();

@@ -13,7 +13,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/build/xmls" />
@@ -24,12 +24,12 @@
     </orderEntry>
     <orderEntry type="library" exported="" name="poi" level="project" />
     <orderEntry type="library" exported="" name="cagrid" level="project" />
-    <orderEntry type="library" name="mail" level="project" />
-    <orderEntry type="library" name="velocity" level="project" />
+    <orderEntry type="library" exported="" name="mail" level="project" />
+    <orderEntry type="library" exported="" name="velocity" level="project" />
     <orderEntry type="module" module-name="service" exported="" />
-    <orderEntry type="library" name="mysql" level="project" />
-    <orderEntry type="module" module-name="db" />
-    <orderEntry type="library" name="test" level="project" />
+    <orderEntry type="library" exported="" name="mysql" level="project" />
+    <orderEntry type="module" module-name="db" exported="" />
+    <orderEntry type="library" exported="" name="test" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">
     <option name="_basePreferences">

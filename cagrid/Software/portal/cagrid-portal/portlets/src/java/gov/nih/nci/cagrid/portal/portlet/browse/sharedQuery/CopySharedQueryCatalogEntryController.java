@@ -13,6 +13,8 @@ import org.springframework.web.portlet.ModelAndView;
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * User: kherm
@@ -54,7 +56,12 @@ public class CopySharedQueryCatalogEntryController extends BrowseViewDetailsCont
         getUserModel().setCurrentCatalogEntry(copyCatalogEntry);
 
         ModelAndView mav = super.handleRenderRequestInternal(request, response);
-        mav.addObject(queryCopyParam, catalogEntry.getAbout().getXml());
+        //Encoding query string to fix IE issue: Query is not getting displayed while edit query
+        try{
+        	mav.addObject(queryCopyParam, URLEncoder.encode(catalogEntry.getAbout().getXml(),"UTF8"));
+        } catch (UnsupportedEncodingException e) {
+            logger.warn("Error encoding query xml", e);
+        }
         return mav;
     }
 

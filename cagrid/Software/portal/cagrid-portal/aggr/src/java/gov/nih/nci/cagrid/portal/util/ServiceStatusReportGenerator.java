@@ -182,7 +182,7 @@ public class ServiceStatusReportGenerator {
                         if (status.equals(svc.getCurrentStatus())) {
                             HSSFRow row = sheet.createRow((short) counter++);
                             addCell(row, 0, svc.getUrl());
-                            ResearchCenter rc = svc.getServiceMetadata().getHostingResearchCenter();
+                            ResearchCenter rc = BeanUtils.traverse(svc, "serviceMetadata.hostingResearchCenter",ResearchCenter.class);
                             if (rc != null) {
                                 addCell(row, 1, rc.getShortName());
 

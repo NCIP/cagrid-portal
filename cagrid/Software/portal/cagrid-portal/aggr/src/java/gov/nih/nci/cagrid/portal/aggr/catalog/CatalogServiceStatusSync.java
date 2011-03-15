@@ -21,16 +21,16 @@ public class CatalogServiceStatusSync {
     GridServiceEndPointCatalogEntryDao gridServiceEndPointCatalogEntryDao;
 
     public void sync() {
-        for (GridServiceEndPointCatalogEntry entry : gridServiceEndPointCatalogEntryDao.getAll()) {
+    	for (GridServiceEndPointCatalogEntry entry : gridServiceEndPointCatalogEntryDao.getAll()) {
             if (entry.isHidden()) {
-                if (!baseServiceFilter.willBeFiltered(entry.getAbout())) {
-                    logger.info("Catalog with ID " + entry.getId()
+            	if (!baseServiceFilter.willBeFiltered(entry.getAbout())) {
+                	logger.info("Catalog with ID " + entry.getId()
                             + " is hidden for a service that is in good standing. Will unhide");
                     entry.setHidden(false);
                     gridServiceEndPointCatalogEntryDao.save(entry);
                 }
             } else {
-                if (baseServiceFilter.willBeFiltered(entry.getAbout())) {
+            	if (baseServiceFilter.willBeFiltered(entry.getAbout())) {
                     logger.info("Catalog with ID " + entry.getId()
                             + " is not hidden for a service that is in not in good standing. Will hide");
                     entry.setHidden(true);

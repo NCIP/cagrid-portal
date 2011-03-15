@@ -87,7 +87,7 @@ public class XMLQueryResultToQueryResultTableHandler extends
 
         if (resultType != null) {
             if (ResultType.COUNT.equals(resultType)) {
-                QueryResultColumn col = new QueryResultColumn();
+            	QueryResultColumn col = new QueryResultColumn();
                 col.setName("count");
                 col.setTable(table);
                 if (persist) {
@@ -97,6 +97,11 @@ public class XMLQueryResultToQueryResultTableHandler extends
 
                 QueryResultRow row = new QueryResultRow();
                 row.setTable(table);
+                if (dataServiceUrl == null) {
+                    throw new RuntimeException(
+                            "Couldn't determine source URL");
+                }
+                row.setServiceUrl(dataServiceUrl);
                 if (persist) {
                     getQueryResultTableDao().getHibernateTemplate().save(row);
                 }
@@ -106,29 +111,13 @@ public class XMLQueryResultToQueryResultTableHandler extends
                 cell.setValue(attributes.getValue("count"));
                 cell.setRow(row);
                 cell.setColumn(col);
+                row.getCells().add(cell);
                 if (persist) {
                     getQueryResultTableDao().getHibernateTemplate().save(cell);
-                }
-                row.getCells().add(cell);
-                if (dataServiceUrl == null) {
-                    throw new RuntimeException(
-                            "Couldn't determine source URL");
-                }
-                row.setServiceUrl(dataServiceUrl);
-                if (persist) {
-                    getQueryResultTableDao().getHibernateTemplate().save(row);
-                }
+                }                
 
-            } else if (ResultType.ATTRIBUTE.equals(resultType)) {
-
-                if ("AttributeResult".equals(localName)) {
-
-                    if (currentRow != null) {
-                        if (persist) {
-                            getQueryResultTableDao().getHibernateTemplate()
-                                    .save(currentRow);
-                        }
-                    }
+            } else if (ResultType.ATTRIBUTE.equals(resultType)) {            	
+                if ("AttributeResult".equals(localName)) {                	
                     currentRow = new QueryResultRow();
                     currentRow.setTable(table);
 
@@ -145,8 +134,7 @@ public class XMLQueryResultToQueryResultTableHandler extends
                     table.getRows().add(currentRow);
 
                 } else if ("Attribute".equals(localName)) {
-
-                    String name = attributes.getValue("name");
+                	String name = attributes.getValue("name");
                     String value = attributes.getValue("value");
                     QueryResultColumn col = cols.get(name);
                     if (col == null) {
@@ -170,15 +158,9 @@ public class XMLQueryResultToQueryResultTableHandler extends
                     }
                     currentRow.getCells().add(cell);
                 }
-            } else if (ResultType.OBJECT.equals(resultType)) {
+            } else if (ResultType.OBJECT.equals(resultType)) {   	
 
-                if ("ObjectResult".equals(localName)) {
-                    if (currentRow != null) {
-                        if (persist) {
-                            getQueryResultTableDao().getHibernateTemplate()
-                                    .save(currentRow);
-                        }
-                    }
+                if ("ObjectResult".equals(localName)) {                	
                     currentRow = new QueryResultRow();
                     currentRow.setTable(table);
 
@@ -195,9 +177,7 @@ public class XMLQueryResultToQueryResultTableHandler extends
 
                 } else if ("ObjectResult".equals(elementStack.get(elementStack
                         .size() - 2).localName)) {
-
-                    for (int i = 0; i < attributes.getLength(); i++) {
-
+                	 for (int i = 0; i < attributes.getLength(); i++) {
                         String name = attributes.getLocalName(i);
                         String value = attributes.getValue(i);
                         QueryResultColumn col = cols.get(name);

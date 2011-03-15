@@ -44,8 +44,7 @@ public class PointOfContactCatalogAspect {
 
         } catch (Exception ex) {
             logger
-                    .error("Error creating catalog entry: " + ex.getMessage(),
-                            ex);
+                    .error("Error creating catalog entry: ",ex);
         }
     }
 

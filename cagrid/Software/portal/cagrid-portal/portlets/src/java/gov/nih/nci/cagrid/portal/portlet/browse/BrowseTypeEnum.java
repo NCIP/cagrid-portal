@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.browse;
 

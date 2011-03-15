@@ -17,4 +17,5 @@ public class BrowseParams {
     public static final String SELECTED_CATALOG_LABEL = "selectedCatalogLabel";
     public static final String ENTRY_ID="entryId";
     public static final String CLASS_NAME="className";
+    public static final String TEXTMAP="textMap";
 }

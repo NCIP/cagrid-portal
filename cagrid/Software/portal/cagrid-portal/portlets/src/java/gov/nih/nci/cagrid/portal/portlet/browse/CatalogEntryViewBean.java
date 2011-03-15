@@ -41,6 +41,7 @@ public class CatalogEntryViewBean {
 
 	public void initialize() {
 		for (CatalogEntryRoleInstance sourceRole : getCatalogEntry().getRoles()) {
+
 			CatalogEntryRoleInstance targetRole = sourceRole.getRelationship()
 					.getRoleA();
 			if (targetRole == sourceRole) {
@@ -51,6 +52,7 @@ public class CatalogEntryViewBean {
 
 				BrowseTypeEnum entryType = null;
 				CatalogEntry targetCe = targetRole.getCatalogEntry();
+				if (targetCe.isHidden()) continue;
 				if (targetCe instanceof PersonCatalogEntry) {
 					entryType = BrowseTypeEnum.PERSON;
 				} else if (targetCe instanceof InstitutionCatalogEntry) {

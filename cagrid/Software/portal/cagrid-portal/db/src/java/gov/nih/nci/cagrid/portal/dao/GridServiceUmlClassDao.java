@@ -14,8 +14,8 @@ import java.util.Set;
 
 import javax.persistence.NonUniqueResultException;
 
-public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
-
+public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {	
+	
 	@Override
 	public Class domainClass() {
 		// TODO Auto-generated method stub
@@ -49,35 +49,35 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
     }
 
 
-    public Map getAggregatedClassCountByCaption (String caption) {
-	    //Get list of services whose status is not DORMANT and not BANNED (not hidden services)
-	    List services = getHibernateTemplate().find("from GridService");
-	    List<Integer> serviceIds = new ArrayList<Integer>();
-	    for(int i=0;i<services.size();i++){
-	    	GridService service =(GridService) services.get(i);
-	    	if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) &&
-	    		(!service.getCurrentStatus().equals(ServiceStatus.BANNED)) &&
-	    		service.getServiceMetadata()!=null &&
-	    		service.getServiceMetadata().getServiceDescription()!=null){
-
-	    		serviceIds.add(service.getId());
-	    	}
-	    }
-
-	    List list = new ArrayList();
-	    if(serviceIds.size()>0){
-	    	String hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption and gsu.gridService.id in (:listOfIds)  group by className order by className";
-	    	String[] params = { "caption","listOfIds"};
-	        Object[] values = { caption, serviceIds };
-	        list = getHibernateTemplate().findByNamedParam(hql, params, values);
-	    }
-
-	    Map map = new HashMap();
-	    for (int i=0; i<list.size();i++) {
-	    	Object[] obj = (Object[])list.get(i);
-	    	map.put(obj[0], obj[1]);
-	    }
-	    return map;
+    public Map getAggregatedClassCountByCaption (String caption) {   	
+    	//Get list of services whose status is not DORMANT and not BANNED (not hidden services)
+    	List services = getHibernateTemplate().find("from GridService");    	
+    	List<Integer> serviceIds = new ArrayList<Integer>();
+    	for(int i=0;i<services.size();i++){
+    		GridService service =(GridService) services.get(i);
+    		if((!service.getCurrentStatus().equals(ServiceStatus.DORMANT)) && 
+    			(!service.getCurrentStatus().equals(ServiceStatus.BANNED)) &&
+    			service.getServiceMetadata()!=null && 
+    			service.getServiceMetadata().getServiceDescription()!=null){   			
+    			
+    			serviceIds.add(service.getId());
+    		}
+    	}
+    	
+    	List list = new ArrayList();
+    	if(serviceIds.size()>0){
+    		String hql = "select gsu.umlClass.className as className , sum(gsu.objectCount) as count from GridServiceUmlClass gsu where gsu.caption = :caption and gsu.gridService.id in (:listOfIds)  group by className order by className";
+    		String[] params = { "caption","listOfIds"};
+        	Object[] values = { caption, serviceIds };
+        	list = getHibernateTemplate().findByNamedParam(hql, params, values);
+    	}
+    	
+    	Map map = new HashMap();
+    	for (int i=0; i<list.size();i++) {
+    		Object[] obj = (Object[])list.get(i);
+    		map.put(obj[0], obj[1]);
+    	}
+    	return map;
    }
 
    public Map<Object,Set> getCatalogIdsGroupedByClassName() {
@@ -99,6 +99,6 @@ public class GridServiceUmlClassDao extends AbstractDao<GridServiceUmlClass> {
 
 	   	}
 	   	return map;
-   }
+   }	
 
 }

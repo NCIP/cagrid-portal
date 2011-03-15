@@ -30,6 +30,15 @@ span.summary{
 	width:603px;
 	color:gray;
 }
+
+#mapLegend a {
+    text-decoration:none;
+}
+
+#mapLegend div#textMap {
+    float:left;    
+}
+
 #mapLegend img {
 	vertical-align:middle;
 	margin:5px 5px 0 10px;
