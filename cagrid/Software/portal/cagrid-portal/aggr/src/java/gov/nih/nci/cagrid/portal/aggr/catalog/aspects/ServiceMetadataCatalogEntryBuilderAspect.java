@@ -39,7 +39,12 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                 logger.info("Service should be filtered. Will hide the associate CE");
                 GridServiceEndPointCatalogEntry entry = service.getCatalog();
                 if (entry != null) {
+					try{
                     gridServiceEndPointCatalogEntryDao.hide(entry);
+                    gridServiceEndPointCatalogEntryDao.getHibernateTemplate.flush();
+				}catch(Exception e){
+						logger.error("Error while hiding catalog", e);
+					}
 
                     //clean up the statistics
                     try {
