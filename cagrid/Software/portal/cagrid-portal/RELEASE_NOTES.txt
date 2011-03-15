@@ -59,7 +59,8 @@ The following major new features were implemented in this release
 The following bugs were fixed in this release
 
 16914	Portal does not notice when credentials are required by a service, but the user isn't logged in	
-30054 	Unable to execute shared queries
+30054 	Unable to execute shared queries in IE
+30407 	Unable to execute shared queries in Safari
 30016 	Enable Add button issue in IE for Area of focus page
 29977 	JavaScript errors in IE
 27505 	Comments and Related Entries are listed on the same tab in IE
