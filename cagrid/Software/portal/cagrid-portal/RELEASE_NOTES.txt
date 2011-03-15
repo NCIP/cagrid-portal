@@ -50,6 +50,7 @@ The following major new features were implemented in this release
 	 
 	Upgraded to Java 6
 30420	Implemented Text version of the Map as part for 508 compliance
+30776 	Provide a utility to delete given service from index service in portal
 
 ================================================================
                       4.0 Bug fixes Since Last Release
@@ -68,8 +69,6 @@ The following bugs were fixed in this release
 30763 	Catalog search is not working for URL's
 28324	Shared query counts in the UI is not correct
 27894	Shared query execution result exported to Excel: results in the screen and in excel file do not match
-30763 	Catalog search is not working for URL's
-30776 	Provide a utility to delete given service from index service in portal
 
 
 ================================================================
