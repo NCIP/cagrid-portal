@@ -26,13 +26,13 @@
                 </label>
             </td>
             <td>
-                <input type="text" alt="Keywords" name="keywords"/>
+                <input type="text" alt="Keywords" name="keywords" id="keywords"/>
             </td>
         </tr>
         <tr>
-            <td>Search Fields:</td>
+            <td><label for="searchFields" /> Search Fields:</td>
             <td>
-                <select name="searchFields" multiple size="8">
+                <select id="searchFields" name="searchFields" multiple size="8">
                     <option value="person.firstName">First Name</option>
                     <option value="person.lastName">Last Name</option>
                     <option value="role">Role</option>
@@ -50,4 +50,4 @@
         </tbody>
     </table>
     <input type="hidden" name="discoveryType" alt="Hidden" value="POC"/>
-</form:form>
+</form:form> 

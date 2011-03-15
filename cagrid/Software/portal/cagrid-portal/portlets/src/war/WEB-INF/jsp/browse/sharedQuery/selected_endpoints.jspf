@@ -2,7 +2,7 @@
 
 <div class="yui-skin-sam">
     <div class="row">
-        <label for="selectedEndpoints">
+        <label for="${ns}selectedEndpoints">
             Selected Data Sources
         </label>
 
@@ -14,7 +14,7 @@
 
     </div>
     <div class="row">
-        <label>&nbsp;</label>
+        <div class="title">&nbsp;</div>
         <span id="${ns}executeQueryButtonContainer"></span>
     </div>
     <%@ include file="/WEB-INF/jsp/browse/sharedQuery/query_results.jspf" %>

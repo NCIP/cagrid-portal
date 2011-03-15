@@ -1,5 +1,5 @@
-<td style="padding-right:5px">
-    <select name="operation"
+<td style="padding-right:5px"><label for="operation">
+    <select name="operation" id="operation"
             onchange="<c:out value="${namespace}"/>executeHistoryOperation('<c:out value="${instance.id}"/>',
     this.options[this.selectedIndex].value)">
     <option value="---" selected>---</option>
@@ -14,7 +14,7 @@
     </c:if>
     <option value="reloadQueryInstance">Re-Load</option>
     <option value="deleteQueryInstance">Delete</option>
-    </select></td>
+    </select></label></td>
 <td style="padding-right:5px">
     <span>
 <c:if test="${instance.state == 'RUNNING'}">

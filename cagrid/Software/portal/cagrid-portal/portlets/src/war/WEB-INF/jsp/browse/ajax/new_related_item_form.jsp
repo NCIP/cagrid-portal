@@ -14,13 +14,13 @@
 <div class="row">
 How does this <spring:message code="${sourceRoleType.type}"/> relate to 
 the selected <spring:message code="${targetRoleType.type}"/>?<br/>
-<label for="targetRoleDescription">Description</label>
+<label for="${ns}targetRoleDescription">Description</label>
 <textarea name="targetRoleDescription" id="${ns}targetRoleDescription" class="required"></textarea>
 </div>
 
 <div class="row">
 Enter the name of the related catalog entry.<br/>
-<label for="relatedEntryName">Related Entry</label>
+<label for="${ns}relatedEntryName">Related Entry</label>
 <input type="text" alt="Related Entry Name" name="relatedEntryName" id="${ns}relatedEntryName" style="width:50em;"/>
 
 <input type="hidden" alt="Hidden" name="relatedEntryId" id="${ns}relatedEntryId" value="" class="required"/>

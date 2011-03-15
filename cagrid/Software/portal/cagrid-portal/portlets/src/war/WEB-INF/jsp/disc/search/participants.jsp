@@ -26,11 +26,11 @@
                 </label>
             </td>
             <td>
-                <input type="text" alt="Keywords" name="keywords"/>
+                <input type="text" alt="Keywords" name="keywords" id="keywords"/>
             </td>
         </tr>
         <tr>
-            <td>Search Fields:</td>
+            <td><label for="${participantDiscoveryControlsFormName}Search"/>Search Fields:</td>
             <td>
                 <select id="${participantDiscoveryControlsFormName}Search" name="searchFields" multiple size="8">
                     <option id="${participantDiscoveryControlsFormName}Name" value="name">Name</option>
@@ -80,4 +80,4 @@
         </tbody>
     </table>
     <input type="hidden" alt="Hidden" name="discoveryType" value="PARTICIPANT"/>
-</form:form>
+</form:form> 

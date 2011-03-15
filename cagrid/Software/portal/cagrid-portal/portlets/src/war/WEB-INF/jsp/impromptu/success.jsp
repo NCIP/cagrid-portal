@@ -16,11 +16,16 @@ s = s + q.getUuid();
 if (q.isHtmlSuccessPage()) {
     %>
     <html>
-    <head></head>
+    <head><title>Impromptu Query Results</title></head>
     <body><a href="<%=s%>"><%=s%></a></body>
     </html>
     <%
-} else {
-	out.print(s);
+} else {	 
+	 if (ImpromptuQueryStorage.instance.getResult(q.getUuid().toString())!=null) {
+	 	response.setContentType("text/xml");
+		out.print(ImpromptuQueryStorage.instance.getResult(q.getUuid().toString()));
+	}else{
+		out.print("Query execution failed");
+	}
 }
-%>
+%> 

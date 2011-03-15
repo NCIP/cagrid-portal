@@ -33,14 +33,14 @@
 	<tbody>
 		<tr>
 			<td style="padding:5px"><c:out value="${criterionBean.umlAttribute.name}"/></td>
-			<td style="padding:5px">
+			<td style="padding:5px"><label for="${criterionBeanFormName}Predicate"/>
 				<form:select id="${criterionBeanFormName}Predicate" path="predicate">
 					<c:forEach var="pred" items="${predicates}">
 						<form:option value="${pred}"/>
 					</c:forEach>
 				</form:select>
 			</td>
-			<td style="padding:5px">
+			<td style="padding:5px"><label for="${criterionBeanFormName}Value"/>
 				<form:input id="${criterionBeanFormName}Value"  alt="Value" path="value"/>
 			</td>
 		</tr>
@@ -54,4 +54,4 @@
 <input type="hidden" name="operation" value="updateCriterion"/>
 <input type="hidden" name="path" value="<c:out value="${path}"/>"/>
 <input type="hidden" name="editOperation" value=""/>
-</form:form>
+</form:form> 

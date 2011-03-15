@@ -15,9 +15,9 @@
 <form name="addCommentForm">
     <div>
         <div class="row">
-            <div class="label">
+            <label for="${ns}commentText">
                 Comment:
-            </div>
+            </label>
             <div class="tight value">
                 <textarea id="${ns}commentText" rows="4" cols="50"/>
             </div>

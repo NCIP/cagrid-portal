@@ -37,3 +37,6 @@
 <c:set var="mapBean" value="${mapCommand}"/>
 
 <%@ include file="/WEB-INF/jsp/map/map.jspf" %>
+
+
+<a>Text Version of the map</a> 

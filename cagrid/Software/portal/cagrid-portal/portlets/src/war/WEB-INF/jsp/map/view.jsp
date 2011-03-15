@@ -27,7 +27,8 @@
 
 <liferay-portlet:renderURL var="viewCatalogs" portletName="BrowsePortlet_WAR_cagridportlets"
                            portletMode="view">
-    <liferay-portlet:param name="operation" value="view"/>
+    <liferay-portlet:param name="operation" value="textMap"/>
+    <liferay-portlet:param name="textMap" value="true"/>
 </liferay-portlet:renderURL>
 
 
@@ -195,6 +196,13 @@
         $("${prefix}mapNodeForm").action = viewCatalogsLink;
         $('${prefix}mapNodeForm').submit();
     }
+    
+    function selectTextMap(){
+    	var textMapUrl = "${viewCatalogs}";
+    	textMapUrl = textMapUrl.replace("/guest/home", "/guest/catalog/all");
+        $("${prefix}mapNodeForm").action = textMapUrl;
+        $('${prefix}mapNodeForm').submit();
+    }
 
 </script>
 
@@ -204,6 +212,6 @@
 
 <% if (request.isUserInRole("Administrator")) {  %>
 	<a href="${refreshStatsUrl}">Refresh Stats</a>
-<% } %>
+<% } %> 
 
 

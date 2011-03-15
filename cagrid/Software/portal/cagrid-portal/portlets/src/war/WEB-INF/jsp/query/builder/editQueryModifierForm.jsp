@@ -48,7 +48,7 @@
 	function <portlet:namespace/>addSelectedAttributesInputElements(inputType){
 		for(var i = 0; i < <portlet:namespace/>availableAttributes.length; i++){
 			var attName = <portlet:namespace/>availableAttributes[i];
-			var inputEl = "<input type='" + inputType + "' name='selectedAttributes' value='" + attName + "' ";
+			var inputEl = "<label for='"+<portlet:namespace/>selectedAttributesMap[attName]+"' /><input type='" + inputType + "' id='"+<portlet:namespace/>selectedAttributesMap[attName]+"' name='selectedAttributes' value='" + attName + "' ";
 			if(<portlet:namespace/>selectedAttributesMap[attName]){
 				inputEl += " checked ";
 			}
@@ -95,9 +95,13 @@
            name="${editQueryModifierFormName}" action="${editQueryModifierFormAction}">
 
 <br/>
+<label for="${objectInputId}"/>
 <form:radiobutton id="${objectInputId}" value="OBJECT" path="modifierType"/>Object&nbsp;&nbsp;
+<label for="${countOnlyInputId}"/>
 <form:radiobutton id="${countOnlyInputId}" value="COUNT_ONLY" path="modifierType"/>Count Only&nbsp;&nbsp;
+<label for="${distinctAttributeInputId}"/>
 <form:radiobutton id="${distinctAttributeInputId}" value="DISTINCT_ATTRIBUTE" path="modifierType"/>Distinct Attribute&nbsp;&nbsp;
+<label for="${selectedAttributesInputId}"/>
 <form:radiobutton id="${selectedAttributesInputId}" value="SELECTED_ATTRIBUTES" path="modifierType"/>Selected Attributes&nbsp;&nbsp;
 <br/>
 <br/>
@@ -111,4 +115,4 @@
 <div id="<portlet:namespace/>selectedAttributesDiv" style="border:3px">
 </div>
 
-</form:form>
+</form:form> 

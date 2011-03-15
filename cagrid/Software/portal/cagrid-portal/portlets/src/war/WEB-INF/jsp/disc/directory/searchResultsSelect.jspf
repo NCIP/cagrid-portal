@@ -1,3 +1,4 @@
+	<label for="selectedResults" />
 	<form:select id="selectedResults" onchange="submit()" path="selectedResults">
 		<c:choose>
 		<c:when test="${empty results}">
@@ -13,4 +14,4 @@
 			</c:forEach>
 		</c:otherwise>
 		</c:choose>
-	</form:select>
+	</form:select> 

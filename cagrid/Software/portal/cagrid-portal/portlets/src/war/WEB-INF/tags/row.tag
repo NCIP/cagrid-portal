@@ -12,10 +12,10 @@
 <div class="row">
     <c:choose>
         <c:when test="${!useLabel}">
-            <div class="label"><c:out value="${rowLabel}"/></div>
+            <div class="title"><c:out value="${rowLabel}"/></div>
         </c:when>
         <c:otherwise>
-            <label><c:out value="${rowLabel}"/></label>
+            <label for="${rowLabel}"><c:out value="${rowLabel}"/></label>
         </c:otherwise>
     </c:choose>
     <div class="value"><c:out value="${rowValue}"/></div>

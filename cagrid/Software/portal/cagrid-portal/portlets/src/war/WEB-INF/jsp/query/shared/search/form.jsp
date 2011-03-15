@@ -38,7 +38,7 @@
 <table>
 	<tr>
 		<td style="padding-right:5px;">
-            <label for="keywords">
+            <label for="${formName}Keywords">
                 Keyword:
             </label>
         </td>
@@ -47,9 +47,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-right:5px;" valign="top"><b>Search Fields:</b></td>
+		<td style="padding-right:5px;" valign="top"><label for="${formName}searchFields"><b>Search Fields:</b></td>
 		<td>
-			<select name="searchFields" multiple size="8">
+			<select id="${formName}searchFields" name="searchFields" multiple size="8">
 				<option id="${formName}Name" value="name">Query Name</option>
 				<option id="${formName}Desc" value="description">Query Description</option>
 				<option id="${formName}Url" value="targetService.url">Target Service URL</option>
@@ -68,4 +68,4 @@
 	</tr>
 </table>
 
-</form:form>
+</form:form> 

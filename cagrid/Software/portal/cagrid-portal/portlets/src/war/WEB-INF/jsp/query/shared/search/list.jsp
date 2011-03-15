@@ -68,7 +68,7 @@
 				</c:choose>
 			
 			<tr class="<c:out value="${rowClass}"/>">
-				<td class="dataCellText">
+				<td class="dataCellText"><label for="${formName}Operation"/>
 					<select id="${formName}Operation" name="operation"
 						onchange="<portlet:namespace/>doSharedQueryOp('<c:out value="${sharedQuery.id}"/>', this.options[this.selectedIndex].value)">
 						<option id="${formName}Selected" value="---" selected>---</option>
@@ -104,4 +104,4 @@
 		
 		<%@ include file="/WEB-INF/jsp/include/scroll_controls.jspf" %>
 	</c:otherwise>
-</c:choose>
+</c:choose> 

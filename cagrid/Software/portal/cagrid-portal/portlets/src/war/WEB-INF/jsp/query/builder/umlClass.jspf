@@ -44,7 +44,7 @@
                             <div class="label">
                                 Local Attribute:
                             </div>
-                            <div class="value">
+                            <div class="value"><label for="${nodePath}"/>
                                 <select id="<c:out value="${nodePath}"/>localAttributeName"
                                         onchange="${prefix}changeJoin('<c:out value="${nodePath}"/>')">
                                     <c:forEach var="att" items="${currNode.parent.content.attributes}">
@@ -67,7 +67,7 @@
                             <div class="label">
                                 Predicate:
                             </div>
-                            <div class="value">
+                            <div class="value"><label for="${nodePath}"/>
                                 <select id="<c:out value="${nodePath}"/>predicate"
                                         onchange="${prefix}changeJoin('<c:out value="${nodePath}"/>')">
                                     <c:forEach var="predicate" items="${predicates}">
@@ -92,7 +92,7 @@
                             <div class="label">
                                 Foreign Attribute:
                             </div>
-                            <div class="value">
+                            <div class="value"><label for="${nodePath}"/>
 
                                 <select id="<c:out value="${nodePath}"/>foreignAttributeName"
                                         onchange="${prefix}changeJoin('<c:out value="${nodePath}"/>')">
@@ -134,4 +134,4 @@
         </c:choose>
 	</jsp:attribute>
 
-</m:tree>
+</m:tree> 

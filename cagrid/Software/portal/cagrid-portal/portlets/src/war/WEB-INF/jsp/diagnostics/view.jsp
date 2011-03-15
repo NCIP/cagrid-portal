@@ -25,7 +25,7 @@
     </tr>
     <tr>
         <td>
-            <label for="url">
+            <label for="${prefix}url">
             Service URL:&nbsp;
         </label>
         </td>
@@ -162,6 +162,6 @@
     }
 
 
-</script>
+</script> 
 
 

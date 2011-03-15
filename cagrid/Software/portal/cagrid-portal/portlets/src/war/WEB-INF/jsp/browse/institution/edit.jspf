@@ -10,7 +10,7 @@
             <label for="phoneNumber">
                 Phone
             </label>
-            <input type="text" name="phoneNumber" alt="Phone Number" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
+            <input type="text" id="phoneNumber" name="phoneNumber" alt="Phone Number" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
             "></span>
 
         </div>
@@ -18,7 +18,7 @@
             <label for="emailAddress">
                 e-mail
             </label>
-            <input type="text" name="emailAddress" alt="Email Address" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
+            <input type="text" id="emailAddress" name="emailAddress" alt="Email Address" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
             "></span>
 
         </div>
@@ -27,7 +27,7 @@
             <label for="street1">
                 Street Line 1
             </label>
-            <input type="text" name="street1" alt="Street 1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
+            <input type="text" id="street1" name="street1" alt="Street 1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
             "></span>
 
         </div>
@@ -35,7 +35,7 @@
             <label for="street2">
                 Street Line 2
             </label>
-            <input type="text" name="street2" alt="Street 2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
+            <input type="text" id="street2" name="street2" alt="Street 2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
             "></span>
 
         </div>
@@ -43,7 +43,7 @@
             <label for="locality">
                 City/Locality
             </label>
-            <input type="text" name="locality" alt="Locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
+            <input type="text" id="locality" name="locality" alt="Locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
             "></span>
 
         </div>
@@ -51,7 +51,7 @@
             <label for="stateProvince">
                 State/Province
             </label>
-            <select name="stateProvince" alt="State" class="autoSet">
+            <select id="stateProvince" name="stateProvince" alt="State" class="autoSet">
             </select>
         </div>
         
@@ -61,13 +61,13 @@
             <label for="phoneNumberPublic">
                 Public Phone Number?
             </label>
-            Yes: <input type="radio" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="true"
+            Yes: <input type="radio" id="phoneNumberPublic" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="true"
             <c:if test="${catalogEntry.phoneNumberPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="false"
+            <input type="radio" id="phoneNumberPublic" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="false"
             <c:if test="${!catalogEntry.phoneNumberPublic}">
                 checked
             </c:if>
@@ -77,13 +77,13 @@
             <label for="emailAddressPublic">
                 Public Email?
             </label>
-            Yes: <input type="radio" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="true"
+            Yes: <input type="radio" id="emailAddressPublic" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="true"
             <c:if test="${catalogEntry.emailAddressPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="false"
+            <input type="radio" id="emailAddressPublic" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="false"
             <c:if test="${!catalogEntry.emailAddressPublic}">
                 checked
             </c:if>
@@ -94,13 +94,13 @@
             <label for="addressPublic">
                 Public Address?
             </label>
-            Yes: <input type="radio" name="addressPublic" alt="Address is Public ?" class="autoSet" value="true"
+            Yes: <input type="radio" id="addressPublic" name="addressPublic" alt="Address is Public ?" class="autoSet" value="true"
             <c:if test="${catalogEntry.addressPublic}">
                 checked
             </c:if>
             /> 
             No: 
-            <input type="radio" name="addressPublic" alt="Address is Public ?"  class="autoSet" value="false"
+            <input type="radio" id="addressPublic" name="addressPublic" alt="Address is Public ?"  class="autoSet" value="false"
             <c:if test="${!catalogEntry.addressPublic}">
                 checked
             </c:if>
@@ -113,7 +113,7 @@
             <label for="countryCode">
                 Country
             </label>
-            <select name="countryCode" class="autoSet" onChange="${ns}printStateMenu(this.value);">
+            <select id="countryCode" name="countryCode" class="autoSet" onChange="${ns}printStateMenu(this.value);">
                 <%@ include file="/WEB-INF/jsp/include/country_options.jspf" %>
             </select>
         </div>
@@ -121,7 +121,7 @@
             <label for="webSite">
                 Website
             </label>
-            <input type="text" name="webSite" class="autoSet" alt="Website"  value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
+            <input type="text" id="webSite" name="webSite" class="autoSet" alt="Website"  value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
             "></span>
 
         </div>
@@ -213,4 +213,4 @@ function ${ns}printStateMenu(country) {
 			
 ${ns}printStateMenu('US');		
 			
-</script>
+</script> 

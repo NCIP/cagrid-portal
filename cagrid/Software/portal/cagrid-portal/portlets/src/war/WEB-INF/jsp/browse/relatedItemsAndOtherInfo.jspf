@@ -376,7 +376,7 @@ function ${ns}newButton(label, baseName){
 
 jQuery(document).ready(function() {
     var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
-    commentsTab = myTabs.getTab(1);
+    var commentsTab = myTabs.getTab(1);
     commentsTab.addListener('click', ${ns}loadComments);
 
 
@@ -384,4 +384,4 @@ jQuery(document).ready(function() {
 	${ns}newHyperlinkButton = ${ns}newButton("New Hyperlink", "${ns}newHyperlink");
 	${ns}newFileButton = ${ns}newButton("New File", "${ns}newFile");
 });
-</script>
+</script> 

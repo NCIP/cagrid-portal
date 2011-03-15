@@ -15,7 +15,7 @@
 <%@ attribute name="loggedInText" required="false" %>
 
 
-<portlet:renderURL var="currentRenderURL"/>
+<portlet:renderURL var="currentRenderURL"/> 
 
 <liferay-portlet:renderURL var="loginLink" portletName="cagriddirectauthn_WAR_cagridportlets"
                            portletMode="view">
@@ -54,6 +54,7 @@
 <script type="text/javascript">
     function ${id}login() {
         var loginLink = "${loginLink}";
+        loginLink = loginLink.replace(/;jsessionid=[a-zA-Z0-9]*/, "");
         loginLink = loginLink.replace(/\/guest\/[a-zA-Z]+\?/, "/guest/login?");
         loginLink = loginLink.replace(/\/guest\/[a-zA-Z]+\/[a-zA-Z]+\?/, "/guest/login?");
 

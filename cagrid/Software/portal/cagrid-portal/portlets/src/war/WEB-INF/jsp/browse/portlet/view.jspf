@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/browse/common/view/photo_row.jspf" %>
 
 <div class="row">
-	<label></label>
+	<div class="title"></div>
 	<div class="value"><a href="${catalogEntry.portalUrl}">Try It!</a></div>
 </div>
 
@@ -12,4 +12,4 @@
 
 <%@ include file="/WEB-INF/jsp/browse/pocs.jspf" %>
 
-<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %> 

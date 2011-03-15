@@ -61,6 +61,7 @@
                      var thumbImg = document.createElement('img');
                 thumbImg.setAttribute('src', '/cagridportlets/images/catalog_icons/'+catalog.catalog_type+'.png');
                 thumbImg.setAttribute('align','middle');
+                thumbImg.setAttribute('alt',catalog.catalog_type);
                 thumbImgDiv.appendChild(thumbImg);
                 resultDiv.appendChild(thumbImgDiv);
 
@@ -94,6 +95,6 @@
     </div>
     <br/>
     <a href="/web/guest/catalog/all">More...</a>
-</div>
+</div> 
 
 

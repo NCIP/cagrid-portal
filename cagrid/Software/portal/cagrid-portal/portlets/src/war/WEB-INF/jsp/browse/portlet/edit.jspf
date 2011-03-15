@@ -5,7 +5,7 @@
 <!-- Portal URL Field -->
 <div class="row">
     <label for="portalUrl">Portal URL</label>
-    <input type="text" name="portalUrl" class="autoSet" size="100" alt="portal url"
+    <input type="text" id="portalUrl" name="portalUrl" class="autoSet" size="100" alt="portal url"
            value="<c:out value="${catalogEntry.portalUrl}"/>"/><span style="color: red"></span>
 </div>
 
@@ -13,4 +13,4 @@
 
 <%-- TODO: add POCs --%>
 
-<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %> 

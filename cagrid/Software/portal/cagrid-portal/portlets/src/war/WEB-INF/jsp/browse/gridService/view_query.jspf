@@ -4,10 +4,9 @@
     <liferay-portlet:param name="dataServiceUrl" value="${gridService.url}"/>
 </liferay-portlet:actionURL>
 
-
-    <span id="${ns}queryBtnContainer" class="yui-skin-sam" />
-    <span id="${ns}queryTipContainer" class="yui-skin-sam"/>
-
+<div class="yui-skin-sam" >
+    <input type="button" id="${ns}queryButton"/>
+</div>
 
 <script type="text/javascript">
 
@@ -23,24 +22,22 @@
     jQuery(document).ready(function() {
 
 
-        ${ns}queryButton = new YAHOO.widget.Button({
-            label: "Query",
-            id: "${ns}queryButton",
-            container: "${ns}queryBtnContainer"
+        var ${ns}queryButton = new YAHOO.widget.Button("${ns}queryButton",{
+            label: "Query"                              
         });
-
+        
         ${ns}queryButton.on("click", function(evt) {
-            var queryLink = "${queryLink}";
-            queryLink = replacePart(queryLink, "web/guest/", "?", "tools/query-builder");
-            window.location = queryLink;
+	            var queryLink = "${queryLink}";
+	            queryLink = replacePart(queryLink, "web/guest/", "?", "tools/query-builder");
+	            window.location = queryLink;
         });
-
-        ${ns}queryTip = new YAHOO.widget.Tooltip("queryTip", {
-            context:"${ns}queryBtnContainer",
-            text:"Construct a Query for this Data Service.",
-            container:"${ns}queryTipContainer",
+        
+        var ${ns}queryTip = new YAHOO.widget.Tooltip("queryTip", {
+            context:"${ns}queryButton",
+            text:"Construct a Query for this Data Service.",           
             showDelay:200 });
 
-    });
+    	});
+ 
 
-</script>
+</script> 

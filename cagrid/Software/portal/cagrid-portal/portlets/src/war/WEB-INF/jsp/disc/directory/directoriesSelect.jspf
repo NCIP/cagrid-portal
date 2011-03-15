@@ -1,3 +1,4 @@
-	<form:select onchange="submit()" path="selectedDirectory">
+	<label for="selectedDirectory" />
+	<form:select onchange="submit()" path="selectedDirectory" id="selectedDirectory">
 		<%@ include file="/WEB-INF/jsp/disc/directory/directories.jspf" %>
-	</form:select>
+	</form:select> 

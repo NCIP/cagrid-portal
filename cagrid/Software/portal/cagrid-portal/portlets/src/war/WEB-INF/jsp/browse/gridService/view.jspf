@@ -6,35 +6,34 @@
     <c:set var="gridService" value="${catalogEntry.about}"/>
 
     <div class="row">
-        <label>
+        <div class="title">
             URL
-        </label>
-        <span class="value">
+        </div>
+        <div class="value">
                 ${gridService.url}
-        </span>
+        </div>
     </div>
     <c:if test="${gridService.class.simpleName == 'GridDataService'}">
     <div class="row">
-    	<label>&nbsp;</label>
+    	<div class="title">&nbsp;</div>
     	<%@ include file="/WEB-INF/jsp/browse/gridService/view_query.jspf" %>
-    </div>
-    </c:if>
-
+    </div>    
+    </c:if>	
     <div class="row">
-        <label>
+        <div class="title">
             Status
-        </label>
+        </div>
         <div class="value">
-        	<span
+        	
         	<c:if test="${gridService.currentStatus != 'ACTIVE'}">
 			style="color:red;"        	
         	</c:if>
-        	><c:out value="${gridService.currentStatus}"/></span>
+        	${gridService.currentStatus}
         </div>
    </div>
    <c:if test="${gridService.currentStatus != 'ACTIVE'}">
    <div class="row">
-   		<label>&nbsp;</label>
+   		<div class="title">&nbsp;</div>
    		<%@ include file="/WEB-INF/jsp/browse/gridService/view_diagnose.jspf" %>
    </div>   
    </c:if>
@@ -44,14 +43,14 @@
 	<script type="text/javascript" src='<c:url value="/js/scriptaculous/controls.js"/>'></script>
 
     <div class="row">
-            <label>Notifications</label>
+            <div class="title">Notifications</div>
     <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
-    </div>
+    </div>    
     <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>
 
 </c:if>
 
 <%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
 <%@ include file="/WEB-INF/jsp/browse/pocs.jspf" %>
-<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %> 
 

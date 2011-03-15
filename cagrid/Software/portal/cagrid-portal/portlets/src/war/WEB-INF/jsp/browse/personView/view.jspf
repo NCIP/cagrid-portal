@@ -14,9 +14,9 @@
 			</c:if>
 			<c:if test="${!empty catalogEntry.webSite}">
             <div class="row">
-                <label for="website">
+                <div class="title">
                     Website
-                </label>
+                </div>
                 <a href="${catalogEntry.webSite}" target="_blank">${catalogEntry.webSite}</a>
             </div>
 			</c:if>
@@ -24,4 +24,4 @@
 		
 <%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
 
-<%@ include file="/WEB-INF/jsp/browse/personView/relatedItemsAndOtherInfo.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/personView/relatedItemsAndOtherInfo.jspf" %> 

@@ -57,23 +57,23 @@
         <div class="row">
             <div class="leftpanel">
                 <div class="row">
-                    <div class="label">First Name</div>
-                    <div class="value"><input type="text" alt="First Name" name="firstName" class="autoSet required"/></div>
+                    <label for="firstName">First Name</label>
+                    <div class="value"><input type="text" alt="First Name" id="firstName" name="firstName" class="autoSet required"/></div>
                 </div>
                 <div class="row">
                     <label for="lastName">Last Name</label>
-                    <input type="text" name="lastName" alt="Last Name" class="autoSet required"/>
+                    <input type="text" id="lastName" name="lastName" alt="Last Name" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="username">User Name</label>
-                    <input type="text" name="username" alt="Username" class="autoSet required"/>
+                    <input type="text" id="username" name="username" alt="Username" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="password">Password</label>
-                    <input type="password" name="password" alt="Password" id="password"/>
+                    <input type="password" id="password" name="password" alt="Password" id="password"/>
                 </div>
                 <div class="row">
-                    <label for="password">ReType Password</label>
+                    <label for="password2">ReType Password</label>
                     <input type="password" id="password2" alt="Password"/>
 
                     <div id="passwordError" class="errorMsg" style="display:none;">
@@ -83,29 +83,29 @@
 
                 <div class="row">
                     <label for="email">e-mail</label>
-                    <input type="text" name="email" alt="Email" class="autoSet required"/>
+                    <input type="text" id="email" name="email" alt="Email" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="phone">Phone</label>
-                    <input type="text" name="phone" alt="Phone" class="autoSet required"/>
+                    <input type="text" id="phone" name="phone" alt="Phone" class="autoSet required"/>
                 </div>
             </div>
             <div class="rightpanel">
                 <div class="row">
                     <label for="organization">Organization</label>
-                    <input type="text" name="organization" alt="Organization" class="autoSet required"/>
+                    <input type="text" id="organization" name="organization" alt="Organization" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="street1">Street 1</label>
-                    <input type="text" name="street1" alt="Street 1" class="autoSet required"/>
+                    <input type="text" id="street1" name="street1" alt="Street 1" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="street2">Street 2</label>
-                    <input type="text" name="street2" alt="Street 2" class="autoSet"/>
+                    <input type="text" id="street2" name="street2" alt="Street 2" class="autoSet"/>
                 </div>
                 <div class="row">
                     <label for="locality">City/Locality</label>
-                    <input type="text" name="locality" alt="Locality" class="autoSet required"/>
+                    <input type="text" id="locality" name="locality" alt="Locality" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="stateProvince">State/Province</label>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="row">
                     <label for="postalCode">Postal Code</label>
-                    <input type="text" name="postalCode"  alt="Postal Code" class="autoSet required"/>
+                    <input type="text"  id="postalCode" name="postalCode"  alt="Postal Code" class="autoSet required"/>
                 </div>
                 <div class="row">
                     <label for="country">Country</label>
@@ -222,4 +222,4 @@
             return null;
         }
     }
-</script>
+</script> 

@@ -122,7 +122,7 @@
                     iconLnk.className = "oneResultIcon";
                     var icon = document.createElement('img');
                     icon.setAttribute('src', '<c:url value="/images/catalog_icons/"/>' + result.catalog_type + '.png');
-                    icon.setAttribute('alt', '');
+                    icon.setAttribute('alt', result.catalog_type);
                     iconLnk.appendChild(icon);
                     resultDiv.appendChild(iconLnk);
 
@@ -197,7 +197,7 @@
 
     jQuery(document).ready(function() {
         var _searchKeyword = unescape('<c:out value="${searchKeyword}"/>');
-        if (_searchKeyword != null && _searchKeyword != '*:*') {
+        if (_searchKeyword != null && _searchKeyword != '*:*' &&_searchKeyword != '*%3A*') {
             wildcard = "<c:out value="${searchKeyword}"/>";
             wildcard = _searchKeyword;
             $("${ns}keyword").value = wildcard;
@@ -299,7 +299,7 @@
             <br style="clear:both;"/>
         </div>
     </div>
-</form:form>
+</form:form> 
 
 
 

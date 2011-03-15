@@ -11,18 +11,18 @@
 <table>
 <tr>
     <td valign="top" style="padding-right:5px; text-align:right">
-      <label for="keywords">
+      <label for="keywords1">
                 Keyword:
        </label>
     </td>
     <td valign="top">
-        <input type="text" name="keywords" value="Keywords" class="searchField"/>
+        <input type="text" id="keywords1" name="keywords" value="Keywords" class="searchField"/>
     </td>
 </tr>
 <tr>
 <td valign="top" style="padding-right:5px; align:right"><b>Search Fields:</b></td>
-<td valign="top">
-<select id="${prefix}searchFields"  name="searchFields" multiple size="8">
+<td valign="top"><label for="${prefix}searchFields1"/>
+<select id="${prefix}searchFields1"  name="searchFields" multiple size="8">
 <option id="${prefix}url" value="url">URL</option>
 <option id="${prefix}serviceName" value="serviceMetadata.serviceDescription.name">Name</option>
 <option id="${prefix}serviceDesc" value="serviceMetadata.serviceDescription.description">Description</option>
@@ -244,4 +244,4 @@
 </table>
 <input type="hidden" name="discoveryType" value="SERVICE" alt="service"/>
 </form:form>
-</div>
+</div> 
