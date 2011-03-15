@@ -41,7 +41,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                 if (entry != null) {
 					try{
                     gridServiceEndPointCatalogEntryDao.hide(entry);
-                    gridServiceEndPointCatalogEntryDao.getHibernateTemplate.flush();
+                    gridServiceEndPointCatalogEntryDao.getHibernateTemplate().flush();
 				}catch(Exception e){
 						logger.error("Error while hiding catalog", e);
 					}
@@ -52,7 +52,6 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                             GridServiceUmlClass umlClass = gridServiceUmlClassDao.getByGridServiceAndUmlClass(service.getId(), guc.getId());
                             if (umlClass != null) {
                                 logger.info("Will delete gridServiceUml with id " + umlClass.getId());
-                                service.getGridServiceUmlClasses().remove(umlClass);
                                 gridServiceUmlClassDao.delete(umlClass);
                                 gridServiceUmlClassDao.getHibernateTemplate().flush();
                             }
