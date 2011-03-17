@@ -43,7 +43,7 @@ public class ServiceMetadataCatalogEntryBuilderAspect {
                     gridServiceEndPointCatalogEntryDao.hide(entry);
                     gridServiceEndPointCatalogEntryDao.getHibernateTemplate().flush();
 				}catch(Exception e){
-						logger.error("Error while hiding catalog", e);
+						logger.error("Error while hiding catalog entry for service :"+ service.getId(), e);
 					}
 
                     //clean up the statistics
