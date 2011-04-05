@@ -74,6 +74,10 @@ var PersonEditForm = Class.create(CGP_BaseAjaxForm,
     			}
 			});
 		}else{
+			<!-- The following is to handle description with multiple lines -->
+			var desc = document.getElementById("description").value;
+			this.setField("description",encodeURI(desc));	
+			
 			mgr.save(
 			{
 				callback:function(response){

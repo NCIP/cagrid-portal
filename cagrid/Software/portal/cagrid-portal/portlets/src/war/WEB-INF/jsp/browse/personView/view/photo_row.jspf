@@ -7,7 +7,11 @@
         <h1 class="entryName"><c:out value="${catalogEntry.name}"/></h1>
 
         <p class="entryDescription">
-            <c:out value="${catalogEntry.description}"/>
+            <!-- The following is to handle description with multiple lines -->
+	    <script type="text/javascript">
+	        var desc =decodeURI("${catalogEntry.description}");
+	  	document.write(desc.replace(/\n/g, '<br>')); 
+            </script>
         </p>
         <br/>
     </div>
