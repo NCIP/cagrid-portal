@@ -273,7 +273,7 @@ via copyField further on in this schema  -->
            When each document was indexed.
         -->
         <!-- PORTAL adds  -->
-        <field name="catalogName" type="alphaOnlySort" indexed="true" stored="false"/>
+        <field name="catalogName" type="string" indexed="true" stored="false"/>
         <field name="updatedAt" type="date" indexed="true" stored="false"/>
         <field name="createdAt" type="date" indexed="true" stored="false"/>
 
