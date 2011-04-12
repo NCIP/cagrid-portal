@@ -99,7 +99,8 @@ var SummaryTree = Class.create({
         <%--if catalog type label is clicked, update the AOF sub tree--%>
             if (node.data.type.search(/catalog/i) > -1) {
                 summaryQuery.setTree(true);
-                solrDatasource.sendRequest(summaryQuery.getQuery(), {
+                <%--Added additional timer parameter to avaoid caching issues in IE--%>
+                solrDatasource.sendRequest(summaryQuery.getQuery()+"&ignoreMe="+new Date().getTime(), {
                     success : updateAOF,
                     failure : updateAOF,
                     cache: false,
@@ -121,7 +122,8 @@ var SummaryTree = Class.create({
 
     <%--only get catalog_type field for making summary tree--%>
         summaryQuery.setTree(true);
-        solrDatasource.sendRequest(summaryQuery.getQuery(), {
+        <%--Added additional timer parameter to avaoid caching issues in IE--%>
+        solrDatasource.sendRequest(summaryQuery.getQuery()+"&ignoreMe="+new Date().getTime(), {
             success : searchCallback,
             failure : searchCallback,
             cache: false,
@@ -314,8 +316,8 @@ var Catalogs = Class.create({
             this.paginatorSummaryDiv.innerHTML = "Catalog Search Error";
             resultEvent.fire(null);
         };
-
-        solrDatasource.sendRequest(this.query.getQuery(), {
+	<%--Added additional timer parameter to avaoid caching issues in IE--%>
+        solrDatasource.sendRequest(this.query.getQuery()+"&ignoreMe="+new Date().getTime(), {
             success : searchCallback,
             failure : failureCallback,
             cache: false,
