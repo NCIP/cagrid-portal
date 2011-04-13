@@ -95,6 +95,7 @@ public class PointOfContactCatalogEntryDao extends
                     entry.setLatitude(address.getLatitude());
                     entry.setLongitude(address.getLongitude());
                     entry.setStateProvince(address.getStateProvince());
+                    entry.setLocality(address.getLocality());
                 }
 
             }

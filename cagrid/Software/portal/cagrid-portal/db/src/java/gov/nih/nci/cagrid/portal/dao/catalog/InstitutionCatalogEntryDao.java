@@ -54,6 +54,7 @@ public class InstitutionCatalogEntryDao extends AboutCatalogEntryDao<Institution
                 entry.setLatitude(address.getLatitude());
                 entry.setLongitude(address.getLongitude());
                 entry.setStateProvince(address.getStateProvince());
+                entry.setLocality(address.getLocality());
             }
 
         }

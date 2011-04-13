@@ -74,6 +74,7 @@ public class PersonCatalogEntryDao extends
                     entry.setLatitude(address.getLatitude());
                     entry.setLongitude(address.getLongitude());
                     entry.setStateProvince(address.getStateProvince());
+                    entry.setLocality(address.getLocality());
                 }
             }
         }

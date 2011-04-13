@@ -13,8 +13,11 @@
 		<c:if test="${not empty catalogEntry.stateProvince}">
 			<c:out value="${catalogEntry.stateProvince}"/>
 		</c:if>
+		<c:if test="${not empty catalogEntry.postalCode}">
+			<c:out value="${catalogEntry.postalCode}"/>,
+		</c:if>
 		<c:if test="${not empty catalogEntry.countryCode}">
 			<c:out value="${catalogEntry.countryCode}"/>
-		</c:if>
+		</c:if>		
 	</address>
 </div> 
