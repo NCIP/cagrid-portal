@@ -219,9 +219,9 @@ but may be good for SKUs.  Can insert dashes in the wrong place and still match.
 
                    http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/package-summary.html
                 -->
-                <filter class="solr.PatternReplaceFilterFactory"
+                <!--<filter class="solr.PatternReplaceFilterFactory"
                         pattern="([^a-z])" replacement="" replace="all"
-                        />
+                        /> -->
             </analyzer>
         </fieldType>
 
@@ -273,7 +273,7 @@ via copyField further on in this schema  -->
            When each document was indexed.
         -->
         <!-- PORTAL adds  -->
-        <field name="catalogName" type="string" indexed="true" stored="false"/>
+        <field name="catalogName" type="alphaOnlySort" indexed="true" stored="false"/>
         <field name="updatedAt" type="date" indexed="true" stored="false"/>
         <field name="createdAt" type="date" indexed="true" stored="false"/>
 
