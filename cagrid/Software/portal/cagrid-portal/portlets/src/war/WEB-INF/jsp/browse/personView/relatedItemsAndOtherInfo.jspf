@@ -12,6 +12,7 @@
 <div id="<portlet:namespace/>tabs" class="yui-navset">
     <ul class="yui-nav">
         <li class="selected"><a href="#<portlet:namespace/>tab1"><em>Related Entries</em></a></li>
+        <li><a href="#<portlet:namespace/>tab2"><em>My Catalogs</em></a></li>
     </ul>
     <div class="yui-content">
         <div>
@@ -338,6 +339,9 @@ function ${ns}deleteRelatedItem(relationshipId){
 
 <%@ include file="/WEB-INF/jsp/browse/related_items_content.jspf" %>
         </div>
+        <div>
+	  <%@ include file="/WEB-INF/jsp/browse/personView/catalogsCreatedByUser.jspf" %>
+        </div>
 
     </div>
 </div>
@@ -345,9 +349,15 @@ function ${ns}deleteRelatedItem(relationshipId){
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/tabview/assets/skins/sam/tabview.css"/>"/>
 <script type="text/javascript" src="<c:url value="/js/yui/tabview/tabview-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+
 
 <script type="text/javascript"
 	src="<c:url value="/dwr/interface/CatalogEntryManagerFacade.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
 <script type="text/javascript">
 
@@ -365,6 +375,10 @@ function ${ns}newButton(label, baseName){
 }
 
 jQuery(document).ready(function() {
+	var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
+    	var myCatalogsTab = myTabs.getTab(1);
+    	myCatalogsTab.addListener('click', ${ns}loadMyCatalogs);
+    	
  	${ns}newCitationButton = ${ns}newButton("New Citation", "${ns}newCitation");
 	${ns}newHyperlinkButton = ${ns}newButton("New Hyperlink", "${ns}newHyperlink");
 	${ns}newFileButton = ${ns}newButton("New File", "${ns}newFile");
