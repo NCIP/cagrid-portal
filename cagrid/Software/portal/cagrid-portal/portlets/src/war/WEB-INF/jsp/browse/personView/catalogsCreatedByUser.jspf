@@ -32,7 +32,7 @@ CatalogEntryManagerFacade.getCatalogsCreatedByUser(
 				for (var i = 0, len = resultList.length; i < len; i++) {				
 					var result = resultList[i];
 					 if (result.name == null || result.name == undefined || result.name == ""){
-					 }else{					
+					 }else{					 	
 						var resultDiv = document.createElement('div');
 						resultDiv.className = "oneResultDiv";
 						var detailsLnk = document.createElement('a');
@@ -42,6 +42,14 @@ CatalogEntryManagerFacade.getCatalogsCreatedByUser(
                     				var nameDiv = document.createElement('div');
 				        	nameDiv.appendChild(detailsLnk);				                    
                     				resultDiv.appendChild(nameDiv);
+                    				var descDiv = document.createElement('div');						
+						if (result.description == null || result.description == undefined || result.description == "") {
+							descDiv.className = "oneResultNoDescription";
+						        descDiv.appendChild(document.createTextNode("No information available"));
+						} else {						        
+						        descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
+                    				}
+                    				resultDiv.appendChild(descDiv);
                     				$("myCatalogs").appendChild(resultDiv);
                     			}
                     		}
@@ -59,5 +67,5 @@ function ${ns}viewDetails(id) {
         $("${ns}catalogDetailsForm").action = catalogLink;
         $("${ns}catalogDetailsForm").submit();
         return false;
-}
+    }
 </script>
