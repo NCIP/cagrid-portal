@@ -26,7 +26,7 @@ public class CatalogEntryDao extends AbstractCatalogEntryDao<CatalogEntry> {
 	public CatalogEntryDao() {
 	}/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.cagrid.portal.dao.AbstractDao#domainClass()
 	 */
 
@@ -67,7 +67,7 @@ public class CatalogEntryDao extends AbstractCatalogEntryDao<CatalogEntry> {
 			final String className) {
 		try {
 			final Class klass = Class.forName(className);
-			
+
 			return (List<CatalogEntry>) getHibernateTemplate().execute(
 					new HibernateCallback() {
 						public Object doInHibernate(Session session)
@@ -143,6 +143,16 @@ public class CatalogEntryDao extends AbstractCatalogEntryDao<CatalogEntry> {
 			}
 		});
 
+	}
+	
+	/**
+	 * This method is to return the list of catalogs created by user
+	 * @param personId
+	 * @return
+	 */
+	public List<CatalogEntry> getCatalogsCreatedByUser(Integer personId){
+		return (List<CatalogEntry>)getHibernateTemplate().find(
+				"from CatalogEntry ce where ce.author.person.id = ?", personId);
 	}
 
 	@Override

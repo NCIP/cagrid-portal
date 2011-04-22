@@ -167,7 +167,7 @@
             <param name="include" value="id"/>
         </convert>
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry">
-            <param name="include" value="id"/>
+            <param name="include" value="id,name"/>            
         </convert>
 
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.catalog.Comment">
