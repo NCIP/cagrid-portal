@@ -45,7 +45,7 @@
                     conf="default->portlet;compile->portal-ext"/>
 
         <dependency rev="latest.integration" org="apache" name="commons-discovery"/>
-        <dependency rev="latest.integration" org="apache" name="log4j" conf="compile->*"/>
+      
 
         <!--globus ext dependencies-->
         <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>

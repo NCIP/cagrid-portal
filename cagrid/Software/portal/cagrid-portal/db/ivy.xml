@@ -36,7 +36,7 @@
 
         <dependency rev="1.5.3" org="aspectj" name="aspectjrt" conf="default"/>
         <dependency rev="1.5.3" org="aspectj" name="aspectjweaver" conf="default"/>
-        <dependency rev="1.2.14" org="apache" name="log4j" conf="compile->*"/>
+       
         <dependency rev="3.4.0" org="hibernate" name="hibernate" conf="default->full"/>
         <dependency rev="1.4.2_08-b03" org="hibernate" name="tools" conf="schema->default"/>
         <dependency rev="1.9.1" org="org.liquibase" name="liquibase-core" conf="dao->default;default"/>
