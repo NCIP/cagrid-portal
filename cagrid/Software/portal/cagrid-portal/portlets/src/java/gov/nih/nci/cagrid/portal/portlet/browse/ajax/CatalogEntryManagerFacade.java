@@ -124,8 +124,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
 	 * @return
 	 */
 	public List<CatalogEntry> getCatalogsCreatedByUser() {
-		return getCatalogEntryDao().getCatalogsCreatedByUser(
-				getUserModel().getPortalUser().getPerson().getId());
+		Integer userId = getUserModel().getCurrentCatalogEntry().getAuthor().getPerson().getId();
+		return getCatalogEntryDao().getCatalogsCreatedByUser(userId);
 	}
 
 	public Integer hide() {
