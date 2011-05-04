@@ -36,57 +36,37 @@
   
  
 
-function renderDataTable(queryType, jsonObj)
+function renderDataTable(jsonObj)
 {	
+	var jsonStr=eval('jsonObj');
+	var jsonSplit = jsonStr.split('{',3);
+	colsStr = jsonSplit[2].split(",");	
+	var myColumnDefs = [];
+	var fieldDefs=[];
+	for(i=0;i<colsStr.length;i++){
+		col = colsStr[i].split(":",1);
+		var column = col[0].replace(/"/g, "");	
+		if(column!=""){
+			var obj = {
+		    		key: column,
+		    		sortable: true,
+		    		resizeable: true
+		    		};
+			myColumnDefs.push(obj);			
+			fieldDefs.push(column);
+		}
+	}	
 	
-	var myColumnDefs;
 	myDataSource = new YAHOO.util.LocalDataSource(jsonObj);
 	myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;	
 	var oConfigs = { paginator: new YAHOO.widget.Paginator({ 
 			         rowsPerPage: 20 
-			                })
-	        };	
+			                })	        };
 	
-	if(queryType=='CountResult'){
-		myColumnDefs = [ {key:"count", label:"count", resizeable:true} ];
-		myDataSource.responseSchema = {
+	myDataSource.responseSchema = {
 					resultsList: "rows",
-					fields: ["count"]};
-		new YAHOO.widget.DataTable("resultsDiv",myColumnDefs, myDataSource);
-	}
-	if(queryType=='AttributeResult'){
-		myColumnDefs = [ {key:"id", label:"id", sortable:true, resizeable:true},
-				{key:"bigid", label:"bigid", sortable:true, resizeable:true},
-				{key:"fullName", label:"fullName", sortable:true, resizeable:true},
-				{key:"clusterId", label:"clusterId", sortable:true, resizeable:true},
-				{key:"symbol", label:"symbol", sortable:true, resizeable:true}
-							 				];
-		myDataSource.responseSchema = {
-						resultsList: "rows",
-						fields: ["id","bigid","fullName","clusterId","symbol"]};
-		new YAHOO.widget.DataTable("resultsDiv",myColumnDefs, myDataSource,oConfigs);
-	}
-	if(queryType=='ObjectResult'){
-		myColumnDefs = [ {key:"id", label:"Id", sortable:true, resizeable:true},
-				{key:"caBigId", label:"caBigId", sortable:true, resizeable:true},
-			 	{key:"date", label:"date", sortable:true, resizeable:true},
-			 	{key:"description", label:"description", sortable:true, resizeable:true},
-			 	{key:"designDescription", label:"designDescription", sortable:true, resizeable:true},
-			 	{key:"lsidAuthority", label:"lsidAuthority", sortable:true, resizeable:true},
-				{key:"lsidNamespace", label:"lsidNamespace", sortable:true, resizeable:true},
-			 	{key:"lsidObjectId", label:"lsidObjectId", sortable:true, resizeable:true},
-			 	{key:"publicIdentifier", label:"publicIdentifier", sortable:true, resizeable:true},
-			 	{key:"publicReleaseDate", label:"publicReleaseDate", sortable:true, resizeable:true},
-			 	{key:"qualityControlDescription", label:"qualityControlDescription", sortable:true, resizeable:true},
-			 	{key:"replicateDescription", label:"replicateDescription", sortable:true, resizeable:true},
-			 	{key:"title", label:"title", sortable:true, resizeable:true}
-			 				];
-		myDataSource.responseSchema = {
-						resultsList: "rows",
-						fields: ["id","caBigId","date","description","designDescription","lsidAuthority","lsidNamespace","publicIdentifier","publicReleaseDate","qualityControlDescription","replicateDescription","title"]};
-		new YAHOO.widget.DataTable("resultsDiv",myColumnDefs, myDataSource,oConfigs);
-	}
-	
+					fields: fieldDefs };
+	new YAHOO.widget.DataTable("resultsDiv",myColumnDefs, myDataSource,oConfigs);	
 
 }
 </script>
@@ -103,14 +83,7 @@ function renderDataTable(queryType, jsonObj)
 	
 <html><head><title>Impromptu Query Results</title></head><body class="yui-skin-sam">
   <b>Query Results:</b> <br>  
-<% if (xmlString!=null) {
-	if(xmlString.contains("ObjectResult>")){
-		queryType = "ObjectResult";
-	}else if(xmlString.contains("AttributeResult>")){
-		queryType = "AttributeResult";
-	}else if(xmlString.contains("CountResult")){
-		queryType = "CountResult";
-	}
+<% if (xmlString!=null) {	
 	InputStream is = null;
 	try {
 	is = new ByteArrayInputStream(xmlString.getBytes("UTF-8"));
@@ -132,7 +105,7 @@ function renderDataTable(queryType, jsonObj)
 	        </div>
  	</div>
  	
-	<script>renderDataTable('<%=queryType%>','<%=json%>');</script>
+	<script>renderDataTable('<%=json%>');</script>
 <%	 
 }else{ 	 
 	 out.print("Query execution failed");
