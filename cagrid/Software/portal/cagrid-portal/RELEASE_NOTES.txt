@@ -1,7 +1,7 @@
 
                          caGrid Portal
                          Version 3.5
-                         April 29, 2011
+                         May 4, 2011
 
 
 ================================================================
@@ -50,6 +50,7 @@
 The following major new features were implemented in this release
 	 
 28678	No cross-links offered for person items
+30693	Impromptu query results in html format
 
 ================================================================
                       4.0 Bug fixes Since Last Release
@@ -61,7 +62,8 @@ The following bugs were fixed in this release
 26958 	Portal 3.0: Text entered on a new line is not saved in User Profile
 27934 	Portal 3.0: IE 7 does not update the catalog type tree with newly added entries
 29557 	Tools Portlets fail to display user profile and login links
-30406 	The address metadata for institutuions displayed in the portal is incomplete
+30406 	The address metadata for institutions displayed in the portal is incomplete
+31097	Application log file is not getting created for caGridPortal in Jboss app server
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
