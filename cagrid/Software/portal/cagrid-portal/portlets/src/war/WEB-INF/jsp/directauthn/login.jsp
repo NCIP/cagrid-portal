@@ -57,19 +57,21 @@
                     <tbody>
                     <tr>
                         <td style="padding-right:5px; text-align:right">Username:</td>
-                        <td><form:input path="username" size="29"/></td>
+                        <td><label for="username"> <form:input id="username" path="username" size="29"/></label></td>
                     </tr>
                     <tr>
                         <td style="padding-right:5px; text-align:right;">Password:</td>
-                        <td><form:password path="password" size="29"/></td>
+                        <td><label for="password"/><form:password id="password" path="password" size="29"/></label></td>
                     </tr>
                     <tr>
                         <td style="padding-right:5px; text-align:right;">Identity Provider:</td>
                         <td>
                             <input name="idpUrl" id="idpUrl" alt="Hidden" type="hidden"/>
+                            <label for="${ns}idpSelect">
                             <select id="${ns}idpSelect">
                                 <option>Loading...</option>
                             </select>
+                            </label>
                         </td>
                     </tr>
                     <tr>
