@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipType;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleType;
+import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.Rating;
 import gov.nih.nci.cagrid.portal.domain.catalog.Term;
 import gov.nih.nci.cagrid.portal.domain.catalog.Terminology;
@@ -124,7 +125,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
 	 * @return
 	 */
 	public List<CatalogEntry> getCatalogsCreatedByUser() {
-		Integer userId = getUserModel().getCurrentCatalogEntry().getAuthor().getPerson().getId();
+		PersonCatalogEntry personCatalogEntry = (PersonCatalogEntry)getUserModel().getCurrentCatalogEntry();
+		Integer userId = personCatalogEntry.getAbout().getPerson().getId();
 		return getCatalogEntryDao().getCatalogsCreatedByUser(userId);
 	}
 
