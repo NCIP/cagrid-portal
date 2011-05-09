@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipType;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleType;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
+import gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.Rating;
 import gov.nih.nci.cagrid.portal.domain.catalog.Term;
 import gov.nih.nci.cagrid.portal.domain.catalog.Terminology;
@@ -124,10 +125,16 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
 	 * 
 	 * @return
 	 */
-	public List<CatalogEntry> getCatalogsCreatedByUser() {
-		PersonCatalogEntry personCatalogEntry = (PersonCatalogEntry)getUserModel().getCurrentCatalogEntry();
-		Integer userId = personCatalogEntry.getAbout().getPerson().getId();
-		return getCatalogEntryDao().getCatalogsCreatedByUser(userId);
+	public List<CatalogEntry> getCatalogsCreatedByUser( ) {
+		CatalogEntry catalogEntry = getUserModel().getCurrentCatalogEntry();
+		if(catalogEntry instanceof  PersonCatalogEntry){			
+			PersonCatalogEntry  personCatalogEntry = (PersonCatalogEntry)catalogEntry;			
+			return getCatalogEntryDao().getCatalogsCreatedByUser(personCatalogEntry.getAbout().getPerson().getId());
+		}else if(catalogEntry instanceof  PointOfContactCatalogEntry){			
+			PointOfContactCatalogEntry  pointOfContactCatalogEntry = (PointOfContactCatalogEntry)catalogEntry;			
+			return getCatalogEntryDao().getCatalogsCreatedByUser(pointOfContactCatalogEntry.getAbout().getPerson().getId());
+		}
+		return null;
 	}
 
 	public Integer hide() {

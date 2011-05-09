@@ -139,7 +139,9 @@
                         descDiv.appendChild(document.createTextNode("No information available"));
                     } else {
                         descDiv.className = "oneResultDescription";
-                        descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
+                        var desc =decodeURI(result.description);
+			desc.replace(/\n/g, '<br>');
+                        descDiv.appendChild(document.createTextNode(desc.truncate(80, "...")));                        
                     }
                     
                    
