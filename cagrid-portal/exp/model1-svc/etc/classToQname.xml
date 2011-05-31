@@ -1,6 +1,0 @@
-<ns1:ClassMappings xmlns:ns1="http://gov.nih.nci.cagrid.data">
- <ns2:mapping className="model1.domain.Gene" qname="{http://model1/model}Gene" xsi:type="ns2:classToQname" xmlns:ns2="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns3:mapping className="model1.domain.Annotation" qname="{http://model1/model}Annotation" xsi:type="ns3:classToQname" xmlns:ns3="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns4:mapping className="model1.domain.Source" qname="{http://model1/model}Source" xsi:type="ns4:classToQname" xmlns:ns4="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns5:mapping className="model1.domain.Term" qname="{http://model1/model}Term" xsi:type="ns5:classToQname" xmlns:ns5="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-</ns1:ClassMappings>

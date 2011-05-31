@@ -1,7 +1,0 @@
-#*
-This file allows you to override and define new velocity variables.
-*#
-
-#set ($sign_out_text = "Log Out")
-#set ($sign_in_text = "Log In")        
-#set ($register_text = "Register")

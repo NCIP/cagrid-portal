@@ -1,1 +1,0 @@
-alter table query_instances modify column error text
