@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="globus" module="globus" revision="4.0.3">
+        <license name="Apache License" url="http://www.apache.org/licenses/LICENSE-2.0"/>
+
+        <description>
+            The Globus® Toolkit is an open source software toolkit used for building grids.
+        </description>
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="default" visibility="public"/>
+        <conf name="crypto" visibility="public"/>
+
+    </configurations>
+
+    <publications>
+        <artifact name="addressing-1.0" type="jar" conf="default"/>
+        <artifact name="axis" type="jar" conf="default"/>
+        <artifact name="bootstrap" type="jar" conf="default"/>
+        <artifact name="cog-axis" type="jar" conf="default"/>
+        <artifact name="commonj" type="jar" conf="default"/>
+        <artifact name="concurrent" type="jar" conf="default"/>
+        <artifact name="jaxrpc" type="jar" conf="default"/>
+        <artifact name="resolver" type="jar" conf="default"/>
+        <artifact name="saaj" type="jar" conf="default"/>
+        <artifact name="wsdl4j" type="jar" conf="default"/>
+        <artifact name="wsrf_common" type="jar" conf="default"/>
+        <artifact name="wsrf_core" type="jar" conf="default"/>
+        <artifact name="wsrf_core_enum" type="jar" conf="default"/>
+        <artifact name="wsrf_core_stubs" type="jar" conf="default"/>
+        <artifact name="wsrf_core_stubs_enum" type="jar" conf="default"/>
+        <artifact name="wss4j" type="jar" conf="default"/>
+        <artifact name="jgss" type="jar" conf="default"/>
+
+        <artifact name="cog-jglobus" type="jar" conf="default,crypto"/>
+
+        <artifact name="cryptix-asn1" type="jar" conf="crypto"/>
+        <artifact name="cryptix" type="jar" conf="crypto"/>
+        <artifact name="cryptix32" type="jar" conf="crypto"/>
+        <artifact name="jce-jdk13-125" type="jar" conf="crypto"/>
+        <artifact name="puretls" type="jar" conf="crypto"/>
+        <artifact name="xmlsec" type="jar" conf="crypto"/>
+
+    </publications>
+
+    <dependencies>
+        <dependency org="apache" name="commons-discovery" rev="latest.integration"/>
+    </dependencies>
+
+
+</ivy-module>

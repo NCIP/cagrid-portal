@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreUnresolvablePlaceholders="true">
+        <property name="locations">
+            <list>
+                <value>classpath:cagridportlets.properties</value>
+                <value>classpath:cagridportal.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="viewUmlClassListController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.model.ViewUmlClassListController"
+          autowire="byName">
+        <property name="objectName" value="selectServiceCommand"/>
+        <property name="successViewName" value="/model"/>
+        <property name="errorsAttributeName" value="submitServiceErrors"/>
+    </bean>
+
+    <bean
+            id="selectServiceController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceController"
+            autowire="byName">
+
+        <property name="validators">
+            <list>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommandValidator"
+                      autowire="byName"/>
+            </list>
+        </property>
+
+        <property name="commandName" value="selectServiceCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/model"/>
+                <property name="errorTabPath" value="/model"/>
+                <property name="errorsAttributeName" value="submitServiceErrors"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="selectUmlClassController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.model.SelectUmlClassController"
+            autowire="byName">
+        <property name="commandName" value="selectUmlClassCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.model.SelectUmlClassCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/builder/cqlQuery"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="viewCqlTreeController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewCqlTreeController"
+          autowire="byName">
+        <property name="objectName" value="rootNode"/>
+        <property name="successViewName" value="/builder"/>
+    </bean>
+
+    <bean id="viewUmlClassTreeController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewUmlClassTreeController"
+          autowire="byName">
+        <property name="objectName" value="rootNode"/>
+        <property name="successViewName" value="/builder/umlClassTree"/>
+        <property name="predicates" ref="joinPredicates">
+        </property>
+    </bean>
+
+    <bean id="viewAggregateTargetsController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewAggregateTargetsController"
+          autowire="byName">
+        <property name="objectName" value="aggregateTargetsCmd"/>
+        <property name="successViewName" value="/builder/editAggregateTargetsForm"/>
+        <property name="targetsProvider">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
+                  autowire="byName"/>
+        </property>
+    </bean>
+
+    <bean id="selectAggregateTargetsController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.SelectAggregateTargetsController"
+          autowire="byName">
+        <property name="commandName" value="aggregateTargetsCmd"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/builder/umlTree"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="selectCriterionController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.SelectCriterionController"
+            autowire="byName">
+        <property name="commandName" value="selectCriterionCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.builder.SelectCriterionCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/builder/editCriterionForm"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="viewCriterionController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewCriterionController"
+          autowire="byName">
+        <property name="objectName" value="criterionBean"/>
+        <property name="successViewName" value="/builder/editCriterionForm"/>
+
+        <property name="predicates">
+            <list>
+                <value>EQUAL_TO</value>
+                <value>GREATER_THAN</value>
+                <value>GREATER_THAN_EQUAL_TO</value>
+                <value>IS_NOT_NULL</value>
+                <value>IS_NULL</value>
+                <value>LESS_THAN</value>
+                <value>LESS_THAN_EQUAL_TO</value>
+                <value>LIKE</value>
+                <value>NOT_EQUAL_TO</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean
+            id="updateCriterionController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.UpdateCriterionController"
+            autowire="byName">
+        <property name="commandName" value="updateCriterionCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CriterionBean"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/builder/cqlQuery"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="viewQueryModifierController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewQueryModifierController"
+          autowire="byName">
+        <property name="objectName" value="editQueryModifierCommand"/>
+        <property name="successViewName" value="/builder/editQueryModifierForm"/>
+    </bean>
+
+    <bean
+            id="updateQueryModifierController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.UpdateQueryModifierController"
+            autowire="byName">
+        <property name="commandName" value="editQueryModifierCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.builder.EditQueryModifierCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/builder/cqlQuery"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="exportToXmlController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.ExportToXmlController"
+            autowire="byName">
+        <property name="commandName" value="exportToXmlCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="viewCqlXmlController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewCqlXmlController"
+          autowire="byName">
+        <property name="objectName" value="cqlQueryCommand"/>
+        <property name="successViewName" value="/xml"/>
+        <property name="errorsAttributeName" value="submitQueryErrors"/>
+    </bean>
+
+    <bean id="cqlQuerySchemaValidator" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQuerySchemaValidator"
+                      p:cqlSchema="1_gov.nih.nci.cagrid.CQLQuery-1.3.xsd"
+                      p:dcqlSchema="Distributed_CQL_schema_2.0.xsd"/>
+
+    <bean
+            id="submitQueryController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.SubmitQueryController"
+            autowire="byName">
+        <property name="validators">
+            <list>
+                <ref bean="cqlQuerySchemaValidator"/>
+            </list>
+        </property>
+
+        <property name="commandName" value="cqlQueryCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/history"/>
+                <property name="errorTabPath" value="/query/xml"/>
+                <property name="errorsAttributeName" value="submitQueryErrors"/>
+            </bean>
+        </property>
+        <property name="fqpService" value="${fqp.service.url}"/>
+    </bean>
+
+    <bean
+            id="submitBuilderQueryController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.builder.SubmitBuilderQueryController"
+            autowire="byName">
+        <property name="validators">
+            <list>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName"/>
+            </list>
+        </property>
+        <property name="commandName" value="cqlQueryCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/history"/>
+                <property name="errorTabPath" value="/query/builder"/>
+                <property name="errorsAttributeName" value="submitQueryErrors"/>
+            </bean>
+        </property>
+        <property name="fqpService" value="${fqp.service.url}"/>
+    </bean>
+
+    <bean id="viewQueryHistoryController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryHistoryController"
+          autowire="byName">
+        <property name="objectName" value="instances"/>
+        <property name="successViewName" value="/history"/>
+    </bean>
+
+    <bean
+            id="selectQueryInstanceController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceController"
+            autowire="byName">
+        <property name="commandName" value="selectQueryInstanceCommand"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
+                <property name="newTabPath" value="/results/tabular"/>
+                 -->
+                <property name="newTabPath" value="/results"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="selectQueryInstanceErrorController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceController"
+            autowire="byName">
+        <property name="commandName" value="selectQueryInstanceCommand"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
+                <property name="newTabPath" value="/results/xml"/>
+                 -->
+                <property name="newTabPath" value="/results"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="cancelQueryInstanceController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.CancelQueryInstanceController"
+            autowire="byName">
+        <property name="commandName" value="selectQueryInstanceCommand"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/history"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="deleteQueryInstanceController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.DeleteQueryInstanceController"
+            autowire="byName">
+        <property name="commandName" value="selectQueryInstanceCommand"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/history"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
+            id="reloadQueryInstanceController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.ReloadQueryInstanceController"
+            autowire="byName">
+        <property name="commandName" value="selectQueryInstanceCommand"/>
+        <property name="commandClass"
+                  value="gov.nih.nci.cagrid.portal.portlet.query.results.SelectQueryInstanceCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/query/xml"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="viewQueryResultsTabularController"
+          class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
+          autowire="byName">
+        <property name="objectName" value="resultsCommand"/>
+        <property name="successViewName" value="/results/tabular"/>
+        <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+        <property name="serviceErrorInterpretors" ref="serviceErrorInterpretors"/>
+        <property name="portalFileService" ref="securePortalFileService"/>
+    </bean>
+
+    <!--
+   <bean id="viewQueryResultsXmlController"
+         class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
+         autowire="byName">
+       <property name="objectName" value="resultsCommand"/>
+       <property name="successViewName" value="/results/xml"/>
+       <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
+       <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+   </bean>
+    -->
+
+    <bean
+            id="scrollQueryInstanceResultsController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.results.ScrollQueryInstanceResultsController"
+            autowire="byName">
+        <property name="commandName" value="scrollCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.util.ScrollCommand"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
+                <property name="newTabPath" value="/results/tabular"/>
+                 -->
+                <property name="newTabPath" value="/results"/>
+            </bean>
+        </property>
+        <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+    </bean>
+
+    <bean id="shareQueryRedirectUrl" class="java.lang.String">
+        <constructor-arg>
+            <value>
+                <![CDATA[/web/guest/catalog/tools?p_p_id=BrowsePortlet_WAR_cagridportlets&p_p_lifecycle=1&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_BrowsePortlet_WAR_cagridportlets_operation=editCatalogEntry&_BrowsePortlet_WAR_cagridportlets_entryId=]]></value>
+        </constructor-arg>
+    </bean>
+
+    <bean
+            id="shareQueryController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.shared.ShareQueryController"
+            autowire="byName">
+
+        <property name="validators">
+            <list>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName"/>
+            </list>
+        </property>
+
+        <property name="commandName" value="cqlQueryCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
+
+        <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
+
+    </bean>
+
+    <bean
+            id="shareBuilderQueryController"
+            class="gov.nih.nci.cagrid.portal.portlet.query.shared.ShareBuilderQueryController"
+            autowire="byName" parent="shareQueryController">
+
+        <property name="commandName" value="cqlQueryCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
+
+        <property name="redirectUrl" ref="shareQueryRedirectUrl"/>
+
+    </bean>
+
+
+    <bean
+            id="scrollSharedQuerySearchResultsController"
+            class="gov.nih.nci.cagrid.portal.portlet.discovery.list.ScrollDiscoveryListController"
+            autowire="byName">
+        <property name="commandName" value="scrollCommand"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.util.ScrollCommand"/>
+        <property name="listBeanSessionAttributeName" value="sharedQueryListBean"/>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <property name="newTabPath" value="/shared/search/list"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="portletModeParameterHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+
+        <property name="order" value="1"/>
+
+        <property name="parameterName" value="operation"/>
+        <property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="selectService" value-ref="selectServiceController"/>
+                        <entry key="selectUmlClass" value-ref="selectUmlClassController"/>
+                        <entry key="selectCriterion" value-ref="selectCriterionController"/>
+                        <entry key="updateCriterion" value-ref="updateCriterionController"/>
+                        <entry key="updateQueryModifier" value-ref="updateQueryModifierController"/>
+                        <entry key="exportToXml" value-ref="exportToXmlController"/>
+                        <entry key="submitQuery" value-ref="submitQueryController"/>
+                        <entry key="submitBuilderQuery" value-ref="submitBuilderQueryController"/>
+                        <entry key="selectQueryInstance" value-ref="selectQueryInstanceController"/>
+                        <entry key="selectQueryInstanceError" value-ref="selectQueryInstanceErrorController"/>
+                        <entry key="cancelQueryInstance" value-ref="cancelQueryInstanceController"/>
+                        <entry key="deleteQueryInstance" value-ref="deleteQueryInstanceController"/>
+                        <entry key="reloadQueryInstance" value-ref="reloadQueryInstanceController"/>
+                        <entry key="scrollQueryInstanceResults" value-ref="scrollQueryInstanceResultsController"/>
+                        <entry key="shareQuery" value-ref="shareQueryController"/>
+                        <entry key="shareBuilderQuery" value-ref="shareBuilderQueryController"/>
+                        <entry key="scrollSharedQuerySearchResults"
+                               value-ref="scrollSharedQuerySearchResultsController"/>
+                        <entry key="viewAggregateTargets" value-ref="viewAggregateTargetsController"/>
+                        <entry key="selectAggregateTargets" value-ref="selectAggregateTargetsController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="tabHandlerMapping" class="gov.nih.nci.cagrid.portal.portlet.tab.SelectedPathDelegatingTabHandlerMapping">
+
+        <property name="selectedPathHandlers">
+            <list>
+
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.SelectUmlClassPathHandler" autowire="byName">
+                    <property name="interPortletMessageReceiver">
+                        <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                            <property name="modePreferenceName" value="umlClassSelectMode"/>
+                            <property name="inputQueuePreferenceName" value="selectedUmlClassInputQueueName"/>
+                        </bean>
+                    </property>
+                    <property name="umlClassSelectedTabPath" value="/query/builder/cqlQuery"/>
+                </bean>
+
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.SelectDataServicePathHandler" autowire="byName">
+                    <property name="interPortletMessageReceiver">
+                        <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                            <property name="modePreferenceName" value="dataServiceSelectMode"/>
+                            <property name="inputQueuePreferenceName" value="selectedDataServiceInputQueueName"/>
+                        </bean>
+                    </property>
+                    <property name="dataServiceSelectedTabPath" value="/model"/>
+                </bean>
+            </list>
+        </property>
+
+        <property name="tabControlConfig" ref="queryTabControlConfig"/>
+
+        <property name="order" value="2"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
+            </list>
+        </property>
+
+        <property name="tabPathMappings">
+            <map>
+                <entry key="/model" value-ref="viewUmlClassListController"/>
+                <entry key="/query/builder/cqlQuery" value-ref="viewCqlTreeController"/>
+                <entry key="/query/builder/umlClass" value-ref="viewUmlClassTreeController"/>
+                <entry key="/query/builder/editCriterionForm" value-ref="viewCriterionController"/>
+                <entry key="/query/builder/editQueryModifierForm" value-ref="viewQueryModifierController"/>
+                <entry key="/query/builder/addAggregateTargets" value-ref="viewQueryModifierController"/>
+                <entry key="/query/xml" value-ref="viewCqlXmlController"/>
+                <entry key="/history" value-ref="viewQueryHistoryController"/>
+
+                <entry key="/results" value-ref="viewQueryResultsTabularController"/>
+                <!-- 
+                <entry key="/results/tabular" value-ref="viewQueryResultsTabularController"/>
+                
+                <entry key="/results/xml" value-ref="viewQueryResultsXmlController"/>
+                 -->
+            </map>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/query"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="defaultExceptionHandler"
+          parent="defaultExceptionHandlerTemplate"/>
+
+    <bean id="queryTabModelInterceptor" class="gov.nih.nci.cagrid.portal.portlet.tab.TabModelInterceptor">
+        <property name="tabControlConfig" ref="queryTabControlConfig"/>
+    </bean>
+
+    <bean id="queryTabControlConfig" class="gov.nih.nci.cagrid.portal.portlet.tab.TabControlConfig">
+        <property name="selectedPathParameterName" value="selectedTabPath"/>
+        <property name="tabModelRequestAttributeName" value="queryTabModel"/>
+        <property name="tabModel" ref="queryTabModel"/>
+    </bean>
+
+    <bean id="queryTabActionResponseHandler" class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+        <property name="tabControlConfig" ref="queryTabControlConfig"/>
+    </bean>
+
+    <bean id="queryTabModel"
+          class="gov.nih.nci.cagrid.portal.portlet.tab.TabModel">
+
+        <aop:scoped-proxy proxy-target-class="true"/>
+
+        <property name="tabs">
+            <list>
+                <bean
+                        class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                    <property name="name" value="model"/>
+                    <property name="label" value="Select UML Class"/>
+                </bean>
+                <bean
+                        class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                    <property name="name" value="query"/>
+                    <property name="label" value="Query"/>
+                    <property name="children">
+                        <list>
+                            <bean
+                                    class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                <property name="name" value="builder"/>
+                                <property name="label" value="Query Builder"/>
+                                <property name="children">
+                                    <list>
+                                        <bean
+                                                class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                            <property name="visible" value="false"/>
+                                            <property name="name" value="cqlQuery"/>
+                                        </bean>
+                                        <bean
+                                                class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                            <property name="visible" value="false"/>
+                                            <property name="name" value="umlClass"/>
+                                        </bean>
+                                        <bean
+                                                class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                            <property name="visible" value="false"/>
+                                            <property name="name" value="editCriterionForm"/>
+                                        </bean>
+                                        <bean
+                                                class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                            <property name="visible" value="false"/>
+                                            <property name="name" value="editQueryModifierForm"/>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                            <bean
+                                    class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                                <property name="name" value="xml"/>
+                                <property name="label" value="Query XML"/>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+                <bean
+                        class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                    <property name="name" value="history"/>
+                    <property name="label" value="History"/>
+                </bean>
+                <bean
+                        class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
+                    <property name="name" value="results"/>
+                    <property name="label" value="Results"/>
+
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="criteriaBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBean" scope="prototype">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="umlClassTreeFacade" ref="umlClassTreeFacade"/>
+    </bean>
+
+    <bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean" scope="prototype">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="formulators">
+            <map>
+                <entry>
+                    <key>
+                        <util:constant
+                                static-field="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator"/>
+                </entry>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>

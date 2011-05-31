@@ -1,0 +1,386 @@
+
+
+
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/autocomplete/assets/skins/sam/autocomplete.css"/>">
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/autocomplete/autocomplete-min.js"/>"></script>
+
+<br/>
+<br/>
+
+<div class="yui-skin-sam">
+<div id="<portlet:namespace/>tabs" class="yui-navset">
+    <ul class="yui-nav">
+        <li class="selected"><a href="#<portlet:namespace/>tab1"><em>Related Entries</em></a></li>
+        <li><a href="#<portlet:namespace/>tab2"><em>My Catalogs</em></a></li>
+    </ul>
+    <div class="yui-content">
+        <div>
+
+<%--
+<%
+    String actionId = "ADD_RELATEED_ITEM";
+%>
+<c:if test="<%= permissionChecker.hasPermission(0, resourceName,0, actionId) %>">
+--%>
+<c:if test='<%=request.isUserInRole("catalog-user")%>'>
+
+<div id="${ns}editRelatedItemsDiv">
+<p>
+<div id="${ns}addRelatedItemButtonContainer"></div>
+</p>
+<br/>
+<style type="text/css">
+.match {
+    font-weight:bold;
+}
+</style>
+
+<script type="text/javascript">
+var ${ns}popupDialog = null;
+function ${ns}showEditDialog(){
+	${ns}popupDialog = new Liferay.Popup({title: "Add Related Item", modal:true, width:800 , height:500});
+	jQuery(
+		${ns}popupDialog
+	).load(
+		<c:url var="addRelatedItemsUrl" value="/browse/add_related_items.html">
+			<c:param name="ns" value="${ns}"/>
+		</c:url>
+	    '${addRelatedItemsUrl}',
+	    { }
+	);
+
+}
+function ${ns}addRelationship(roleTypeId){
+	Liferay.Popup.close(${ns}popupDialog);
+	CatalogEntryManagerFacade.renderNewRelatedItemForm(roleTypeId, "${ns}",
+	{
+		callback:function(html){
+			jQuery("#${ns}newRelatedItemDiv").html(html);
+			${ns}initNewRelationshipForm();
+  		},
+  		errorHandler:function(errorString, exception){
+  			alert("Error rendering new related item form: " + errorString);
+  		}
+	});
+}
+
+function ${ns}getCatalogEntries(sQuery){
+
+	var targetRoleType = jQuery("#${ns}targetRoleType").val();
+
+	jQuery("#${ns}relatedEntrySearchMsg").html("Searching <img alt='Searching' src='<c:url value="/images/indicator.gif"/>'/>");
+	var results = new Array();
+
+	CatalogEntryManagerFacade.getCatalogEntriesForPartialName(sQuery, targetRoleType,
+	{
+		callback:function(entries){
+			if(entries.length == 0){
+				jQuery("#${ns}relatedEntrySearchMsg").html("No catalog entries found with that name.");
+			}else{
+				jQuery("#${ns}relatedEntrySearchMsg").html("");
+				for(var i = 0; i < entries.length; i++){
+					results.push(entries[i]);
+				}
+			}
+		},
+  		errorHandler:function(errorString, exception){
+  			alert("Error rendering role types: " + errorString);
+  		},
+  		async: false
+	});
+
+ 	return results;
+}
+
+function ${ns}checkEnableSaveNewRelatedItem(){
+	var emptyCount = 0;
+	var requiredFields = jQuery("form[name='${ns}newRelatedItemForm'] :input[class*='required']").get();
+
+	for(var i = 0; i < requiredFields.length; i++){
+		if(jQuery.trim(jQuery(requiredFields[i]).val()) == ""){
+			emptyCount++;
+		}
+	}
+
+	if(emptyCount > 0){
+		${ns}saveNewRelatedItemButton.set("disabled", true);
+	}else{
+		${ns}saveNewRelatedItemButton.set("disabled", false);
+	}
+}
+function ${ns}setRelatedEntryId(relatedEntryId){
+	CatalogEntryManagerFacade.setRelatedEntryId(relatedEntryId,
+	{
+		callback:function(message){
+
+		},
+		errorHandler:function(errorString, exception){
+			alert("Error setting related entry id: " + errorString);
+		}
+	});
+}
+
+function ${ns}setInputMessage(inputName, message){
+	var newMessage = message;
+	if(newMessage == null){
+		newMessage = "";
+	}
+	jQuery("form[name='${ns}newRelatedItemForm']  :input[name='" + inputName + "']").next().html(newMessage);
+}
+
+function ${ns}saveNewRelatedItem(){
+	CatalogEntryManagerFacade.saveRelationship(
+	{
+		callback:function(message){
+			if(message != null){
+				alert(message);
+			}else{
+				jQuery("#${ns}newRelatedItemFormSaveMsg").html("Saved new related item.");
+				${ns}renderUpdatedRelatedItemsView();
+			}
+		},
+		errorHandler:function(errorString, exception){
+			alert("Error saving new related item: " + errorString);
+		}
+
+	});
+}
+
+function ${ns}renderUpdatedRelatedItemsView(){
+	jQuery("#${ns}relatedItemsDiv").html("Rendering related items <img alt='Rendering' src='<c:url value="/images/indicator.gif"/>'/>");
+
+	var callback = {
+		success: function(o){
+			var html = o.responseText;
+			jQuery("#${ns}relatedItemsDiv").html(html);
+			jQuery("#${ns}addRelatedItemButtonContainer").show();
+		},
+		failure: function(o){
+			alert("Error rendering related items: " + errorString);
+		},
+		cache: false
+	}
+
+	<portlet:renderURL var="renderUpdatedRelatedItemsUrl"
+		windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"
+	>
+		<portlet:param name="operation" value="viewRelatedItems"/>
+		<portlet:param name="entryId" value="${catalogEntry.id}"/>
+	</portlet:renderURL>
+	YAHOO.util.Connect.asyncRequest("GET", "${renderUpdatedRelatedItemsUrl}", callback, null);
+
+	/*
+	CatalogEntryManagerFacade.renderRelatedItems("${ns}",
+	{
+		callback:function(html){
+			jQuery("#${ns}relatedItemsDiv").html(html);
+			jQuery("#${ns}addRelatedItemButtonContainer").show();
+		},
+		errorHandler:function(errorString, exception){
+			alert("Error rendering related items: " + errorString);
+		}
+	});
+	*/
+
+}
+function ${ns}cancelNewRelatedItem(){
+	${ns}renderUpdatedRelatedItemsView();
+}
+
+var ${ns}saveNewRelatedItemButton = null;
+var ${ns}cancelNewRelatedItemButton = null;
+var ${ns}entryTypeAC = null;
+function ${ns}initNewRelationshipForm(){
+
+	jQuery("#${ns}addRelatedItemButtonContainer").hide();
+
+	${ns}entryTypeAC = function(){
+
+
+	    var oDS = new YAHOO.util.FunctionDataSource(${ns}getCatalogEntries);
+
+	    var oAC = new YAHOO.widget.AutoComplete('${ns}relatedEntryName','${ns}relatedEntryDiv', oDS);
+	    oAC.prehighlightClassName = "yui-ac-prehighlight";
+	    oAC.useShadow = true;
+	    oAC.resultTypeList = false;
+
+	    oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
+	        var text = "<b>" + oResultData.label + "</b><br/>";
+	        var desc = oResultData.description;
+	        if(desc != null && desc != "null" && desc > 0){
+				text += desc;
+	        }else{
+				text += "No description provided";
+	        }
+	        return text;
+	    };
+
+	    var myHiddenField = YAHOO.util.Dom.get("${ns}relatedEntryId");
+	    var myHandler = function(sType, aArgs) {
+	        var myAC = aArgs[0]; // reference back to the AC instance
+	        var elLI = aArgs[1]; // reference to the selected LI element
+	        var oData = aArgs[2]; // object literal of selected item's result data
+
+	        myHiddenField.value = oData.id;
+	        myAC.getInputEl().value = oData.label;
+	        ${ns}checkEnableSaveNewRelatedItem();
+	        ${ns}setRelatedEntryId(oData.id);
+	    };
+	    oAC.itemSelectEvent.subscribe(myHandler);
+
+	    return {
+	        oDS: oDS,
+	        oAC: oAC
+	    };
+	}();
+
+
+	${ns}saveNewRelatedItemButton = new YAHOO.widget.Button({
+		label: "Save New Related Item",
+		id: "${ns}saveNewRelatedItemButton",
+		container: "${ns}saveNewRelatedItemButtonContainer"
+	});
+	${ns}saveNewRelatedItemButton.set("disabled", true);
+
+	${ns}saveNewRelatedItemButton.on("click", function(evt){
+		${ns}saveNewRelatedItem();
+	});
+
+	${ns}cancelNewRelatedItemButton = new YAHOO.widget.Button({
+		label: "Cancel",
+		id: "${ns}cancelNewRelatedItemButton",
+		container: "${ns}cancelNewRelatedItemButtonContainer"
+	});
+
+	${ns}cancelNewRelatedItemButton.on("click", function(evt){
+		${ns}cancelNewRelatedItem();
+	});
+
+	jQuery("form[name='${ns}newRelatedItemForm'] :input[class*='required']").bind("keyup", function(evt){
+		${ns}checkEnableSaveNewRelatedItem();
+	});
+
+	jQuery("#${ns}relatedEntryName").bind("keyup", function(evt){
+		if(evt.target.value == ""){
+			jQuery("#${ns}relatedEntryId").val("");
+			${ns}checkEnableSaveNewRelatedItem();
+		}
+	});
+
+	jQuery("#${ns}sourceRoleDescription, #${ns}targetRoleDescription").bind('blur', function(evt){
+		var inputName = evt.target.name;
+		var setterName = "set" + inputName.substring(0, 1).toUpperCase() + inputName.substring(1, inputName.length);
+		eval(
+			"CatalogEntryManagerFacade." + setterName + "('" + evt.target.value + "'," +
+			"{" +
+			"	callback:function(message){" +
+			"		${ns}setInputMessage('" + inputName + "', message);" +
+			//"		if(message == null){" +
+			//"			${ns}dirty = true;" +
+			//"			jQuery('#${ns}dirty').html('true');" +
+			//"		}" +
+			"	}," +
+			"	errorHandler:function(errorString, exception){" +
+    		"		alert(\"Error setting input '" + inputName + "': \" + errorString);" +
+    		"	}" +
+			"});"
+		);
+	});
+
+}
+var ${ns}addRelatedItemsButton = null;
+jQuery(document).ready(function() {
+
+	${ns}addRelatedItemButton = new YAHOO.widget.Button({
+		label: "Add Related Item",
+		id: "${ns}addRelatedItemButton",
+		container: "${ns}addRelatedItemButtonContainer"
+	});
+
+	${ns}addRelatedItemButton.on("click", function(evt){
+		${ns}showEditDialog();
+	});
+});
+
+function ${ns}deleteRelatedItem(relationshipId){
+
+	CatalogEntryManagerFacade.deleteRelationship(relationshipId,
+	{
+		callback:function(message){
+			if(message == null){
+				/*
+				var el = jQuery("#${ns}_rel_" + relationshipId).get(0);
+				var parentEl = jQuery(el).parents(".oneRelatedItem").get(0);
+				var numChildren = jQuery(parentEl).find(".oneRoleInstance").length;
+				if(numChildren == 1){
+					jQuery(parentEl).remove();
+				}else{
+					jQuery(el).remove();
+				}
+				*/
+				${ns}renderUpdatedRelatedItemsView();
+			}else{
+				alert(message);
+			}
+		},
+		errorHandler:function(errorString, exception){
+			alert("Error deleting related item: " + errorString);
+		}
+	});
+
+}
+
+</script>
+
+</div>
+
+</c:if>
+
+<%@ include file="/WEB-INF/jsp/browse/related_items_content.jspf" %>
+        </div>
+        <div>
+	  <%@ include file="/WEB-INF/jsp/browse/personView/catalogsCreatedByUser.jspf" %>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/tabview/assets/skins/sam/tabview.css"/>"/>
+<script type="text/javascript" src="<c:url value="/js/yui/tabview/tabview-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+
+
+<script type="text/javascript"
+	src="<c:url value="/dwr/interface/CatalogEntryManagerFacade.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
+
+<script type="text/javascript">
+
+var ${ns}newCitationButton = null;
+var ${ns}newHyperlinksButton = null;
+var ${ns}newFileButton = null;
+
+
+function ${ns}newButton(label, baseName){
+	var b = new YAHOO.widget.Button({
+		label: label,
+		id: baseName + "Button",
+		container: baseName + "ButtonContainer"
+	});
+}
+
+jQuery(document).ready(function() {
+	var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
+    	var myCatalogsTab = myTabs.getTab(1);
+    	myCatalogsTab.addListener('click', ${ns}loadMyCatalogs);
+    	
+ 	${ns}newCitationButton = ${ns}newButton("New Citation", "${ns}newCitation");
+	${ns}newHyperlinkButton = ${ns}newButton("New Hyperlink", "${ns}newHyperlink");
+	${ns}newFileButton = ${ns}newButton("New File", "${ns}newFile");
+});
+</script>

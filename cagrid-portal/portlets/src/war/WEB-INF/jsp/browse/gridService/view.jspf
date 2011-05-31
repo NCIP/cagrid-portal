@@ -1,0 +1,56 @@
+<%@ include file="/WEB-INF/jsp/browse/common/view/edit_controls.jspf" %>
+
+<%@ include file="/WEB-INF/jsp/browse/common/view/photo_row.jspf" %>
+
+<c:if test="${!empty catalogEntry.about}">
+    <c:set var="gridService" value="${catalogEntry.about}"/>
+
+    <div class="row">
+        <div class="title">
+            URL
+        </div>
+        <div class="value">
+                ${gridService.url}
+        </div>
+    </div>
+    <c:if test="${gridService.class.simpleName == 'GridDataService'}">
+    <div class="row">
+    	<div class="title">&nbsp;</div>
+    	<%@ include file="/WEB-INF/jsp/browse/gridService/view_query.jspf" %>
+    </div>    
+    </c:if>	
+    <div class="row">
+        <div class="title">
+            Status
+        </div>
+        <div class="value">
+        	
+        	<c:if test="${gridService.currentStatus != 'ACTIVE'}">
+			<span style="color:red;" />        	
+        	</c:if>
+        	${gridService.currentStatus}
+        </div>
+   </div>
+   <c:if test="${gridService.currentStatus != 'ACTIVE'}">
+   <div class="row">
+   		<div class="title">&nbsp;</div>
+   		<%@ include file="/WEB-INF/jsp/browse/gridService/view_diagnose.jspf" %>
+   </div>   
+   </c:if>
+
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/prototype.js"/>'></script>
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/effects.js"/>'></script>
+	<script type="text/javascript" src='<c:url value="/js/scriptaculous/controls.js"/>'></script>
+
+    <div class="row">
+            <div class="title">Notifications</div>
+    <%@ include file="/WEB-INF/jsp/disc/details/service/notification.jspf" %>
+    </div>    
+    <%@ include file="/WEB-INF/jsp/browse/gridService/view_description.jspf" %>
+
+</c:if>
+
+<%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/pocs.jspf" %>
+<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %> 
+

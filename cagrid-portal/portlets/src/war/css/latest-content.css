@@ -1,0 +1,20 @@
+#latestContent{
+    width:290px;
+    float:left;
+}
+.oneLatestEntry {
+	overflow:auto;
+}
+#latestContent div.label{
+	font-weight:normal;
+}
+body a.infoPopupLink{
+	font-weight:normal;
+	text-decoration:underline;
+}
+#latestContent img {
+	margin-right:10px;
+}
+body .infoPopup {
+	left:465px;
+}

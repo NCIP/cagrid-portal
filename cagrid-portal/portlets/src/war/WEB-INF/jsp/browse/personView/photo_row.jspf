@@ -1,0 +1,89 @@
+<div class="photoRow">
+
+    <div class="photo">
+        <tags:catalogEntryImage entry="${catalogEntry}" thumbnail="false" id="${ns}catalogEntryImage"
+                                title="Click to edit this image." cssClass="cagp-tooltip"/>
+    </div>
+    <div class="photoRightContent">
+        <div >
+            <label for="name"/>
+            <input id="name" alt="Name" class="pAutoSet pRequired" style="font-size:23pt;
+				<c:if test="${empty catalogEntry.name}">color:#afafaf;</c:if>
+			" type="text" name="name" value="
+			<c:choose>
+				<c:when test="${empty catalogEntry.name}">Name</c:when>
+				<c:otherwise><c:out value="${catalogEntry.name}"/></c:otherwise>
+			</c:choose>
+			"/>
+            <span style="color: red"></span><br/>
+        </div>
+        <div >
+            <label for="description"/>
+	    <textarea id="description" class="pAutoSet pRequired" name="description" 
+	                          style="height:100px;width:590px;<c:if test="${empty catalogEntry.description}">color:#afafaf;</c:if>"><c:choose><c:when
+	                        test="${empty catalogEntry.description}">Description</c:when></c:choose></textarea>
+            <span style="color: red"></span>
+        </div>
+    </div>
+    <!-- The following line is for formatting purposes -->
+    <hr style="clear:both; visibility:hidden;"/>
+
+    <c:if test='<%=request.isUserInRole("catalog-admin")%>'>
+        <div class="row">
+            <label>Featured Item?</label>
+            Yes: <input type="radio" alt="Featured" name="featured" class="pAutoSet" value="true"
+                <c:if test="${catalogEntry.featured}">
+                    checked
+                </c:if>
+                />
+            No:
+            <input type="radio" alt="Featured"  name="featured" class="pAutoSet" value="false"
+                    <c:if test="${!catalogEntry.featured}">
+                        checked
+                    </c:if>
+                    />
+        </div>
+    </c:if>
+
+</div>
+
+<script type="text/javascript">
+
+    var ${ns}uploadImageDialog = null;
+    function ${ns}showUploadImageDialog() {
+        ${ns}uploadImageDialog = new Liferay.Popup({title: "Upload Image", modal:true, width:500 , height:200});
+        jQuery(
+                ${ns}uploadImageDialog
+                ).load(
+                <c:url var="uploadImageDialogUrl" value="/img/form.html">
+                <c:param name="ns" value="${ns}"/>
+                </c:url>
+                '${uploadImageDialogUrl}',
+        { }
+                );
+    }
+    function ${ns}displayImage(imageId) {
+        var newImageUrl = "<c:url value="/img/get.html"/>" + "?id=" + imageId;
+        jQuery("#${ns}catalogEntryImage").attr("src", newImageUrl);
+        Liferay.Popup.close(${ns}uploadImageDialog);
+    }
+
+
+    jQuery(document).ready(function() {
+    
+    	<!-- The following is to handle description with multiple lines -->    	
+	if(document.getElementById("description").value !='Description'){    
+	document.getElementById("description").value = decodeURI("${catalogEntry.description}");    		
+    	}
+    	
+        jQuery("#${ns}catalogEntryImage")
+                .bind("click", function(evt) {
+            ${ns}showUploadImageDialog();
+        });
+
+
+        //${ns}initTooltips();
+
+
+    });
+</script> 

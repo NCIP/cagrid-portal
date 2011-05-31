@@ -1,0 +1,57 @@
+
+<c:if test="${!empty catalogEntryViewBean.pocRoleType.orderedRoleInstances}">
+Points of Contact<br/>
+<table>
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+	<tbody>
+		<tr>
+			<th>Name</th><th>POC Type</th><th>Email</th>
+		</tr>
+		<c:forEach var="role" items="${catalogEntryViewBean.pocRoleType.orderedRoleInstances}">
+   			<tr>
+   					<td>
+   						<portlet:renderURL var="viewPocUrl">
+							<portlet:param name="operation" value="viewDetails"/>
+							<portlet:param name="entryId" value="${role.roleInstance.catalogEntry.id}"/>
+						</portlet:renderURL>
+						<a href="<c:out value="${viewPocUrl}"/>">
+        					<c:out value="${role.roleInstance.catalogEntry.firstName}"/>&nbsp;
+        					<c:out value="${role.roleInstance.catalogEntry.lastName}"/>
+        				</a>
+        			</td>
+        			<td>
+        				<c:choose>
+        					<c:when test="${fn:startsWith(role.roleInstance.type.name, 'Organizational')}">
+        						Organizational
+        					</c:when>
+        					<c:when test="${fn:startsWith(role.roleInstance.type.name, 'Operational')}">
+        						Operational
+        					</c:when>
+        					<c:when test="${fn:startsWith(role.roleInstance.type.name, 'Technical')}">
+        						Technical
+        					</c:when>
+        					<c:otherwise>
+        						Not Provided
+        					</c:otherwise>
+        				</c:choose>
+        			</td>
+        			<td>
+        				<c:choose>
+        					<c:when test="${role.roleInstance.catalogEntry.emailAddressPublic}">
+        						<c:out value="${role.roleInstance.catalogEntry.emailAddress}"/>
+							</c:when>
+							<c:otherwise>
+								Not Provided
+							</c:otherwise>
+        				</c:choose>
+        			</td>
+        	</tr>			
+		</c:forEach>
+	</tbody>
+</table>
+</c:if>

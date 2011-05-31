@@ -1,0 +1,25 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-ctsa-sample-portlet" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>CTSA Sample Portlet</description>
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="default" visibility="public"
+              description="runtime dependencies and master artifact can be used with this conf"/>
+        <conf name="test" extends="default" visibility="public"
+              description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
+    </configurations>
+
+    <publications>
+        <artifact name="caGrid-ctsa-sample-portlet-test" conf="test" type="jar"/>
+    </publications>
+
+    <dependencies>
+        <dependency rev="latest.integration" org="caGrid" name="portal-portlets" conf="default->ext-portlets;test"/>
+    </dependencies>
+
+</ivy-module>

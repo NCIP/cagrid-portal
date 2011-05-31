@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<project name="ivy-targets" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <dirname property="ivy-targets.basedir" file="${ant.file.ivy-targets}"/>
+
+    <property name="ivy.repository.dir" location="${ivy-targets.basedir}/repository"/>
+    <property name="ivy.integration.repository.dir" location="${ivy-targets.basedir}/integration-repository"/>
+    <property name="ivy.jar.dir" value="${ivy-targets.basedir}/lib"/>
+
+    <property name="project.build.file" value="${basedir}/build.xml"/>
+    <property name="project.build.all.target" value="all"
+              description="The ant target in the project's main build file that should be called to do a complete build"/>
+    <property name="project.build.clean.target" value="clean"
+              description="The ant target in the project's main build file that should be called to clean a build"/>
+
+    <path id="ivy.lib.path">
+        <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+    </path>
+
+
+    <!--common target-->
+    <target name="ivy:load">
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant"
+                 classpathref="ivy.lib.path"/>
+        <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="ivy.lib.path"/>
+
+        <ivy:settings file="${ivy-targets.basedir}/ivysettings.xml" id="ivy.instance"/>
+
+        <property name="ivy.initialized" location="true"/>
+    </target>
+
+
+    <target name="ivy:install" depends="ivy:load">
+        <property name="from.resolver" value="caGrid-portal-ivy-resolver"/>
+        <property name="to.resolver" value="fs-repository"/>
+
+        <ivy:install 
+                organisation="apache" module="commons-collections"  revision="3.1"  
+                from="${from.resolver}" to="${to.resolver}"/>
+    </target>
+
+</project>

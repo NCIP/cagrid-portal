@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="sharedSessionAutoLogin" class="gov.nih.nci.cagrid.portal.authn.service.SharedSessionAutoLogin"
+            p:companyWebId="${cagrid.portal.liferay.companyWebId}"
+            p:gridUserType="GRID_USER"
+            p:omniUserEmail="${cagrid.portal.liferay.omniUserEmail}"
+            p:portalSessionAuthnAttribute="CAGRIDPORTAL_ATTS_liferayUser_IdPAuthnInfo"
+            p:sharedSessionAuthnAttribute="CAGRIDPORTAL_ATTS_idp_authn_info"/>
+
+</beans>

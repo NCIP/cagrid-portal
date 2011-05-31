@@ -1,0 +1,128 @@
+<ns1:DomainModel projectDescription="model1" projectLongName="model1" projectShortName="model1" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:exposedUMLAssociationCollection>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="children" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="parent" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="descendants" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="ancestors" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="genes" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:000000000000095E" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="terms" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="annotations" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000971" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="gene" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:000000000000095E" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="source" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000979" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="annotations" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000971" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+ </ns1:exposedUMLAssociationCollection>
+ <ns1:exposedUMLClassCollection>
+  <ns1:UMLClass allowableAsTarget="true" className="AbstractDomainObject" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000953" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
+   <ns2:umlAttributeCollection xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns2:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns2:UMLAttribute"/>
+   </ns2:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Gene" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:000000000000095E" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
+   <ns3:umlAttributeCollection xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns3:UMLAttribute name="name" publicID="451070259" version="1.0" xsi:type="ns3:UMLAttribute"/>
+    <ns3:UMLAttribute name="symbol" publicID="451070265" version="1.0" xsi:type="ns3:UMLAttribute"/>
+    <ns3:UMLAttribute name="clusterId" publicID="451070277" version="1.0" xsi:type="ns3:UMLAttribute"/>
+    <ns3:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns3:UMLAttribute"/>
+   </ns3:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C16612" 
+   	conceptDefinition="A functional unit of heredity which occupies a specific position (locus) on a particular chromosome, is capable of reproducing itself exactly at each cell division, and directs the formation of a protein or other product." 
+   	conceptName="Gene" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Annotation" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000971" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
+   <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns4:UMLAttribute name="value" publicID="451070293" version="1.0" xsi:type="ns4:UMLAttribute"/>
+    <ns4:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns4:UMLAttribute"/>
+   </ns4:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Source" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000979" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
+   <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns5:UMLAttribute name="name" publicID="451070308" version="1.0" xsi:type="ns5:UMLAttribute"/>
+    <ns5:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns5:UMLAttribute"/>
+   </ns5:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Term" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
+   <ns6:umlAttributeCollection xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns6:UMLAttribute name="value" publicID="451070324" version="1.0" xsi:type="ns6:UMLAttribute"/>
+    <ns6:UMLAttribute name="level" publicID="451070329" version="1.0" xsi:type="ns6:UMLAttribute"/>
+    <ns6:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns6:UMLAttribute"/>
+   </ns6:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C43520" 
+   	conceptDefinition="The Gene Ontology (GO) project is a collaborative effort to address the need for consistent descriptions of gene products in different databases. The goal of the Gene Ontology project is to produce a controlled vocabulary that can be applied to all organisms even as knowledge of gene and protein roles in cells is accumulating and changing. GO provides three structured networks of defined terms, molecular function, biological process, and cellular component, to describe gene product attributes.|from http://www.geneontology.org/" 
+   	conceptName="Gene Ontology" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns1:UMLClass>
+ </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection>
+  <ns1:UMLGeneralization xsi:type="ns1:UMLGeneralization">
+   <ns1:subClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:000000000000095E" xsi:type="ns1:UMLClassReference"/>
+   <ns1:superClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000953" xsi:type="ns1:UMLClassReference"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization xsi:type="ns1:UMLGeneralization">
+   <ns1:subClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000971" xsi:type="ns1:UMLClassReference"/>
+   <ns1:superClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000953" xsi:type="ns1:UMLClassReference"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization xsi:type="ns1:UMLGeneralization">
+   <ns1:subClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000979" xsi:type="ns1:UMLClassReference"/>
+   <ns1:superClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000953" xsi:type="ns1:UMLClassReference"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization xsi:type="ns1:UMLGeneralization">
+   <ns1:subClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000981" xsi:type="ns1:UMLClassReference"/>
+   <ns1:superClassReference refid="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000953" xsi:type="ns1:UMLClassReference"/>
+  </ns1:UMLGeneralization>
+ </ns1:umlGeneralizationCollection>
+</ns1:DomainModel>

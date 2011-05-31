@@ -1,0 +1,50 @@
+<c:if test="${!empty sd.serviceContextCollection}">
+
+    <div class="row">
+        <div class="title">
+            Service Contexts
+        </div>	
+        <div class="label">
+            <span id="${ns}ctxTree"></span>
+        </div>
+    </div>
+
+    <c:forEach var="ctx" items="${sd.serviceContextCollection}">
+        <script type="text/javascript">
+            var tree = new YAHOO.widget.TreeView("${ns}ctxTree");
+            var root = tree.getRoot();
+            var ctxRoot = new YAHOO.widget.HTMLNode({html: "${ctx.name}", expanded: false}, root);
+            var propRoot = new YAHOO.widget.HTMLNode({html: "Context Properties", expanded: false}, ctxRoot);
+            var operRoot = new YAHOO.widget.HTMLNode({html: "Operations", expanded: true}, ctxRoot);
+
+
+            <c:forEach var="oper" items="${ctx.operationCollection}">
+            var operNode = new YAHOO.widget.HTMLNode({html: "${oper.name}", expanded: false}, operRoot);
+            new YAHOO.widget.HTMLNode({html: "Description:${oper.description}", expanded: false}, operNode);
+
+            <c:if test="${!empty oper.inputParameterCollection}">
+
+            var inputRoot = new YAHOO.widget.HTMLNode({html: "Input Parameters", expanded: false}, operNode);
+
+            <c:forEach var="input" items="${oper.inputParameterCollection}">
+            var inputNode = new YAHOO.widget.HTMLNode({html: "${input.name}", expanded: false}, inputRoot);
+            new YAHOO.widget.HTMLNode({html: "Name:${input.name}", expanded: false}, inputNode);
+            new YAHOO.widget.HTMLNode({html: "Index:${input.index}", expanded: false}, inputNode);
+            </c:forEach>
+            </c:if>
+            </c:forEach>
+
+
+            <c:forEach var="prop" items="${ctx.contextPropertyCollection}">
+            var propNode = new YAHOO.widget.HTMLNode({html: "${prop.name}", expanded: false}, propRoot);
+            new YAHOO.widget.HTMLNode({html: "Description:${prop.description}", expanded: false}, propNode);
+            </c:forEach>
+
+            tree.render();
+        </script>
+
+    </c:forEach>
+
+</c:if> 
+
+

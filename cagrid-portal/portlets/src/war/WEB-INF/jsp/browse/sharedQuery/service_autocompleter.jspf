@@ -1,0 +1,80 @@
+
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/autocomplete/assets/skins/sam/autocomplete.css"/>">
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/autocomplete/autocomplete-min.js"/>"></script>
+
+
+<div class="yui-skin-sam">
+    <div class="row">
+        <label for="${ns}serviceUrl">
+            Service URL 
+        </label>
+        <div class="value" style="width:80%;">
+        <div id="${ns}serviceUrlAutoComplete" >
+            <input id="${ns}serviceUrl" alt="Service URL" type="text" style="width:94%;"/>
+            <input type="hidden" alt="Hidden" id="${ns}serviceId"/>
+              <input type="hidden" alt="Hidden" id="${ns}queryCEId"/>
+
+            <span id="${ns}gridServiceSearchMsg"></span>
+            <span id="${ns}serviceUrlContainer"></span>
+        </div>
+            </div>
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function ${ns}getGSCatalogEntries(sQuery) {
+
+        jQuery("#${ns}gridServiceSearchMsg").html("Searching <img alt='Searching' src='<c:url value="/images/indicator.gif"/>'/>");
+        var xml = jQuery("#input-query").val();
+        var results = new Array();
+
+    ${managerFacadeName}.
+        getAppropriateEndpointsForPartialUrl(xml, sQuery,
+        {
+            callback:function(entries) {
+                if (entries.length == 0) {
+                    jQuery("#${ns}gridServiceSearchMsg").html("No catalog entries found with that URL.");
+                } else {
+                    jQuery("#${ns}gridServiceSearchMsg").html("");
+                    for (var i = 0; i < entries.length; i++) {
+                        results.push(entries[i]);
+                    }
+                }
+            },
+            errorHandler:function(errorString, exception) {
+                alert("Error rendering Service URL's: " + errorString);
+            },
+            async: false
+        });
+
+        return results;
+    }
+
+
+    jQuery(document).ready(function() {
+
+        var serviceUrlDS = new YAHOO.util.FunctionDataSource(${ns}getGSCatalogEntries);
+        serviceUrlDS.responseSchema = {fields: [ "gridServiceUrl","catalogId","gridServiceId"]};
+
+        var ${ns}myAutoComp = new YAHOO.widget.AutoComplete("${ns}serviceUrl", "${ns}serviceUrlContainer", serviceUrlDS);
+
+
+        ${ns}myAutoComp.maxResultsDisplayed = 20;
+        ${ns}myAutoComp.allowBrowserAutocomplete = false;
+        ${ns}myAutoComp.resultTypeList = false; 
+
+        ${ns}myAutoComp.itemSelectEvent.subscribe(function(sType, aArgs) {
+            var ceData = aArgs[2];
+            $("${ns}serviceId").value = ceData.gridServiceId;
+
+        });
+       
+
+    });
+
+</script> 

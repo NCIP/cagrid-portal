@@ -1,0 +1,13 @@
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" >
+	<Target name="gov.nih.nci.cabio.domain.Gene">
+		<Group logicRelation="AND">
+			<Association roleName="taxon" name="gov.nih.nci.cabio.domain.Taxon">
+				<Attribute name="scientificName" value="Mus musculus" predicate="EQUAL_TO"/>
+			</Association>
+			<Group logicRelation="OR">
+				<Attribute name="symbol" value="BRCA%" predicate="LIKE"/>
+				<Attribute name="symbol" value="ICR%" predicate="LIKE"/>
+			</Group>
+		</Group>
+	</Target>
+</CQLQuery>

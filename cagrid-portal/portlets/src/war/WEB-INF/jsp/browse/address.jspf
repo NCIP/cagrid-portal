@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="title">Address</div>
+	<address>
+		<c:if test="${not empty catalogEntry.street1}">
+			<c:out value="${catalogEntry.street1}"/><br/>
+		</c:if>
+		<c:if test="${not empty catalogEntry.street2}">
+			<c:out value="${catalogEntry.street2}"/><br/>
+		</c:if>
+		<c:if test="${not empty catalogEntry.locality}">
+			<c:out value="${catalogEntry.locality}"/>,
+		</c:if>
+		<c:if test="${not empty catalogEntry.stateProvince}">
+			<c:out value="${catalogEntry.stateProvince}"/>
+		</c:if>
+		<c:if test="${not empty catalogEntry.postalCode}">
+			<c:out value="${catalogEntry.postalCode}"/>,
+		</c:if>
+		<c:if test="${not empty catalogEntry.countryCode}">
+			<c:out value="${catalogEntry.countryCode}"/>
+		</c:if>		
+	</address>
+</div> 

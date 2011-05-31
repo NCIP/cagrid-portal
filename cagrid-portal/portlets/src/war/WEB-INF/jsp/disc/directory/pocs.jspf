@@ -1,0 +1,29 @@
+
+
+	<table id="${prefix}mainTable" border="0"
+       class="sortable-onload-0 rowstyle-dataRowLight paginate-30 max-pages-7 ">
+		<thead>
+			<tr class="contentTableHeader">
+				<th  class="sortable-text fd-column-0 contentTableHeaderCell">Name</th>
+				<th  class="sortable-text fd-column-1 contentTableHeaderCell">Email</th>
+				<th  class="contentTableHeaderCell"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${listCommand.scroller.objects}" var="poc" varStatus="rowStatus">
+			
+				<tr class="<c:out value="${rowClass}"/>">
+			
+					<td class="dataCellText"><c:out value="${poc.firstName}"/> <c:out value="${poc.lastName}"/></td>
+					<td class="dataCellText"><c:out value="${poc.emailAddress}"/></td>
+					<td class="dataCellText">
+						<a alt="More Details..." href="<portlet:actionURL><portlet:param name="operation" value="selectPoc"/><portlet:param name="selectedId" value="${poc.id}"/></portlet:actionURL>">
+							More Details...		
+						</a>
+					</td>
+				</tr>
+
+			</c:forEach>
+		</tbody>
+	</table>
+

@@ -1,0 +1,27 @@
+<%@ include file="/WEB-INF/jsp/browse/common/view/edit_controls.jspf" %>
+		
+<%@ include file="/WEB-INF/jsp/browse/personView/view/photo_row.jspf" %>
+
+		<div class="contactInfoRow">
+			<c:if test="${catalogEntry.phoneNumberPublic}">
+				<tags:row rowLabel="Phone" rowValue="${catalogEntry.phoneNumber}"/>
+			</c:if>
+			<c:if test="${catalogEntry.emailAddressPublic}">
+				<tags:row rowLabel="e-mail" rowValue="${catalogEntry.emailAddress}"/>
+			</c:if>
+			<c:if test="${catalogEntry.addressPublic}">
+				<%@ include file="/WEB-INF/jsp/browse/address.jspf" %>
+			</c:if>
+			<c:if test="${!empty catalogEntry.webSite}">
+            <div class="row">
+                <div class="title">
+                    Website
+                </div>
+                <a href="${catalogEntry.webSite}" target="_blank">${catalogEntry.webSite}</a>
+            </div>
+			</c:if>
+		</div>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
+
+<%@ include file="/WEB-INF/jsp/browse/personView/relatedItemsAndOtherInfo.jspf" %> 

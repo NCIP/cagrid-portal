@@ -1,0 +1,50 @@
+<%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+
+<script type="text/javascript" src='<c:url value="/dwr/interface/NotificationSubscriptionService.js"/>'></script>
+
+
+    <div>
+        <c:choose>
+          <c:when test="${empty portalUser}">
+                Please <a href='<c:out value="${loginUrl}"/>'>sign in</a> to set Notifications for this service.
+            </c:when>
+
+            <c:otherwise>
+                <a href="javascript:${prefix}expandNotifications('<c:out value="${gridService.id}"/>');">Manage Notifications</a>
+                <div id="${prefix}notificationSection" style="padding:5px;display:none; width:120px; height:30px;">
+                    <input type="button" alt="Notifications"
+                           id="${prefix}notificationBtn" onclick="${prefix}subscribeUnsubscribe('<c:out value="${gridService.id}"/>');"/>
+               </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
+<div id="${prefix}notChoices">
+
+</div>
+
+<script type="text/javascript">
+    function ${prefix}expandNotifications(serviceId) {
+        NotificationSubscriptionService.isSubscribed(serviceId, function(subscribed){
+            ${prefix}toggleBtn(subscribed);
+            Effect.SlideDown('${prefix}notificationSection');
+        });
+
+    }
+
+    function ${prefix}toggleBtn(subscribedFlag){
+        if(subscribedFlag)
+            $("${prefix}notificationBtn").value="Cancel Notification";
+        else
+            $("${prefix}notificationBtn").value="Start Notification";
+    }
+
+    function ${prefix}subscribeUnsubscribe(serviceId){
+           $("${prefix}notificationBtn").disable;
+       NotificationSubscriptionService.subscribreUnsubscribe(serviceId, function(subscribed){
+            ${prefix}toggleBtn(subscribed);
+           $("${prefix}notificationBtn").enable;
+       });
+    }
+</script>

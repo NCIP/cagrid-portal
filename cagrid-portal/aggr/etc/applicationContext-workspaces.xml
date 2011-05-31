@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<util:list id="defaultWorkspaces">
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Clinical Trial Management Systems"/>
+			<property name="abbreviation" value="CTMS"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						The Clinical Trials Management Systems (CTMS) Workspace is developing a comprehensive set of modular, interoperable and standards-based tools designed to meet diverse clinical trials management needs and respond to four informatics-focused recommendations made by NCI's Clinical Trials Working Group (CTWG).
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/CTMS"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/clinicalTriallogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Integrative Cancer Research"/>
+			<property name="abbreviation" value="ICR"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						The Integrative Cancer Research Workspace is producing modular and interoperable tools and interfaces that provide for integration between biomedical informatics applications and data. This will ultimately enable translational and integrative research by providing for the integration of clinical and basic research data. The Workspace is developing a software-engineered, well-documented and validated biomedical informatics toolset for use throughout the research community.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/ICR"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/icrlogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="In Vivo Imaging"/>
+			<property name="abbreviation" value="IMAGING"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						In Vivo Imaging––from the molecular level to small animal imaging to clinical imaging of patients––is an essential component of basic and clinical cancer research. The caBIG™ In Vivo Imaging Workspace will focus on identifying the ways in which the wealth of information provided by such imaging, performed at academic and other research centers across the country, can be shared, optimized, and most effectively integrated into the ongoing effort to relieve suffering and death from cancer.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Imaging"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/ImagingIcon.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Tissue Banks and Pathology Tools"/>
+			<property name="abbreviation" value="TBPT"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						This Workspace is providing for the integration, development, and implementation of tissue and pathology tools. There is already strong interest and investment in this area throughout the Cancer Center community, and this Workspace provides an opportunity to bind those systems together into a unified resource through shared informatics infrastructure. In keeping with the caBIG™philosophy of database federation, these systems are being designed or modified to facilitate the integration and access to information from geographically-separate areas. Cancer Centers with experience in successfully developing tools in this domain are acting as developers, while other Centers are included as testing and validation sites. Centers which have expressed an interest in sharing information regarding specimen repositories and data sets are participating as early test sites, providing an opportunity to demonstrate how the tools perform in actual practice.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/TBPT"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/tbptlogo.gif"/>			
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Architecture"/>
+			<property name="abbreviation" value="ARCH"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						This Cross Cutting Workspace is developing policy documents, reviewing Workspaces, working on architectural standards and provide architectural assistance as necessary to the other Workspaces. The primary purpose of the Architectural Crosscutting Workspace is to ensure consistent application of the caBIG™ development principles to the distributed groups doing the actual integration and implementation activities throughout the caBIG project.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Architecture"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/architecturelogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Vocabulary and Common Data Elements"/>
+			<property name="abbreviation" value="VCDE"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						This Cross Cutting Workspace is responsible for evaluating and integrating systems for vocabulary and ontology content development, as well as software systems for content delivery. They are also responsible for developing standards for the representation of ontologies and vocabularies used throughout the caBIG™ system, as well as assessments of existing systems proposed for use within the caBIG™. This Workspace also has some limited responsibility for vocabulary and ontology content development, when specific and required content does not exist in a form usable by caBIG™. As a Cross Cutting Workspace, it is expected that they will interact with many of the other Workspaces as part of their activities.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/VCDE"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/vcdelogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Data Sharing and Intellectual Capital"/>
+			<property name="abbreviation" value="DSIC"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						This is a strategic level caBIG Workspace that addresses issues of concern to the other caBIG™ Workspaces. The mission of the DSIC Workspace is to facilitate data sharing between and among caBIG™ participants by addressing legal, regulatory, policy, proprietary, and contractual barriers to data exchange. Our primary goal is to support reviews of caBIG™ tools under development, develop recommendations for policies, procedures, and best practices, prepare white papers and comment letters on proposed policies and guidelines, develop problem scenarios that illustrate issues confronted by caBIG™ participants, and provide education and outreach to caBIG participants, their IRBs and their technology transfer offices. The members include biomedical researchers, clinicians, technology transfer experts, intellectual property and regulatory attorneys, policy specialists, patient advocates, bioethicists and bioinformaticists.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/DSIC_SLWG"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/dsiclogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Documentation and Training"/>
+			<property name="abbreviation" value="TRAINING"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						The mission of the Documentation and Training Workspace is to facilitate widespread adoption, dissemination, and use of caBIG™ interoperable tools, standards, and data sets within the larger cancer and biomedical communities. Our primary goal is to support the creation and dissemination of documentation and training materials for caBIG-related projects and community-wide resources.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/Training_SLWG"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/traininglogo.gif"/>
+		</bean>
+		<bean class="gov.nih.nci.cagrid.portal.domain.Workspace">
+			<property name="name" value="Strategic Planning"/>
+			<property name="abbreviation" value="SP"/>
+			<property name="description">
+				<value>
+					<![CDATA[
+						The Strategic Planning Workspace assists caBIG leadership with strategic planning and vision development activities. In addition, participants provide strategic insights with regard to engaging and interacting effectively with the biomedical cancer research community. The products of these endeavors include outreach, white papers and planning documents that help identify and prioritize additional activities for the caBIG program as a whole.
+					]]>				
+				</value>
+			</property>
+			<property name="homepageUrl" value="https://cabig.nci.nih.gov/workspaces/SP_SLWG"/>
+			<property name="logoUrl" value="https://cabig.nci.nih.gov/images/spslwglogo.gif"/>
+		</bean>
+	</util:list>
+	
+	<bean id="workspacesLoader" class="gov.nih.nci.cagrid.portal.util.WorkspacesLoader">
+		<property name="workspaceDao" ref="workspaceDao"/>
+		<property name="participantDao" ref="participantDao"/>
+		<property name="addressDao" ref="addressDao"/>
+		<property name="defaultWorkspaces" ref="defaultWorkspaces"/>
+	</bean>
+</beans>

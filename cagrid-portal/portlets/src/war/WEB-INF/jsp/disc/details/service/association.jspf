@@ -1,0 +1,22 @@
+<table class="detailstable">
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+	<tbody>
+		<tr>
+			<td class="detailslabelcell">Type:</td>
+			<td><c:out value="${assoc.type.packageName}"/>.<c:out value="${assoc.type.className}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Min Cardinality:</td>
+			<td><c:out value="${fn:replace(assoc.minCardinality, '-1', '*')}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Max Cardinality:</td>
+			<td><c:out value="${fn:replace(assoc.maxCardinality, '-1', '*')}"/></td>
+		</tr>
+	</tbody>
+</table>

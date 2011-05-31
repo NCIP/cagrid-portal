@@ -1,0 +1,73 @@
+#service-url {
+    width: 100px;
+    font-size: 15px;
+}
+
+.searchBar {
+    background-color: #E5E8EF;
+    width: 100%;
+    float: inherit;
+    margin-bottom: 10px;
+}
+
+#browsingSummaryDiv {
+    float: left;
+}
+
+#paginatorSummaryDiv {
+    float: right;
+}
+
+.sortOrder {
+    cursor: pointer;
+}
+
+.catalogIcon {
+    float: left;
+}
+
+#summaryHelpLink {
+    float: right;
+}
+
+#summaryTitle {
+    font-size: 15pt;
+    border-bottom: 2px solid #A3B9E2;
+    font-weight: bold;
+    margin: 0 0 0.5em;
+}
+
+#summaryContent {
+    overflow: auto;
+}
+
+.suggestLink {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.resultsCount {
+    font-weight: bold;
+}
+
+#cagp-tooltip {
+    position: absolute;
+    border: 1px solid #333;
+    background: #f7f5d1;
+    padding: 2px 5px;
+    color: #333;
+    display: none;
+}
+
+span.resultStatus {
+    padding-left: 50px;
+}
+
+div.results {
+    width: 100%;
+}
+
+.gssStatisticsDescription{
+    font-weight:bold;
+    color:#404040;
+}

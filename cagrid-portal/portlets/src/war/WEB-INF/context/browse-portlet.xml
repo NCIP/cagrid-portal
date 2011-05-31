@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <util:map id="entryTypeMap">
+        <entry key="COMMUNITY" value="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry"/>
+        <entry key="DATASET" value="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry"/>
+        <entry key="DESKTOPTOOL" value="gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry"/>
+        <entry key="GRIDSERVICEENDPOINT"
+               value="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"/>
+        <entry key="GRIDDATASERVICEENDPOINT"
+               value="gov.nih.nci.cagrid.portal.domain.catalog.GridDataServiceEndPointCatalogEntry"/>
+        <entry key="GRIDSERVICEINTERFACE"
+               value="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry"/>
+        <entry key="INFORMATIONMODEL" value="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry"/>
+        <entry key="INSTITUTION" value="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry"/>
+        <entry key="KNOWLEDGECENTER" value="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry"/>
+        <entry key="PERSON" value="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry"/>
+        <entry key="POC" value="gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry"/>
+        <entry key="PORTLET" value="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry"/>
+        <entry key="PROJECT" value="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry"/>
+        <entry key="SHAREDQUERY" value="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry"/>
+        <entry key="TERMINOLOGY" value="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry"/>
+        <entry key="TOOL" value="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry"/>
+        <entry key="TOOLDEPLOYMENT" value="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry"/>
+        <entry key="WORKFLOW" value="gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry"/>
+        <entry key="WORKSPACE" value="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry"/>
+    </util:map>
+
+    <util:map id="entryTypeViewMap">
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry" value="communityView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"
+               value="gridServiceCatalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry"
+               value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" value="institutionView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" value="personView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry" value="personView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry" value="portletView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" value="sharedQueryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry" value="catalogEntryView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry" value="catalogEntryView"/>
+
+    </util:map>
+
+
+    <bean id="browseViewDetailsController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewDetailsController"
+          autowire="byName">
+        <property name="objectName" value="catalogEntryViewBean"/>
+    </bean>
+
+    <bean id="browseViewProfileController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewProfileController"
+          parent="browseViewDetailsController"
+          autowire="byName">
+        <property name="objectName" value="catalogEntryViewBean"/>
+    </bean>
+
+
+    <bean id="catalogEntryFactory" class="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryFactory"
+          autowire="byName"/>
+
+
+    <bean id="createCatalogEntryController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.CreateCatalogEntryController"
+          autowire="byName"/>
+
+    <bean id="editCatalogEntryController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.EditCatalogEntryController"
+          autowire="byName"/>
+
+    <bean id="deleteCatalogEntryController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.DeleteCatalogEntryController"
+          autowire="byName"/>
+
+
+    <bean id="viewRelationshipTypeController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.ViewRelationshipTypeController"
+          autowire="byName">
+        <property name="objectName" value="relType"/>
+        <property name="viewName" value="relationshipTypeView"/>
+    </bean>
+
+    <bean id="createRelationshipTypeController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.CreateRelationshipTypeController"
+          autowire="byName"/>
+
+    <bean id="createPortalCommunity"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.community.CreatePortalCommunityController"
+          autowire="byName">
+        <property name="objectName" value="catalogEntryViewBean"/>
+    </bean>
+
+    <bean id="editRelationshipTypeController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.EditRelationshipTypeController"
+          autowire="byName"/>
+
+    <bean id="deleteRelationshipTypeController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.DeleteRelationshipTypeController"
+          autowire="byName"/>
+
+    <bean id="copySharedQueryCatalog"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.sharedQuery.CopySharedQueryCatalogEntryController"
+          autowire="byName" parent="browseViewDetailsController">
+        <property name="queryCopyParam" value="queryCopy"/>
+        <property name="sharedQueryEntryType" value="SHAREDQUERY"/>
+    </bean>
+
+    <bean id="browseViewController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewController"
+          autowire="byName">
+        <property name="successViewName" value="view"/>
+    </bean>
+
+    <bean id="browseEditController"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseEditController"
+          autowire="byName">
+        <property name="objectName" value="command"/>
+        <property name="successViewName" value="edit"/>
+    </bean>
+
+    <bean
+            id="browseUpdateController"
+            class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseUpdateController"
+            autowire="byName">
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.browse.BrowseCommand"/>
+    </bean>
+
+    <bean
+            id="browseViewRelatedItemsController"
+            class="gov.nih.nci.cagrid.portal.portlet.browse.ViewRelatedItemsController"
+            autowire="byName">
+        <property name="viewName" value="related_items_content"/>
+    </bean>
+
+    <!--
+     <bean
+      id="portletModeParameterHandlerMapping"
+         class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+     -->
+    <bean
+            id="portletModeParameterHandlerMapping"
+            class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseHandlerMapping">
+
+        <property name="order" value="1"/>
+        <property name="parameterName" value="operation"/>
+        <!--<property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>-->
+
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+                <ref bean="csrfTokenProviderRequestInterceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="edit">
+                    <map>
+                        <entry key="update" value-ref="browseUpdateController"/>
+                        <entry key="viewRelationshipType" value-ref="viewRelationshipTypeController"/>
+                        <entry key="createRelationshipType" value-ref="createRelationshipTypeController"/>
+                        <entry key="editRelationshipType" value-ref="editRelationshipTypeController"/>
+                        <entry key="deleteRelationshipType" value-ref="deleteRelationshipTypeController"/>
+                    </map>
+                </entry>
+                <entry key="view">
+                    <map>
+                        <entry key="view" value-ref="browseViewController"/>
+                        <entry key="textMap" value-ref="browseViewController"/>
+                        <entry key="viewDetails" value-ref="browseViewDetailsController"/>
+                        <entry key="viewProfile" value-ref="browseViewProfileController"/>
+                        <entry key="createPortalCommunity" value-ref="createPortalCommunity"/>
+                        <entry key="createCatalogEntry" value-ref="createCatalogEntryController"/>
+                        <entry key="editCatalogEntry" value-ref="editCatalogEntryController"/>
+                        <entry key="deleteCatalogEntry" value-ref="deleteCatalogEntryController"/>
+                        <entry key="copySharedQueryCatalog" value-ref="copySharedQueryCatalog"/>
+                        <entry key="viewRelatedItems" value-ref="browseViewRelatedItemsController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="portletModeHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>
+
+        <property name="order" value="2"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+                <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="portalUserInterceptor2"/>
+                <ref bean="portalUserRequestInterceptor"/>
+                <ref bean="requestAttributePropertiesPopulatorInterceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeMap">
+            <map>
+                <entry key="edit">
+                    <ref bean="browseEditController"/>
+                </entry>
+                <entry key="view">
+                    <ref bean="browseViewController"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="prefix" value="/WEB-INF/jsp/browse/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="defaultExceptionHandler"
+          parent="defaultExceptionHandlerTemplate"/>
+
+
+</beans>

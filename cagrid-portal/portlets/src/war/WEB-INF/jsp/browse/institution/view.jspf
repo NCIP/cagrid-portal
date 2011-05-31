@@ -1,0 +1,24 @@
+<%@ include file="/WEB-INF/jsp/browse/common/view/edit_controls.jspf" %>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/view/photo_row.jspf" %>
+
+		<div class="contactInfoRow">
+			
+			<tags:notEmptyRow rowLabel="Phone" rowValue="${catalogEntry.phoneNumber}" useLabel="true"/>
+			<tags:notEmptyRow rowLabel="e-mail" rowValue="${catalogEntry.emailAddress}" useLabel="true"/>
+			
+<%@ include file="/WEB-INF/jsp/browse/address.jspf" %>		
+			
+			<c:if test="${!empty catalogEntry.webSite}">
+            <div class="row">
+                <div class="title">
+                    Website
+                </div>
+                <a href="${catalogEntry.webSite}" target="_blank">${catalogEntry.webSite}</a>
+            </div>
+			</c:if>
+		</div>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/view/terms.jspf" %>
+		
+<%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %> 

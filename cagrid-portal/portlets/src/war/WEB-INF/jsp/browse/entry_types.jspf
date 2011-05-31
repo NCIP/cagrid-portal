@@ -1,0 +1,23 @@
+<%
+Object[] entryTypes = new Object[]{
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry", "Community"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry", "Dataset"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry", "Desktop Tool"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry", "Grid Service Endpoint"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry", "Grid Service Interface"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry", "Information Model"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry", "Institution"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry", "Knowledge Center"},		
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry", "Person"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry", "Portlet"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry", "Project"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry", "Shared Query"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry", "Terminology"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry", "Tool"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry", "Tool Deployment"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry", "Workflow"},
+		new String[]{"gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry", "Workspace"},	
+		
+};
+pageContext.setAttribute("entryTypes", entryTypes);
+%>

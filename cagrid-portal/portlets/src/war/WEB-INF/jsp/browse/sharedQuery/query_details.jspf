@@ -1,0 +1,27 @@
+<div>
+    <div class="row">
+        <div class="title">
+            Target Class
+        </div>
+        <div class="value">
+            <span id="${ns}targetClass">
+
+            </span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+
+    ${managerFacadeName}.getTargetClass({
+            callback:function(response) {
+                jQuery("#${ns}targetClass").html(response);
+            },
+             errorHandler:function(errorString, exception) {
+                alert("Error rendering Service URL's: " + errorString);
+            },
+            async: true
+        });
+
+    });
+</script> 

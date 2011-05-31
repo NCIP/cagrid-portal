@@ -1,0 +1,19 @@
+ <portlet:renderURL var="copySharedQueryCatalog"><portlet:param name="operation" value="copySharedQueryCatalog"/><portlet:param name="entryId" value="${catalogEntry.id}"/><portlet:param name="viewMode" value="edit"/></portlet:renderURL>
+<div><c:choose><c:when test="${!empty editMode}">
+            <div class="row"><label for="input-query">Query</label><textarea id="input-query" onblur="${ns}submitQuery();" wrap="virtual" class="required" name="query" style="height:100px;width:75%;>"><c:out value="${catalogEntry.about.xml}"/></textarea>
+                <span style="color: red"></span>
+            </div>
+        </c:when><c:otherwise>
+            <div class="row" style="padding:5px;"><label for="input-query">Query</label>
+                <div class="value"><div><c:if test="${!empty portalUser}">
+                            <span id="${ns}editQuerySpan"><a href="<c:out value="${copySharedQueryCatalog}"/>">Edit XML </a></span></c:if><a id="${ns}showQueryXml" onclick="${ns}showQueryXml()">View XML</a>
+                    </div>
+                    <div><textarea id="input-query" onblur="${ns}submitQuery();" readonly="true" wrap="virtual" name="query" style="height:100px;width:70%;display:none;>">
+                        <c:out value="${catalogEntry.about.xml}"/></textarea>
+                        <span style="color: red"></span>
+                    </div></div></div>
+        </c:otherwise></c:choose>
+</div>
+ <script type="text/javascript">
+ <%--if query is being copied--%><c:if test="${queryCopy !=null}">jQuery(document).ready(function(){${ns}copyQuery('${queryCopy}');});</c:if>function ${ns}copyQuery(queryXML){jQuery("#input-query").val((decodeURIComponent(queryXML)).replace(/\+/g,  " "));${ns}submitQuery();}function ${ns}submitQuery(){${managerFacadeName}.setQuery($("input-query").value,{callback:function(response){if(response!=null)alert(response);},errorHandler:function(errorString,exception){alert("Error setting query "+errorString);},async:true});}function ${ns}showQueryXml(){jQuery("#input-query").toggle();if(jQuery("#${ns}showQueryXml").html()=="View XML"){jQuery("#${ns}showQueryXml").html("Hide XML");}else{jQuery("#${ns}showQueryXml").html("View XML");}}
+ </script> 

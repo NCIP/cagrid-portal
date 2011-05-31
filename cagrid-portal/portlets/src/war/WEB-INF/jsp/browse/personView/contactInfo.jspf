@@ -1,0 +1,189 @@
+<form name="${ns}contactInfoForm">
+
+<div class="contactInfoRow">
+    <div class="leftpanel">
+        <div class="row">
+            <label for="phoneNumber">
+                Phone
+            </label>
+            <input type="text" name="phoneNumber" alt="phoneNumber" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="emailAddress">
+                e-mail
+            </label>
+            <input type="text" name="emailAddress" alt="emailAddress" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
+            "></span>
+
+        </div>
+		<br/>
+        <div class="row">
+            <label for="street1">
+                Street Line 1
+            </label>
+            <input type="text" name="street1" alt="street1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="street2">
+                Street Line 2
+            </label>
+            <input type="text" name="street2" alt="street2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="locality">
+                City/Locality
+            </label>
+            <input type="text" name="locality" alt="locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="stateProvince">
+                State/Province
+            </label>
+            <select name="stateProvince" alt="stateProvince" id="${ns}contactInfoStateProvince" class="autoSet">
+            </select>
+        </div>
+        
+    </div>
+    <div class="rightpanel">
+        <div class="row">
+            <label for="phoneNumberPublic">
+                Public Phone Number?
+            </label>
+            Yes: <input type="radio" name="phoneNumberPublic" alt="Phone Number" class="autoSet" value="true"
+            <c:if test="${catalogEntry.phoneNumberPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" name="phoneNumberPublic" alt="Phone Number" class="autoSet" value="false"
+            <c:if test="${!catalogEntry.phoneNumberPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+        <div class="row">
+            <label for="emailAddressPublic">
+                Public Email?
+            </label>
+            Yes: <input type="radio" name="emailAddressPublic" alt="Email Address" class="autoSet" value="true"
+            <c:if test="${catalogEntry.emailAddressPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" name="emailAddressPublic" class="autoSet" alt="Email Address" value="false"
+            <c:if test="${!catalogEntry.emailAddressPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+		<br/>
+        <div class="row">
+            <label for="addressPublic">
+                Public Address?
+            </label>
+            Yes: <input type="radio" name="addressPublic" alt="Address" class="autoSet" value="true"
+            <c:if test="${catalogEntry.addressPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" name="addressPublic" class="autoSet" alt="Address" value="false"
+            <c:if test="${!catalogEntry.addressPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+    </div>
+	<!-- The following line is for formatting purposes -->
+	<hr style="clear:both; visibility:hidden; height:0; border:0;"/>
+	<div class="row" style="margin-top:0;">
+            <label for="countryCode">
+                Country
+            </label>
+            <select name="countryCode" id="${ns}contactInfoCountryCode" class="autoSet"></select>
+        </div>
+        <div class="row">
+            <label for="webSite">
+                Website
+            </label>
+            <input type="text" name="webSite" alt="website" class="autoSet" value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
+            "></span>
+        </div>
+        
+		
+</div>
+
+</form>
+
+	<div class="flow-buttons" style="text-align:left;">
+		<span id="${ns}contactInfoCancelButtonContainer"></span>
+		<span id="${ns}contactInfoSubmitButtonContainer"></span>
+		&nbsp;<span id="${ns}savedMessageContainer" style="color:green; display:none;"></span>
+	</div>
+
+
+<script type="text/javascript">
+
+var ContactInfoForm = Class.create(CGP_BaseAjaxForm, 
+{
+	handleSubmitSuccess: function(){
+		jQuery("#${ns}savedMessageContainer").show("normal").html("Your contact information has been updated.");
+		setTimeout("jQuery('#${ns}savedMessageContainer').hide('normal').html('')", 3000);
+	},
+	validateThenSubmit: function(validated){
+		
+		var thisObj = this;
+		var mgr = eval(this.mgrName);
+		if(!validated){
+			mgr.validate(
+			{
+				callback: function(response){
+					thisObj.handleValidateSuccess(response);
+    			},
+    			errorHandler: function(errorString, exception){
+    				thisObj.handleValidateError(errorString, exception);
+    			}
+			});
+		}else{
+			mgr.save(
+			{
+				callback:function(response){
+					thisObj.handleSubmitSuccess(response);
+    			},
+    			errorHandler:function(errorString, exception){
+    				thisObj.handleSubmitError(errorString, exception);
+    			}
+			});
+		}	
+	}
+});
+
+jQuery(document).ready(function(){
+	var contactInfoForm = new ContactInfoForm("${ns}", "contactInfoForm", "PersonCatalogEntryManagerFacade");
+	contactInfoForm.submitButtonContainerId = "${ns}contactInfoSubmitButtonContainer";
+	contactInfoForm.cancelButtonContainerId = "${ns}contactInfoCancelButtonContainer";
+	contactInfoForm.showCancelButton = false;
+	contactInfoForm.submitButtonLabel = "Save";	
+	contactInfoForm.render();
+
+	var myStates = 
+		new CGP_StateCountryLists(
+			"${ns}contactInfoStateProvince", 
+			"${ns}contactInfoCountryCode", 
+			"${catalogEntry.stateProvince}", 
+			"${catalogEntry.countryCode}" 
+		);
+	myStates.render();
+
+});
+</script>
+

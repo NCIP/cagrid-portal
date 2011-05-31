@@ -1,0 +1,58 @@
+/**
+ * The automcomplete box styling
+ */
+div.auto_complete {
+    width: 450px;
+    background-color: #dcedad;
+    z-index:100;
+}
+
+div.auto_complete ul {
+    border: 1px solid #31430f;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style-type: none;
+}
+
+div.auto_complete ul li {
+    margin: 0;
+    padding: 3px;
+    text-align: left;
+}
+
+div.auto_complete ul li.selected {
+    background-color: #FFFFCC;
+}
+
+div.auto_complete ul strong.highlight {
+    color: #800;
+    margin:0;
+    padding:0;
+}
+
+input.searchField{
+    width:180px;
+}
+
+input.auto_complete{
+    background-color: #dcedad;
+}
+
+img.indicator {
+    visibility: hidden;
+    display:none;
+}
+
+#evsConceptDefinition{
+    width:180px;
+    margin:0.5em 0 0.5em 0;
+    padding: 0.5em;
+    border: 1px dashed #2f6fab;
+    color: black;
+    background-color: #ffc ;
+    line-height: 1.1em;
+}
+
+ 
+

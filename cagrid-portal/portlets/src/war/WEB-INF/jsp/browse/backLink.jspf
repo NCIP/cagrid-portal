@@ -1,0 +1,51 @@
+<%@ taglib prefix="liferay-portlet" uri="http://liferay.com/tld/portlet" %>
+<liferay-portlet:actionURL var="viewUrl">
+    <liferay-portlet:param name="operation" value="view"/>
+    <c:if test="${fn:length(query)>0}">
+        <liferay-portlet:param name="query" value="${query}"/>
+        <c:set var="backLink" value="query"/>
+    </c:if>
+    <c:if test="${fn:length(selectedCatalogType)>0}">
+        <liferay-portlet:param name="selectedCatalogType" value="${selectedCatalogType}"/>
+        <c:set var="backLink" value="selectedCatalogType"/>
+    </c:if>
+    <c:if test="${fn:length(selectedCatalogLabel)>0}">
+        <liferay-portlet:param name="selectedCatalogLabel" value="${selectedCatalogLabel}"/>
+        <c:set var="backLink" value="selectedCatalogLabel"/>
+    </c:if>
+    <c:if test="${fn:length(catalogType)>0}">
+        <liferay-portlet:param name="catalogType" value="${catalogType}"/>
+        <c:set var="backLink" value="catalogType"/>
+    </c:if>
+    <c:if test="${fn:length(aof)>0}">
+        <liferay-portlet:param name="aof" value="${aof}"/>
+        <c:set var="backLink" value="aof"/>
+    </c:if>
+    <c:if test="${searchKeyword!='*:*'}">
+        <liferay-portlet:param name="searchKeyword" value="${searchKeyword}"/>
+        <c:set var="backLink" value="searchKeyword"/>
+    </c:if>
+    <c:if test="${fn:length(selectedIds)>0}">
+        <liferay-portlet:param name="selectedIds" value="${selectedIds}"/>
+        <c:set var="backLink" value="selectedIds"/>
+    </c:if>
+</liferay-portlet:actionURL>
+<div class="row">
+    <c:if test="${backLink !=null}">
+        <form:form id="${ns}backLinkForm" method="post">
+        <div style="float:left;">
+            <a href="javascript:${ns}returnToSearch();"><img src="/cagridportlets/images/foop/back-arrow.png" alt="Back"/> Back to Results</a>
+        </div>
+        </form:form>
+    </c:if>
+    <div style="float:right;">
+        <!-- AddThis Button BEGIN -->
+        <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4a9587a21a6fbe5e"><img
+                src="http://s7.addthis.com/static/btn/sm-bookmark-en.gif" width="83" height="16"
+                alt="Bookmark and Share" style="border:0"/></a>
+        <script type="text/javascript"
+                src="http://s7.addthis.com/js/250/addthis_widget.js?pub=xa-4a9587a21a6fbe5e"></script>
+        <!-- AddThis Button END -->
+    </div>
+</div>
+<script type="text/javascript">function ${ns}returnToSearch(){$("${ns}backLinkForm").action="${viewUrl}";$("${ns}backLinkForm").submit();}</script>

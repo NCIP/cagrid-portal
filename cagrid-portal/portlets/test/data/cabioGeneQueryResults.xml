@@ -1,0 +1,567 @@
+<ns1:CQLQueryResults
+        xsi:type="ns1:CQLQueryResults"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
+	targetClassname="gov.nih.nci.cabio.domain.Gene">
+	<ns1:ObjectResult>
+		<ns2:Gene
+			xmlns:ns2="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="17356"
+			fullName="ATPase, aminophospholipid transporter (APLT), Class I, type 8A, member 1"
+			clusterId="435052" symbol="ATP8A1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns3:Gene
+			xmlns:ns3="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="125393" fullName="ATP binding domain 3" clusterId="26514"
+			symbol="Atpbd3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns4:Gene
+			xmlns:ns4="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="24399"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit C2 (subunit 9)"
+			clusterId="524464" symbol="ATP5G2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns5:Gene
+			xmlns:ns5="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="128787"
+			fullName="ATPase, (Na+)/K+ transporting, beta 4 polypeptide"
+			clusterId="60134" symbol="Atp1b4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns6:Gene
+			xmlns:ns6="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="23032"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit B1"
+			clusterId="514870" symbol="ATP5F1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns7:Gene
+			xmlns:ns7="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="20581"
+			fullName="ATG3 autophagy related 3 homolog (S. cerevisiae)"
+			clusterId="477126" symbol="ATG3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns8:Gene
+			xmlns:ns8="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="141985" fullName="ATPase, Ca++ transporting, plasma membrane 2"
+			clusterId="321755" symbol="Atp2b2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns9:Gene
+			xmlns:ns9="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="135938" fullName="ATPase family, AAA domain containing 3A"
+			clusterId="241152" symbol="Atad3a" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns10:Gene
+			xmlns:ns10="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="22883" fullName="ATPase, Ca++ transporting, ubiquitous"
+			clusterId="513870" symbol="ATP2A3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns11:Gene
+			xmlns:ns11="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="22695" fullName="Ataxin 7-like 3" clusterId="512651"
+			symbol="ATXN7L3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns12:Gene
+			xmlns:ns12="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="122756"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit c (subunit 9), isoform 3"
+			clusterId="2966" symbol="Atp5g3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns13:Gene
+			xmlns:ns13="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="12742" fullName="ATPase, Class I, type 8B, member 3"
+			clusterId="306212" symbol="ATP8B3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns14:Gene
+			xmlns:ns14="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="3947" fullName="ATP binding domain 4" clusterId="107196"
+			symbol="ATPBD4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns15:Gene
+			xmlns:ns15="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="123738" fullName="Autophagy-related 12 (yeast)" clusterId="9852"
+			symbol="Atg12" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns16:Gene
+			xmlns:ns16="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="152360" fullName="Activating transcription factor 5"
+			clusterId="389890" symbol="Atf5" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns17:Gene
+			xmlns:ns17="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="126019" fullName="Alanine-glyoxylate aminotransferase 2-like 1"
+			clusterId="29125" symbol="Agxt2l1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns18:Gene
+			xmlns:ns18="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="14735" fullName="ATPase family, AAA domain containing 2"
+			clusterId="370834" symbol="ATAD2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns19:Gene
+			xmlns:ns19="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="134548" fullName="Arginine-tRNA-protein transferase 1"
+			clusterId="216321" symbol="Ate1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns20:Gene
+			xmlns:ns20="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="122994" fullName="CAMP responsive element binding protein-like 1"
+			clusterId="4068" symbol="Crebl1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns21:Gene
+			xmlns:ns21="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="141877"
+			fullName="ATPase, aminophospholipid transporter-like, class I, type 8A, member 2"
+			clusterId="319599" symbol="Atp8a2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns22:Gene
+			xmlns:ns22="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="154059" fullName="Hypothetical protein 9630017O17"
+			clusterId="393500" symbol="9630017O17" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns23:Gene
+			xmlns:ns23="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="142198" fullName="ATPase, Ca++-sequestering" clusterId="326247"
+			symbol="Atp2c1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns24:Gene
+			xmlns:ns24="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="45039" fullName="Transcribed locus" clusterId="592510" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns25:Gene
+			xmlns:ns25="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="81960" fullName="ATPase family, AAA domain containing 3A"
+			clusterId="655253" symbol="ATAD3A" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns26:Gene
+			xmlns:ns26="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="22228"
+			fullName="ATPase, Ca++ transporting, cardiac muscle, slow twitch 2"
+			clusterId="506759" symbol="ATP2A2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns27:Gene
+			xmlns:ns27="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="198556"
+			fullName="ATPase, Ca++ transporting, cardiac muscle, slow twitch 2"
+			clusterId="465355" symbol="Atp2a2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns28:Gene
+			xmlns:ns28="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="135219"
+			fullName="ATPase, Ca++ transporting, cardiac muscle, slow twitch 2"
+			clusterId="227583" symbol="Atp2a2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns29:Gene
+			xmlns:ns29="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="123460" fullName="ATPase, Ca++ transporting, ubiquitous"
+			clusterId="6306" symbol="Atp2a3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns30:Gene
+			xmlns:ns30="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="11423" fullName="ATPase, Ca++ transporting, plasma membrane 2"
+			clusterId="268942" symbol="ATP2B2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns31:Gene
+			xmlns:ns31="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="84466" fullName="ATPase, Ca++ transporting, plasma membrane 3"
+			clusterId="658008" symbol="ATP2B3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns32:Gene
+			xmlns:ns32="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="25591" fullName="ATPase, Ca++ transporting, plasma membrane 3"
+			clusterId="533956" symbol="ATP2B3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns33:Gene
+			xmlns:ns33="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="13678" fullName="ATPase, Ca++ transporting, plasma membrane 4"
+			clusterId="343522" symbol="ATP2B4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns34:Gene
+			xmlns:ns34="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="42357" fullName="ATPase, Ca++ transporting, type 2C, member 1"
+			clusterId="584884" symbol="ATP2C1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns35:Gene
+			xmlns:ns35="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="416" fullName="ATPase, Ca++ transporting, type 2C, member 2"
+			clusterId="6168" symbol="ATP2C2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns36:Gene
+			xmlns:ns36="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="3928" fullName="Alanine-glyoxylate aminotransferase 2-like 1"
+			clusterId="106576" symbol="AGXT2L1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns37:Gene
+			xmlns:ns37="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="10908" fullName="Alanine-glyoxylate aminotransferase 2-like 2"
+			clusterId="248746" symbol="AGXT2L2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns38:Gene
+			xmlns:ns38="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="137262" fullName="Alanine-glyoxylate aminotransferase 2-like 2"
+			clusterId="256875" symbol="Agxt2l2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns39:Gene
+			xmlns:ns39="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="136916"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit b, isoform 1"
+			clusterId="251152" symbol="Atp5f1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns40:Gene
+			xmlns:ns40="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="2960"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit C1 (subunit 9)"
+			clusterId="80986" symbol="ATP5G1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns41:Gene
+			xmlns:ns41="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="147156"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit c (subunit 9), isoform 1"
+			clusterId="371547" symbol="Atp5g1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns42:Gene
+			xmlns:ns42="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="149397"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit c (subunit 9), isoform 2"
+			clusterId="381662" symbol="Atp5g2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns43:Gene
+			xmlns:ns43="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="123795"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit c (subunit 9), isoform 2"
+			clusterId="10314" symbol="Atp5g2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns44:Gene
+			xmlns:ns44="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" id="40"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit C3 (subunit 9)"
+			clusterId="429" symbol="ATP5G3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns45:Gene
+			xmlns:ns45="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="90702"
+			fullName="ATP synthase, H+ transporting, mitochondrial F0 complex, subunit G2"
+			clusterId="664737" symbol="ATP5L2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns46:Gene
+			xmlns:ns46="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="21208" fullName="Ataxin 7-like 1" clusterId="489603"
+			symbol="ATXN7L1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns47:Gene
+			xmlns:ns47="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="4388" fullName="Ataxin 7-like 2" clusterId="118248"
+			symbol="ATXN7L2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns48:Gene
+			xmlns:ns48="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="21208" fullName="Ataxin 7-like 1" clusterId="489603"
+			symbol="ATXN7L1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns49:Gene
+			xmlns:ns49="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="127776" fullName="Ataxin 7-like 4" clusterId="41540"
+			symbol="Atxn7l4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns50:Gene
+			xmlns:ns50="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="132042"
+			fullName="ATPase, aminophospholipid transporter (APLT), class I, type 8A, member 1"
+			clusterId="153230" symbol="Atp8a1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns51:Gene
+			xmlns:ns51="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="182964" fullName="Transcribed locus" clusterId="444957" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns52:Gene
+			xmlns:ns52="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="18592"
+			fullName="ATPase, aminophospholipid transporter-like, Class I, type 8A, member 2"
+			clusterId="444957" symbol="ATP8A2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns53:Gene
+			xmlns:ns53="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="10203" fullName="ATPase, Class I, type 8B, member 1"
+			clusterId="216623" symbol="ATP8B1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns54:Gene
+			xmlns:ns54="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="17459" fullName="ATPase, Class I, type 8B, member 2"
+			clusterId="435700" symbol="ATP8B2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns55:Gene
+			xmlns:ns55="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="126400" fullName="Atpase, class I, type 8B, member 2"
+			clusterId="30455" symbol="Atp8b2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns56:Gene
+			xmlns:ns56="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="22500" fullName="ATPase, Class I, type 8B, member 4"
+			clusterId="511311" symbol="ATP8B4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns57:Gene
+			xmlns:ns57="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="17500" fullName="ATPase family, AAA domain containing 1"
+			clusterId="435948" symbol="ATAD1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns58:Gene
+			xmlns:ns58="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="196150" fullName="ATPase family, AAA domain containing 1"
+			clusterId="462217" symbol="Atad1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns59:Gene
+			xmlns:ns59="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="125506" fullName="ATPase family, AAA domain containing 1"
+			clusterId="27123" symbol="Atad1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns60:Gene
+			xmlns:ns60="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="157235" fullName="ATPase family, AAA domain containing 2"
+			clusterId="398814" symbol="Atad2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns61:Gene
+			xmlns:ns61="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="134865" fullName="ATPase family, AAA domain containing 2"
+			clusterId="221758" symbol="Atad2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns62:Gene
+			xmlns:ns62="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="14420" fullName="ATPase family, AAA domain containing 4"
+			clusterId="368260" symbol="ATAD4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns63:Gene
+			xmlns:ns63="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="143714" fullName="ATPase family, AAA domain containing 4"
+			clusterId="342551" symbol="Atad4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns64:Gene
+			xmlns:ns64="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="130588" fullName="ATP binding domain 4" clusterId="117809"
+			symbol="Atpbd4" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns65:Gene
+			xmlns:ns65="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="131848" fullName="Solute carrier family 44, member 2"
+			clusterId="148425" symbol="Slc44a2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns66:Gene
+			xmlns:ns66="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="7094" fullName="ATP binding domain 3" clusterId="148425"
+			symbol="ATPBD3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns67:Gene
+			xmlns:ns67="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="16650" fullName="Ataxia, cerebellar, Cayman type (caytaxin)"
+			clusterId="418055" symbol="ATCAY" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns68:Gene
+			xmlns:ns68="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="131032"
+			fullName="Ataxia, cerebellar, Cayman type homolog (human)"
+			clusterId="127681" symbol="Atcay" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns69:Gene
+			xmlns:ns69="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="20056" fullName="ATPase family, AAA domain containing 2B"
+			clusterId="467862" symbol="ATAD2B" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns70:Gene
+			xmlns:ns70="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="1213" fullName="ATPase family, AAA domain containing 3B"
+			clusterId="23413" symbol="ATAD3B" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns71:Gene
+			xmlns:ns71="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="68367" fullName="Arginyltransferase 1" clusterId="632080"
+			symbol="ATE1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns72:Gene
+			xmlns:ns72="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="78412" fullName="Activating transcription factor 1"
+			clusterId="648565" symbol="ATF1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns73:Gene
+			xmlns:ns73="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="153302" fullName="Activating transcription factor 2"
+			clusterId="391886" symbol="Atf2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns74:Gene
+			xmlns:ns74="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="134108" fullName="Activating transcription factor 2"
+			clusterId="209903" symbol="Atf2" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns75:Gene
+			xmlns:ns75="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="9952" fullName="Transcribed locus" clusterId="209903" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns76:Gene
+			xmlns:ns76="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" id="44"
+			fullName="Activating transcription factor 3" clusterId="460"
+			symbol="ATF3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns77:Gene
+			xmlns:ns77="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="122695" fullName="Activating transcription factor 3"
+			clusterId="2706" symbol="Atf3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns78:Gene
+			xmlns:ns78="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="21358" fullName="Activating transcription factor 6"
+			clusterId="492740" symbol="ATF6" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns79:Gene
+			xmlns:ns79="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="1897" fullName="CAMP responsive element binding protein-like 1"
+			clusterId="42853" symbol="CREBL1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns80:Gene
+			xmlns:ns80="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="123916" fullName="Arachidonate 12-lipoxygenase" clusterId="12286"
+			symbol="Alox12" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns81:Gene
+			xmlns:ns81="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="717" fullName="Activating transcription factor 7"
+			clusterId="12286" symbol="ATF7" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns82:Gene
+			xmlns:ns82="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="191995" fullName="Activating transcription factor 7"
+			clusterId="455936" symbol="Atf7" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns83:Gene
+			xmlns:ns83="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="134005" fullName="Activating transcription factor 7"
+			clusterId="208714" symbol="Atf7" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns84:Gene
+			xmlns:ns84="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="135603" fullName="Autophagy-related 10 (yeast)"
+			clusterId="235385" symbol="Atg10" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns85:Gene
+			xmlns:ns85="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="11341"
+			fullName="ATG12 autophagy related 12 homolog (S. cerevisiae)"
+			clusterId="264482" symbol="ATG12" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns86:Gene
+			xmlns:ns86="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="8282"
+			fullName="ATG2 autophagy related 2 homolog B (S. cerevisiae)"
+			clusterId="168241" symbol="C14orf103" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns87:Gene
+			xmlns:ns87="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="130920"
+			fullName="ATG2 autophagy related 2 homolog B (S. cerevisiae)"
+			clusterId="125279" symbol="Atg2b" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns88:Gene
+			xmlns:ns88="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="130481"
+			fullName="ATG2 autophagy related 2 homolog B (S. cerevisiae)"
+			clusterId="114362" symbol="Atg2b" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns89:Gene
+			xmlns:ns89="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="127836" fullName="Autophagy-related 3 (yeast)" clusterId="41775"
+			symbol="Atg3" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns90:Gene
+			xmlns:ns90="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="123685" fullName="Hexamethylene bis-acetamide inducible 1"
+			clusterId="8763" symbol="Hexim1" />
+	</ns1:ObjectResult>
+	<ns1:ObjectResult>
+		<ns91:Gene
+			xmlns:ns91="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			id="578"
+			fullName="ATG4 autophagy related 4 homolog A (S. cerevisiae)"
+			clusterId="8763" symbol="ATG4A" />
+	</ns1:ObjectResult>
+</ns1:CQLQueryResults>

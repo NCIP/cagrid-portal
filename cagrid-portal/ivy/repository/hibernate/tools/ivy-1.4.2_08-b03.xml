@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+  <info organisation="hibernate" module="tools" revision="1.4.2_08-b03">
+        <license name="LGPL" url="http://www.gnu.org/copyleft/lesser.html"/>
+
+        <description>
+           The tools used for roundtrip development in Hibernate 2 provide support for transforming to and from sourcecode (java), mappingfiles (hbm) and a database definition (ddl). Use the new tools for Hibernate 3.x.
+        </description>
+    </info>
+
+    <publications>
+        <artifact name="hibernate-tools" type="jar"/>
+    </publications>
+
+</ivy-module>

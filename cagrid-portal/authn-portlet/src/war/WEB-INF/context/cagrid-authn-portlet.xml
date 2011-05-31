@@ -1,0 +1,85 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="gov.nih.nci.cagrid.portal.authn.web"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="cache" value="true"/>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="authnController" class="gov.nih.nci.cagrid.portal.authn.web.controllers.AuthnController"
+          p:ifsUrl="${cagrid.portal.ifsUrl}"
+          p:formView="loginForm"
+          p:successView="greetings"
+          p:commandClass="gov.nih.nci.cagrid.portal.authn.domain.DirectLoginCommand"
+          p:idPService-ref="idPService"
+          p:authnService-ref="authnService"
+          p:redirectUrlPreferenceName="loginRedirectUrl"
+          p:sharedSessionAttribute="CAGRIDPORTAL_ATTS_idp_authn_info"
+          p:portalUserIdSessionAttributeName="CAGRIDPORTAL_ATTS_liferayUser_IdPAuthnInfo"
+          p:errorsObjectName="loginErrors"/>
+
+    <bean
+            id="logoutController"
+            class="gov.nih.nci.cagrid.portal.authn.web.controllers.LogoutController"
+            autowire="byName"/>
+
+    <bean id="viewGreetingController"
+          class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+        <property name="viewName" value="greetings"/>
+    </bean>
+
+    <bean id="portletModeParameterHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="1"/>
+        <property name="parameterName" value="operation"/>
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="login"
+                               value-ref="authnController"/>
+                        <entry key="logout"
+                               value-ref="logoutController"/>
+
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="portletModeHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+
+        <property name="order" value="2"/>
+
+        <property name="portletModeMap">
+            <map>
+                <entry key="view">
+                    <ref bean="authnController"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+
+</beans>

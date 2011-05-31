@@ -1,0 +1,17 @@
+	<label for="selectedResults" />
+	<form:select id="selectedResults" onchange="submit()" path="selectedResults">
+		<c:choose>
+		<c:when test="${empty results}">
+			<form:option value="----">No results available</form:option>
+		</c:when>
+		<c:otherwise>
+			<option>Select a result set</option>
+			<c:forEach var="result" items="${results}">
+				<form:option value="${result.id}">
+					<c:out value="${result.type}"/>&nbsp;[<c:out value="${fn:length(result.objects)}"/>]
+					<fmt:formatDate value="${result.time}" type="both"/>
+				</form:option>
+			</c:forEach>
+		</c:otherwise>
+		</c:choose>
+	</form:select> 

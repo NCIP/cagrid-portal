@@ -1,0 +1,15 @@
+<ivy-module version="2.0">
+
+    <!-- for more information see this page
+    http://www.cagrid.org/wiki/CaGrid:How-To:DependOnCaGridLibraries
+    -->
+
+    <info organisation="cagrid" module="cagrid-evs-sample-portlet"/>
+
+
+    <dependencies>
+        <dependency rev="1.2" org="caGrid" name="evs" conf="default->client"/>
+    </dependencies>
+    
+</ivy-module>
+

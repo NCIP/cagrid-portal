@@ -1,0 +1,49 @@
+<div id="navigation" class="sort-pages modify-pages">
+	<ul class="signIn">
+        <!--make sure only admin can see this-->
+       #if($show_dock)
+		#if ($show_sign_in)
+			<li class="sign-in">
+				<a href="$sign_in_url">$sign_in_text</a>
+			</li>
+
+		#end
+
+        #if ($show_my_account)
+                    <li class="my-account">
+                        <a href="$my_account_url">$my_account_text</a>
+                    </li>
+                #end
+
+		#if ($show_sign_out)
+			<li class="sign-out">
+				<a href="$sign_out_url">$sign_out_text</a>
+			</li>
+		#end
+       #end
+
+    </ul>
+
+    <ul class="main">
+    	<div class="community-icon"></div>
+        #foreach ($nav_item in $nav_items)			
+			#if ($nav_item.isSelected())				
+				#set ($nav_item_class = "selected")			
+			#else				
+				#set ($nav_item_class = "")			
+		#end 
+        <li class="$nav_item_class">
+            #set($navName = $nav_item.getName()) <a href="$nav_item.getURL()" $nav_item.getTarget()  id="$stringUtil.replace($navName, ' ', '_')"><span>$navName</span></a>
+            #if ($nav_item.hasChildren()) 
+            <ul class="child-menu">
+                #foreach ($nav_child in $nav_item.getChildren()) 
+                <li>
+                    <a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child. getName() </a>
+                </li>
+                #end 
+            </ul>
+            #end 
+        </li>
+        #end 
+    </ul>
+</div>

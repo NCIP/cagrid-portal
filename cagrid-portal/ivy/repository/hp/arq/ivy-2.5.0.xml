@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="hp" module="arq" revision="2.5.0"/>
+
+
+	<configurations>
+		<!-- Public Configurations-->
+		<conf name="core" visibility="public"/>
+		<conf name="default" visibility="public" extends="core"/>
+	</configurations>
+
+
+	<publications>
+		<artifact name="arq" type="jar" conf="default"/>
+		<artifact name="arq-extra" type="jar" conf="default"/>
+	</publications>
+
+	<dependencies>
+		<dependency org="hp" name="jena" rev="2.5.6"/>
+	</dependencies>
+	
+</ivy-module>

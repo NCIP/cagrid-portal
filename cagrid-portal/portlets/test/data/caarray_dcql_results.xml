@@ -1,0 +1,1633 @@
+<ns1:DCQLQueryResultsCollection xmlns:ns1="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult">
+ <ns1:DCQLResult targetServiceURL="http://array.nci.nih.gov:80/wsrf/services/cagrid/CaArraySvc">
+  <ns2:CQLQueryResultCollection targetClassname="gov.nih.nci.caarray.domain.array.ArrayDesign" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet">
+   <ns2:ObjectResult>
+    <ns2:ArrayDesign id="1" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="GenomeWideSNP_6.Full" name="GenomeWideSNP_6.Full" assayType="snp" version="rev2" xmlns:ns2="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns2:technologyType>
+      <ns3:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns3="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns3:categories/>
+      </ns3:Term>
+     </ns2:technologyType>
+     <ns2:organism>
+      <ns4:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns4="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns4:additionalOrganismNameCollection/>
+      </ns4:Organism>
+     </ns2:organism>
+     <ns2:provider>
+      <ns5:Organization id="1" name="Affymetrix" xmlns:ns5="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns2:provider>
+     <ns2:designFiles>
+      <ns6:CaArrayFile id="1" name="GenomeWideSNP_6.Full.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns6="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns2:designFiles>
+    </ns2:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns7:ArrayDesign id="2" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="GenomeWideSNP_5.Full" name="GenomeWideSNP_5.Full" assayType="snp" version="1" xmlns:ns7="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns7:technologyType>
+      <ns8:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns8="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns8:categories/>
+      </ns8:Term>
+     </ns7:technologyType>
+     <ns7:organism>
+      <ns9:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns9="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns9:additionalOrganismNameCollection/>
+      </ns9:Organism>
+     </ns7:organism>
+     <ns7:provider>
+      <ns10:Organization id="1" name="Affymetrix" xmlns:ns10="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns7:provider>
+     <ns7:designFiles>
+      <ns11:CaArrayFile id="2" name="GenomeWideSNP_5.Full.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns11="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns7:designFiles>
+    </ns7:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns12:ArrayDesign id="3" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG-U133_Plus_2" name="HG-U133_Plus_2" assayType="geneExpression" version="1" xmlns:ns12="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns12:technologyType>
+      <ns13:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns13="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns13:categories/>
+      </ns13:Term>
+     </ns12:technologyType>
+     <ns12:organism>
+      <ns14:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns14="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns14:additionalOrganismNameCollection/>
+      </ns14:Organism>
+     </ns12:organism>
+     <ns12:provider>
+      <ns15:Organization id="1" name="Affymetrix" xmlns:ns15="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns12:provider>
+     <ns12:designFiles>
+      <ns16:CaArrayFile id="3" name="HG-U133_Plus_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns16="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns12:designFiles>
+    </ns12:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns17:ArrayDesign id="4" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping250K_Nsp" name="Mapping250K_Nsp" assayType="snp" version="rev4" xmlns:ns17="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns17:technologyType>
+      <ns18:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns18="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns18:categories/>
+      </ns18:Term>
+     </ns17:technologyType>
+     <ns17:organism>
+      <ns19:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns19="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns19:additionalOrganismNameCollection/>
+      </ns19:Organism>
+     </ns17:organism>
+     <ns17:provider>
+      <ns20:Organization id="1" name="Affymetrix" xmlns:ns20="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns17:provider>
+     <ns17:designFiles>
+      <ns21:CaArrayFile id="4" name="Mapping250K_Nsp.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns21="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns17:designFiles>
+    </ns17:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns22:ArrayDesign id="5" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping250K_Sty" name="Mapping250K_Sty" assayType="snp" version="rev4" xmlns:ns22="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns22:technologyType>
+      <ns23:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns23="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns23:categories/>
+      </ns23:Term>
+     </ns22:technologyType>
+     <ns22:organism>
+      <ns24:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns24="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns24:additionalOrganismNameCollection/>
+      </ns24:Organism>
+     </ns22:organism>
+     <ns22:provider>
+      <ns25:Organization id="1" name="Affymetrix" xmlns:ns25="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns22:provider>
+     <ns22:designFiles>
+      <ns26:CaArrayFile id="5" name="Mapping250K_Sty.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns26="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns22:designFiles>
+    </ns22:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns27:ArrayDesign id="6" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG-U133A_2" name="HG-U133A_2" assayType="geneExpression" version="2" xmlns:ns27="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns27:technologyType>
+      <ns28:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns28="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns28:categories/>
+      </ns28:Term>
+     </ns27:technologyType>
+     <ns27:organism>
+      <ns29:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns29="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns29:additionalOrganismNameCollection/>
+      </ns29:Organism>
+     </ns27:organism>
+     <ns27:provider>
+      <ns30:Organization id="1" name="Affymetrix" xmlns:ns30="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns27:provider>
+     <ns27:designFiles>
+      <ns31:CaArrayFile id="6" name="HG-U133A_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns31="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns27:designFiles>
+    </ns27:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns32:ArrayDesign id="7" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HT_HG-U133A" name="HT_HG-U133A" assayType="geneExpression" version="1" xmlns:ns32="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns32:technologyType>
+      <ns33:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns33="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns33:categories/>
+      </ns33:Term>
+     </ns32:technologyType>
+     <ns32:organism>
+      <ns34:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns34="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns34:additionalOrganismNameCollection/>
+      </ns34:Organism>
+     </ns32:organism>
+     <ns32:provider>
+      <ns35:Organization id="1" name="Affymetrix" xmlns:ns35="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns32:provider>
+     <ns32:designFiles>
+      <ns36:CaArrayFile id="7" name="HT_HG-U133A.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns36="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns32:designFiles>
+    </ns32:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns37:ArrayDesign id="8" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG-U133A" name="HG-U133A" assayType="geneExpression" version="1" xmlns:ns37="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns37:technologyType>
+      <ns38:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns38="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns38:categories/>
+      </ns38:Term>
+     </ns37:technologyType>
+     <ns37:organism>
+      <ns39:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns39="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns39:additionalOrganismNameCollection/>
+      </ns39:Organism>
+     </ns37:organism>
+     <ns37:provider>
+      <ns40:Organization id="1" name="Affymetrix" xmlns:ns40="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns37:provider>
+     <ns37:designFiles>
+      <ns41:CaArrayFile id="8" name="HG-U133A.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns41="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns37:designFiles>
+    </ns37:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns42:ArrayDesign id="9" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95Av2" name="HG_U95Av2" assayType="geneExpression" version="2" xmlns:ns42="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns42:technologyType>
+      <ns43:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns43="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns43:categories/>
+      </ns43:Term>
+     </ns42:technologyType>
+     <ns42:organism>
+      <ns44:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns44="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns44:additionalOrganismNameCollection/>
+      </ns44:Organism>
+     </ns42:organism>
+     <ns42:provider>
+      <ns45:Organization id="1" name="Affymetrix" xmlns:ns45="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns42:provider>
+     <ns42:designFiles>
+      <ns46:CaArrayFile id="9" name="HG_U95Av2.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns46="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns42:designFiles>
+    </ns42:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns47:ArrayDesign id="10" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95B" name="HG_U95B" assayType="geneExpression" version="1" xmlns:ns47="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns47:technologyType>
+      <ns48:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns48="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns48:categories/>
+      </ns48:Term>
+     </ns47:technologyType>
+     <ns47:organism>
+      <ns49:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns49="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns49:additionalOrganismNameCollection/>
+      </ns49:Organism>
+     </ns47:organism>
+     <ns47:provider>
+      <ns50:Organization id="1" name="Affymetrix" xmlns:ns50="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns47:provider>
+     <ns47:designFiles>
+      <ns51:CaArrayFile id="10" name="HG_U95B.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns51="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns47:designFiles>
+    </ns47:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns52:ArrayDesign id="11" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95C" name="HG_U95C" assayType="geneExpression" version="1" xmlns:ns52="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns52:technologyType>
+      <ns53:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns53="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns53:categories/>
+      </ns53:Term>
+     </ns52:technologyType>
+     <ns52:organism>
+      <ns54:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns54="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns54:additionalOrganismNameCollection/>
+      </ns54:Organism>
+     </ns52:organism>
+     <ns52:provider>
+      <ns55:Organization id="1" name="Affymetrix" xmlns:ns55="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns52:provider>
+     <ns52:designFiles>
+      <ns56:CaArrayFile id="11" name="HG_U95C.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns56="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns52:designFiles>
+    </ns52:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns57:ArrayDesign id="12" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95D" name="HG_U95D" assayType="geneExpression" version="1" xmlns:ns57="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns57:technologyType>
+      <ns58:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns58="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns58:categories/>
+      </ns58:Term>
+     </ns57:technologyType>
+     <ns57:organism>
+      <ns59:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns59="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns59:additionalOrganismNameCollection/>
+      </ns59:Organism>
+     </ns57:organism>
+     <ns57:provider>
+      <ns60:Organization id="1" name="Affymetrix" xmlns:ns60="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns57:provider>
+     <ns57:designFiles>
+      <ns61:CaArrayFile id="12" name="HG_U95D.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns61="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns57:designFiles>
+    </ns57:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns62:ArrayDesign id="13" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm-Incyte-v1px_16Bx24Cx23R" name="Mm-Incyte-v1px_16Bx24Cx23R" assayType="geneExpression" version="1" xmlns:ns62="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns62:technologyType>
+      <ns63:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns63="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns63:categories/>
+      </ns63:Term>
+     </ns62:technologyType>
+     <ns62:organism>
+      <ns64:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns64="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns64:additionalOrganismNameCollection/>
+      </ns64:Organism>
+     </ns62:organism>
+     <ns62:provider>
+      <ns65:Organization id="2" name="GenePix" xmlns:ns65="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns62:provider>
+     <ns62:designFiles>
+      <ns66:CaArrayFile id="13" name="Mm-Incyte-v1px_16Bx24Cx23R.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns66="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns62:designFiles>
+    </ns62:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns67:ArrayDesign id="14" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95E" name="HG_U95E" assayType="geneExpression" version="1" xmlns:ns67="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns67:technologyType>
+      <ns68:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns68="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns68:categories/>
+      </ns68:Term>
+     </ns67:technologyType>
+     <ns67:organism>
+      <ns69:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns69="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns69:additionalOrganismNameCollection/>
+      </ns69:Organism>
+     </ns67:organism>
+     <ns67:provider>
+      <ns70:Organization id="1" name="Affymetrix" xmlns:ns70="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns67:provider>
+     <ns67:designFiles>
+      <ns71:CaArrayFile id="127" name="HG_U95E.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns71="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns67:designFiles>
+    </ns67:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns72:ArrayDesign id="15" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HT_HG-U133B" name="HT_HG-U133B" assayType="geneExpression" version="1" xmlns:ns72="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns72:technologyType>
+      <ns73:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns73="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns73:categories/>
+      </ns73:Term>
+     </ns72:technologyType>
+     <ns72:organism>
+      <ns74:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns74="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns74:additionalOrganismNameCollection/>
+      </ns74:Organism>
+     </ns72:organism>
+     <ns72:provider>
+      <ns75:Organization id="1" name="Affymetrix" xmlns:ns75="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns72:provider>
+     <ns72:designFiles>
+      <ns76:CaArrayFile id="128" name="HT_HG-U133B.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns76="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns72:designFiles>
+    </ns72:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns77:ArrayDesign id="16" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG-U133B" name="HG-U133B" assayType="geneExpression" version="1" xmlns:ns77="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns77:technologyType>
+      <ns78:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns78="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns78:categories/>
+      </ns78:Term>
+     </ns77:technologyType>
+     <ns77:organism>
+      <ns79:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns79="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns79:additionalOrganismNameCollection/>
+      </ns79:Organism>
+     </ns77:organism>
+     <ns77:provider>
+      <ns80:Organization id="1" name="Affymetrix" xmlns:ns80="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns77:provider>
+     <ns77:designFiles>
+      <ns81:CaArrayFile id="129" name="HG-U133B.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns81="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns77:designFiles>
+    </ns77:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns82:ArrayDesign id="17" lsidAuthority="illumina.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Human-6 v2 sequence" name="Human-6 v2 sequence" assayType="geneExpression" version="2" xmlns:ns82="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns82:technologyType>
+      <ns83:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns83="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns83:categories/>
+      </ns83:Term>
+     </ns82:technologyType>
+     <ns82:organism>
+      <ns84:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns84="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns84:additionalOrganismNameCollection/>
+      </ns84:Organism>
+     </ns82:organism>
+     <ns82:provider>
+      <ns85:Organization id="3" name="Illumina" xmlns:ns85="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns82:provider>
+     <ns82:designFiles>
+      <ns86:CaArrayFile id="130" name="Human-6 v2 sequence.csv" status="IMPORTED" type="ILLUMINA_DESIGN_CSV" xmlns:ns86="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns82:designFiles>
+    </ns82:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns87:ArrayDesign id="18" lsidAuthority="illumina.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HumanRef-8 v2 sequence" name="HumanRef-8 v2 sequence" assayType="geneExpression" version="2" xmlns:ns87="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns87:technologyType>
+      <ns88:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns88="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns88:categories/>
+      </ns88:Term>
+     </ns87:technologyType>
+     <ns87:organism>
+      <ns89:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns89="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns89:additionalOrganismNameCollection/>
+      </ns89:Organism>
+     </ns87:organism>
+     <ns87:provider>
+      <ns90:Organization id="3" name="Illumina" xmlns:ns90="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns87:provider>
+     <ns87:designFiles>
+      <ns91:CaArrayFile id="131" name="HumanRef-8 v2 sequence.csv" status="IMPORTED" type="ILLUMINA_DESIGN_CSV" xmlns:ns91="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns87:designFiles>
+    </ns87:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns92:ArrayDesign id="19" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HuGene-1_0-st-v1.r3" name="HuGene-1_0-st-v1.r3" assayType="geneExpression" version="2007 Mar" xmlns:ns92="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns92:technologyType>
+      <ns93:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns93="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns93:categories/>
+      </ns93:Term>
+     </ns92:technologyType>
+     <ns92:organism>
+      <ns94:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns94="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns94:additionalOrganismNameCollection/>
+      </ns94:Organism>
+     </ns92:organism>
+     <ns92:provider>
+      <ns95:Organization id="1" name="Affymetrix" xmlns:ns95="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns92:provider>
+     <ns92:designFiles>
+      <ns96:CaArrayFile id="282" name="HuGene-1_0-st-v1.r3.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns96="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns92:designFiles>
+    </ns92:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns97:ArrayDesign id="20" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Hu6800" name="Hu6800" assayType="geneExpression" version="rev02" xmlns:ns97="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns97:technologyType>
+      <ns98:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns98="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns98:categories/>
+      </ns98:Term>
+     </ns97:technologyType>
+     <ns97:organism>
+      <ns99:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns99="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns99:additionalOrganismNameCollection/>
+      </ns99:Organism>
+     </ns97:organism>
+     <ns97:provider>
+      <ns100:Organization id="1" name="Affymetrix" xmlns:ns100="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns97:provider>
+     <ns97:designFiles>
+      <ns101:CaArrayFile id="283" name="Hu6800.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns101="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns97:designFiles>
+    </ns97:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns102:ArrayDesign id="21" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HuGene-1_0-st-v1" name="HuGene-1_0-st-v1" assayType="geneExpression" version="1.0" xmlns:ns102="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns102:technologyType>
+      <ns103:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns103="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns103:categories/>
+      </ns103:Term>
+     </ns102:technologyType>
+     <ns102:organism>
+      <ns104:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns104="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns104:additionalOrganismNameCollection/>
+      </ns104:Organism>
+     </ns102:organism>
+     <ns102:provider>
+      <ns105:Organization id="1" name="Affymetrix" xmlns:ns105="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns102:provider>
+     <ns102:designFiles>
+      <ns106:CaArrayFile id="341" name="HuGene-1_0-st-v1.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns106="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns102:designFiles>
+    </ns102:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns107:ArrayDesign id="23" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="GenomeWideSNP_6" name="GenomeWideSNP_6" assayType="snp" version="1" xmlns:ns107="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns107:technologyType>
+      <ns108:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns108="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns108:categories/>
+      </ns108:Term>
+     </ns107:technologyType>
+     <ns107:organism>
+      <ns109:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns109="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns109:additionalOrganismNameCollection/>
+      </ns109:Organism>
+     </ns107:organism>
+     <ns107:provider>
+      <ns110:Organization id="1" name="Affymetrix" xmlns:ns110="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns107:provider>
+     <ns107:designFiles>
+      <ns111:CaArrayFile id="347" name="GenomeWideSNP_6.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns111="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns107:designFiles>
+    </ns107:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns112:ArrayDesign id="24" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Test3" name="Test3" assayType="geneExpression" version="Test3.CDF" xmlns:ns112="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns112:technologyType>
+      <ns113:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns113="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns113:categories/>
+      </ns113:Term>
+     </ns112:technologyType>
+     <ns112:organism>
+      <ns114:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns114="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns114:additionalOrganismNameCollection/>
+      </ns114:Organism>
+     </ns112:organism>
+     <ns112:provider>
+      <ns115:Organization id="1" name="Affymetrix" xmlns:ns115="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns112:provider>
+     <ns112:designFiles>
+      <ns116:CaArrayFile id="507" name="Test3.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns116="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns112:designFiles>
+    </ns112:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns117:ArrayDesign id="25" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="mg_u74av2" name="mg_u74av2" assayType="geneExpression" version="2.0" xmlns:ns117="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns117:technologyType>
+      <ns118:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns118="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns118:categories/>
+      </ns118:Term>
+     </ns117:technologyType>
+     <ns117:organism>
+      <ns119:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns119="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns119:additionalOrganismNameCollection/>
+      </ns119:Organism>
+     </ns117:organism>
+     <ns117:provider>
+      <ns120:Organization id="1" name="Affymetrix" xmlns:ns120="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns117:provider>
+     <ns117:designFiles>
+      <ns121:CaArrayFile id="549" name="mg_u74av2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns121="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns117:designFiles>
+    </ns117:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns122:ArrayDesign id="26" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mouse430_2" name="Mouse430_2" assayType="geneExpression" version="2.0" xmlns:ns122="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns122:technologyType>
+      <ns123:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns123="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns123:categories/>
+      </ns123:Term>
+     </ns122:technologyType>
+     <ns122:organism>
+      <ns124:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns124="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns124:additionalOrganismNameCollection/>
+      </ns124:Organism>
+     </ns122:organism>
+     <ns122:provider>
+      <ns125:Organization id="1" name="Affymetrix" xmlns:ns125="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns122:provider>
+     <ns122:designFiles>
+      <ns126:CaArrayFile id="550" name="Mouse430_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns126="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns122:designFiles>
+    </ns122:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns127:ArrayDesign id="27" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping10K_Xba142" name="Mapping10K_Xba142" assayType="snp" description="GeneChip&#xAE; Human Mapping 10K Array Xba 142 2.0" version="2" xmlns:ns127="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns127:technologyType>
+      <ns128:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns128="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns128:categories/>
+      </ns128:Term>
+     </ns127:technologyType>
+     <ns127:organism>
+      <ns129:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns129="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns129:additionalOrganismNameCollection/>
+      </ns129:Organism>
+     </ns127:organism>
+     <ns127:provider>
+      <ns130:Organization id="1" name="Affymetrix" xmlns:ns130="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns127:provider>
+     <ns127:designFiles>
+      <ns131:CaArrayFile id="925" name="Mapping10K_Xba142.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns131="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns127:designFiles>
+    </ns127:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns132:ArrayDesign id="28" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping50K_Hind240" name="Mapping50K_Hind240" assayType="snp" version="rev 3" xmlns:ns132="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns132:technologyType>
+      <ns133:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns133="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns133:categories/>
+      </ns133:Term>
+     </ns132:technologyType>
+     <ns132:organism>
+      <ns134:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns134="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns134:additionalOrganismNameCollection/>
+      </ns134:Organism>
+     </ns132:organism>
+     <ns132:provider>
+      <ns135:Organization id="1" name="Affymetrix" xmlns:ns135="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns132:provider>
+     <ns132:designFiles>
+      <ns136:CaArrayFile id="926" name="Mapping50K_Hind240.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns136="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns132:designFiles>
+    </ns132:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns137:ArrayDesign id="29" lsidAuthority="illumina.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HumanHap550v3_A" name="HumanHap550v3_A" assayType="snp" description="HumanHap550_v3" version="1" xmlns:ns137="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns137:technologyType>
+      <ns138:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns138="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns138:categories/>
+      </ns138:Term>
+     </ns137:technologyType>
+     <ns137:organism>
+      <ns139:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns139="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns139:additionalOrganismNameCollection/>
+      </ns139:Organism>
+     </ns137:organism>
+     <ns137:provider>
+      <ns140:Organization id="3" name="Illumina" xmlns:ns140="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns137:provider>
+     <ns137:designFiles>
+      <ns141:CaArrayFile id="7642" name="HumanHap550v3_A.csv" status="IMPORTED" type="ILLUMINA_DESIGN_CSV" xmlns:ns141="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns137:designFiles>
+    </ns137:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns142:ArrayDesign id="30" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.2.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.2.adf" assayType="methylation" description="IlluminaDNAMethylation_OMA002_CPI.2" version="1" xmlns:ns142="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns142:technologyType>
+      <ns143:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns143="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns143:categories/>
+      </ns143:Term>
+     </ns142:technologyType>
+     <ns142:organism>
+      <ns144:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns144="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns144:additionalOrganismNameCollection/>
+      </ns144:Organism>
+     </ns142:organism>
+     <ns142:provider>
+      <ns145:Organization id="3" name="Illumina" xmlns:ns145="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns142:provider>
+     <ns142:designFiles>
+      <ns146:CaArrayFile id="8727" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.2.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns146="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns142:designFiles>
+    </ns142:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns147:ArrayDesign id="31" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.1.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.1.adf" assayType="methylation" description="Magetab array design file" version="1" xmlns:ns147="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns147:technologyType>
+      <ns148:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns148="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns148:categories/>
+      </ns148:Term>
+     </ns147:technologyType>
+     <ns147:organism>
+      <ns149:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns149="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns149:additionalOrganismNameCollection/>
+      </ns149:Organism>
+     </ns147:organism>
+     <ns147:provider>
+      <ns150:Organization id="3" name="Illumina" xmlns:ns150="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns147:provider>
+     <ns147:designFiles>
+      <ns151:CaArrayFile id="9051" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.1.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns151="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns147:designFiles>
+    </ns147:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns152:ArrayDesign id="32" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.4.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.4.adf" assayType="methylation" description="Magetab array design file" version="1" xmlns:ns152="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns152:technologyType>
+      <ns153:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns153="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns153:categories/>
+      </ns153:Term>
+     </ns152:technologyType>
+     <ns152:organism>
+      <ns154:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns154="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns154:additionalOrganismNameCollection/>
+      </ns154:Organism>
+     </ns152:organism>
+     <ns152:provider>
+      <ns155:Organization id="3" name="Illumina" xmlns:ns155="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns152:provider>
+     <ns152:designFiles>
+      <ns156:CaArrayFile id="9060" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.4.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns156="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns152:designFiles>
+    </ns152:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns157:ArrayDesign id="33" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.5.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.5.adf" assayType="methylation" description="Magetab array design file" version="1" xmlns:ns157="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns157:technologyType>
+      <ns158:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns158="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns158:categories/>
+      </ns158:Term>
+     </ns157:technologyType>
+     <ns157:organism>
+      <ns159:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns159="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns159:additionalOrganismNameCollection/>
+      </ns159:Organism>
+     </ns157:organism>
+     <ns157:provider>
+      <ns160:Organization id="3" name="Illumina" xmlns:ns160="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns157:provider>
+     <ns157:designFiles>
+      <ns161:CaArrayFile id="9064" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA002_CPI.5.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns161="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns157:designFiles>
+    </ns157:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns162:ArrayDesign id="34" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="JoeDeRisi-fix" name="JoeDeRisi-fix" assayType="geneExpression" version="2" xmlns:ns162="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns162:technologyType>
+      <ns163:Term id="455" accession="MO_483" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_antibody_features" value="spotted_antibody_features" xmlns:ns163="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns163:categories/>
+      </ns163:Term>
+     </ns162:technologyType>
+     <ns162:organism>
+      <ns164:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns164="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns164:additionalOrganismNameCollection/>
+      </ns164:Organism>
+     </ns162:organism>
+     <ns162:provider>
+      <ns165:Organization id="2" name="GenePix" xmlns:ns165="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns162:provider>
+     <ns162:designFiles>
+      <ns166:CaArrayFile id="9693" name="JoeDeRisi-fix.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns166="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns162:designFiles>
+    </ns162:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns167:ArrayDesign id="35" lsidAuthority="illumina.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Human_WG-6" name="Human_WG-6" assayType="geneExpression" version="3" xmlns:ns167="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns167:technologyType>
+      <ns168:Term id="601" accession="MO_618" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_colony_features" value="spotted_colony_features" xmlns:ns168="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns168:categories/>
+      </ns168:Term>
+     </ns167:technologyType>
+     <ns167:organism>
+      <ns169:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns169="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns169:additionalOrganismNameCollection/>
+      </ns169:Organism>
+     </ns167:organism>
+     <ns167:provider>
+      <ns170:Organization id="3" name="Illumina" xmlns:ns170="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns167:provider>
+     <ns167:designFiles>
+      <ns171:CaArrayFile id="9696" name="Human_WG-6.csv" status="IMPORTED" type="ILLUMINA_DESIGN_CSV" xmlns:ns171="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns167:designFiles>
+    </ns167:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns172:ArrayDesign id="36" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mouse430A_2" name="Mouse430A_2" assayType="geneExpression" description="Affymetrix Mouse Genome 430A 2.0 Array" version="2.0" xmlns:ns172="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns172:technologyType>
+      <ns173:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns173="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns173:categories/>
+      </ns173:Term>
+     </ns172:technologyType>
+     <ns172:organism>
+      <ns174:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns174="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns174:additionalOrganismNameCollection/>
+      </ns174:Organism>
+     </ns172:organism>
+     <ns172:provider>
+      <ns175:Organization id="1" name="Affymetrix" xmlns:ns175="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns172:provider>
+     <ns172:designFiles>
+      <ns176:CaArrayFile id="9968" name="Mouse430A_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns176="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns172:designFiles>
+    </ns172:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns177:ArrayDesign id="37" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping50K_Xba240" name="Mapping50K_Xba240" assayType="snp" description="Mapping50K_Xba240" version="rev3" xmlns:ns177="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns177:technologyType>
+      <ns178:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns178="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns178:categories/>
+      </ns178:Term>
+     </ns177:technologyType>
+     <ns177:organism>
+      <ns179:Organism scientificName="Homo sapiens" id="37" xmlns:ns179="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns179:additionalOrganismNameCollection/>
+      </ns179:Organism>
+     </ns177:organism>
+     <ns177:provider>
+      <ns180:Organization id="1" name="Affymetrix" xmlns:ns180="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns177:provider>
+     <ns177:designFiles>
+      <ns181:CaArrayFile id="17072" name="Mapping50K_Xba240.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns181="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns177:designFiles>
+    </ns177:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns182:ArrayDesign id="42" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="017703_G2_D_F_20070913" name="017703_G2_D_F_20070913" assayType="geneExpression" description="test123" version="test1234" xmlns:ns182="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns182:technologyType>
+      <ns183:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns183="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns183:categories/>
+      </ns183:Term>
+     </ns182:technologyType>
+     <ns182:organism>
+      <ns184:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns184="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns184:additionalOrganismNameCollection/>
+      </ns184:Organism>
+     </ns182:organism>
+     <ns182:provider>
+      <ns185:Organization id="4" name="Agilent" xmlns:ns185="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns182:provider>
+     <ns182:designFiles>
+      <ns186:CaArrayFile id="19650" name="017703_G2_D_F_20070913.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns186="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns182:designFiles>
+    </ns182:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns187:ArrayDesign id="43" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="unc.edu_Agilent244K_07_1" name="unc.edu_Agilent244K_07_1" assayType="geneExpression" description="testing how the naming  convention works." version="version2- test123" xmlns:ns187="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns187:technologyType>
+      <ns188:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns188="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns188:categories/>
+      </ns188:Term>
+     </ns187:technologyType>
+     <ns187:organism>
+      <ns189:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns189="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns189:additionalOrganismNameCollection/>
+      </ns189:Organism>
+     </ns187:organism>
+     <ns187:provider>
+      <ns190:Organization id="4" name="Agilent" xmlns:ns190="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns187:provider>
+     <ns187:designFiles>
+      <ns191:CaArrayFile id="19961" name="unc.edu_Agilent244K_07_1.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns191="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns187:designFiles>
+    </ns187:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns192:ArrayDesign id="44" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="015847_G2_D_F_20070129" name="015847_G2_D_F_20070129" assayType="geneExpression" description="TEST-AGILENT-ARRAY USED FOR TCGA." version="1" xmlns:ns192="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns192:technologyType>
+      <ns193:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns193="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns193:categories/>
+      </ns193:Term>
+     </ns192:technologyType>
+     <ns192:organism>
+      <ns194:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns194="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns194:additionalOrganismNameCollection/>
+      </ns194:Organism>
+     </ns192:organism>
+     <ns192:provider>
+      <ns195:Organization id="4" name="Agilent" xmlns:ns195="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns192:provider>
+     <ns192:designFiles>
+      <ns196:CaArrayFile id="19962" name="015847_G2_D_F_20070129.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns196="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns192:designFiles>
+    </ns192:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns197:ArrayDesign id="45" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="AgilentG4502A_07_1" name="AgilentG4502A_07_1" assayType="geneExpression" description="Array used for TCGA Gene Expression 244K for GBM Batches 1 thro Batch 4. This is a not a catalog array." version="1" xmlns:ns197="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns197:technologyType>
+      <ns198:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns198="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns198:categories/>
+      </ns198:Term>
+     </ns197:technologyType>
+     <ns197:organism>
+      <ns199:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns199="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns199:additionalOrganismNameCollection/>
+      </ns199:Organism>
+     </ns197:organism>
+     <ns197:provider>
+      <ns200:Organization id="4" name="Agilent" xmlns:ns200="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns197:provider>
+     <ns197:designFiles>
+      <ns201:CaArrayFile id="19963" name="AgilentG4502A_07_1.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns201="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns197:designFiles>
+    </ns197:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns202:ArrayDesign id="46" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="AgilentG4502A_07_2" name="AgilentG4502A_07_2" assayType="geneExpression" description="This array was used for TCGA Gene Expresion 244K Batch 5, 6, 7,8 and 10 GBM samples.   fyi: TCGA Batch 9 was ovarian." version="4" xmlns:ns202="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns202:technologyType>
+      <ns203:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns203="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns203:categories/>
+      </ns203:Term>
+     </ns202:technologyType>
+     <ns202:organism>
+      <ns204:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns204="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns204:additionalOrganismNameCollection/>
+      </ns204:Organism>
+     </ns202:organism>
+     <ns202:provider>
+      <ns205:Organization id="4" name="Agilent" xmlns:ns205="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns202:provider>
+     <ns202:designFiles>
+      <ns206:CaArrayFile id="19964" name="AgilentG4502A_07_2.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns206="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns202:designFiles>
+    </ns202:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns207:ArrayDesign id="47" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="H-miRNA_8x15K" name="H-miRNA_8x15K" assayType="microRNA" description="TCGA. Agilent catalog microRNA platform." version="2" xmlns:ns207="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns207:technologyType>
+      <ns208:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns208="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns208:categories/>
+      </ns208:Term>
+     </ns207:technologyType>
+     <ns207:organism>
+      <ns209:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns209="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns209:additionalOrganismNameCollection/>
+      </ns209:Organism>
+     </ns207:organism>
+     <ns207:provider>
+      <ns210:Organization id="4" name="Agilent" xmlns:ns210="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns207:provider>
+     <ns207:designFiles>
+      <ns211:CaArrayFile id="19969" name="H-miRNA_8x15K.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns211="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns207:designFiles>
+    </ns207:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns212:ArrayDesign id="49" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG_U95A" name="HG_U95A" assayType="geneExpression" version="1" xmlns:ns212="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns212:technologyType>
+      <ns213:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns213="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns213:categories/>
+      </ns213:Term>
+     </ns212:technologyType>
+     <ns212:organism>
+      <ns214:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns214="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns214:additionalOrganismNameCollection/>
+      </ns214:Organism>
+     </ns212:organism>
+     <ns212:provider>
+      <ns215:Organization id="1" name="Affymetrix" xmlns:ns215="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns212:provider>
+     <ns212:designFiles>
+      <ns216:CaArrayFile id="28959" name="HG_U95A.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns216="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns212:designFiles>
+    </ns212:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns217:ArrayDesign id="50" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HuEx-1_0-st-v2" name="HuEx-1_0-st-v2" assayType="exon" description="Human Exon 1.0 ST Array Contains: HuEx-1_0-st-v2 HuEx-1_0-st-v1 HuEx-1_0-st-ta1" version="1.0" xmlns:ns217="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns217:technologyType>
+      <ns218:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns218="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns218:categories/>
+      </ns218:Term>
+     </ns217:technologyType>
+     <ns217:organism>
+      <ns219:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns219="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns219:additionalOrganismNameCollection/>
+      </ns219:Organism>
+     </ns217:organism>
+     <ns217:provider>
+      <ns220:Organization id="1" name="Affymetrix" xmlns:ns220="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns217:provider>
+     <ns217:designFiles>
+      <ns221:CaArrayFile id="31566" name="HuEx-1_0-st-v2.r2.clf" status="IMPORTED" type="AFFYMETRIX_CLF" xmlns:ns221="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+      <ns222:CaArrayFile id="31565" name="HuEx-1_0-st-v2.r2.pgf" status="IMPORTED" type="AFFYMETRIX_PGF" xmlns:ns222="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns217:designFiles>
+    </ns217:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns223:ArrayDesign id="51" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HuEx-1_0-st-v1" name="HuEx-1_0-st-v1" assayType="exon" description="Human Exon 1.0 ST Array Contains: HuEx-1_0-st-v2 HuEx-1_0-st-v1 HuEx-1_0-st-ta1" version="1.0" xmlns:ns223="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns223:technologyType>
+      <ns224:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns224="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns224:categories/>
+      </ns224:Term>
+     </ns223:technologyType>
+     <ns223:organism>
+      <ns225:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns225="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns225:additionalOrganismNameCollection/>
+      </ns225:Organism>
+     </ns223:organism>
+     <ns223:provider>
+      <ns226:Organization id="1" name="Affymetrix" xmlns:ns226="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns223:provider>
+     <ns223:designFiles>
+      <ns227:CaArrayFile id="31566" name="HuEx-1_0-st-v2.r2.clf" status="IMPORTED" type="AFFYMETRIX_CLF" xmlns:ns227="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+      <ns228:CaArrayFile id="31565" name="HuEx-1_0-st-v2.r2.pgf" status="IMPORTED" type="AFFYMETRIX_PGF" xmlns:ns228="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns223:designFiles>
+    </ns223:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns229:ArrayDesign id="52" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HuEx-1_0-st-ta1" name="HuEx-1_0-st-ta1" assayType="exon" description="Human Exon 1.0 ST Array Contains: HuEx-1_0-st-v2 HuEx-1_0-st-v1 HuEx-1_0-st-ta1" version="1.0" xmlns:ns229="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns229:technologyType>
+      <ns230:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns230="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns230:categories/>
+      </ns230:Term>
+     </ns229:technologyType>
+     <ns229:organism>
+      <ns231:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns231="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns231:additionalOrganismNameCollection/>
+      </ns231:Organism>
+     </ns229:organism>
+     <ns229:provider>
+      <ns232:Organization id="1" name="Affymetrix" xmlns:ns232="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns229:provider>
+     <ns229:designFiles>
+      <ns233:CaArrayFile id="31566" name="HuEx-1_0-st-v2.r2.clf" status="IMPORTED" type="AFFYMETRIX_CLF" xmlns:ns233="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+      <ns234:CaArrayFile id="31565" name="HuEx-1_0-st-v2.r2.pgf" status="IMPORTED" type="AFFYMETRIX_PGF" xmlns:ns234="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns229:designFiles>
+    </ns229:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns235:ArrayDesign id="53" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="RAE230A" name="RAE230A" assayType="geneExpression" description="RAT2B_AR" version="2.1.1" xmlns:ns235="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns235:technologyType>
+      <ns236:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns236="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns236:categories/>
+      </ns236:Term>
+     </ns235:technologyType>
+     <ns235:organism>
+      <ns237:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns237="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns237:additionalOrganismNameCollection/>
+      </ns237:Organism>
+     </ns235:organism>
+     <ns235:provider>
+      <ns238:Organization id="1" name="Affymetrix" xmlns:ns238="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns235:provider>
+     <ns235:designFiles>
+      <ns239:CaArrayFile id="36321" name="RAE230A.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns239="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns235:designFiles>
+    </ns235:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns240:ArrayDesign id="54" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Test3-zcheng" name="Test3-zcheng" assayType="geneExpression" description="Test caArray Design" version="1.0" xmlns:ns240="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns240:technologyType>
+      <ns241:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns241="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns241:categories/>
+      </ns241:Term>
+     </ns240:technologyType>
+     <ns240:organism>
+      <ns242:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns242="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns242:additionalOrganismNameCollection/>
+      </ns242:Organism>
+     </ns240:organism>
+     <ns240:provider>
+      <ns243:Organization id="1" name="Affymetrix" xmlns:ns243="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns240:provider>
+     <ns240:designFiles>
+      <ns244:CaArrayFile id="36729" name="Test3-zcheng.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns244="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns240:designFiles>
+    </ns240:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns245:ArrayDesign id="55" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.1.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.1.adf" assayType="methylation" version="1.0" xmlns:ns245="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns245:technologyType>
+      <ns246:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns246="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns246:categories/>
+      </ns246:Term>
+     </ns245:technologyType>
+     <ns245:organism>
+      <ns247:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns247="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns247:additionalOrganismNameCollection/>
+      </ns247:Organism>
+     </ns245:organism>
+     <ns245:provider>
+      <ns248:Organization id="3" name="Illumina" xmlns:ns248="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns245:provider>
+     <ns245:designFiles>
+      <ns249:CaArrayFile id="36783" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.1.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns249="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns245:designFiles>
+    </ns245:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns250:ArrayDesign id="56" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.2.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.2.adf" assayType="methylation" version="1.0" xmlns:ns250="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns250:technologyType>
+      <ns251:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns251="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns251:categories/>
+      </ns251:Term>
+     </ns250:technologyType>
+     <ns250:organism>
+      <ns252:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns252="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns252:additionalOrganismNameCollection/>
+      </ns252:Organism>
+     </ns250:organism>
+     <ns250:provider>
+      <ns253:Organization id="3" name="Illumina" xmlns:ns253="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns250:provider>
+     <ns250:designFiles>
+      <ns254:CaArrayFile id="36790" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.2.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns254="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns250:designFiles>
+    </ns250:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns255:ArrayDesign id="57" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.3.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.3.adf" assayType="methylation" version="1.0" xmlns:ns255="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns255:technologyType>
+      <ns256:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns256="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns256:categories/>
+      </ns256:Term>
+     </ns255:technologyType>
+     <ns255:organism>
+      <ns257:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns257="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns257:additionalOrganismNameCollection/>
+      </ns257:Organism>
+     </ns255:organism>
+     <ns255:provider>
+      <ns258:Organization id="3" name="Illumina" xmlns:ns258="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns255:provider>
+     <ns255:designFiles>
+      <ns259:CaArrayFile id="36798" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.3.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns259="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns255:designFiles>
+    </ns255:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns260:ArrayDesign id="58" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.4.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.4.adf" assayType="methylation" version="1.0" xmlns:ns260="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns260:technologyType>
+      <ns261:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns261="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns261:categories/>
+      </ns261:Term>
+     </ns260:technologyType>
+     <ns260:organism>
+      <ns262:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns262="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns262:additionalOrganismNameCollection/>
+      </ns262:Organism>
+     </ns260:organism>
+     <ns260:provider>
+      <ns263:Organization id="3" name="Illumina" xmlns:ns263="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns260:provider>
+     <ns260:designFiles>
+      <ns264:CaArrayFile id="36801" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.4.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns264="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns260:designFiles>
+    </ns260:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns265:ArrayDesign id="59" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.5.adf" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.5.adf" assayType="methylation" version="1.0" xmlns:ns265="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns265:technologyType>
+      <ns266:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns266="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns266:categories/>
+      </ns266:Term>
+     </ns265:technologyType>
+     <ns265:organism>
+      <ns267:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns267="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns267:additionalOrganismNameCollection/>
+      </ns267:Organism>
+     </ns265:organism>
+     <ns265:provider>
+      <ns268:Organization id="3" name="Illumina" xmlns:ns268="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns265:provider>
+     <ns265:designFiles>
+      <ns269:CaArrayFile id="36806" name="jhu-usc.edu_GBM.IlluminaDNAMethylation_OMA003_CPI.5.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns269="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns265:designFiles>
+    </ns265:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns270:ArrayDesign id="60" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="MG_U74B" name="MG_U74B" assayType="geneExpression" description="The MG-U74 set includes 3 arrays with a total of 36899 entries and was indexed 29-Jan-2002. The set represents ~36,000 full length genes and EST clusters derived from sequence clusters in Build 74 of the Mouse Unigene Database. This is the B array within the set." version="1" xmlns:ns270="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns270:technologyType>
+      <ns271:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns271="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns271:categories/>
+      </ns271:Term>
+     </ns270:technologyType>
+     <ns270:organism>
+      <ns272:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns272="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns272:additionalOrganismNameCollection/>
+      </ns272:Organism>
+     </ns270:organism>
+     <ns270:provider>
+      <ns273:Organization id="1" name="Affymetrix" xmlns:ns273="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns270:provider>
+     <ns270:designFiles>
+      <ns274:CaArrayFile id="36840" name="MG_U74B.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns274="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns270:designFiles>
+    </ns270:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns275:ArrayDesign id="61" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm_20k_P1G3-091702-remake-vmsr-name" name="Mm_20k_P1G3-091702-remake-vmsr-name" assayType="geneExpression" description="20k mouse array" version="1" xmlns:ns275="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns275:technologyType>
+      <ns276:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns276="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns276:categories/>
+      </ns276:Term>
+     </ns275:technologyType>
+     <ns275:organism>
+      <ns277:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns277="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns277:additionalOrganismNameCollection/>
+      </ns277:Organism>
+     </ns275:organism>
+     <ns275:provider>
+      <ns278:Organization id="2" name="GenePix" xmlns:ns278="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns275:provider>
+     <ns275:designFiles>
+      <ns279:CaArrayFile id="36857" name="Mm_20k_P1G3-091702-remake-vmsr-name.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns279="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns275:designFiles>
+    </ns275:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns280:ArrayDesign id="62" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm_20k_P2G3-092702-remake-vmsr-name" name="Mm_20k_P2G3-092702-remake-vmsr-name" assayType="geneExpression" description="20k mouse array" version="2" xmlns:ns280="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns280:technologyType>
+      <ns281:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns281="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns281:categories/>
+      </ns281:Term>
+     </ns280:technologyType>
+     <ns280:organism>
+      <ns282:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns282="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns282:additionalOrganismNameCollection/>
+      </ns282:Organism>
+     </ns280:organism>
+     <ns280:provider>
+      <ns283:Organization id="2" name="GenePix" xmlns:ns283="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns280:provider>
+     <ns280:designFiles>
+      <ns284:CaArrayFile id="36858" name="Mm_20k_P2G3-092702-remake-vmsr-name.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns284="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns280:designFiles>
+    </ns280:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns285:ArrayDesign id="63" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm_20k_P4G3-vmsrid_noempt-011703" name="Mm_20k_P4G3-vmsrid_noempt-011703" assayType="geneExpression" description="20k mouse array" version="4" xmlns:ns285="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns285:technologyType>
+      <ns286:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns286="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns286:categories/>
+      </ns286:Term>
+     </ns285:technologyType>
+     <ns285:organism>
+      <ns287:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns287="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns287:additionalOrganismNameCollection/>
+      </ns287:Organism>
+     </ns285:organism>
+     <ns285:provider>
+      <ns288:Organization id="2" name="GenePix" xmlns:ns288="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns285:provider>
+     <ns285:designFiles>
+      <ns289:CaArrayFile id="36859" name="Mm_20k_P4G3-vmsrid_noempt-011703.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns289="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns285:designFiles>
+    </ns285:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns290:ArrayDesign id="64" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm_20k_P5G3-vmsrid-02-03-03-no-empts" name="Mm_20k_P5G3-vmsrid-02-03-03-no-empts" assayType="geneExpression" description="20k mouse array" version="5" xmlns:ns290="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns290:technologyType>
+      <ns291:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns291="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns291:categories/>
+      </ns291:Term>
+     </ns290:technologyType>
+     <ns290:organism>
+      <ns292:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns292="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns292:additionalOrganismNameCollection/>
+      </ns292:Organism>
+     </ns290:organism>
+     <ns290:provider>
+      <ns293:Organization id="2" name="GenePix" xmlns:ns293="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns290:provider>
+     <ns290:designFiles>
+      <ns294:CaArrayFile id="36860" name="Mm_20k_P5G3-vmsrid-02-03-03-no-empts.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns294="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns290:designFiles>
+    </ns290:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns295:ArrayDesign id="65" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mus_20k_P9G3-vmsrid-072803" name="Mus_20k_P9G3-vmsrid-072803" assayType="geneExpression" description="20k mouse array" version="9" xmlns:ns295="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns295:technologyType>
+      <ns296:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns296="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns296:categories/>
+      </ns296:Term>
+     </ns295:technologyType>
+     <ns295:organism>
+      <ns297:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns297="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns297:additionalOrganismNameCollection/>
+      </ns297:Organism>
+     </ns295:organism>
+     <ns295:provider>
+      <ns298:Organization id="2" name="GenePix" xmlns:ns298="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns295:provider>
+     <ns295:designFiles>
+      <ns299:CaArrayFile id="36861" name="Mus_20k_P9G3-vmsrid-072803.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns299="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns295:designFiles>
+    </ns295:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns300:ArrayDesign id="66" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Mm_20k_P3G3-VMSRID_noempt-121802" name="Mm_20k_P3G3-VMSRID_noempt-121802" assayType="geneExpression" description="20k mouse array" version="3" xmlns:ns300="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns300:technologyType>
+      <ns301:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns301="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns301:categories/>
+      </ns301:Term>
+     </ns300:technologyType>
+     <ns300:organism>
+      <ns302:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns302="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns302:additionalOrganismNameCollection/>
+      </ns302:Organism>
+     </ns300:organism>
+     <ns300:provider>
+      <ns303:Organization id="2" name="GenePix" xmlns:ns303="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns300:provider>
+     <ns300:designFiles>
+      <ns304:CaArrayFile id="36862" name="Mm_20k_P3G3-VMSRID_noempt-121802.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns304="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns300:designFiles>
+    </ns300:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns305:ArrayDesign id="67" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="Hs-ATC7.6k-v5px_16Bx22Cx22R" name="Hs-ATC7.6k-v5px_16Bx22Cx22R" assayType="geneExpression" description="The cDNA microarray chips contained 7651 total features and were manufactured at the National Cancer Institute microarray facility. The cDNAclones used are identified by their Integrated Molecular Analysis of Genomes and their Expression Consortium (I.M.A.G.E.) clone number." version="1" xmlns:ns305="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns305:technologyType>
+      <ns306:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns306="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns306:categories/>
+      </ns306:Term>
+     </ns305:technologyType>
+     <ns305:organism>
+      <ns307:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns307="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns307:additionalOrganismNameCollection/>
+      </ns307:Organism>
+     </ns305:organism>
+     <ns305:provider>
+      <ns308:Organization id="2" name="GenePix" xmlns:ns308="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns305:provider>
+     <ns305:designFiles>
+      <ns309:CaArrayFile id="36863" name="Hs-ATC7.6k-v5px_16Bx22Cx22R.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns309="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns305:designFiles>
+    </ns305:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns310:ArrayDesign id="68" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="LM2_RAE230A" name="LM2_RAE230A" assayType="geneExpression" description="AD imported for smoke tests 12/22/08" version="qa1" xmlns:ns310="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns310:technologyType>
+      <ns311:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns311="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns311:categories/>
+      </ns311:Term>
+     </ns310:technologyType>
+     <ns310:organism>
+      <ns312:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns312="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns312:additionalOrganismNameCollection/>
+      </ns312:Organism>
+     </ns310:organism>
+     <ns310:provider>
+      <ns313:Organization id="1" name="Affymetrix" xmlns:ns313="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns310:provider>
+     <ns310:designFiles>
+      <ns314:CaArrayFile id="37123" name="LM2_RAE230A.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns314="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns310:designFiles>
+    </ns310:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns315:ArrayDesign id="71" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="GP_KKWONG UniGem10K" name="GP_KKWONG UniGem10K" assayType="geneExpression" description="The cDNA microarrays were fabricated with the Easy-to-Spot Human UniGene 1 PCR products (Incyte Genomics, Palo Alto, CA) that consist of a total of 9,216 unique elements. The PCR products were printed in duplicate along with three Arabidopsis cDNA for detecting spike-in controls using an OmniGrid Accent Arrayer (GeneMachines, San Carlos, CA) equipped with 24 SMP3 pins (TeleChem International, Sunnyvale, CA). All PCR products were resequenced before printing to validate their annotation." version="0" xmlns:ns315="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns315:technologyType>
+      <ns316:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns316="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns316:categories/>
+      </ns316:Term>
+     </ns315:technologyType>
+     <ns315:organism>
+      <ns317:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns317="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns317:additionalOrganismNameCollection/>
+      </ns317:Organism>
+     </ns315:organism>
+     <ns315:provider>
+      <ns318:Organization id="2" name="GenePix" xmlns:ns318="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns315:provider>
+     <ns315:designFiles>
+      <ns319:CaArrayFile id="43567" name="GP_KKWONG UniGem10K.gal" status="IMPORTED" type="GENEPIX_GAL" xmlns:ns319="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns315:designFiles>
+    </ns315:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns320:ArrayDesign id="72" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Rat230_2" name="Rat230_2" assayType="geneExpression" description="Affymetrix RAT230 2" version="230 2.0" xmlns:ns320="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns320:technologyType>
+      <ns321:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns321="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns321:categories/>
+      </ns321:Term>
+     </ns320:technologyType>
+     <ns320:organism>
+      <ns322:Organism commonName="norway rat" scientificName="Rattus norvegicus" taxonomyRank="species" ncbiTaxonomyId="10116" id="3" xmlns:ns322="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns322:additionalOrganismNameCollection/>
+      </ns322:Organism>
+     </ns320:organism>
+     <ns320:provider>
+      <ns323:Organization id="1" name="Affymetrix" xmlns:ns323="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns320:provider>
+     <ns320:designFiles>
+      <ns324:CaArrayFile id="43898" name="Rat230_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns324="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns320:designFiles>
+    </ns320:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns325:ArrayDesign id="73" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="TCGA__HG-CGH-244A_v081008.ADF" name="TCGA__HG-CGH-244A_v081008.ADF" assayType="aCGH" description="TCGA__HG-CGH-244A_v081008.ADF" version="1.0.0" xmlns:ns325="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns325:technologyType>
+      <ns326:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns326="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns326:categories/>
+      </ns326:Term>
+     </ns325:technologyType>
+     <ns325:organism>
+      <ns327:Organism scientificName="Homo sapiens" id="34" xmlns:ns327="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns327:additionalOrganismNameCollection/>
+      </ns327:Organism>
+     </ns325:organism>
+     <ns325:provider>
+      <ns328:Organization id="4" name="Agilent" xmlns:ns328="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns325:provider>
+     <ns325:designFiles>
+      <ns329:CaArrayFile id="44002" name="TCGA__HG-CGH-244A_v081008.ADF.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns329="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns325:designFiles>
+    </ns325:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns330:ArrayDesign id="74" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mu11KsubB" name="Mu11KsubB" assayType="geneExpression" description="Affymetrix Mu11k GeneChips, interrogating 13,104 genes and ESTs on two different arrays, were processed according to the manufacturer&#x2019;s recommendations. Approximately 20 pairs of oligonucleotides (probe pairs) represent every gene or EST in a probe set, with one sequence being complementary to the target sequence and the other having a 1-bp mismatch in a central position. This serves as an internal control for hybridization specificity. This is the array B within the set" version="1.0" xmlns:ns330="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns330:technologyType>
+      <ns331:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns331="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns331:categories/>
+      </ns331:Term>
+     </ns330:technologyType>
+     <ns330:organism>
+      <ns332:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns332="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns332:additionalOrganismNameCollection/>
+      </ns332:Organism>
+     </ns330:organism>
+     <ns330:provider>
+      <ns333:Organization id="1" name="Affymetrix" xmlns:ns333="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns330:provider>
+     <ns330:designFiles>
+      <ns334:CaArrayFile id="44329" name="Mu11KsubB.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns334="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns330:designFiles>
+    </ns330:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns335:ArrayDesign id="75" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mu11KsubA" name="Mu11KsubA" assayType="geneExpression" description="Affymetrix Mu11k GeneChips contains 13,104 genes and ESTs on two different arrays. Approximately 20 pairs of oligonucleotides (probe pairs) represent every gene or EST in a probe set, with one sequence being complementary to the target sequence and the other having a 1-bp mismatch in a central position. This serves as an internal control for hybridization specificity. This is the A array from a set of 2 and it has a total of 6585 probe sets." version="1" xmlns:ns335="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns335:technologyType>
+      <ns336:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns336="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns336:categories/>
+      </ns336:Term>
+     </ns335:technologyType>
+     <ns335:organism>
+      <ns337:Organism commonName="house mouse" scientificName="Mus musculus" taxonomyRank="species" ncbiTaxonomyId="10090" id="2" xmlns:ns337="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns337:additionalOrganismNameCollection/>
+      </ns337:Organism>
+     </ns335:organism>
+     <ns335:provider>
+      <ns338:Organization id="1" name="Affymetrix" xmlns:ns338="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns335:provider>
+     <ns335:designFiles>
+      <ns339:CaArrayFile id="45668" name="Mu11KsubA.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns339="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns335:designFiles>
+    </ns335:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns340:ArrayDesign id="76" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="HumArray 1.14" name="HumArray 1.14" assayType="aCGH" description="This array was designed for copy-number assessments across the human genome. We printed 2,460 BAC and P1 clones in triplicate (approx. 7,500 elements) in a 12mm X 12mm square. Each clone contains at least one STS, allowing linkage to the genome sequence. Cytogenetic mapping indicated that 2,298 of the arrayed clones are single copy; this array thus provides average resolution of approximately 1.4 Mb across the genome." version="1.14" xmlns:ns340="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns340:technologyType>
+      <ns341:Term id="62" accession="MO_499" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#spotted_ds_DNA_features" value="spotted_ds_DNA_features" xmlns:ns341="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns341:categories/>
+      </ns341:Term>
+     </ns340:technologyType>
+     <ns340:organism>
+      <ns342:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns342="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns342:additionalOrganismNameCollection/>
+      </ns342:Organism>
+     </ns340:organism>
+     <ns340:provider>
+      <ns343:Organization id="5" name="UCSF Spot" xmlns:ns343="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns340:provider>
+     <ns340:designFiles>
+      <ns344:CaArrayFile id="45669" name="HumArray 1.14.txt" status="IMPORTED_NOT_PARSED" type="UCSF_SPOT_SPT" xmlns:ns344="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns340:designFiles>
+    </ns340:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns345:ArrayDesign id="77" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="jhu-usc.edu_OV.HumanMethylation27.1.adf" name="jhu-usc.edu_OV.HumanMethylation27.1.adf" assayType="methylation" description="jhu-usc.edu_OV.HumanMethylation27.1.adf.txt" version="1.0" xmlns:ns345="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns345:technologyType>
+      <ns346:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns346="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns346:categories/>
+      </ns346:Term>
+     </ns345:technologyType>
+     <ns345:organism>
+      <ns347:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns347="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns347:additionalOrganismNameCollection/>
+      </ns347:Organism>
+     </ns345:organism>
+     <ns345:provider>
+      <ns348:Organization id="3" name="Illumina" xmlns:ns348="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns345:provider>
+     <ns345:designFiles>
+      <ns349:CaArrayFile id="47252" name="jhu-usc.edu_OV.HumanMethylation27.1.adf.txt" status="IMPORTED_NOT_PARSED" type="MAGE_TAB_ADF" xmlns:ns349="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns345:designFiles>
+    </ns345:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns350:ArrayDesign id="78" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Hu35KsubA" name="Hu35KsubA" assayType="geneExpression" version="GC3.0" xmlns:ns350="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns350:technologyType>
+      <ns351:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns351="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns351:categories/>
+      </ns351:Term>
+     </ns350:technologyType>
+     <ns350:organism>
+      <ns352:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns352="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns352:additionalOrganismNameCollection/>
+      </ns352:Organism>
+     </ns350:organism>
+     <ns350:provider>
+      <ns353:Organization id="1" name="Affymetrix" xmlns:ns353="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns350:provider>
+     <ns350:designFiles>
+      <ns354:CaArrayFile id="48764" name="Hu35KsubA.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns354="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns350:designFiles>
+    </ns350:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns355:ArrayDesign id="79" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="U133AAofAv2" name="U133AAofAv2" assayType="geneExpression" version="1" xmlns:ns355="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns355:technologyType>
+      <ns356:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns356="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns356:categories/>
+      </ns356:Term>
+     </ns355:technologyType>
+     <ns355:organism>
+      <ns357:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns357="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns357:additionalOrganismNameCollection/>
+      </ns357:Organism>
+     </ns355:organism>
+     <ns355:provider>
+      <ns358:Organization id="1" name="Affymetrix" xmlns:ns358="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns355:provider>
+     <ns355:designFiles>
+      <ns359:CaArrayFile id="63959" name="U133AAofAv2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns359="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns355:designFiles>
+    </ns355:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns360:ArrayDesign id="80" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Canine_2" name="Canine_2" assayType="geneExpression" description="Affymetrix Canine Version 2.0" version="2.0" xmlns:ns360="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns360:technologyType>
+      <ns361:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns361="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns361:categories/>
+      </ns361:Term>
+     </ns360:technologyType>
+     <ns360:organism>
+      <ns362:Organism commonName="dog" scientificName="Canis familiaris" taxonomyRank="species" ncbiTaxonomyId="9615" id="8" xmlns:ns362="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns362:additionalOrganismNameCollection/>
+      </ns362:Organism>
+     </ns360:organism>
+     <ns360:provider>
+      <ns363:Organization id="1" name="Affymetrix" xmlns:ns363="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns360:provider>
+     <ns360:designFiles>
+      <ns364:CaArrayFile id="64049" name="Canine_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns364="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns360:designFiles>
+    </ns360:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns365:ArrayDesign id="86" lsidAuthority="Agilent.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="022522_D_F_20090107" name="022522_D_F_20090107" assayType="aCGH" version="1.0" xmlns:ns365="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns365:technologyType>
+      <ns366:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns366="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns366:categories/>
+      </ns366:Term>
+     </ns365:technologyType>
+     <ns365:organism>
+      <ns367:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns367="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns367:additionalOrganismNameCollection/>
+      </ns367:Organism>
+     </ns365:organism>
+     <ns365:provider>
+      <ns368:Organization id="4" name="Agilent" xmlns:ns368="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns365:provider>
+     <ns365:designFiles>
+      <ns369:CaArrayFile id="64895" name="022522_D_F_20090107.xml" status="IMPORTED_NOT_PARSED" type="AGILENT_XML" xmlns:ns369="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns365:designFiles>
+    </ns365:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns370:ArrayDesign id="87" lsidAuthority="caarray.nci.nih.gov" lsidNamespace="domain" lsidObjectId="022522_D_20090107" name="022522_D_20090107" assayType="aCGH" version="1.0" xmlns:ns370="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns370:technologyType>
+      <ns371:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns371="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns371:categories/>
+      </ns371:Term>
+     </ns370:technologyType>
+     <ns370:organism>
+      <ns372:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns372="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns372:additionalOrganismNameCollection/>
+      </ns372:Organism>
+     </ns370:organism>
+     <ns370:provider>
+      <ns373:Organization id="2" name="GenePix" xmlns:ns373="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns370:provider>
+     <ns370:designFiles>
+      <ns374:CaArrayFile id="64907" name="022522_D_20090107.gal" status="IMPORT_FAILED" type="GENEPIX_GAL" xmlns:ns374="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns370:designFiles>
+    </ns370:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns375:ArrayDesign id="88" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="hjay_binary" name="hjay_binary" assayType="exon" description="The Affymetrix Human Exon Junction array (HJAY) has eight probes per exon for approximately 315 000 exons in the human genome." version="1" xmlns:ns375="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns375:technologyType>
+      <ns376:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns376="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns376:categories/>
+      </ns376:Term>
+     </ns375:technologyType>
+     <ns375:organism>
+      <ns377:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns377="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns377:additionalOrganismNameCollection/>
+      </ns377:Organism>
+     </ns375:organism>
+     <ns375:provider>
+      <ns378:Organization id="1" name="Affymetrix" xmlns:ns378="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns375:provider>
+     <ns375:designFiles>
+      <ns379:CaArrayFile id="65701" name="hjay_binary.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns379="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns375:designFiles>
+    </ns375:ArrayDesign>
+   </ns2:ObjectResult>
+   <ns2:ObjectResult>
+    <ns380:ArrayDesign id="89" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="hjay" name="hjay" assayType="exon" description="The Affymetrix Human Exon Junction array (HJAY) has eight probes per exon for approximately 315 000 exons in the human genome" version="1" xmlns:ns380="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns380:technologyType>
+      <ns381:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns381="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns381:categories/>
+      </ns381:Term>
+     </ns380:technologyType>
+     <ns380:organism>
+      <ns382:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns382="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns382:additionalOrganismNameCollection/>
+      </ns382:Organism>
+     </ns380:organism>
+     <ns380:provider>
+      <ns383:Organization id="1" name="Affymetrix" xmlns:ns383="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns380:provider>
+     <ns380:designFiles>
+      <ns384:CaArrayFile id="65702" name="hjay.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns384="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns380:designFiles>
+    </ns380:ArrayDesign>
+   </ns2:ObjectResult>
+  </ns2:CQLQueryResultCollection>
+ </ns1:DCQLResult>
+ <ns1:DCQLResult targetServiceURL="http://137.187.66.94:18080/wsrf/services/cagrid/CaArraySvc">
+  <ns3:CQLQueryResultCollection targetClassname="gov.nih.nci.caarray.domain.array.ArrayDesign" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet">
+   <ns3:ObjectResult>
+    <ns2:ArrayDesign id="1" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Hu6800" name="Hu6800" assayType="geneExpression" description="This is the sample data from KC" version="1.0" xmlns:ns2="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns2:technologyType>
+      <ns3:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns3="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns3:categories/>
+      </ns3:Term>
+     </ns2:technologyType>
+     <ns2:organism>
+      <ns4:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns4="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns4:additionalOrganismNameCollection/>
+      </ns4:Organism>
+     </ns2:organism>
+     <ns2:provider>
+      <ns5:Organization id="1" name="Affymetrix" xmlns:ns5="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns2:provider>
+     <ns2:designFiles>
+      <ns6:CaArrayFile id="1" name="Hu6800.CDF" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns6="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns2:designFiles>
+    </ns2:ArrayDesign>
+   </ns3:ObjectResult>
+   <ns3:ObjectResult>
+    <ns7:ArrayDesign id="5" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HT_HG-U133A" name="HT_HG-U133A" assayType="geneExpression" description="HT_HG-U133A" version="GC3.0" xmlns:ns7="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns7:technologyType>
+      <ns8:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns8="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns8:categories/>
+      </ns8:Term>
+     </ns7:technologyType>
+     <ns7:organism>
+      <ns9:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns9="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns9:additionalOrganismNameCollection/>
+      </ns9:Organism>
+     </ns7:organism>
+     <ns7:provider>
+      <ns10:Organization id="1" name="Affymetrix" xmlns:ns10="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns7:provider>
+     <ns7:designFiles>
+      <ns11:CaArrayFile id="48" name="HT_HG-U133A.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns11="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns7:designFiles>
+    </ns7:ArrayDesign>
+   </ns3:ObjectResult>
+   <ns3:ObjectResult>
+    <ns12:ArrayDesign id="6" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="Mapping250K_Sty" name="Mapping250K_Sty" assayType="snp" description="Mapping250K_Sty" version="Rev 4" xmlns:ns12="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns12:technologyType>
+      <ns13:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns13="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns13:categories/>
+      </ns13:Term>
+     </ns12:technologyType>
+     <ns12:organism>
+      <ns14:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns14="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns14:additionalOrganismNameCollection/>
+      </ns14:Organism>
+     </ns12:organism>
+     <ns12:provider>
+      <ns15:Organization id="1" name="Affymetrix" xmlns:ns15="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns12:provider>
+     <ns12:designFiles>
+      <ns16:CaArrayFile id="119" name="Mapping250K_Sty.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns16="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns12:designFiles>
+    </ns12:ArrayDesign>
+   </ns3:ObjectResult>
+   <ns3:ObjectResult>
+    <ns17:ArrayDesign id="7" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="hg-u133_plus_2" name="hg-u133_plus_2" assayType="geneExpression" description="HG-U133 Plus2" version="1" xmlns:ns17="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns17:technologyType>
+      <ns18:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns18="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns18:categories/>
+      </ns18:Term>
+     </ns17:technologyType>
+     <ns17:organism>
+      <ns19:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns19="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns19:additionalOrganismNameCollection/>
+      </ns19:Organism>
+     </ns17:organism>
+     <ns17:provider>
+      <ns20:Organization id="1" name="Affymetrix" xmlns:ns20="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns17:provider>
+     <ns17:designFiles>
+      <ns21:CaArrayFile id="222" name="hg-u133_plus_2.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns21="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns17:designFiles>
+    </ns17:ArrayDesign>
+   </ns3:ObjectResult>
+   <ns3:ObjectResult>
+    <ns22:ArrayDesign id="8" lsidAuthority="Affymetrix.com" lsidNamespace="PhysicalArrayDesign" lsidObjectId="HG-U133A" name="HG-U133A" assayType="geneExpression" description="HG-U133A" version="1" xmlns:ns22="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.array">
+     <ns22:technologyType>
+      <ns23:Term id="624" accession="MO_514" url="http://mged.sourceforge.net/ontologies/MGEDontology.php#in_situ_oligo_features" value="in_situ_oligo_features" xmlns:ns23="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.vocabulary">
+       <ns23:categories/>
+      </ns23:Term>
+     </ns22:technologyType>
+     <ns22:organism>
+      <ns24:Organism commonName="human" scientificName="Homo sapiens" taxonomyRank="species" ncbiTaxonomyId="9606" id="1" xmlns:ns24="gme://caArray.caBIG/2.1/edu.georgetown.pir">
+       <ns24:additionalOrganismNameCollection/>
+      </ns24:Organism>
+     </ns22:organism>
+     <ns22:provider>
+      <ns25:Organization id="1" name="Affymetrix" xmlns:ns25="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.contact"/>
+     </ns22:provider>
+     <ns22:designFiles>
+      <ns26:CaArrayFile id="268" name="HG-U133A.cdf" status="IMPORTED" type="AFFYMETRIX_CDF" xmlns:ns26="gme://caArray.caBIG/2.1/gov.nih.nci.caarray.domain.file"/>
+     </ns22:designFiles>
+    </ns22:ArrayDesign>
+   </ns3:ObjectResult>
+  </ns3:CQLQueryResultCollection>
+ </ns1:DCQLResult>
+</ns1:DCQLQueryResultsCollection>

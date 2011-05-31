@@ -1,0 +1,9 @@
+<%@ include file="/WEB-INF/jsp/browse/common/edit/top.jspf" %>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/edit/photo_row.jspf" %>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/terms.jspf" %>
+
+<%-- TODO: add POCs --%>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %>

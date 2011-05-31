@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+        #parse ($init)
+
+<html dir="#language (" lang.dir")">
+
+<head>
+<title>caBIG :: caGrid Portal</title>
+
+$theme.include($top_head_include)
+
+#css ($css_main_file)
+#js ($js_main_file)
+#set ($buildstamp = $request.getSession().getAttribute("cagrid.portal.build.stamp"))
+</head>
+
+<body class="$css_class">
+
+$theme.include($top_messages_include)
+
+<div id="wrapper">
+    <div id="banner">
+        <!-- Begin NCICB Banner -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="hdrBG">
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td width="283" height="37" align="left">
+                    <a href="http://www.cancer.gov">
+                        <img alt="National Cancer Institute" src="$images_folder/ncicb/logotype.gif" width="283"
+                             height="37" border="0">
+                    </a>
+                </td>
+                <td>&nbsp;</td>
+                <td width="295" height="37" align="right">
+                    <a href="http://www.cancer.gov">
+                        <img alt="U.S. National Institutes of Health | www.cancer.gov"
+                             src="$images_folder/ncicb/tagline.gif" width="295" height="37" border="0">
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <!-- End NCICB Banner -->
+        <img src="$images_folder/caGrid_logo.gif" height="70" alt="caGrid Portal Logo" style="position:relative;"/>
+        <!--
+            <img src="$images_folder/logo_v3b_copy.gif" height="60" alt="caGrid Portal Logo"/>
+        -->
+        #parse ("$full_templates_path/dock.vm")
+
+        #if ($update_available_url)
+        <div class="popup-alert-notice">
+            <a class="update-available" href="$update_available_url">#language ("updates-are-available-for-liferay")</a>
+        </div>
+        #end
+    </div>
+
+    #if ($has_navigation)
+    #parse ("$full_templates_path/navigation.vm")
+    #end
+
+    #if ($selectable)
+    $theme.include($content_include)
+    #else
+    $portletDisplay.recycle()
+
+    $portletDisplay.setTitle($the_title)
+
+    $theme.wrapPortlet("portlet.vm", $content_include)
+    #end
+
+    <div id="footer">
+        <div class="footerMenu">
+            <table summary="" align="center" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+
+                <tr>
+                    <!--
+                        <td height="20" class="footerMenuItem"  onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/help">HELP</a>&nbsp;&nbsp;
+                        </td>
+                        <td><img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt="" /></td>
+                    -->
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                    <td height="20" class="footerMenuItem" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/contact">CONTACT US</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                    <td height="20" class="footerMenuItem" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/privacy">PRIVACY NOTICE</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                    <td height="20" class="footerMenuItem" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/disclaimer">DISCLAIMER</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                    <td height="20" class="footerMenuItem" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/accessibility">ACCESSIBILITY</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                    <td height="20" class="footerMenuItem" onclick="document.location.href='#'">
+                        &nbsp;&nbsp;<a class="footerMenuLink" href="/web/guest/support">APPLICATION SUPPORT</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <img src="$images_folder/ncicb/ftrMenuSeparator.gif" width="1" height="16" alt=""/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftrTable">
+            <tr>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <div align="center">
+                        <a href="http://www.cancer.gov/">
+                            <img src="$images_folder/ncicb/footer_nci.gif" width="63" height="31"
+                                 alt="National Cancer Institute" border="0">
+                        </a>
+                        <a href="http://www.dhhs.gov/">
+                            <img src="$images_folder/ncicb/footer_hhs.gif" width="39" height="31"
+                                 alt="Department of Health and Human Services" border="0">
+                        </a>
+                        <a href="http://www.nih.gov/">
+                            <img src="$images_folder/ncicb/footer_nih.gif" width="46" height="31"
+                                 alt="National Institutes of Health" border="0">
+                        </a>
+                        <a href="http://www.firstgov.gov/">
+                            <img src="$images_folder/ncicb/footer_firstgov.gif" width="91" height="31"
+                                 alt="FirstGov.gov" border="0">
+                        </a>
+                    </div>
+                    #if ($buildstamp)
+                    <div align="right" class="versionStamp">
+                        caGrid Portal v.$buildstamp
+                    </div>
+                    #end
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+
+</body>
+
+        </html>

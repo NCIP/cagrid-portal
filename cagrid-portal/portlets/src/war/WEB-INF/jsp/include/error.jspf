@@ -1,0 +1,24 @@
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+
+<span style="color:red"><b>Error!</b></span>
+<br/>
+<a href="/web/guest/home" style="text-decoration:none">&lt;&lt; To Home Page</a><br/>
+<p>
+An error occurred during the processing of your request. 
+Please contact the administrator at <c:out value="${adminEmail}"/> and 
+provide the information below.
+</p>
+<br/>
+<br/>
+<div style="margin-left:10px">
+Time: <fmt:formatDate value="${now}" type="both"/><br/>
+<c:if test="${!empty handler}">
+Handler: <c:out value="${handler.class.name}"/><br/>
+</c:if>
+<c:if test="${!empty exception}">
+Exception: <c:out value="${exception.class.name}"/><br/>
+</c:if>
+<c:if test="${!empty message}">
+Message: <c:out value="${message}"/>
+</c:if>
+</div>

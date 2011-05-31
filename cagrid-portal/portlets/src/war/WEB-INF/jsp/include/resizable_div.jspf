@@ -1,0 +1,46 @@
+<script type="text/javascript"><!--
+/*
+ * resizehandle.js (c) Fil 2007, plugin pour jQuery ecrit
+ * a partir du fichier resize.js du projet DotClear
+ * (c) 2005 Nicolas Martin & Olivier Meunier and contributors
+ */
+jQuery.fn.<c:out value="${resizablePrefix}"/>resizehandle = function() {
+  return this.each(function() {
+    var me = jQuery(this);
+    me.after(
+      jQuery('<div class="<c:out value="${resizablePrefix}"/>resizehandle"></div>')
+      .bind('mousedown', function(e) {
+        var h = me.height();
+        var y = e.clientY;
+        var moveHandler = function(e) {
+          me
+          .height(Math.max(20, e.clientY + h - y));
+        };
+        var upHandler = function(e) {
+          jQuery('html')
+          .unbind('mousemove',moveHandler)
+          .unbind('mouseup',upHandler);
+        };
+        jQuery('html')
+        .bind('mousemove', moveHandler)
+        .bind('mouseup', upHandler);
+      })
+    );
+  });
+}
+
+
+jQuery(document).ready(function(){
+  jQuery("#<c:out value="${resizablePrefix}"/>").<c:out value="${resizablePrefix}"/>resizehandle();
+});
+// --></script>
+
+<style>
+.<c:out value="${resizablePrefix}"/>resizehandle {
+	background:transparent url("<c:url value="/images/resizer.png"/>") no-repeat scroll 45%;
+	cursor:s-resize;
+	font-size:0.1em;
+	height:16px;
+	width:100%;
+}
+</style>

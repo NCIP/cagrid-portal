@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <ADDRESSES ID="-4" STREET1="street4" COUNTRY="country4" POSTALCODE="code4" />
+	<ADDRESSES ID="-1" />
+    <ADDRESSES ID="-2" POSTALCODE="code2" />
+    <ADDRESSES ID="-3" STREET1="street3" STATEPROVINCE="state3"  POSTALCODE="code3" />
+
+</dataset>

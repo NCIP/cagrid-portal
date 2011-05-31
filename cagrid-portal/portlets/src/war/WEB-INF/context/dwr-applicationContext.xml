@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <!--evs configuration-->
+
+    <bean id="defaultOntology" class="java.lang.String">
+        <constructor-arg value="NCI Thesaurus"/>
+    </bean>
+
+    <bean id="baseEVService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.BaseConceptService"
+          abstract="true"
+          p:searchLimit="15" p:vocabulary-ref="defaultOntology">
+        <property name="appService">
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+                  p:targetClass="gov.nih.nci.system.client.ApplicationServiceProvider"
+                  p:targetMethod="getApplicationServiceFromUrl">
+                <property name="arguments">
+                    <list>
+                        <value>http://evsapi.nci.nih.gov/evsapi40</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="caCoreConceptService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.CacoreConceptService"
+          parent="baseEVService"/>
+
+    <bean id="lexbigEVSService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigConceptService"
+          parent="baseEVService">
+        <property name="productionTag">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
+                  p:tag="PRODUCTION"/>
+        </property>
+        <property name="cr">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.ConceptReference">
+                <property name="codingScheme" ref="defaultOntology"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="evsAutoCompleter"
+          class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DefaultConceptAutocompleterService"
+          scope="session" autowire="byName">
+        <property name="conceptService">
+            <bean id="delegatingEVSConceptAggregator"
+                  class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DelegatingConceptService"
+                  parent="baseEVService">
+                <property name="conceptServices">
+                    <list>
+                        <ref local="lexbigEVSService"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="ccSearchProvider">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.KeywordConceptCodeSearchProvider"
+                  autowire="byName"/>
+        </property>
+    </bean>
+
+    <bean id="serviceStatusManager"
+          class="gov.nih.nci.cagrid.portal.portlet.status.EditServiceStatusManager"
+          autowire="byName"/>
+
+    <!--Diagnostics Portlet-->
+    <bean id="portalStatusDiagnosticService"
+          class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
+          autowire="byName">
+        <property name="serviceFilter" ref="servicefilter"/>
+    </bean>
+
+    <bean id="metadataDiagnosticService"
+          class="gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService" autowire="byName">
+        <property name="defaultTimeout" ref="defaultTimeout"/>
+        <property name="geocoder" ref="defaultGeocoder"/>
+    </bean>
+
+    <bean id="idxDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.IdxDiagnosticService">
+        <property name="dynamicServiceUrlProvider" ref="cacheFirstDynamicServiceStatusProvider"/>
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+    </bean>
+
+    <bean id="pingDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PingDiagnosticService">
+        <property name="serviceStatusProvider" ref="pingServiceStatusProvider"/>
+    </bean>
+
+    <bean id="filteredContentGenerator" class="gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator"
+          abstract="true" autowire="byName">
+        <property name="filter" ref="baseServiceFilter">
+
+        </property>
+    </bean>
+
+    <bean id="ajaxStatusService" parent="filteredContentGenerator"
+          class="gov.nih.nci.cagrid.portal.portlet.status.AjaxStatusService"
+          p:latestServicesLimit="5"
+          p:view="/WEB-INF/jsp/status/latestServices.jsp"
+          p:monitor-ref="registeredServiceMonitor"
+          autowire="byName">
+    </bean>
+
+    <bean id="ajaxMapService"
+          class="gov.nih.nci.cagrid.portal.portlet.map.ajax.AjaxMapService"
+          p:view="/WEB-INF/jsp/map/ajaxMap.jsp"
+          autowire="byName">
+    </bean>
+
+    <bean id="cachedMap"
+          class="gov.nih.nci.cagrid.portal.portlet.map.ajax.CachedMap" scope="singleton"
+          autowire="byName" parent="filteredContentGenerator">
+    </bean>
+
+    <bean id="latestContentService"
+          class="gov.nih.nci.cagrid.portal.portlet.map.ajax.LatestContentService"
+          p:latestContentLimit="5"
+          p:view="/WEB-INF/jsp/map/latestContent-ajax.jsp"
+          autowire="byName">
+    </bean>
+
+
+    <!--Timers to update caches-->
+    <bean id="ajaxstatusTimerFactory"
+          class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="period" ref="fastDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="ajaxStatusService"/>
+                            <property name="targetMethod" value="refreshCache"/>
+                        </bean>
+                    </property>
+                </bean>
+                <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="period" ref="fastDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="cachedMap"/>
+                            <property name="targetMethod" value="refreshCache"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="notificationSubscriptionService"
+          class="gov.nih.nci.cagrid.portal.portlet.notification.NotificationSubscriptionService"
+          autowire="byName"/>
+
+</beans>

@@ -1,0 +1,26 @@
+<table class="detailstable">
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+	<tbody>
+		<tr>
+			<td class="detailslabelcell">Project Long Name:</td>
+			<td><c:out value="${domainModel.projectLongName}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Project Short Name:</td>
+			<td><c:out value="${domainModel.projectShortName}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Project Version:</td>
+			<td><c:out value="${domainModel.projectVersion}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Project Description:</td>
+			<td><c:out value="${domainModel.projectDescription}"/></td>
+		</tr>
+	</tbody>
+</table>

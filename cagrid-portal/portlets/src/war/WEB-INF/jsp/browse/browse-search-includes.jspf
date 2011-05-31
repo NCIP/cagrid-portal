@@ -1,0 +1,371 @@
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/catalog.css"/>"/>
+
+
+<link type="text/css" rel="stylesheet"
+      href="<c:url value="/js/yui/assets/skins/sam/datatable.css"/>"/>
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/treeview/assets/css/menu/tree.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/paginator/assets/skins/sam/paginator.css"/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>"/>
+
+<script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
+
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/logger/logger-min.js"/>"></script>
+<!-- yahoo container Dependencies -->
+<script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
+
+<script src="<c:url value="/js/yui/treeview/treeview-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/paginator/paginator-min.js"/>"></script>
+<c:set var="ns"><portlet:namespace/></c:set>
+
+
+<div id="myLogger"><%--logging--%></div>
+
+<script type="text/javascript">
+//var myLogReader = new YAHOO.widget.LogReader("myLogger");
+
+var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrUrl}"/>/select?spellcheck=true&", {responseType:YAHOO.util.XHRDataSource.JSON});
+//global variables
+var g_wildcard = "*:*";
+var g_catalogType = "";
+var g_catalogType_label = "";
+var g_aof = "";
+var g_selectedids = "";
+var g_tree;
+
+<%--Represents the summary tree for filtering search results--%>
+var SummaryTree = Class.create({
+    initialize: function(catalog) {
+        var summaryQuery = catalog.query;
+        if (catalog.config.catalog) {
+            g_catalogType = catalog.config.catalog.type;
+            g_catalogType_label = "All";
+            this.catalogType = catalog.config.catalog.type;
+        }
+        else
+            this.catalogType = g_wildcard;
+
+        this.tree = new YAHOO.widget.TreeView(document.getElementById(catalog.config.treeDiv));
+    <%--also save it in a global variable--%>
+        g_tree = this.tree;
+
+    <%--onClick callback. This is when a catalog type is selected in the tree. We will update the AOF tree here--%>
+        this.tree.subscribe("labelClick", function(node, tree) {
+
+        <%--if catalog type label is clicked--%>
+            if (node.data.type.search(/catalog/i) > -1) {
+                catalog.config.filter = null;
+                g_catalogType = node.data.name;
+                g_catalogType_label = node.data.baseLabel;
+
+                catalog.config.catalog = new CatalogType(node.data.name, node.data.baseLabel);
+            }
+                    <%--else AOF label has been clicked--%>
+            else {
+                g_aof = node.data.name;
+                catalog.config.filter = new Filter(node.data.baseLabel, node.data.type, node.data.name);
+            }
+            catalog.runQuery(false);
+
+        <%--also update AOF sub tree--%>
+            var updateAOF = function (oRequest, oParsedResponse, oPayload) {
+                if (oParsedResponse.results != null) {
+                    var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
+                    var sTree = solrJSON.tree;
+                    if (sTree.length > 1) {
+                        var subTree = sTree[1];
+                        var nodesList = subTree.nodes;
+
+                        var subTreeNode;
+                        if (subTree.type.search(/catalog/i) < 0) {
+                            subTreeNode = tree.tree.getNodeByProperty("type", subTree.type);
+                            tree.tree.removeChildren(subTreeNode);
+                            for (var i = 0; i < nodesList.length; i++) {
+                                var node = nodesList[i];
+                                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "(" + node.count + ")",type:subTree.type,name:node.name}, subTreeNode, true);
+                            }
+                        }
+                        subTreeNode.toggle();
+                        tree.refresh();
+
+                    }
+                }
+            };
+        <%--if catalog type label is clicked, update the AOF sub tree--%>
+            if (node.data.type.search(/catalog/i) > -1) {
+                summaryQuery.setTree(true);
+                <%--Added additional timer parameter to avaoid caching issues in IE--%>
+                solrDatasource.sendRequest(summaryQuery.getQuery()+"&ignoreMe="+new Date().getTime(), {
+                    success : updateAOF,
+                    failure : updateAOF,
+                    cache: false,
+                    scope : this
+                });
+            }
+            node.toggle();
+        }, this);
+
+        treeEvent.subscribe(updateTreeWithResults, this);
+
+        var searchCallback = function (oRequest, oParsedResponse, oPayload) {
+            if (oParsedResponse.results != null) {
+                var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
+                YAHOO.log("Firing tree event");
+                treeEvent.fire(solrJSON.tree);
+            }
+        };
+
+    <%--only get catalog_type field for making summary tree--%>
+        summaryQuery.setTree(true);
+        <%--Added additional timer parameter to avaoid caching issues in IE--%>
+        solrDatasource.sendRequest(summaryQuery.getQuery()+"&ignoreMe="+new Date().getTime(), {
+            success : searchCallback,
+            failure : searchCallback,
+            cache: false,
+            scope : this
+        });
+        YAHOO.log("Summary query is " + summaryQuery.getQuery());
+        this.rootNode = new YAHOO.widget.HTMLNode({html:"Catalog Search Categories"}, this.tree.getRoot(), true);
+        this.tree.render();
+    },
+
+    addSubTree: function(subTree, tree) {
+        var nodesList = subTree.nodes;
+        if (subTree.nodes.length > 0) {
+            var subTreeNode;
+            if (subTree.type.search(/catalog/i) > -1)
+                subTreeNode = new YAHOO.widget.TextNode({baseLabel:'All',label:subTree.label + " (All)",type:subTree.type,name:tree.catalogType}, this.rootNode, true);
+            else
+                subTreeNode = new YAHOO.widget.TextNode({baseLabel:'All',label:subTree.label + " (All)",type:subTree.type,name:"*:*"}, this.rootNode, true);
+
+            for (var i = 0; i < nodesList.length; i++) {
+                var node = nodesList[i];
+                new YAHOO.widget.MenuNode({baseLabel:node.label,label:node.label + "<span class='numberOfResults'>(" + node.count + ")</span>",type:subTree.type,name:node.name}, subTreeNode, true);
+            }
+        }
+    },
+    refresh: function() {
+        this.tree.getRoot().refresh();
+    }
+});
+
+function updateTreeWithResults(type, args, tree) {
+    var treeList = args[0];
+    for (var i = 0, len = treeList.length; i < len; i++) {
+        tree.addSubTree(treeList[i], tree);
+    }
+    tree.refresh();
+}
+
+<%--represents the catalog search/browse results object--%>
+var Catalogs = Class.create({
+
+    initialize: function(config) {
+        this.rowsPerPage = 10;
+        this.config = {keyword:config.keyword,treeDiv:config.treeDiv,rowsPerPage:config.rowsPerPage,paginatorDiv:config.paginatorDiv,searchBar:config.searchBar,
+            sortField:config.sortField};
+
+        /// if area of focus has been specified.
+        if (config.aof) {
+            if (config.aof != g_wildcard)
+                this.config.filter = new Filter(config.aof, "term_label", config.aof);
+            else
+                this.config.filter = new Filter("", "term_label", config.aof);
+        }
+        if (this.config.rowsPerPage)
+            this.rowsPerPage = this.config.rowsPerPage;
+
+        this.paginator = new YAHOO.widget.Paginator({
+            rowsPerPage  : this.rowsPerPage,
+            alwaysVisible: false,
+            containers   : [this.config.paginatorDiv],
+            template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} <div>{CurrentPageReport}</div>",
+            rowsPerPageOptions : [10, 20, 30, 5]
+        });
+
+        this.paginator.subscribe('changeRequest', this.handlePagination, this);
+        this.query = new solrQuery(this.config.keyword, this.rowsPerPage);
+        sortEvent.subscribe(this.sort, this);
+
+
+        if (config.catalogType) {
+            if (config.keyword && config.keyword != g_wildcard)
+                this.config.catalog = new CatalogType(config.catalogType);
+            else
+                this.config.catalog = new CatalogType(config.catalogType, "All");
+        }
+
+        if (config.ids) {
+            g_selectedids = config.ids;
+            this.config.ids = config.ids;
+        }
+
+        if (config.selectedCatalogType) {
+            this.config.selectedCatalogType = config.selectedCatalogType;
+            this.config.selectedCatalogLabel = config.selectedCatalogLabel;
+        }
+
+    <%--set the search summary bar--%>
+        $(this.config.searchBar).innerHTML = '';
+        this.paginatorSummaryDiv = document.createElement('div');
+        this.paginatorSummaryDiv.id = 'paginatorSummaryDiv';
+        $(this.config.searchBar).appendChild(this.paginatorSummaryDiv);
+
+        this.browseSummaryDiv = document.createElement('div');
+        this.browseSummaryDiv.id = 'browseSummary';
+        $(this.config.searchBar).appendChild(this.browseSummaryDiv);
+
+        this.runQuery(false);
+        new SummaryTree(this);
+
+
+    },
+
+    sort: function(type, args, catalog) {
+        var sort = args[0];
+        catalog.config.sortField = sort.value;
+        catalog.runQuery(false);
+    },
+
+    runQuery: function(paginate) {
+
+        this.query.removeAllFacets();
+        this.query.setTree(false);
+        this.query.setRowsPerPage(this.rowsPerPage);
+
+
+        if (this.config.catalog) {
+            YAHOO.log("Adding catalog_type facet:" + this.config.catalog.type);
+            this.query.addFacet("catalog_type", this.config.catalog.type);
+
+        }
+
+        if (this.config.selectedCatalogType) {
+            YAHOO.log("Adding selected catalog_type facet:" + this.config.selectedCatalogType);
+                this.query.addFacet("catalog_type", this.config.selectedCatalogType);
+            
+        }
+
+        if (this.config.filter) {
+            YAHOO.log("Adding " + this.config.filter.type + " facet");
+            this.query.addFacet(this.config.filter.type, this.config.filter.value);
+        }
+        if (this.config.sortField) {
+            YAHOO.log("Will sort on " + this.config.sortField);
+            this.query.sort(this.config.sortField);
+            <%--ignore POC and People when sort by rating--%>
+            if(this.config.sortField =="rating"){
+                this.query.addFacet("catalog_type", "!poc !person");
+                if(this.config.catalog)
+                    this.query.addFacet("catalog_type", this.config.catalog.type + " !poc !person");
+        }
+        }
+
+        if (this.config.ids) {
+            this.query.addFacet("id", this.config.ids);
+        }
+        if (!paginate) {
+        <%--not coming for paginator--%>
+            this.query.setStartValue(0);
+            this.browseSummaryDiv.innerHTML = '';
+
+            this.browseSummaryDiv.appendChild(document.createTextNode(""));
+            if (this.config.keyword != g_wildcard)
+                this.browseSummaryDiv.appendChild(document.createTextNode("(" + this.config.keyword + ")"));
+
+            if (this.config.catalog && this.config.catalog.label) {
+                this.browseSummaryDiv.appendChild(document.createTextNode(">>" + this.config.catalog.label));
+            }
+            if (this.config.selectedCatalogType && this.config.selectedCatalogLabel) {
+                this.browseSummaryDiv.appendChild(document.createTextNode(">>" + this.config.selectedCatalogLabel));
+            }
+            if (this.config.filter && this.config.filter.label) {
+                this.browseSummaryDiv.appendChild(document.createTextNode(">>" + this.config.filter.label));
+            }
+
+        }
+        YAHOO.log("Will run a new query" + this.query.getQuery());
+
+        var searchCallback = function (oRequest, oParsedResponse, oPayload) {
+            try {
+                var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
+                var resultList = solrJSON.response.docs;
+
+                this.setupPaginator({start:solrJSON.response.start, count:solrJSON.response.numFound});
+
+                YAHOO.log("Firing result event");
+                resultEvent.fire(resultList);
+                if (solrJSON.spellcheck != null) {
+                    var suggestions = solrJSON.spellcheck.suggestions;
+                    ${ns}addSuggestions(suggestions);
+                }
+
+            }
+            catch (x) {
+                alert("JSON Parse failed!" + x);
+            }
+        };
+
+        var failureCallback = function (o) {
+            this.paginator.destroy();
+            this.paginatorSummaryDiv.innerHTML = "Catalog Search Error";
+            resultEvent.fire(null);
+        };
+	<%--Added additional timer parameter to avaoid caching issues in IE--%>
+        solrDatasource.sendRequest(this.query.getQuery()+"&ignoreMe="+new Date().getTime(), {
+            success : searchCallback,
+            failure : failureCallback,
+            cache: false,
+            scope : this});
+
+    <%--reset selected types so they are only used the first time the page is rendered otherwise summary tree is restricted--%>
+        if (this.config.selectedCatalogType) {
+            YAHOO.log("Removing selected catalog_type facet:" + this.config.selectedCatalogType);
+            this.query.removeFacet("catalog_type");
+            this.config.selectedCatalogType = null;
+        }
+        if (this.config.filter) {
+            YAHOO.log("Removing " + this.config.filter.type + " facet");
+            this.query.removeFacet(this.config.filter.type);
+            this.config.filter = null;
+        }
+        if (this.config.catalog) {
+            YAHOO.log("Adding catalog_type facet:" + this.config.catalog.type);
+            this.query.addFacet("catalog_type", this.config.catalog.type);
+        }
+    },
+
+    setupPaginator: function(result) {
+        this.paginator.setState({totalRecords:result.count,recordOffset:result.start});
+        this.paginator.render();
+        var startValue = result.start + 1;
+        var totalRecords = result.count;
+        var endValue = result.start + this.rowsPerPage;
+        if (endValue > totalRecords)
+            endValue = totalRecords;
+
+
+        this.paginatorSummaryDiv.innerHTML = '';
+        if (totalRecords > 0) {
+            this.paginatorSummaryDiv.appendChild(document.createTextNode("Results " + startValue + " - " + endValue + " of " + totalRecords));
+            if (this.config.keyword != "*:*")
+                this.paginatorSummaryDiv.appendChild(document.createTextNode(" for " + this.config.keyword));
+        }
+    },
+
+    handlePagination: function(newState, cat) {
+        cat.paginator.setState(newState);
+        cat.query.setStartValue(newState.recordOffset);
+        cat.rowsPerPage = newState.rowsPerPage;
+        cat.runQuery(true);
+    }
+});
+
+
+</script>
+

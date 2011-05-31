@@ -1,0 +1,57 @@
+<project name="ctsa-query-portlet" basedir=".">
+
+    <import file="${basedir}/../antfiles/build-common-test.xml"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.jar.dir" value="${build.dir}/jars"/>
+
+
+    <property name="src.java.dir" value="${basedir}/src/java"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ext.lib.dir" value="${ext.dir}/default/jars"/>
+    <property name="ext.xml.dir" value="${ext.dir}/default/xmls"/>
+    <property name="ext.xsd.dir" value="${ext.dir}/default/xsds"/>
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/jars"/>
+    <property name="ext.test.xml.dir" value="${ext.dir}/test/xmls"/>
+    <property name="ext.test.xsd.dir" value="${ext.dir}/test/xsds"/>
+
+    <path id="test.compile.cp">
+        <fileset dir="${ext.test.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+    <path id="test.run.cp">
+        <pathelement location="${test.build.classes.dir}"/>
+        <path refid="test.compile.cp"/>
+        <pathelement location="${ext.test.xml.dir}"/>
+        <pathelement location="${ext.test.xsd.dir}"/>
+    </path>
+
+
+    <target name="compile">
+        <mkdir dir="${build.classes.dir}"/>
+
+        <javac destdir="${build.classes.dir}" srcdir="${src.java.dir}">
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile-test">
+        <mkdir dir="${build.jar.dir}"/>
+        <jar basedir="${test.build.classes.dir}" destfile="${build.jar.dir}/caGrid-ctsa-sample-portlet-test.jar"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${test.build.dir}"/>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <!--all called from main build. Will build tests-->
+    <target name="all" depends="jar"/>
+
+</project>

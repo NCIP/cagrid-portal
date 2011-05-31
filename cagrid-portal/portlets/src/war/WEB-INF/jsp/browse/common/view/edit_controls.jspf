@@ -1,0 +1,25 @@
+<%
+boolean userIsAdmin = request.isUserInRole("catalog-admin");
+boolean userIsOwnerUser = false;
+boolean entryIsPerson = false;
+CatalogEntry catalogEntry = ((CatalogEntryViewBean)request.getAttribute("catalogEntryViewBean")).getCatalogEntry();
+entryIsPerson = catalogEntry.getClass().getSimpleName().equals("PersonCatalogEntry");
+if(request.isUserInRole("catalog-user")){
+	PortalUser portalUser = (PortalUser)request.getAttribute("portalUser");
+	PortalUser author = catalogEntry.getAuthor();
+	if(author != null && author.getId().equals(portalUser.getId())){
+		userIsOwnerUser = true;
+	}
+}
+%>
+<c:set var="canUpdate" value="<%=userIsOwnerUser || userIsAdmin%>"/>
+<c:set var="canDelete" value="<%=userIsOwnerUser && !entryIsPerson || userIsAdmin%>"/>
+
+		<portlet:actionURL var="updateUrl"><portlet:param name="operation" value="editCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/></portlet:actionURL>
+		<portlet:actionURL var="deleteUrl"><portlet:param name="operation" value="deleteCatalogEntry"/><portlet:param name="entryId" value="${catalogEntry.id}"/><portlet:param name="${csrfTokenName}" value="${csrfTokenValue}"/></portlet:actionURL>
+		<p>
+		<c:if test="${canUpdate}"><a href="<c:out value="${updateUrl}"/>">Edit</a></c:if>
+		<%-- TODO: Should be able to delete only after associated potal user has been deleted. --%>
+		<c:if test="${canUpdate && canDelete}"> | </c:if>
+		<c:if test="${canDelete}"><a href="<c:out value="${deleteUrl}"/>" onclick="confirm('Are you sure you want to delete this?');">Delete</a></c:if><br/>
+		</p>

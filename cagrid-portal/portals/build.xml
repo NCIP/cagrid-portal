@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<project name="cagrid-portal-portals" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property name="liferay.dir" value="${basedir}/liferay"/>
+    <property name="test.dir" value="${liferay.dir}/test"/>
+    <import file="${basedir}/../antfiles/build-common-test.xml"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.jar.dir" value="${build.dir}/jars"/>
+    <property name="build.xml.dir" value="${build.dir}/xmls"/>
+
+    <property name="test.build.dir" value="${build.dir}/test"/>
+
+    <property name="classes.dir" value="${build.dir}/classes"/>
+
+    <property name="src.java.dir" value="${liferay.dir}/src/java"/>
+    <property name="etc.dir" value="${liferay.dir}/etc"/>
+
+    <property name="src.war.dir" value="${liferay.dir}/src/war"/>
+    <property name="src.layouts.dir" value="${liferay.dir}/src/layouts"/>
+    <property name="src.themes.dir" value="${liferay.dir}/src/themes"/>
+    <property name="src.scripts.dir" value="${liferay.dir}/src/scripts"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ext.default.lib.dir" value="${ext.dir}/default/jars"/>
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/jars"/>
+    <property name="ext.ext.lib.dir" value="${ext.dir}/ext/jars"/>
+    <property name="ext.ext.xml.dir" value="${ext.dir}/ext/xmls"/>
+    <property name="ext.themes.lib.dir" value="${ext.dir}/themes/jars"/>
+    <property name="ext.authn.lib.dir" value="${ext.dir}/authn/jars"/>
+    <property name="ext.authn.xml.dir" value="${ext.dir}/authn/xmls"/>
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/jars"/>
+    <property name="ext.search.dir" value="${ext.dir}/search"/>
+    <property name="ext.search.wars.dir" value="${ext.search.dir}/wars"/>
+
+    <property name="portal.search.war" value="${ext.search.wars.dir}/${portal.search.war.name}.war"/>
+
+    <path id="compile.cp">
+        <fileset dir="${ext.default.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test.compile.cp">
+        <fileset dir="${ext.test.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <path path="${classes.dir}"/>
+    </path>
+
+    <path id="test.run.cp">
+        <path refid="test.compile.cp"/>
+        <path path="${test.build.classes.dir}"/>
+        <path path="${src.war.dir}/WEB-INF/classes"/>
+    </path>
+
+    <target name="prepare" depends="prepare-ant-tasks"/>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.java.dir}" destdir="${classes.dir}"
+               debug="${javac.debug.flag}">
+            <classpath refid="compile.cp"/>
+        </javac>
+    </target>
+
+    <target name="build-resources" depends="prepare">
+
+        <mkdir dir="${build.xml.dir}"/>
+        <copy todir="${build.xml.dir}">
+            <fileset dir="${etc.dir}">
+                <filename name="applicationContext-liferay-utils.xml"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile,build-resources">
+        <mkdir dir="${build.jar.dir}"/>
+
+        <jar
+             destfile="${build.jar.dir}/cagrid-portal-liferay.jar">
+            <fileset dir="${classes.dir}">
+            <exclude name="**/utils/*.class"/>
+                <include name="**"/>
+            </fileset>
+            </jar>
+
+        <jar
+             destfile="${build.jar.dir}/cagrid-portal-liferay-utils.jar">
+            <fileset dir="${classes.dir}">
+            <include name="**/utils/*.class"/>
+            </fileset>
+            </jar>
+
+    </target>
+
+    <target name="javadoc"
+            description="Generate javadocs for this project. To be called from main build.">
+        <!--does nothing-->
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="all" depends="jar"/>
+
+</project>

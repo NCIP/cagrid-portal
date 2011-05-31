@@ -1,0 +1,30 @@
+<table class="detailstable">
+    <thead>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+	<tbody>
+		<c:forEach var="contextProperty" items="${cps}">
+		<tr>
+			<td class="detailslabelcell">QName:</td>
+			<td>
+				<c:choose>
+					<c:when test="${empty contextProperty.xmlSchema}">
+						<c:out value="${contextProperty.name}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="selectUrl" value="${fn:replace(selectXmlSchemaUrl, 'XML_SCHEMA_ID', contextProperty.xmlSchema.id)}"/>
+						<a href="${selectUrl}"><c:out value="${contextProperty.name}"/></a><br/>
+					</c:otherwise>
+				</c:choose>
+			</td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Description:</td>
+			<td><c:out value="${contextProperty.description}"/></td>
+		</tr>
+		</c:forEach>
+	</tbody>
+</table>

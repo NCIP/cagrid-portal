@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://model1/model"
+	xmlns:tns="http://model1/model" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:element name="Gene" type="tns:Gene"/>
+	<xs:complexType name="Gene">
+		<xs:complexContent>
+			<xs:extension base="tns:AbstractDomainObject">
+				<xs:sequence/>
+				<xs:attribute name="name" type="string"/>
+				<xs:attribute name="symbol" type="string"/>
+				<xs:attribute name="clusterId" type="string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="Annotation" type="tns:Annotation"/>
+	<xs:complexType name="Annotation">
+		<xs:complexContent>
+			<xs:extension base="tns:AbstractDomainObject">
+				<xs:sequence/>
+				<xs:attribute name="value" type="string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="Source" type="tns:Source"/>
+	<xs:complexType name="Source">
+		<xs:complexContent>
+			<xs:extension base="tns:AbstractDomainObject">
+				<xs:sequence/>
+				<xs:attribute name="name" type="string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="Term" type="tns:Term"/>
+	<xs:complexType name="Term">
+		<xs:complexContent>
+			<xs:extension base="tns:AbstractDomainObject">
+				<xs:sequence/>
+				<xs:attribute name="value" type="string"/>
+				<xs:attribute name="level" type="integer"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="AbstractDomainObject">
+		<xs:sequence/>
+		<xs:attribute name="id" type="integer"/>
+	</xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,216 @@
+<%@ include file="/WEB-INF/jsp/browse/common/edit/top.jspf" %>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/edit/photo_row.jspf" %>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/terms.jspf" %>
+
+<div class="contactInfoRow">
+    <div class="leftpanel">
+        <div class="row">
+            <label for="phoneNumber">
+                Phone
+            </label>
+            <input type="text" id="phoneNumber" name="phoneNumber" alt="Phone Number" class="autoSet" value="<c:out value="${catalogEntry.phoneNumber}"/>"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="emailAddress">
+                e-mail
+            </label>
+            <input type="text" id="emailAddress" name="emailAddress" alt="Email Address" class="autoSet" value="<c:out value="${catalogEntry.emailAddress}"/>" style="width: 230px;"/><span style="color: red
+            "></span>
+
+        </div>
+		<br/>
+        <div class="row">
+            <label for="street1">
+                Street Line 1
+            </label>
+            <input type="text" id="street1" name="street1" alt="Street 1" class="autoSet" value="<c:out value="${catalogEntry.street1}"/>" style="width: 200px;"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="street2">
+                Street Line 2
+            </label>
+            <input type="text" id="street2" name="street2" alt="Street 2" class="autoSet" value="<c:out value="${catalogEntry.street2}"/>" style="width: 200px;"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="locality">
+                City/Locality
+            </label>
+            <input type="text" id="locality" name="locality" alt="Locality" class="autoSet" value="<c:out value="${catalogEntry.locality}"/>"/><span style="color: red
+            "></span>
+
+        </div>
+        <div class="row">
+            <label for="stateProvince">
+                State/Province
+            </label>
+            <select id="stateProvince" name="stateProvince" alt="State" class="autoSet">
+            </select>
+        </div>
+        
+    </div>
+    <div class="rightpanel">
+        <div class="row">
+            <label for="phoneNumberPublic">
+                Public Phone Number?
+            </label>
+            Yes: <input type="radio" id="phoneNumberPublic" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="true"
+            <c:if test="${catalogEntry.phoneNumberPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" id="phoneNumberPublic" name="phoneNumberPublic" alt="Phone Number is Public?" class="autoSet" value="false"
+            <c:if test="${!catalogEntry.phoneNumberPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+        <div class="row">
+            <label for="emailAddressPublic">
+                Public Email?
+            </label>
+            Yes: <input type="radio" id="emailAddressPublic" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="true"
+            <c:if test="${catalogEntry.emailAddressPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" id="emailAddressPublic" name="emailAddressPublic" alt="Email is Public ?" class="autoSet" value="false"
+            <c:if test="${!catalogEntry.emailAddressPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+		<br/>
+        <div class="row">
+            <label for="addressPublic">
+                Public Address?
+            </label>
+            Yes: <input type="radio" id="addressPublic" name="addressPublic" alt="Address is Public ?" class="autoSet" value="true"
+            <c:if test="${catalogEntry.addressPublic}">
+                checked
+            </c:if>
+            /> 
+            No: 
+            <input type="radio" id="addressPublic" name="addressPublic" alt="Address is Public ?"  class="autoSet" value="false"
+            <c:if test="${!catalogEntry.addressPublic}">
+                checked
+            </c:if>
+            />
+        </div>
+    </div>
+	<!-- The following line is for formatting purposes -->
+	<hr style="clear:both; visibility:hidden; height:0; border:0;"/>
+	<div class="row" style="margin-top:0;">
+            <label for="countryCode">
+                Country
+            </label>
+            <select id="countryCode" name="countryCode" class="autoSet" onChange="${ns}printStateMenu(this.value);">
+                <%@ include file="/WEB-INF/jsp/include/country_options.jspf" %>
+            </select>
+        </div>
+        <div class="row">
+            <label for="webSite">
+                Website
+            </label>
+            <input type="text" id="webSite" name="webSite" class="autoSet" alt="Website"  value="<c:out value="${catalogEntry.webSite}" />" style="width: 270px;"/><span style="color: red
+            "></span>
+
+        </div>
+</div>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %>
+
+		
+<script type="text/javascript">
+function ${ns}printStateMenu(country) {     
+	var stateOptions = '';
+	if (country == 'US') {
+		stateOptions = 
+		'<option value="AK">AK-Alaska</option>' +
+		'<option value="AL">AL-Alabama</option>' +
+		'<option value="AR">AR-Arkansas</option>' +
+		'<option value="AZ">AZ-Arizona</option>' +
+		'<option value="CA">CA-California</option>' +
+		'<option value="CO">CO-Colorado</option>' +
+		'<option value="CT">CT-Connecticut</option>' +
+		'<option value="DC">DC-District of Columbia</option>' +
+		'<option value="DE">DE-Delaware</option>' +
+		'<option value="FL">FL-Florida</option>' +
+		'<option value="GA">GA-Georgia</option>' +
+		'<option value="HI">HI-Hawaii</option>' +
+		'<option value="IA">IA-Iowa</option>' +
+		'<option value="ID">ID-Idaho</option>' +
+		'<option value="IL">IL-Illinois</option>' +
+		'<option value="IN">IN-Indiana</option>' +
+		'<option value="KS">KS-Kansas</option>' +
+		'<option value="KY">KY-Kentucky</option>' +
+		'<option value="LA">LA-Louisiana</option>' +
+		'<option value="MA">MA-Massachusetts</option>' +
+		'<option value="MD">MD-Maryland</option>' +
+		'<option value="ME">ME-Maine</option>' +
+		'<option value="MI">MI-Michigan</option>' +
+		'<option value="MN">MN-Minnesota</option>' +
+		'<option value="MO">MO-Missouri</option>' +
+		'<option value="MS">MS-Mississippi</option>' +
+		'<option value="MT">MT-Montana</option>' +
+		'<option value="NC">NC-North Carolina</option>' +
+		'<option value="ND">ND-North Dakota</option>' +
+		'<option value="NE">NE-Nebraska</option>' +
+		'<option value="NH">NH-New Hampshire</option>' +
+		'<option value="NJ">NJ-New Jersey</option>' +
+		'<option value="NM">NM-New Mexico</option>' +
+		'<option value="NV">NV-Nevada</option>' +
+		'<option value="NY">NY-New York</option>' +
+		'<option value="OH">OH-Ohio</option>' +
+		'<option value="OK">OK-Oklahoma</option>' +
+		'<option value="OR">OR-Oregon</option>' +
+		'<option value="PA">PA-Pennsylvania</option>' +
+		'<option value="RI">RI-Rhode Island</option>' +
+		'<option value="SC">SC-South Carolina</option>' +
+		'<option value="SD">SD-South Dakota</option>' +
+		'<option value="TN">TN-Tennessee</option>' +
+		'<option value="TX">TX-Texas</option>' +
+		'<option value="UT">UT-Utah</option>' +
+		'<option value="VA">VA-Virginia</option>' +
+		'<option value="VT">VT-Vermont</option>' +
+		'<option value="WA">WA-Washington</option>' +
+		'<option value="WI">WI-Wisconsin</option>' +
+		'<option value="WV">WV-West Virginia</option>' +
+		'<option value="WY">WY-Wyoming</option>';
+	}
+	else if (country == 'CA') {
+		stateOptions = 
+		'<option value="AB">AB-Alberta</option>' +
+		'<option value="BC">BC-British Columbia</option>' +
+		'<option value="MB">MB-Manitoba</option>' +
+		'<option value="NB">NB-New Brunswick</option>' +
+		'<option value="NL">NL-Newfoundland and Labrador</option>' +
+		'<option value="NT">NT-Northwest Territories</option>' +
+		'<option value="NS">NS-Nova Scotia</option>' +
+		'<option value="NU">NU-Nunavut</option>' +
+		'<option value="ON">ON-Ontario</option>' +
+		'<option value="PE">PE-Prince Edward Island</option>' +
+		'<option value="QC">QC-Quebec</option>' +
+		'<option value="SK">SK-Saskatchewan</option>' +
+		'<option value="YT">YT-Yukon</option>';
+	}
+	else {
+		stateOptions = 
+		'<option value="Other">Select state...</option>';
+
+	}
+	jQuery("form[name='${ns}editForm'] > *, :input[name='stateProvince']").html(stateOptions);
+}
+			
+${ns}printStateMenu('US');		
+			
+</script> 

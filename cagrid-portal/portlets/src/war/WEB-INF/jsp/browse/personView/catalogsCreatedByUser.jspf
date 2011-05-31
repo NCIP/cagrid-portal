@@ -1,0 +1,77 @@
+<%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+<%@ include file="/WEB-INF/jsp/include/liferay-includes.jspf" %>
+
+<form:form id="${ns}catalogDetailsForm" method="post">
+	<div id="catalogResults">
+		<h3>Catalogs created by ${catalogEntry.firstName} ${catalogEntry.lastName}</h3>
+		<div id="myCatalogs"></div>
+	</div>
+</form:form>
+
+<liferay-portlet:actionURL var="catalogLink"
+                           portletMode="view">
+    <liferay-portlet:param name="operation" value="viewDetails"/>
+    <liferay-portlet:param name="entryId" value="ENTRY_ID"/>
+</liferay-portlet:actionURL>
+
+<script type="text/javascript"
+	src="<c:url value="/dwr/interface/CatalogEntryManagerFacade.js"/>"></script>
+
+<script type="text/javascript">
+
+function ${ns}loadMyCatalogs(){
+$("myCatalogs").innerHTML = "";
+CatalogEntryManagerFacade.getCatalogsCreatedByUser(
+	{		
+		callback:function(resultList){			
+			if(resultList == null || resultList.length == 0){				
+				var noResultMsg = document.createElement('div');
+				noResultMsg.appendChild(document.createTextNode("There are no catalog items"));
+			        $("myCatalogs").appendChild(noResultMsg);				
+			}else{
+				var itemsFound=0;
+				for (var i = 0, len = resultList.length; i < len; i++) {				
+					var result = resultList[i];
+					 if (result.name == null || result.name == undefined || result.name == ""){
+					 }else{	
+					 	itemsFound=1;
+						var resultDiv = document.createElement('div');
+						resultDiv.className = "oneResultDiv";
+						var detailsLnk = document.createElement('a');
+						detailsLnk.setAttribute('id', result.id)
+						detailsLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');				
+                    				detailsLnk.innerHTML = result.name;
+                    				var nameDiv = document.createElement('div');
+				        	nameDiv.appendChild(detailsLnk);				                    
+                    				resultDiv.appendChild(nameDiv);
+                    				var descDiv = document.createElement('div');						
+						if (result.description == null || result.description == undefined || result.description == "") {
+							descDiv.className = "oneResultNoDescription";
+						        descDiv.appendChild(document.createTextNode("No information available"));
+						} else {						        
+						        descDiv.appendChild(document.createTextNode((result.description).truncate(80, "...")));
+                    				}
+                    				resultDiv.appendChild(descDiv);
+                    				$("myCatalogs").appendChild(resultDiv);
+                    			}
+                    		}
+				if(itemsFound==0){
+					var noResultMsg = document.createElement('div');
+					noResultMsg.appendChild(document.createTextNode("There are no catalog items"));
+			        	$("myCatalogs").appendChild(noResultMsg);
+				}
+			}
+		}
+	});
+	
+
+}
+
+function ${ns}viewDetails(id) {
+        var catalogLink = "${catalogLink}";
+        catalogLink = catalogLink.replace("ENTRY_ID", id);
+        $("${ns}catalogDetailsForm").action = catalogLink;
+        $("${ns}catalogDetailsForm").submit();
+        return false;
+    }
+</script>

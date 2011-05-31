@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+
+    <bean id="defaultDelay" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.defaultDelay}"/>
+    </bean>
+
+    <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
+          abstract="true" p:executor-ref="defaultHttpCommandExecutor"
+          p:baseSolrURL="${cagrid.portal.solr.http.url}"
+          p:localhostURL="http://localhost:${cagrid.portal.http.port}"/>
+
+    <!--will initialize on container startup-->
+    <bean id="solrFullImport" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
+          parent="abstractSolrCommandExecutor" p:executor-ref="defaultHttpCommandExecutor"
+          abstract="true">
+        <constructor-arg value="/dataimport?command=full-import"/>
+    </bean>
+
+    <bean id="solrDeltaImport" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
+          p:executor-ref="cachingHttpCommandExecutor"
+          parent="abstractSolrCommandExecutor"
+          abstract="true">
+        <constructor-arg value="/dataimport?command=delta-import"/>
+    </bean>
+
+    <bean id="solrUpdate" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
+          p:executor-ref="defaultHttpCommandExecutor"
+          parent="abstractSolrCommandExecutor"
+          abstract="true">
+        <constructor-arg value="/update"/>
+    </bean>
+
+
+    <bean id="solrSpellBuildIdx" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
+          p:executor-ref="defaultHttpCommandExecutor">
+        <constructor-arg value="/select/?q=*:*&amp;spellcheck=true&amp;spellcheck.build=true"/>
+    </bean>
+
+
+    <bean id="defaultHttpCommandExecutor" class="gov.nih.nci.cagrid.portal.search.DefaultHttpCommandExecutor"
+          scope="singleton" p:httpClient-ref="defaultHttpClient"/>
+
+    <bean id="cachingHttpCommandExecutor" class="gov.nih.nci.cagrid.portal.search.CachingHttpCommandExecutor"
+          scope="singleton" p:httpClient-ref="defaultHttpClient">
+        <property name="quietTime">
+            <bean class="java.lang.Long">
+                <constructor-arg value="${cagrid.portal.solr.quiet.period}"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="defaultHttpClient" class="org.apache.commons.httpclient.HttpClient"/>
+
+    <bean
+            class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <bean class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="delay" ref="defaultDelay"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject">
+                                <bean parent="solrFullImport"/>
+                            </property>
+                            <property name="targetMethod" value="runCommand"/>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="delay" ref="defaultDelay"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="solrSpellBuildIdx"/>
+                            <property name="targetMethod" value="runCommand"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>

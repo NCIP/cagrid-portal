@@ -1,0 +1,23 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+
+    <info organisation="yahoo" module="yui" revision="2.4.2" status="release">
+        <license name="BSD" url="http://developer.yahoo.com/yui/license.html"/>
+        <description homepage="http://www.julienlecomte.net/yuicompressor/README">
+        </description>
+    </info>
+
+     <configurations>
+        <!-- Public Configurations-->
+         <conf name="compressor" visibility="public"/>
+        <conf name="default" extends="compressor" visibility="public"/>
+    </configurations>
+
+    <publications>
+        <artifact name="yuicompressor" conf="compressor" type="jar"/>
+    </publications>
+
+    <dependencies/>
+
+</ivy-module>

@@ -1,0 +1,241 @@
+/* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
+
+#wrapper {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+#banner {
+/*background: #475B82;*/
+/*filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1,startColorStr=#e6eef5,endColorStr=#2e3257);*/
+    background-image: url( ../images/blue_white_grad.gif );
+    background-repeat: repeat-y;
+    background-position: left;
+    height: 110px;
+    position: relative;
+    margin: 0 auto;
+    border: 0;
+    padding: 0;
+}
+
+#banner .hdrBG {
+/* for the cell that contains the required cancer.gov header */
+    background-color: #A90101; /* constant: red */
+}
+
+#banner .subhdrBG {
+/* for the cell that contains the application header */
+    background-color: #475B82; /* darker */
+}
+
+#footer {
+    width: 100%;
+    line-height: 1.5em;
+}
+
+.footerMenu {
+/* for the basic style of the footer menu (bottom) area */
+    background-color: #5C5C5C; /* constant: dark gray */
+    font-family: arial, helvetica, verdana, sans-serif;
+    border-top: 1px solid #CCCCCC; /* constant: medium gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: medium gray */
+}
+
+td.footerMenuItem {
+/* for the off state of the footer menu (bottom) cells */
+    font-size: 10px;
+    background-color: #5C5C5C; /* constant: dark gray */
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.ftrTable {
+/* for the table that contains the footer */
+    padding-top: 0.4em;
+}
+
+a:link.footerMenuLink, a:visited.footerMenuLink, a:active.footerMenuLink {
+/* for the text links at the top of the footer */
+    color: #FFFFFF; /* constant: white */
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+a:hover.footerMenuLink {
+    color: #FFFFFF; /* constant: white */
+}
+
+.selected_tab {
+    background-color: #f0e6c1;
+    background-image: url( ../images/selected_tab_bg.gif );
+    background-repeat: repeat-x;
+    border-color: #e7dcb4;
+    border: thin;
+    border-style: solid;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.normal_tab {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    color: #FFFFFF;
+}
+
+.normal_tab_pipe {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    color: #FFFFFF;
+}
+
+.border_dash {
+    border-right: 1px;
+    border-right-color: #FFFFFF;
+    border-right-style: dotted;
+}
+
+#navigation {
+    background: url( ../images/navigation/bg.png ) no-repeat 0 0;
+    bottom: 0.5em;
+    height: 25px;
+    left: 5px;
+    margin: 1em auto 0.5em;
+    padding: 0;
+    position: relative;
+    width: 99%;
+}
+
+#navigation ul {
+    background: url( ../images/navigation/bg.png ) no-repeat 100% 100%;
+    float: left;
+    height: 25px;
+    left: 0;
+    padding: 0;
+    position: static;
+    top: 0;
+    width: 100%;
+}
+
+.ie6 #navigation, .ie6 #navigation ul {
+    height: 25px;
+}
+
+#navigation li {
+    background: none;
+    display: inline;
+    float: left;
+    margin: 0 0.89em;
+    padding: 0;
+}
+
+#navigation li a {
+    background: none no-repeat 0 50%;
+    color: #fff;
+    display: block;
+    float: left;
+    font-size: 1.1em;
+    height: 15px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+#navigation li a span {
+    background: none;
+    padding: 0;
+}
+
+#navigation li a:hover span {
+    background: none;
+}
+
+#navigation li a:hover {
+    background: url( ../images/navigation/bg_hover.png ) repeat-x;
+    border-left: 1px solid #1D4A81;
+    border-right: 1px solid #1D4A81;
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+#navigation li.selected a {
+    background: url( ../images/navigation/bg_selected.png ) repeat-x;
+    border-left: 1px solid #1D4A81;
+    border-right: 1px solid #1D4A81;
+}
+
+#navigation li.selected a span {
+    background: none;
+    font-size: 1em;
+}
+
+#navigation li.selected a:hover {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.ie #navigation li a {
+    padding-bottom: 3px;
+    padding-top: 5px;
+}
+
+.link-extenal {
+    background: transparent url( ../images/linkext_icon.gif ) no-repeat scroll right center;
+    padding: 1px 16px 1px 0px;
+}
+
+div.row {
+    padding: 2px;
+    margin: 1px 0;
+}
+
+div.row div.label, div.row div.value {
+    line-height: 1.5em;
+    font-weight: normal;
+}
+
+div.row div.label {
+    font-weight: bold;
+    float: left;
+}
+
+div.row div.value {
+    margin-left: 11em; /* individual pages need to override */
+}
+
+/* Automatically clear after each row
+Based on http://www.positioniseverything.net/easyclearing.html */
+div.row:after, .autoclear:after {
+    display: block;
+    content: ' ';
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}
+
+div.row div.threeCols{
+    width:33%;
+    float:left;
+}
+
+div.row div.twoCols{
+    width:50%;
+    float:left;
+}
+
+.errorMsg{
+    color:#ff0000;
+    font-style:italic;
+    font-weight:bold;
+}
+
+.hidden{
+    visibility:hidden;
+}
+
+.versionStamp{
+    font-size:8px;
+    color:#6f6f6f;
+}
+
+

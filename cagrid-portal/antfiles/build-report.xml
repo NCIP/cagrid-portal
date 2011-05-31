@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+<project name="cagrid-portal-reports" basedir=".">
+
+    <dirname property="cagrid-portal-reports.basedir" file="${ant.file.cagrid-portal-reports}"/>
+
+    <property name="cobertura.dir" value="${cagrid-portal-reports.basedir}/cobertura"/>
+    <property name="cobertura.instrumented.dir" value="${cobertura.dir}/instrumented"/>
+    <property name="reports.dir" value="${basedir}/reports"/>
+    <property name="reports.codecoverage.dir" value="${reports.dir}/code-coverage"/>
+    <property name="reports.junit.dir" value="${reports.dir}/junit"/>
+    <property name="reports.javadocs.dir" value="${reports.dir}/javadocs"/>
+
+    <import file="${cagrid-portal-reports.basedir}/build-common.xml"/>
+
+    <target name="reports:prepare" depends="prepare-ant-tasks">
+        <path id="cobertura.classpath">
+            <fileset dir="${cobertura.dir}/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+
+    </target>
+
+    <target name="reports:clean" depends="reports:prepare">
+
+        <delete dir="${reports.dir}"/>
+        <delete dir="${cobertura.instrumented.dir}"/>
+    </target>
+
+    <target name="reports:instrument" depends="reports:prepare">
+        <mkdir dir="${cobertura.instrumented.dir}"/>
+
+        <for list="${reportable.projects}" parallel="false" param="project.name" trim="true">
+            <sequential>
+                <cobertura-instrument todir="${projects.dir}/@{project.name}/build/classes"
+                                      datafile="${cobertura.instrumented.dir}/@{project.name}-cobertura.ser">
+                    <fileset dir="${projects.dir}/@{project.name}/build/classes">
+                        <include name="**/*.class"/>
+                    </fileset>
+                </cobertura-instrument>
+            </sequential>
+        </for>
+
+    </target>
+
+
+    <target name="reports:reports" depends="reports:clean,reports:instrument,reports:test,reports:javadoc">
+
+        <mkdir dir="${reports.codecoverage.dir}"/>
+
+        <for list="${reportable.projects}" parallel="false" param="project.name"  keepgoing="true" trim="true">
+            <sequential>
+                <mkdir dir="${reports.codecoverage.dir}/@{project.name}"/>
+                <echo message="${projects.dir}/@{project.name}/src/java"/>
+
+                <cobertura-report format="${cobertura.report.format}" destdir="${reports.codecoverage.dir}/@{project.name}"
+                                  datafile="${cobertura.instrumented.dir}/@{project.name}-cobertura.ser">
+
+                    <fileset dir="${projects.dir}/@{project.name}/src/java">
+                        <include name="**/*.java"/>
+                    </fileset>
+                </cobertura-report>
+            </sequential>
+        </for>
+
+    </target>
+
+    <target name="reports:test" depends="reports:prepare">
+
+        <delete dir="${reports.junit.dir}" failonerror="false"/>
+        <mkdir dir="${reports.junit.dir}"/>
+
+        <!--test all projects. Even though they might not generate reports-->
+        <for list="${unit.testable.projects}" parallel="false" param="project.name" trim="true">
+
+            <sequential>
+                <stopwatch name="@{project.name}"/>
+                <trycatch property="@{project.name}.unit.test.failed.message">
+                    <try>
+                        <ant inheritAll="false" dir="${projects.dir}/@{project.name}"
+                             target="test">
+                            <property name="junit.reports.dir" value="${reports.junit.dir}"/>
+                            <property name="cobertura.datafile"
+                                      value="${cobertura.instrumented.dir}/@{project.name}-cobertura.ser"/>
+                        </ant>
+                    </try>
+                    <catch>
+                        <fail message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message})"
+                              if="test.failfast"/>
+                        <echo message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message}), proceeding with other tests, but build will fail at completion."/>
+                        <property name="unit.test.failed" value="true"/>
+                    </catch>
+                </trycatch>
+                <stopwatch name="@{project.name}" action="total"/>
+            </sequential>
+        </for>
+        <fail message="Unit Tests failed! Consult the logs for details." if="unit.test.failed"/>
+    </target>
+
+
+    <target name="reports:javadoc" depends="build-projects-list">
+        <mkdir dir="${reports.javadocs.dir}"/>
+
+        <for list="${reportable.projects}" parallel="false" param="project.name" trim="true">
+            <sequential>
+
+                <ant inheritAll="false" dir="${projects.dir}/@{project.name}"
+                     target="javadoc">
+                    <property name="javadocs.dest.dir" value="${reports.javadocs.dir}/@{project.name}"/>
+                </ant>
+            </sequential>
+        </for>
+
+    </target>
+</project>

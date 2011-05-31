@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="com.liferay.portal.service.UserLocalService.impl"
+          class="gov.nih.nci.cagrid.portal.liferay.CaGridPortalUserLocalServiceImpl">
+    </bean>
+
+</beans>
