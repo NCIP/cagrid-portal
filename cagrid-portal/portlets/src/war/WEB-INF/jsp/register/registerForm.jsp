@@ -151,10 +151,7 @@
     <c:set var="prefix"><portlet:namespace/></c:set>
     <c:set var="formName"><portlet:namespace/>registerForm</c:set>
     <portlet:actionURL var="action"/>
-    <form:form id="${formName}" name="${formName}" action="${action}" commandName="application">
-	<span style="color:red">
-		<form:errors path="*"/>
-	</span>
+    <form:form id="${formName}" name="${formName}" action="${action}" commandName="application">	
         <table>
             <thead>
                 <tr>
@@ -165,87 +162,80 @@
             <tbody>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    First Name:
+                    First Name:&nbsp;<span style="color:red">*</span><label for="${prefix}firstName"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}firstName" alt="First Name" path="firstName" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}firstName" alt="First Name" path="firstName" size="50"/><br/>
                     <span style="color:red"><form:errors path="firstName"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Last Name:
+                    Last Name:&nbsp;<span style="color:red">*</span><label for="${prefix}lastName"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}lastName" alt="Last Name" path="lastName" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}lastName" alt="Last Name" path="lastName" size="50"/><br/>
                     <span style="color:red"><form:errors path="lastName"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Username:
+                    Username:&nbsp;<span style="color:red">*</span><label for="${prefix}userId"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}userId" path="userId" alt="User Id" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}userId" path="userId" alt="User Id" size="50"/><br/>
                     <span style="color:red"><form:errors path="userId"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Password:
+                    Password:&nbsp;<span style="color:red">*</span><label for="${prefix}password"/>
                 </td>
                 <td>
-                    <form:password id="${prefix}password" alt="Password" path="password" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
-                    <span style="color:red"><form:errors path="password"/></span>
+                    <form:password id="${prefix}password" alt="Password" path="password" size="50"/><br/>
+                    <span style="color:red"><form:errors path="password"/></span>                    
                 </td>
-            </tr>
+            </tr>             
+            
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Email:
+                    Email:&nbsp;<span style="color:red">*</span><label for="${prefix}email"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}email" alt="Email" path="email" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}email" alt="Email" path="email" size="50"/><br/>
                     <span style="color:red"><form:errors path="email"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Phone:
+                    Phone:&nbsp;<span style="color:red">*</span><label for="${prefix}phoneNumber"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}phoneNumber" alt="Phone Number" path="phoneNumber" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}phoneNumber" alt="Phone Number" path="phoneNumber" size="50"/><br/>
                     <span style="color:red"><form:errors path="phoneNumber"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Organization:
+                    Organization:&nbsp;<span style="color:red">*</span><label for="${prefix}organization"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}organization" alt="Organization" path="organization" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}organization" alt="Organization" path="organization" size="50"/><br/>
                     <span style="color:red"><form:errors path="organization"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Street Address 1:
+                    Street Address 1:&nbsp;<span style="color:red">*</span><label for="${prefix}address"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}address" alt="Address" path="address" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}address" alt="Address" path="address" size="50"/><br/>
                     <span style="color:red"><form:errors path="address"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Street Address 2:
+                    Street Address 2:<label for="${prefix}address2"/>
                 </td>
                 <td>
                     <form:input id="${prefix}address2" alt="Address 2" path="address2" size="50"/><br/>
@@ -254,17 +244,16 @@
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    City:
+                    City:&nbsp;<span style="color:red">*</span><label for="${prefix}city"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}city" alt="City" path="city" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}city" alt="City" path="city" size="50"/><br/>
                     <span style="color:red"><form:errors path="city"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    State:
+                    State:<label for="${prefix}state"/>
                 </td>
                 <td>
                     <form:select id="${prefix}state" path="state" items="${stateCodes}"/><br/>
@@ -273,24 +262,23 @@
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Postal Code:
+                    Postal Code:<label for="${prefix}zipCode"/>
                 </td>
                 <td>
-                    <form:input id="${prefix}zipCode" alt="Zip Code" path="zipcode" size="50"/>&nbsp;<span
-                        style="color:red">*</span><br/>
+                    <form:input id="${prefix}zipCode" alt="Zip Code" path="zipcode" size="50"/><br/>
                     <span style="color:red"><form:errors path="zipcode"/></span>
                 </td>
             </tr>
             <tr>
                 <td style="padding-right:5px; text-align:right">
-                    Country:
+                    Country:<label for="${prefix}country"/>
                 </td>
                 <td>
                     <form:select id="${prefix}country" path="country">
                         <form:option value="US" label="US"/>
                         <form:options items="${countryCodes}"/>
                     </form:select>
-                    &nbsp;<span style="color:red">*</span><br/>
+                    <br/>
                     <span style="color:red"><form:errors path="country"/></span>
                 </td>
             </tr>
@@ -309,3 +297,4 @@
 </c:otherwise>
 </c:choose>
 </div>
+
