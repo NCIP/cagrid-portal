@@ -9,7 +9,7 @@ caGrid provides the technology that enables collaborating institutions to share 
 efficiently and securely, while also allowing investigators to easily contribute to and leverage the resources of a 
 national-scale, multi-institutional environment.
 
-The caGrid Poral is an Open Source project written in Java, and makes use of caGrid core services. It was developed 
+The caGrid Portal is an Open Source project written in Java, and makes use of caGrid core services. It was developed 
 to provide a visualization of caGrid, and a UI for end-users to interact with caGrid services. 
 
 The caGrid Portal is distributed under the BSD 3-Clause License. Please see the NOTICE and LICENSE files for details.
