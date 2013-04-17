@@ -1,21 +1,24 @@
-Welcome to the <PROJECTNAME> Project!
+Welcome to the caGrid Portal Project!
 =====================================
 
-<PROJECTNAME> is an Open Source project the provides the functionalities of <...>
-It is written in <PROGRAMMING LANGUAGE> using <BASED_TECHNOLOGIES>.
-The goal of <PROJECTNAME> is to <...>.
+caGrid is the underlying service-oriented infrastructure that supports the National Cancer Informatics Program (NCIP). 
+Driven primarily by scientific use cases from the cancer research community, it caGrid provides the necessary core 
+infrastructure to facilitate interoperability.
 
-<PROJECTNAME> is distributed under the BSD 3-Clause License.
-Please see the NOTICE and LICENSE files for details.
+caGrid provides the technology that enables collaborating institutions to share information and analytical resources 
+efficiently and securely, while also allowing investigators to easily contribute to and leverage the resources of a 
+national-scale, multi-institutional environment.
 
-You will find more details about <PROJECTNAME> in the following links:
+The caGrid Poral is an Open Source project written in Java, and makes use of caGrid core services. It was developed 
+to provide a visualization of caGrid, and a UI for end-users to interact with caGrid services. 
 
-    *  <PROJECTNAME_HOME_URL>
-    *  <NCI_OSDI_HOME_URL]>
-    *  <MAILING_LIST_SUBSCRIPTION_PAGE_URL>
-    *  <ISSUE_TRACKER_URL>
-    *  <DOCUMENTATION_PAGES_URL>
-    *  https://github.com/NCIP/<PROJECTNAME>
+The caGrid Portal is distributed under the BSD 3-Clause License. Please see the NOTICE and LICENSE files for details.
 
+You will find more details about cagrid-portal in the following links:
 
-Please join us in further developing and improving <PROJECTNAME>.
+*  Mailing List: https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l
+*  JIRA: https://tracker.nci.nih.gov/browse/CAGRID
+*  Wiki: https://wiki.cagrid.org
+*  https://github.com/NCIP/cagrid-core
+
+Please join us in further developing and improving the caGrid Portal.
