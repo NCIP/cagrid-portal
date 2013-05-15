@@ -19,6 +19,6 @@ You will find more details about cagrid-portal in the following links:
 *  Mailing List: https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l
 *  JIRA: https://tracker.nci.nih.gov/browse/CAGRID
 *  Wiki: https://wiki.cagrid.org
-*  https://github.com/NCIP/cagrid-core
+*  https://github.com/NCIP/cagrid-portal
 
 Please join us in further developing and improving the caGrid Portal.
