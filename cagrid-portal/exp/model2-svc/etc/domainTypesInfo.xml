@@ -1,3 +1,11 @@
+<!--
+  The Ohio State University Research Foundation, The University of Chicago -
+  Argonne National Laboratory, Emory University, SemanticBits LLC, 
+  and Ekagra Software Technologies Ltd.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+-->
 <ns1:DomainTypesInformation xmlns:ns1="http://SDKQuery4.caBIG/1/gov.nih.nci.cagrid.sdkquery4.beans.domaininfo">
  <ns1:DomainType javaClassName="model2.domain.AbstractDomainObject">
   <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>

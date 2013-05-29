@@ -1,3 +1,13 @@
+/*
+============================================================================
+  The Ohio State University Research Foundation, The University of Chicago -
+  Argonne National Laboratory, Emory University, SemanticBits LLC, 
+  and Ekagra Software Technologies Ltd.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+============================================================================
+*/
 create index IX_93D5AD4E on Address (companyId)
 go
 create index IX_ABD7DAC0 on Address (companyId, classNameId)

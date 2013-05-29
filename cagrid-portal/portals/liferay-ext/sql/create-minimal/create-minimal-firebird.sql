@@ -1,3 +1,13 @@
+/*
+============================================================================
+  The Ohio State University Research Foundation, The University of Chicago -
+  Argonne National Laboratory, Emory University, SemanticBits LLC, 
+  and Ekagra Software Technologies Ltd.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+============================================================================
+*/
 create database 'lportal.gdb' page_size 8192 user 'sysdba' password 'masterkey';
 connect 'lportal.gdb' user 'sysdba' password 'masterkey';
 create table Account_ (accountId int64 not null primary key,companyId int64,userId int64,userName varchar(75),createDate timestamp,modifiedDate timestamp,parentAccountId int64,name varchar(75),legalName varchar(75),legalId varchar(75),legalType varchar(75),sicCode varchar(75),tickerSymbol varchar(75),industry varchar(75),type_ varchar(75),size_ varchar(75));

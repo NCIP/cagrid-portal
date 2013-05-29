@@ -1,3 +1,11 @@
+<!--
+  The Ohio State University Research Foundation, The University of Chicago -
+  Argonne National Laboratory, Emory University, SemanticBits LLC, 
+  and Ekagra Software Technologies Ltd.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+-->
 CAGRID_SSO_GRID_IDENTITY^/O=organization/OU=org/OU=DEV LOA1/OU=Dorian/CN=user^M$CAGRID_SSO_LAST_NAME^name$CAGRID_SSO_DELEGATION_SERVICE_EPR^
 <ns1:DelegatedCredentialReference
         xmlns:ns1="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types">

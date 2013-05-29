@@ -1,3 +1,13 @@
+/*
+============================================================================
+  The Ohio State University Research Foundation, The University of Chicago -
+  Argonne National Laboratory, Emory University, SemanticBits LLC, 
+  and Ekagra Software Technologies Ltd.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+============================================================================
+*/
 insert into Country (countryId, name, a2, a3, number_, idd_, active_) values (1, 'Canada', 'CA', 'CAN', '124', '001', TRUE);
 insert into Country (countryId, name, a2, a3, number_, idd_, active_) values (2, 'China', 'CN', 'CHN', '156', '086', TRUE);
 insert into Country (countryId, name, a2, a3, number_, idd_, active_) values (3, 'France', 'FR', 'FRA', '250', '033', TRUE);
