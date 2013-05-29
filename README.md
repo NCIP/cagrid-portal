@@ -16,9 +16,9 @@ The caGrid Portal is distributed under the BSD 3-Clause License. Please see the 
 
 You will find more details about cagrid-portal in the following links:
 
-*  Mailing List: https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l
-*  JIRA: https://tracker.nci.nih.gov/browse/CAGRID
-*  Wiki: https://wiki.cagrid.org
-*  https://github.com/NCIP/cagrid-core
+ * [caGrid.org Wiki] (https://wiki.cagrid.org)
+ * [Code Repository] (https://github.com/NCIP/cagrid-portal)
+ * [Issue Tracker] (https://tracker.nci.nih.gov/browse/CAGRID)
+ * [Mailing List] (https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l)
 
 Please join us in further developing and improving the caGrid Portal.
