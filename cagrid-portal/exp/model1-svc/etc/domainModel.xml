@@ -4,7 +4,7 @@
   and Ekagra Software Technologies Ltd.
 
   Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+  See http://ncip.github.com/cagrid-portal/LICENSE.txt for details.
 -->
 <ns1:DomainModel projectDescription="model1" projectLongName="model1" projectShortName="model1" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <ns1:exposedUMLAssociationCollection>

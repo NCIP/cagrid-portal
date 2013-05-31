@@ -5,7 +5,7 @@
   and Ekagra Software Technologies Ltd.
 
   Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cagrid-core/LICENSE.txt for details.
+  See http://ncip.github.com/cagrid-portal/LICENSE.txt for details.
 ============================================================================
 */
 insert into Country (countryId, name, a2, a3, number_, idd_, active_) values (1, 'Canada', 'CA', 'CAN', '124', '001', TRUE);
